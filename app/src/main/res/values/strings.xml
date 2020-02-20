@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MobileUSOS</string>
+    <string name="timetable">Timetable</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+	<string name="login_title">Hi there!</string>
+	<string name="login_description">Pick your university to continue.\nThen you\'ll be asked to log in into your account.</string>
+	<string name="search">Search</string>
+</resources>
