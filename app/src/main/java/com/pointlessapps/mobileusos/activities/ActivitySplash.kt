@@ -3,16 +3,16 @@ package com.pointlessapps.mobileusos.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.FirebaseApp
 
 class ActivitySplash : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-//		TODO: add firebase
-//		FirebaseApp.initializeApp(applicationContext)
+		FirebaseApp.initializeApp(applicationContext)
 
-		startActivity(Intent(this, ActivityMain::class.java))
+		startActivity(Intent(this, ActivityLogin::class.java))
 		finish()
 	}
 }

@@ -2,9 +2,11 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@android:color/white">
+	android:background="@android:color/white"
+	android:windowSoftInputMode="adjustResize">
 
 	<com.google.android.material.appbar.AppBarLayout
 		android:layout_width="match_parent"
@@ -52,8 +54,8 @@
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_horizontal"
 					android:layout_margin="10dp"
-					android:lineSpacingMultiplier="1.3"
 					android:gravity="center"
+					android:lineSpacingMultiplier="1.3"
 					android:text="@string/login_description"
 					android:textColor="@android:color/white"
 					android:textSize="18sp" />
@@ -84,43 +86,37 @@
 					android:layout_marginBottom="5dp"
 					android:orientation="horizontal">
 
-					<androidx.appcompat.widget.AppCompatEditText
+					<com.google.android.material.textfield.TextInputLayout
 						android:id="@+id/editSearch"
+						style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
 						android:layout_width="0dp"
 						android:layout_height="35dp"
-						android:background="@drawable/background_rounded"
-						android:backgroundTint="@android:color/white"
-						android:elevation="1dp"
-						android:hint="@string/search"
 						android:inputType="textAutoCorrect|textFilter|textCapSentences|textPassword|textAutoComplete|textCapWords"
-						android:paddingLeft="20dp"
-						android:paddingTop="5dp"
-						android:paddingRight="20dp"
-						android:paddingBottom="5dp"
-						android:textColor="@color/colorTextPrimary"
-						android:textColorHint="@color/colorTextSecondary"
-						android:textSize="16sp"
+						app:boxBackgroundColor="@android:color/white"
+						app:boxCornerRadiusBottomEnd="15dp"
+						app:boxCornerRadiusBottomStart="15dp"
+						app:boxCornerRadiusTopEnd="15dp"
+						app:boxCornerRadiusTopStart="15dp"
+						app:endIconDrawable="@drawable/ic_clear"
+						app:endIconMode="clear_text"
+						app:endIconTint="@color/colorTextSecondary"
+						app:hintEnabled="false"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
+						app:layout_constraintTop_toTopOf="parent">
 
-					<androidx.appcompat.widget.AppCompatImageView
-						android:id="@+id/buttonClear"
-						android:layout_width="0dp"
-						android:layout_height="0dp"
-						android:background="?attr/selectableItemBackgroundBorderless"
-						android:clickable="true"
-						android:focusable="true"
-						android:padding="5dp"
-						android:src="@drawable/ic_clear"
-						android:tint="@color/colorIcon"
-						android:translationZ="1dp"
-						android:visibility="gone"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintDimensionRatio="1:1"
-						app:layout_constraintRight_toRightOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
+						<com.google.android.material.textfield.TextInputEditText
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_margin="0dp"
+							android:hint="@string/search"
+							android:padding="0dp"
+							android:textColor="@color/colorTextPrimary"
+							android:textColorHint="@color/colorTextSecondary"
+							android:textSize="16sp" />
+
+					</com.google.android.material.textfield.TextInputLayout>
 
 				</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,11 +129,13 @@
 	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:overScrollMode="never"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:clipToPadding="false"
 			android:orientation="vertical">
 
 			<ProgressBar
@@ -151,7 +149,8 @@
 				android:id="@+id/listUniversities"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:nestedScrollingEnabled="false" />
+				android:nestedScrollingEnabled="false"
+				tools:listitem="@layout/list_item_university" />
 
 		</LinearLayout>
 

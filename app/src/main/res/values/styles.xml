@@ -5,7 +5,15 @@
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:fontFamily">@font/josefin_sans</item>
+		<item name="windowActionBarOverlay">true</item>
+		<item name="actionBarStyle">@style/AppBar</item>
 		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowTranslucentNavigation">false</item>
+	</style>
+
+	<style name="AppBar" parent="Widget.Design.AppBarLayout">
+		<item name="android:background">@null</item>
+		<item name="background">@null</item>
 	</style>
 
 	<style name="BottomNavigationText" parent="Widget.MaterialComponents.BottomNavigationView">
