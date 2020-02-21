@@ -1,13 +1,17 @@
 package com.pointlessapps.mobileusos.repositories
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.daos.UniversityDao
 import com.pointlessapps.mobileusos.exceptions.ExceptionDatabaseValueNull
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.services.ServiceFirebaseUniversity
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsync
+import kotlin.coroutines.coroutineContext
 
 class RepositoryUniversity(application: Application) {
 
@@ -18,34 +22,32 @@ class RepositoryUniversity(application: Application) {
 	private val universities: MutableLiveData<List<University>> = MutableLiveData()
 
 	init {
-		universities.postValue(universityDao.getAll().value)
-		doAsync {
+		runBlocking {
+			universities.postValue(universityDao.getAll().value)
 			ServiceFirebaseUniversity.getInstance()?.getAll {
 				universities.postValue(it)
-				update(*it?.toTypedArray() ?: return@getAll)
+				insert(*it?.toTypedArray() ?: return@getAll)
 			}
 		}
 	}
 
 	fun insert(vararg universities: University) {
-		doAsync {
+		runBlocking {
 			universityDao.insert(*universities)
 		}
 	}
 
 	fun update(vararg universities: University) {
-		doAsync {
+		runBlocking {
 			universityDao.update(*universities)
 		}
 	}
 
 	fun delete(vararg universities: University) {
-		doAsync {
+		runBlocking {
 			universityDao.delete(*universities)
 		}
 	}
 
 	fun getAll() = universities
-	fun getByName(name: String) = universityDao.getByName(name)
-	fun getByLocation(location: String) = universityDao.getByLocation(location)
 }

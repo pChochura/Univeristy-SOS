@@ -15,6 +15,4 @@ class ViewModelUniversity(application: Application) : AndroidViewModel(applicati
 	fun delete(vararg universities: University) = repositoryUniversity.delete(*universities)
 
 	fun getAll() = universities
-	fun getByName(name: String) = repositoryUniversity.getByName(name)
-	fun getByLocation(location: String) = repositoryUniversity.getByLocation(location)
 }

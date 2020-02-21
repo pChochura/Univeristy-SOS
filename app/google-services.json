@@ -1,0 +1,101 @@
+{
+  "project_info": {
+    "project_number": "131093281404",
+    "firebase_url": "https://usoschedule-221315.firebaseio.com",
+    "project_id": "usoschedule-221315",
+    "storage_bucket": "usoschedule-221315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131093281404:android:956ec5026bf6221419e7f9",
+        "android_client_info": {
+          "package_name": "com.infinitemind.usoschedule"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131093281404-sqlv8p38f1eoei3t65l0v5ejs9irrq1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.infinitemind.usoschedule",
+            "certificate_hash": "2c55c1afad539fccf23d1b800486307aed0820e8"
+          }
+        },
+        {
+          "client_id": "131093281404-6o65p4s0jum7bi8e9sf8jakgi15uabk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.infinitemind.usoschedule",
+            "certificate_hash": "300a03cf5360cf4c5c5cfe796a7844ca288336b9"
+          }
+        },
+        {
+          "client_id": "131093281404-6gkor2il9e0li1idk6p18hf4u0aqnvoj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh_tNILjKnnkew0nwjcErdIrSEkrOCBjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131093281404-6gkor2il9e0li1idk6p18hf4u0aqnvoj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131093281404:android:d6b8d8f30f2bc04119e7f9",
+        "android_client_info": {
+          "package_name": "com.pointlessapps.mobileusos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131093281404-6t8qnkn3fedvrjteamubbmob2cq8rh20.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pointlessapps.mobileusos",
+            "certificate_hash": "b753c37054a9b92978492fc49623a5aa0e78db20"
+          }
+        },
+        {
+          "client_id": "131093281404-6gev5970qcgllcndnlm92t909ebu8lbp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pointlessapps.mobileusos",
+            "certificate_hash": "300a03cf5360cf4c5c5cfe796a7844ca288336b9"
+          }
+        },
+        {
+          "client_id": "131093281404-6gkor2il9e0li1idk6p18hf4u0aqnvoj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh_tNILjKnnkew0nwjcErdIrSEkrOCBjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131093281404-6gkor2il9e0li1idk6p18hf4u0aqnvoj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

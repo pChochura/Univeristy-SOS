@@ -18,10 +18,4 @@ interface UniversityDao {
 
 	@Query("SELECT * FROM table_universities ORDER BY location AND name ASC")
 	fun getAll(): LiveData<List<University>>
-
-	@Query("SELECT * FROM table_universities WHERE name == :name ORDER BY location ASC")
-	fun getByName(name: String): LiveData<List<University>>
-
-	@Query("SELECT * FROM table_universities WHERE location == :location ORDER BY name ASC")
-	fun getByLocation(location: String): LiveData<List<University>>
 }
