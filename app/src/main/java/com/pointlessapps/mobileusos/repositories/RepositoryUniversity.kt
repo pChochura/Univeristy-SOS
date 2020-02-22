@@ -7,7 +7,8 @@ import com.pointlessapps.mobileusos.exceptions.ExceptionDatabaseValueNull
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.services.ServiceFirebaseUniversity
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RepositoryUniversity(application: Application) {
 
@@ -18,34 +19,32 @@ class RepositoryUniversity(application: Application) {
 	private val universities: MutableLiveData<List<University>> = MutableLiveData()
 
 	init {
-		universities.postValue(universityDao.getAll().value)
-		doAsync {
+		GlobalScope.launch {
+			universities.postValue(universityDao.getAll())
 			ServiceFirebaseUniversity.getInstance()?.getAll {
 				universities.postValue(it)
-				update(*it?.toTypedArray() ?: return@getAll)
+				insert(*it?.toTypedArray() ?: return@getAll)
 			}
 		}
 	}
 
 	fun insert(vararg universities: University) {
-		doAsync {
+		GlobalScope.launch {
 			universityDao.insert(*universities)
 		}
 	}
 
 	fun update(vararg universities: University) {
-		doAsync {
+		GlobalScope.launch {
 			universityDao.update(*universities)
 		}
 	}
 
 	fun delete(vararg universities: University) {
-		doAsync {
+		GlobalScope.launch {
 			universityDao.delete(*universities)
 		}
 	}
 
 	fun getAll() = universities
-	fun getByName(name: String) = universityDao.getByName(name)
-	fun getByLocation(location: String) = universityDao.getByLocation(location)
 }

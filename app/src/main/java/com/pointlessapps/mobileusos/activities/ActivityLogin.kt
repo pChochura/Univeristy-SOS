@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -8,7 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
-import com.pointlessapps.mobileusos.models.University
+import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
+import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.services.SearchManager
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
@@ -16,12 +18,11 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelUniversity
 import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+import org.jetbrains.anko.find
 
 class ActivityLogin : FragmentActivity() {
 
 	private val viewModelUniversity by viewModels<ViewModelUniversity>()
-
-	private val universities = mutableListOf<University>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -37,9 +38,7 @@ class ActivityLogin : FragmentActivity() {
 			}
 
 			hideLoader()
-			universities.clear()
-			universities.addAll(it)
-			listUniversities.adapter?.notifyDataSetChanged()
+			(listUniversities.adapter as? AdapterUniversity)?.update(it)
 		})
 	}
 
@@ -49,12 +48,12 @@ class ActivityLogin : FragmentActivity() {
 
 	private fun prepareSearch() {
 		SearchManager.of(editSearch).setOnChangeTextListener {
-			(listUniversities.adapter as AdapterUniversity).showMatching(it)
+			(listUniversities.adapter as? AdapterUniversity)?.showMatching(it)
 		}
 	}
 
 	private fun prepareOnKeyboardPaddingChange() {
-		KeyboardVisibilityEvent.setEventListener(this, object : KeyboardVisibilityEventListener {
+		KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
 			override fun onVisibilityChanged(isOpen: Boolean) {
 				val left = listUniversities.paddingLeft
 				val right = listUniversities.paddingRight
@@ -73,11 +72,28 @@ class ActivityLogin : FragmentActivity() {
 				LinearLayoutManager.VERTICAL,
 				false
 			)
-			adapter = AdapterUniversity(universities).apply {
+			adapter = AdapterUniversity().apply {
 				onClickListener = {
+					if (it.consumerKey == null || it.consumerSecret == null) {
+						throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
+					}
 
+					HelperClientUSOS.handleLogin(
+						this@ActivityLogin,
+						it.url,
+						it.consumerKey!!,
+						it.consumerSecret!!
+					)
 				}
 			}
+		}
+	}
+
+	override fun onNewIntent(intent: Intent?) {
+		super.onNewIntent(intent)
+		HelperClientUSOS.handleLoginResult(this, intent) {
+			startActivity(Intent(this, ActivityMain::class.java))
+			finish()
 		}
 	}
 }

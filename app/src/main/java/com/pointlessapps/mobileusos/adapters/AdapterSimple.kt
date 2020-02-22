@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class AdapterSimple<T>(private val list: List<T>) :
+abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 	RecyclerView.Adapter<DataObjectHolder>() {
 
-	lateinit var onClickListener: (Int) -> Unit
+	lateinit var onClickListener: (T) -> Unit
 
 	abstract fun getLayoutId(): Int
 	abstract fun onBind(root: View, position: Int)
@@ -34,6 +34,14 @@ abstract class AdapterSimple<T>(private val list: List<T>) :
 
 	override fun getItemId(position: Int) =
 		list[position].hashCode().toLong()
+
+	open fun update(list: List<T>) {
+		this.list.apply {
+			clear()
+			addAll(list)
+		}
+		notifyDataSetChanged()
+	}
 }
 
 class DataObjectHolder(itemView: View, onCreateCallback: (View, Int) -> Unit) :

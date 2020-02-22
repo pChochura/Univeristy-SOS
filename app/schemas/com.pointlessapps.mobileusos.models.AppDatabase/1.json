@@ -2,17 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7dfddbefc63162a91c65ce16e2b1537f",
+    "identityHash": "2e13c25b70affba9b8a1703ab27a2e81",
     "entities": [
       {
         "tableName": "table_universities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `location` TEXT, `url` TEXT, `consumerKey` TEXT, `consumerSecret` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`url` TEXT NOT NULL, `name` TEXT, `location` TEXT, `consumerKey` TEXT, `consumerSecret` TEXT, `serviceUrl` TEXT, `available` INTEGER NOT NULL, PRIMARY KEY(`url`))",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "name",
@@ -27,12 +27,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "url",
-            "columnName": "url",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "consumerKey",
             "columnName": "consumerKey",
             "affinity": "TEXT",
@@ -43,13 +37,25 @@
             "columnName": "consumerSecret",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "serviceUrl",
+            "columnName": "serviceUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "available",
+            "columnName": "available",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "url"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -58,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7dfddbefc63162a91c65ce16e2b1537f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e13c25b70affba9b8a1703ab27a2e81')"
     ]
   }
 }

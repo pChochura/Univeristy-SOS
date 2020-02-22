@@ -43,7 +43,7 @@
 		app:layout_constraintTop_toBottomOf="@id/textName" />
 
 	<ProgressBar
-		android:id="@+id/imageLoading"
+		android:id="@+id/progressLoading"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:indeterminate="true"

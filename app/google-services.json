@@ -60,6 +60,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "131093281404-6t8qnkn3fedvrjteamubbmob2cq8rh20.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pointlessapps.mobileusos",
+            "certificate_hash": "b753c37054a9b92978492fc49623a5aa0e78db20"
+          }
+        },
+        {
           "client_id": "131093281404-6gev5970qcgllcndnlm92t909ebu8lbp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

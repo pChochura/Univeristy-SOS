@@ -6,38 +6,48 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.University
 import org.jetbrains.anko.find
 
-class AdapterUniversity(private val currentList: MutableList<University>) : AdapterSimple<University>(currentList) {
+class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 
-	private val wholeList = listOf(*currentList.toTypedArray())
+	private val wholeList = mutableListOf(*list.toTypedArray())
 
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textLocation: AppCompatTextView
 
 	init {
 		setHasStableIds(true)
-		showMatching("")
 	}
 
 	override fun getLayoutId() = R.layout.list_item_university
 
 	override fun onCreate(root: View, position: Int) {
 		super.onCreate(root, position)
-		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener.invoke(position)
-		}
-
 		textName = root.find(R.id.textName)
 		textLocation = root.find(R.id.textLocation)
 	}
 
 	override fun onBind(root: View, position: Int) {
-		textName.text = currentList[position].name
-		textLocation.text = currentList[position].location
+		root.find<View>(R.id.bg).setOnClickListener {
+			onClickListener.invoke(list[position])
+		}
+
+		textName.text = list[position].name
+		textLocation.text = list[position].location
+	}
+
+	override fun update(list: List<University>) {
+		val sortedList = list.sorted()
+		wholeList.apply {
+			clear()
+			addAll(sortedList)
+		}
+		super.update(sortedList)
 	}
 
 	fun showMatching(text: String) {
-		currentList.clear()
-		currentList.addAll(wholeList.filter { it.matches(text) })
+		list.apply {
+			clear()
+			addAll(wholeList.filter { it.matches(text) }.sorted())
+		}
 		notifyDataSetChanged()
 	}
 }
