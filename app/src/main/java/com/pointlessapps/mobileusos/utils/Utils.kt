@@ -11,17 +11,17 @@ object Utils {
 			viewTreeObserver.addOnGlobalLayoutListener {
 				val r = Rect()
 				window.decorView.getWindowVisibleDisplayFrame(r)
-				callback.invoke(height - r.bottom)
+				callback(height - r.bottom)
 			}
 		}
 	}
 
-	open class SingletonHolder<T : Any, in A>(creator: (A) -> T) {
-		private var creator: ((A) -> T)? = creator
+	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
+		private var creator: ((A?) -> T)? = creator
 		@Volatile
 		protected var instance: T? = null
 
-		fun init(arg: A): T {
+		fun init(arg: A? = null): T {
 			if (instance != null) return instance!!
 
 			return synchronized(this) {

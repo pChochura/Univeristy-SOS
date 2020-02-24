@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2e13c25b70affba9b8a1703ab27a2e81",
+    "identityHash": "17403e0f0b8ea3fcaf2d8a4d78018f3b",
     "entities": [
       {
         "tableName": "table_universities",
@@ -59,12 +59,68 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "table_users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT, `email` TEXT, `first_name` TEXT, `last_name` TEXT, `student_number` TEXT, `photo_urls` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "studentNumber",
+            "columnName": "student_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoUrls",
+            "columnName": "photo_urls",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e13c25b70affba9b8a1703ab27a2e81')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17403e0f0b8ea3fcaf2d8a4d78018f3b')"
     ]
   }
 }

@@ -1,10 +1,10 @@
 package com.pointlessapps.mobileusos.services
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.University
+import com.pointlessapps.mobileusos.utils.Utils
 
-class ServiceFirebaseUniversity {
+class ServiceFirebaseUniversity private constructor() {
 
 	private val database = FirebaseFirestore.getInstance()
 	private val collection = database.collection(DATABASE_NAME)
@@ -15,18 +15,9 @@ class ServiceFirebaseUniversity {
 		}
 	}
 
-	companion object {
+	companion object : Utils.SingletonHolder<ServiceFirebaseUniversity, Unit>({
+		ServiceFirebaseUniversity()
+	}) {
 		const val DATABASE_NAME = "universities"
-
-		private var INSTANCE: ServiceFirebaseUniversity? = null
-
-		fun getInstance(): ServiceFirebaseUniversity? {
-			if (INSTANCE == null) {
-				synchronized(AppDatabase::class) {
-					INSTANCE = ServiceFirebaseUniversity()
-				}
-			}
-			return INSTANCE
-		}
 	}
 }

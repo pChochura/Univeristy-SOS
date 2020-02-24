@@ -19,6 +19,9 @@ class ActivityMain : FragmentActivity() {
 			FragmentTimetable(),
 			FragmentProfile(),
 			FragmentSettings()
-		).showIn(R.id.containerFragment)
+		).apply {
+			showIn(R.id.containerFragment)
+			selectMiddle()
+		}
 	}
 }

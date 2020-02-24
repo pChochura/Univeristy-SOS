@@ -11,6 +11,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.oauth.OAuth10aService
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.clients.ClientUSOS
+import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.utils.getJson
 import com.pointlessapps.mobileusos.utils.putJson
 import org.jetbrains.anko.doAsync
@@ -22,14 +23,10 @@ object HelperClientUSOS {
 	private var requestToken: OAuth1RequestToken? = null
 	private var service: OAuth10aService? = null
 
-	fun handleLogin(
-		activity: Activity,
-		baseUrl: String,
-		consumerKey: String,
-		consumerSecret: String
-	) {
+	fun handleLogin(activity: Activity, university: University) {
 		doAsync {
-			service = getService(baseUrl, consumerKey, consumerSecret)
+			Preferences.get().putSelectedUniversity(university)
+			service = getService(university.url, university.consumerKey!!, university.consumerSecret!!)
 			service?.apply {
 				this@HelperClientUSOS.requestToken = requestToken
 
@@ -57,17 +54,16 @@ object HelperClientUSOS {
 					val accessToken: OAuth1AccessToken =
 						service?.getAccessToken(requestToken, verifier)
 							?: throw NullPointerException("oauthService cannot be null.")
-					Preferences.get().putJson(Preferences.KEY_ACCESS_TOKEN, accessToken)
+					Preferences.get().putAccessToken(accessToken)
 					successCallback.invoke()
 				}
 			}
 		}
 	}
 
-	fun isLoggedIn() =
-		Preferences.get().getJson<OAuth1AccessToken>(Preferences.KEY_ACCESS_TOKEN) != null
+	fun isLoggedIn() = Preferences.get().getAccessToken() != null
 
-	private fun getService(baseUrl: String, consumerKey: String, consumerSecret: String) =
+	fun getService(baseUrl: String, consumerKey: String, consumerSecret: String): OAuth10aService =
 		ServiceBuilder(consumerKey)
 			.apiSecret(consumerSecret)
 			.callback("$CALLBACK_URL_HOST:///")

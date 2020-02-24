@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.repositories
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.daos.UniversityDao
-import com.pointlessapps.mobileusos.exceptions.ExceptionDatabaseValueNull
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.services.ServiceFirebaseUniversity
@@ -12,16 +11,14 @@ import kotlinx.coroutines.launch
 
 class RepositoryUniversity(application: Application) {
 
-	private var universityDao: UniversityDao =
-		AppDatabase.getInstance(application)?.universityDao()
-			?: throw ExceptionDatabaseValueNull("Database values cannot be null")
+	private var universityDao: UniversityDao = AppDatabase.init(application).universityDao()
 
 	private val universities: MutableLiveData<List<University>> = MutableLiveData()
 
 	init {
 		GlobalScope.launch {
 			universities.postValue(universityDao.getAll())
-			ServiceFirebaseUniversity.getInstance()?.getAll {
+			ServiceFirebaseUniversity.init().getAll {
 				universities.postValue(it)
 				insert(*it?.toTypedArray() ?: return@getAll)
 			}

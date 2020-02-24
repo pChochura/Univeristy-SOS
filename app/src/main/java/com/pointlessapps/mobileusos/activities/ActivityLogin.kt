@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
@@ -14,15 +14,14 @@ import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.services.SearchManager
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
-import com.pointlessapps.mobileusos.viewModels.ViewModelUniversity
+import com.pointlessapps.mobileusos.viewModels.ViewModelLogin
 import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
-import org.jetbrains.anko.find
 
 class ActivityLogin : FragmentActivity() {
 
-	private val viewModelUniversity by viewModels<ViewModelUniversity>()
+	private val viewModelLogin by viewModels<ViewModelLogin>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -32,14 +31,14 @@ class ActivityLogin : FragmentActivity() {
 		prepareOnKeyboardPaddingChange()
 		prepareSearch()
 
-		viewModelUniversity.getAll().observe(this, Observer {
+		viewModelLogin.getAll().observe(this) {
 			if (it == null) {
-				return@Observer
+				return@observe
 			}
 
 			hideLoader()
 			(listUniversities.adapter as? AdapterUniversity)?.update(it)
-		})
+		}
 	}
 
 	private fun hideLoader() {
@@ -53,16 +52,19 @@ class ActivityLogin : FragmentActivity() {
 	}
 
 	private fun prepareOnKeyboardPaddingChange() {
-		KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
-			override fun onVisibilityChanged(isOpen: Boolean) {
-				val left = listUniversities.paddingLeft
-				val right = listUniversities.paddingRight
-				val top = listUniversities.paddingTop
-				Utils.getKeyboardHeight(window) {
-					listUniversities.setPadding(left, top, right, if (isOpen) it else 0)
+		KeyboardVisibilityEvent.setEventListener(
+			this,
+			this,
+			object : KeyboardVisibilityEventListener {
+				override fun onVisibilityChanged(isOpen: Boolean) {
+					val left = listUniversities.paddingLeft
+					val right = listUniversities.paddingRight
+					val top = listUniversities.paddingTop
+					Utils.getKeyboardHeight(window) {
+						listUniversities.setPadding(left, top, right, if (isOpen) it else 0)
+					}
 				}
-			}
-		})
+			})
 	}
 
 	private fun prepareListUniversity() {
@@ -78,12 +80,7 @@ class ActivityLogin : FragmentActivity() {
 						throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
 					}
 
-					HelperClientUSOS.handleLogin(
-						this@ActivityLogin,
-						it.url,
-						it.consumerKey!!,
-						it.consumerSecret!!
-					)
+					HelperClientUSOS.handleLogin(this@ActivityLogin, it)
 				}
 			}
 		}

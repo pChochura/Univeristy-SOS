@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.repositories.RepositoryUniversity
 
-class ViewModelUniversity(application: Application) : AndroidViewModel(application) {
+class ViewModelLogin(application: Application) : AndroidViewModel(application) {
 
 	private val repositoryUniversity = RepositoryUniversity(application)
 	private val universities = repositoryUniversity.getAll()

@@ -4,27 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.pointlessapps.mobileusos.converters.ConvertersUser
 import com.pointlessapps.mobileusos.daos.UniversityDao
+import com.pointlessapps.mobileusos.daos.UserDao
+import com.pointlessapps.mobileusos.utils.Utils
 
-@Database(entities = [University::class], version = 1)
+@Database(entities = [University::class, User::class], version = 1)
+@TypeConverters(ConvertersUser::class)
 abstract class AppDatabase : RoomDatabase() {
 
 	abstract fun universityDao(): UniversityDao
+	abstract fun userDao(): UserDao
 
-	companion object {
-		private var INSTANCE: AppDatabase? = null
-
-		fun getInstance(context: Context): AppDatabase? {
-			if (INSTANCE == null) {
-				synchronized(AppDatabase::class) {
-					INSTANCE = Room.databaseBuilder(
-						context.applicationContext,
-						AppDatabase::class.java,
-						"USOSdb"
-					).build()
-				}
-			}
-			return INSTANCE
-		}
-	}
+	companion object : Utils.SingletonHolder<AppDatabase, Context>({
+		Room.databaseBuilder(
+			it!!,
+			AppDatabase::class.java,
+			"USOSdb"
+		).build()
+	})
 }
