@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "17403e0f0b8ea3fcaf2d8a4d78018f3b",
+    "identityHash": "ac5f37e1256500d58c88784a7ccd9ac7",
     "entities": [
       {
         "tableName": "table_universities",
@@ -115,12 +115,112 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "table_terms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `start_date` TEXT, `end_date` TEXT, `order_key` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "start_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "end_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "orderKey",
+            "columnName": "order_key",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "table_groups",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseId` TEXT NOT NULL, `term_id` TEXT, `class_type` TEXT, `course_name` TEXT, `group_number` INTEGER NOT NULL, `participants` TEXT, `lecturers` TEXT, PRIMARY KEY(`courseId`))",
+        "fields": [
+          {
+            "fieldPath": "courseId",
+            "columnName": "courseId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "termId",
+            "columnName": "term_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "classType",
+            "columnName": "class_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courseName",
+            "columnName": "course_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "groupNumber",
+            "columnName": "group_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participants",
+            "columnName": "participants",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lecturers",
+            "columnName": "lecturers",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "courseId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17403e0f0b8ea3fcaf2d8a4d78018f3b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac5f37e1256500d58c88784a7ccd9ac7')"
     ]
   }
 }

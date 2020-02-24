@@ -1,0 +1,21 @@
+package com.pointlessapps.mobileusos.daos
+
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import com.pointlessapps.mobileusos.models.Term
+
+@Dao
+interface TermDao {
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun insert(vararg terms: Term)
+
+	@Update
+	suspend fun update(vararg terms: Term)
+
+	@Delete
+	suspend fun delete(vararg terms: Term)
+
+	@Query("SELECT * FROM table_terms WHERE id IN (:ids)")
+	fun getByIds(ids: List<String>): LiveData<List<Term>>
+}

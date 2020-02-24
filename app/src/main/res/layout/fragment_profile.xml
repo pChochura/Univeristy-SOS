@@ -22,39 +22,42 @@
 			<androidx.constraintlayout.widget.ConstraintLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:clipToPadding="false"
-				android:paddingLeft="20dp"
-				android:paddingTop="20dp"
-				android:paddingRight="20dp">
+				android:paddingTop="20dp">
 
 				<androidx.appcompat.widget.AppCompatTextView
 					android:id="@+id/textUserName"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
+					android:layout_marginLeft="20dp"
+					android:layout_marginRight="20dp"
 					android:paddingTop="10dp"
 					android:paddingBottom="10dp"
 					android:textColor="@color/colorTextPrimary"
 					android:textSize="24sp"
 					app:layout_constraintLeft_toLeftOf="parent"
-					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintRight_toLeftOf="@id/imageAvatar"
 					app:layout_constraintTop_toTopOf="parent" />
 
 				<androidx.appcompat.widget.AppCompatTextView
 					android:id="@+id/textStudentNumber"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
+					android:layout_marginLeft="20dp"
+					android:layout_marginRight="20dp"
 					android:paddingTop="5dp"
 					android:paddingBottom="5dp"
 					android:textColor="@color/colorTextSecondary"
 					android:textSize="18sp"
 					app:layout_constraintLeft_toLeftOf="parent"
-					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintRight_toLeftOf="@id/imageAvatar"
 					app:layout_constraintTop_toBottomOf="@id/textUserName" />
 
 				<androidx.appcompat.widget.AppCompatImageView
 					android:id="@+id/imageAvatar"
 					android:layout_width="75dp"
 					android:layout_height="0dp"
+					android:layout_marginLeft="20dp"
+					android:layout_marginRight="20dp"
 					app:layout_constraintDimensionRatio="1:1"
 					app:layout_constraintRight_toRightOf="parent"
 					app:layout_constraintTop_toTopOf="parent"
@@ -69,9 +72,10 @@
 
 				<com.google.android.material.tabs.TabLayout
 					android:id="@+id/tabLayoutTerms"
-					android:layout_width="wrap_content"
+					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_horizontal|bottom"
+					android:background="@android:color/transparent"
 					android:clipToPadding="false"
 					android:paddingLeft="20dp"
 					android:paddingRight="20dp"

@@ -17,12 +17,25 @@ class FragmentProfile : FragmentBase() {
 	override fun getNavigationName() = R.string.profile
 
 	override fun created() {
-		viewModelProfile.getUserById(null).observe(this, Observer {
+		viewModelProfile.getUserById().observe(this) {
 			textUserName.text = it?.name()
 			textStudentNumber.text = it?.studentNumber
 			it?.photoUrls?.values?.firstOrNull()?.also { image ->
 				Picasso.get().load(image).into(imageAvatar)
 			}
+		}
+		viewModelProfile.getAllGroups().observe(this, Observer { groups ->
+			postTerms(groups.map { it.termId!! })
 		})
+	}
+
+	private fun postTerms(termIds: List<String>) {
+		viewModelProfile.getTermsByIds(termIds).observe(this) {
+			it.forEach { term ->
+				tabLayoutTerms.addTab(tabLayoutTerms.newTab().apply {
+					text = term.id
+				})
+			}
+		}
 	}
 }

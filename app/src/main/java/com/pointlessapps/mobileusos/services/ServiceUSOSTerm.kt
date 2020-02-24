@@ -3,28 +3,29 @@ package com.pointlessapps.mobileusos.services
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
+import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.fromJson
 import org.jetbrains.anko.doAsync
 
-class ServiceUSOSUser private constructor() {
+class ServiceUSOSTerm private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	fun getById(id: String?): LiveData<User?> {
-		val user = MutableLiveData<User?>()
+	fun getByIds(ids: List<String>): LiveData<List<Term>> {
+		val terms = MutableLiveData<List<Term>>()
 		doAsync {
-			user.postValue(
+			terms.postValue(
 				clientService.run {
-					execute(userDetailsRequest(id))?.run {
-						gson.fromJson<User>(body)
+					execute(termsRequest(ids))?.run {
+						gson.fromJson<Map<String, Term>>(body).values.toList().sorted()
 					}
 				}
 			)
 		}
-		return user
+		return terms
 	}
 
-	companion object : Utils.SingletonHolder<ServiceUSOSUser, Unit>({ ServiceUSOSUser() })
+	companion object : Utils.SingletonHolder<ServiceUSOSTerm, Unit>({ ServiceUSOSTerm() })
 }

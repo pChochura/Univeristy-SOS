@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.helpers
 import android.content.Context
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.pointlessapps.mobileusos.exceptions.ExceptionNotInitialized
-import com.pointlessapps.mobileusos.models.SelectedData
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.getJson

@@ -21,4 +21,24 @@ class ClientUSOSService private constructor() : USOSApi() {
 			)
 		}.build().toString()
 	)
+
+	fun userGroupsRequest() = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity.serviceUrl}/groups/user").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"term_id|course_id|class_type|course_name|group_number|lecturers"
+			)
+			.appendQueryParameter("active_terms", "true")
+			.build().toString()
+	)
+
+	fun termsRequest(termIds: List<String>) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity.serviceUrl}/terms/terms").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|name|order_key|start_date|end_date"
+			)
+			.appendQueryParameter("term_ids", termIds.joinToString("|"))
+			.build().toString()
+	)
 }

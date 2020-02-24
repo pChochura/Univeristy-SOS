@@ -8,11 +8,8 @@ import com.pointlessapps.mobileusos.utils.fromJson
 class ConvertersUser {
 
 	@TypeConverter
-	fun toString(title: Any?) = Gson().toJson(title)
+	fun toTitle(title: String): User.Title? = Gson().fromJson(title)
 
 	@TypeConverter
-	fun titleFromString(title: String) = Gson().fromJson(title, User.Title::class.java)
-
-	@TypeConverter
-	fun photoUrlsFromString(map: String) = Gson().fromJson<Map<String, String>>(map)
+	fun toStringStringMap(map: String): Map<String, String>? = Gson().fromJson(map)
 }
