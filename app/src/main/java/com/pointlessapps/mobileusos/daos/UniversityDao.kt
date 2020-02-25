@@ -15,6 +15,6 @@ interface UniversityDao {
 	@Delete
 	suspend fun delete(vararg universities: University)
 
-	@Query("SELECT * FROM table_universities ORDER BY location AND name DESC")
+	@Query("SELECT * FROM table_universities")
 	suspend fun getAll(): List<University>
 }

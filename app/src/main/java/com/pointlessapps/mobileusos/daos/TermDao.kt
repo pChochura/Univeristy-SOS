@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.pointlessapps.mobileusos.models.Term
 
@@ -17,5 +16,5 @@ interface TermDao {
 	suspend fun delete(vararg terms: Term)
 
 	@Query("SELECT * FROM table_terms WHERE id IN (:ids)")
-	fun getByIds(ids: List<String>): LiveData<List<Term>>
+	suspend fun getByIds(ids: List<String>): List<Term>
 }

@@ -15,6 +15,7 @@ data class University(
 	var serviceUrl: String? = null,
 	var available: Boolean = true
 ) : Comparable<University> {
+
 	fun matches(text: String) = text.trim().split(" ").all {
 		name?.contains(it, true) ?: false || location?.contains(it, true) ?: false
 	}

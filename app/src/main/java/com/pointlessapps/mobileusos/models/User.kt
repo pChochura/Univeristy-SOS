@@ -19,7 +19,10 @@ data class User(
 	var studentNumber: String? = null,
 	@ColumnInfo(name = "photo_urls")
 	var photoUrls: Map<String, String>? = null
-) {
+) : Comparable<User> {
+
+	override fun compareTo(other: User) =
+		compareValuesBy(this, other, { it.name() })
 
 	fun name(): String {
 		var name = "$firstName $lastName"

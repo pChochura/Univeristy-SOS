@@ -19,4 +19,8 @@ data class Group(
 	var groupNumber: Int = 0,
 	var participants: List<User>? = null,
 	var lecturers: List<User>? = null
-)
+): Comparable<Group> {
+
+	override fun compareTo(other: Group) =
+		compareValuesBy(this, other, { it.courseId }, { it.courseName })
+}

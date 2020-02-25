@@ -1,9 +1,7 @@
 package com.pointlessapps.mobileusos.daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.pointlessapps.mobileusos.models.Group
-import com.pointlessapps.mobileusos.models.Term
 
 @Dao
 interface GroupDao {
@@ -18,5 +16,5 @@ interface GroupDao {
 	suspend fun delete(vararg groups: Group)
 
 	@Query("SELECT * FROM table_groups")
-	fun getAll(): LiveData<List<Group>>
+	suspend fun getAll(): List<Group>
 }

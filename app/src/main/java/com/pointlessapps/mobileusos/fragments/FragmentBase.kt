@@ -30,10 +30,10 @@ abstract class FragmentBase : Fragment() {
 	abstract fun getLayoutId(): Int
 
 	@DrawableRes
-	abstract fun getNavigationIcon(): Int
+	open fun getNavigationIcon(): Int = 0
 
 	@StringRes
-	abstract fun getNavigationName(): Int
+	open fun getNavigationName(): Int = 0
 
 	abstract fun created()
 	open fun refreshed() = Unit

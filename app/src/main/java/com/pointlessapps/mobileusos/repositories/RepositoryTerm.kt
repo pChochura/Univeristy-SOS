@@ -2,11 +2,11 @@ package com.pointlessapps.mobileusos.repositories
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
-import com.pointlessapps.mobileusos.models.Group
 import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.services.ServiceUSOSTerm
-import com.pointlessapps.mobileusos.utils.CombinedLiveData
+import com.pointlessapps.mobileusos.utils.Callback
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -33,11 +33,15 @@ class RepositoryTerm(application: Application) {
 		}
 	}
 
-	@Suppress("UNCHECKED_CAST")
-	fun getByIds(ids: List<String>) = CombinedLiveData(
-		serviceTerm.getByIds(ids),
-		termDao.getByIds(ids)
-	) { onlineData, dbData ->
-		onlineData ?: dbData
-	} as LiveData<List<Term>>
+	fun getByIds(ids: List<String>): LiveData<List<Term>?> {
+		val callback = MutableLiveData<List<Term>?>()
+		serviceTerm.getByIds(ids).observe {
+			callback.postValue(it?.sorted())
+			insert(*it?.toTypedArray() ?: return@observe)
+		}
+		GlobalScope.launch {
+			callback.postValue(termDao.getByIds(ids).sorted())
+		}
+		return callback
+	}
 }
