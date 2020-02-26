@@ -1,9 +1,11 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPagerGroup
+import com.pointlessapps.mobileusos.utils.getTabs
 import com.pointlessapps.mobileusos.viewModels.ViewModelProfile
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -54,14 +56,14 @@ class FragmentProfile : FragmentBase() {
 				return@observe
 			}
 
-			val selectedTerm = tabLayoutTerm.selectedTabPosition
-			tabLayoutTerm.removeAllTabs()
+			val tabs = tabLayoutTerm.getTabs()
 			it.forEach { term ->
-				tabLayoutTerm.addTab(tabLayoutTerm.newTab().apply {
-					text = term.id
-				})
+				if (tabs.find { tab -> tab.text == term.id } == null) {
+					tabLayoutTerm.addTab(tabLayoutTerm.newTab().apply {
+						text = term.id
+					})
+				}
 			}
-			tabLayoutTerm.selectTab(tabLayoutTerm.getTabAt(selectedTerm) ?: return@observe)
 		}
 	}
 

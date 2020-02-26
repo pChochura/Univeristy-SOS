@@ -6,6 +6,9 @@ import android.view.Window
 import org.jetbrains.anko.find
 
 object Utils {
+
+	val STRING_COMPARATOR: Comparator<in String?> = Comparator { s1, s2 -> s1?.compareTo(s2 ?: "") ?: 0 }
+
 	fun getKeyboardHeight(window: Window, callback: (Int) -> Unit) {
 		window.decorView.find<View>(android.R.id.content).apply {
 			viewTreeObserver.addOnGlobalLayoutListener {

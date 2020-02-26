@@ -76,6 +76,7 @@
 					android:layout_height="wrap_content"
 					android:layout_gravity="center_horizontal|bottom"
 					android:background="@android:color/transparent"
+					android:overScrollMode="never"
 					app:layout_constraintLeft_toLeftOf="parent"
 					app:layout_constraintRight_toRightOf="parent"
 					app:layout_constraintTop_toBottomOf="@id/barrier1"
@@ -95,18 +96,11 @@
 
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<androidx.core.widget.NestedScrollView
+	<androidx.viewpager.widget.ViewPager
+		android:id="@+id/viewPagerGroup"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:overScrollMode="never"
-		android:fillViewport="true"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-		<androidx.viewpager.widget.ViewPager
-			android:id="@+id/viewPagerGroup"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
-
-	</androidx.core.widget.NestedScrollView>
+		app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
