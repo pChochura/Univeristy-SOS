@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
@@ -56,13 +55,8 @@ class FragmentProfile : FragmentBase() {
 				return@observe
 			}
 
-			val tabs = tabLayoutTerm.getTabs()
-			it.forEach { term ->
-				if (tabs.find { tab -> tab.text == term.id } == null) {
-					tabLayoutTerm.addTab(tabLayoutTerm.newTab().apply {
-						text = term.id
-					})
-				}
+			repeat(it.size - tabLayoutTerm.getTabs().count()) {
+				tabLayoutTerm.addTab(tabLayoutTerm.newTab())
 			}
 		}
 	}
