@@ -2,17 +2,17 @@ package com.pointlessapps.mobileusos.adapters
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Group
-import com.pointlessapps.mobileusos.models.Name
-import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.keyAt
 import com.pointlessapps.mobileusos.utils.valueAt
 import org.jetbrains.anko.find
 
-class AdapterGroup(private val groups: Map<Name?, List<Group>>) :
-	AdapterSimple<Name?>(groups.keys.toMutableList()) {
+class AdapterGroup(private val groups: Map<Course, List<Group>>) :
+	AdapterSimple<Course>(groups.keys.toMutableList()) {
 
 	private lateinit var title: AppCompatTextView
 	private lateinit var listClasstype: RecyclerView
@@ -29,14 +29,16 @@ class AdapterGroup(private val groups: Map<Name?, List<Group>>) :
 	}
 
 	override fun onBind(root: View, position: Int) {
-		title.text = groups.keyAt(position).toString()
+		title.text = groups.keyAt(position).courseName.toString()
 
 		prepareListClasstype(position)
 	}
 
 	private fun prepareListClasstype(position: Int) {
 		listClasstype.apply {
-			layoutManager = UnscrollableLinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+			layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+				override fun canScrollVertically() = false
+			}
 			adapter =
 				AdapterClasstype(groups.valueAt(position).map { it.classType.toString() }.toMutableList())
 		}

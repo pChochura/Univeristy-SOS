@@ -2,15 +2,15 @@ package com.pointlessapps.mobileusos.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.*
 
-@Entity(tableName = "table_groups")
+@Entity(tableName = "table_groups", primaryKeys = ["course_id", "term_id", "class_type_id"])
 data class Group(
-	@PrimaryKey
-	var courseId: String = UUID.randomUUID().toString(),
+	@ColumnInfo(name = "course_id")
+	var courseId: String = "",
 	@ColumnInfo(name = "term_id")
-	var termId: String? = null,
+	var termId: String = "",
+	@ColumnInfo(name = "class_type_id")
+	var classTypeId: String = "",
 	@ColumnInfo(name = "class_type")
 	var classType: Name? = null,
 	@ColumnInfo(name = "course_name")
@@ -19,7 +19,7 @@ data class Group(
 	var groupNumber: Int = 0,
 	var participants: List<User>? = null,
 	var lecturers: List<User>? = null
-): Comparable<Group> {
+) : Comparable<Group> {
 
 	override fun compareTo(other: Group) =
 		compareValuesBy(this, other, { it.courseId }, { it.courseName })

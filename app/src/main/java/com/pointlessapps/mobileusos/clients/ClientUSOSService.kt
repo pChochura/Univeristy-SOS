@@ -26,7 +26,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 		Verb.GET, Uri.parse("${selectedUniversity.serviceUrl}/groups/user").buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"term_id|course_id|class_type|course_name|group_number|lecturers"
+				"course_unit_id|class_type_id|term_id|course_id|class_type|course_name|group_number|lecturers"
 			)
 			.appendQueryParameter("active_terms", "true")
 			.build().toString()

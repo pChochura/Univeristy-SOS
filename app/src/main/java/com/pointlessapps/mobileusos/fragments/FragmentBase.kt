@@ -15,6 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
 
 abstract class FragmentBase : Fragment() {
@@ -22,6 +23,7 @@ abstract class FragmentBase : Fragment() {
 	private var rootView: ViewGroup? = null
 	fun root() = rootView!!
 
+	var bottomNavigationView: BottomNavigationView? = null
 	var onChangeFragmentListener: ((FragmentBase) -> Unit)? = null
 	var onLoadedFragmentListener: (() -> Unit)? = null
 	var forceRefresh = false

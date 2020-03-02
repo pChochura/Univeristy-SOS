@@ -32,18 +32,18 @@ class FragmentManager private constructor(
 	}
 
 	init {
-		fragments.forEach {
-			it.onChangeFragmentListener = { fragment ->
-				setFragment(fragment)
-			}
-		}
 		activity.contentView?.rootView?.childrenRecursiveSequence()?.forEach {
 			if (it is BottomNavigationView) {
 				bottomNavigation = it
 				return@forEach
 			}
 		}
-
+		fragments.forEach {
+			it.onChangeFragmentListener = { fragment ->
+				setFragment(fragment)
+			}
+			it.bottomNavigationView = bottomNavigation
+		}
 		bottomNavigation?.apply {
 			fragments.forEachIndexed { index, fragment ->
 				menu.add(Menu.NONE, index, Menu.NONE, fragment.getNavigationName())

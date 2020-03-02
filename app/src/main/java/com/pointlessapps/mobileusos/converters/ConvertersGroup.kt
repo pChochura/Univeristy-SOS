@@ -11,8 +11,5 @@ import com.pointlessapps.mobileusos.utils.fromJson
 class ConvertersGroup {
 
 	@TypeConverter
-	fun toListTerm(name: String): List<Term>? = Gson().fromJson(name)
-
-	@TypeConverter
 	fun toListUser(name: String): List<User>? = Gson().fromJson(name)
 }

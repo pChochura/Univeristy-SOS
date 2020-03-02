@@ -1,7 +1,10 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPagerGroup
 import com.pointlessapps.mobileusos.utils.getTabs
@@ -18,7 +21,7 @@ class FragmentProfile : FragmentBase() {
 	override fun getNavigationName() = R.string.profile
 
 	override fun created() {
-		prepareVIewPagerGroup()
+		prepareViewPagerGroup()
 
 		observeProfileData()
 		observeGroupData()
@@ -30,7 +33,7 @@ class FragmentProfile : FragmentBase() {
 				return@observe
 			}
 
-			postTerms(it.map { group -> group.termId!! })
+			postTerms(it.map { group -> group.termId })
 			(viewPagerGroup.adapter as? AdapterPagerGroup)?.update(it)
 		}
 	}
@@ -49,22 +52,26 @@ class FragmentProfile : FragmentBase() {
 		}
 	}
 
-	private fun postTerms(termIds: List<String>?) {
-		viewModelProfile.getTermsByIds(termIds ?: return).observe(this) {
+	private fun postTerms(termIds: List<String>) {
+		viewModelProfile.getTermsByIds(termIds).observe(this) {
 			if (it == null) {
 				return@observe
 			}
 
+			(viewPagerGroup.adapter as? AdapterPagerGroup)?.updateTerms(it)
 			repeat(it.size - tabLayoutTerm.getTabs().count()) {
 				tabLayoutTerm.addTab(tabLayoutTerm.newTab())
 			}
 		}
 	}
 
-	private fun prepareVIewPagerGroup() {
+	private fun prepareViewPagerGroup() {
 		root().post {
 			tabLayoutTerm.setupWithViewPager(viewPagerGroup)
 			viewPagerGroup.adapter = AdapterPagerGroup(childFragmentManager)
+			(viewPagerGroup.parent as? NestedScrollView)?.also {
+				it.setPadding(it.paddingLeft, it.paddingTop, it.paddingRight, bottomNavigationView?.height ?: it.paddingBottom)
+			}
 		}
 	}
 }

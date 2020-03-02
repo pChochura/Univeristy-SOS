@@ -19,5 +19,26 @@ data class Term(
 ) : Comparable<Term> {
 
 	override fun compareTo(other: Term) =
-		compareValuesBy(this, other, { it.orderKey }, { it.startDate }, { it.endDate })
+		compareValuesBy(other, this, { it.orderKey }, { it.startDate }, { it.endDate }, { it.id })
+
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (javaClass != other?.javaClass) return false
+
+		other as Term
+
+		if (id != other.id) return false
+
+		return true
+	}
+
+	override fun hashCode() = id.hashCode()
+
+	fun set(term: Term?) {
+		id = term?.id ?: throw NullPointerException("Id cannot be null")
+		name = term.name
+		startDate = term.startDate
+		endDate = term.endDate
+		orderKey = term.orderKey
+	}
 }

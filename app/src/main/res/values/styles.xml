@@ -17,6 +17,7 @@
 	</style>
 
 	<style name="BottomNavigationText" parent="Widget.MaterialComponents.BottomNavigationView">
+		<item name="android:fontFamily">@font/josefin_sans</item>
 		<item name="android:textSize">10sp</item>
 	</style>
 

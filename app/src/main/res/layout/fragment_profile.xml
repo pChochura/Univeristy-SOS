@@ -96,11 +96,20 @@
 
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<androidx.viewpager.widget.ViewPager
-		android:id="@+id/viewPagerGroup"
+	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:overScrollMode="never"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+		android:layout_height="match_parent"
+		android:clipToPadding="false"
+		android:fillViewport="true"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<androidx.viewpager.widget.ViewPager
+			android:id="@+id/viewPagerGroup"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:nestedScrollingEnabled="false"
+			android:overScrollMode="never" />
+
+	</androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

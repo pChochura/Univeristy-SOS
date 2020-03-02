@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ac5f37e1256500d58c88784a7ccd9ac7",
+    "identityHash": "69289fcdf00d696561294efe80ddaa64",
     "entities": [
       {
         "tableName": "table_universities",
@@ -162,11 +162,11 @@
       },
       {
         "tableName": "table_groups",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseId` TEXT NOT NULL, `term_id` TEXT, `class_type` TEXT, `course_name` TEXT, `group_number` INTEGER NOT NULL, `participants` TEXT, `lecturers` TEXT, PRIMARY KEY(`courseId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`course_id` TEXT NOT NULL, `term_id` TEXT NOT NULL, `class_type_id` TEXT NOT NULL, `class_type` TEXT, `course_name` TEXT, `group_number` INTEGER NOT NULL, `participants` TEXT, `lecturers` TEXT, PRIMARY KEY(`course_id`, `term_id`, `class_type_id`))",
         "fields": [
           {
             "fieldPath": "courseId",
-            "columnName": "courseId",
+            "columnName": "course_id",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -174,7 +174,13 @@
             "fieldPath": "termId",
             "columnName": "term_id",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
+          },
+          {
+            "fieldPath": "classTypeId",
+            "columnName": "class_type_id",
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "classType",
@@ -209,7 +215,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "courseId"
+            "course_id",
+            "term_id",
+            "class_type_id"
           ],
           "autoGenerate": false
         },
@@ -220,7 +228,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac5f37e1256500d58c88784a7ccd9ac7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69289fcdf00d696561294efe80ddaa64')"
     ]
   }
 }
