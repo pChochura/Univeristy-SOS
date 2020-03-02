@@ -14,7 +14,8 @@ import org.jetbrains.anko.find
 class AdapterGroup(private val groups: Map<Course, List<Group>>) :
 	AdapterSimple<Course>(groups.keys.toMutableList()) {
 
-	private lateinit var title: AppCompatTextView
+	private lateinit var textTitle: AppCompatTextView
+	private lateinit var textGrade: AppCompatTextView
 	private lateinit var listClasstype: RecyclerView
 
 	init {
@@ -24,21 +25,23 @@ class AdapterGroup(private val groups: Map<Course, List<Group>>) :
 	override fun getLayoutId() = R.layout.list_item_group
 
 	override fun onCreate(root: View, position: Int) {
-		title = root.find(R.id.textTitle)
+		textTitle = root.find(R.id.textTitle)
+		textGrade = root.find(R.id.textGrade)
 		listClasstype = root.find(R.id.listClasstype)
 	}
 
 	override fun onBind(root: View, position: Int) {
-		title.text = groups.keyAt(position).courseName.toString()
+		textTitle.text = groups.keyAt(position).courseName.toString()
+		groups.valueAt(position).first().grade?.also {
+			textGrade.text = it.toString()
+		}
 
 		prepareListClasstype(position)
 	}
 
 	private fun prepareListClasstype(position: Int) {
 		listClasstype.apply {
-			layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-				override fun canScrollVertically() = false
-			}
+			layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 			adapter =
 				AdapterClasstype(groups.valueAt(position).map { it.classType.toString() }.toMutableList())
 		}

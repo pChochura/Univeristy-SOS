@@ -35,10 +35,10 @@ data class Term(
 	override fun hashCode() = id.hashCode()
 
 	fun set(term: Term?) {
-		id = term?.id ?: throw NullPointerException("Id cannot be null")
-		name = term.name
-		startDate = term.startDate
-		endDate = term.endDate
-		orderKey = term.orderKey
+		id = term?.id ?: id
+		name = term?.name ?: name
+		startDate = term?.startDate ?: startDate
+		endDate = term?.endDate ?: endDate
+		orderKey = term?.orderKey ?: orderKey
 	}
 }

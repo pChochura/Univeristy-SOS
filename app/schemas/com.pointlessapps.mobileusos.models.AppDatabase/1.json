@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "69289fcdf00d696561294efe80ddaa64",
+    "identityHash": "adc50c2bac04a33928a29418abbbdd4f",
     "entities": [
       {
         "tableName": "table_universities",
@@ -223,12 +223,69 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "table_grades",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`value_symbol` TEXT, `value_description` TEXT, `counts_into_average` INTEGER NOT NULL, `comment` TEXT, `date_modified` TEXT, `course_id` TEXT NOT NULL, `term_id` TEXT NOT NULL, PRIMARY KEY(`course_id`, `term_id`))",
+        "fields": [
+          {
+            "fieldPath": "valueSymbol",
+            "columnName": "value_symbol",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "valueDescription",
+            "columnName": "value_description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "countsIntoAverage",
+            "columnName": "counts_into_average",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateModified",
+            "columnName": "date_modified",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "termId",
+            "columnName": "term_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "course_id",
+            "term_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69289fcdf00d696561294efe80ddaa64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'adc50c2bac04a33928a29418abbbdd4f')"
     ]
   }
 }

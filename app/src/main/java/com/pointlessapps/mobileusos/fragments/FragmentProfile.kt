@@ -3,10 +3,9 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPagerGroup
+import com.pointlessapps.mobileusos.models.Group
 import com.pointlessapps.mobileusos.utils.getTabs
 import com.pointlessapps.mobileusos.viewModels.ViewModelProfile
 import com.squareup.picasso.Picasso
@@ -25,6 +24,8 @@ class FragmentProfile : FragmentBase() {
 
 		observeProfileData()
 		observeGroupData()
+
+		forceRefresh = true
 	}
 
 	private fun observeGroupData() {
@@ -34,6 +35,7 @@ class FragmentProfile : FragmentBase() {
 			}
 
 			postTerms(it.map { group -> group.termId })
+			postGrades(it)
 			(viewPagerGroup.adapter as? AdapterPagerGroup)?.update(it)
 		}
 	}
@@ -49,6 +51,16 @@ class FragmentProfile : FragmentBase() {
 			it.photoUrls?.values?.firstOrNull()?.also { image ->
 				Picasso.get().load(image).into(imageAvatar)
 			}
+		}
+	}
+
+	private fun postGrades(groups: List<Group>) {
+		viewModelProfile.getGradesByGroups(groups).observe(this) {
+			if (it == null) {
+				return@observe
+			}
+
+			(viewPagerGroup.adapter as? AdapterPagerGroup)?.updateGrades(it)
 		}
 	}
 

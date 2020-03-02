@@ -3,7 +3,7 @@ package com.pointlessapps.mobileusos.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(tableName = "table_groups", primaryKeys = ["course_id", "term_id", "class_type_id"])
+@Entity(tableName = "table_groups", primaryKeys = ["course_id", "term_id", "class_type_id"], ignoredColumns = ["grade"])
 data class Group(
 	@ColumnInfo(name = "course_id")
 	var courseId: String = "",
@@ -18,7 +18,8 @@ data class Group(
 	@ColumnInfo(name = "group_number")
 	var groupNumber: Int = 0,
 	var participants: List<User>? = null,
-	var lecturers: List<User>? = null
+	var lecturers: List<User>? = null,
+	var grade: Grade? = null
 ) : Comparable<Group> {
 
 	override fun compareTo(other: Group) =
