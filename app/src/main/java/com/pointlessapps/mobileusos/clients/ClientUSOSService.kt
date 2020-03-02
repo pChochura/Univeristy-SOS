@@ -6,6 +6,7 @@ import com.github.scribejava.core.model.Verb
 import com.pointlessapps.mobileusos.models.Group
 import com.pointlessapps.mobileusos.services.USOSApi
 import com.pointlessapps.mobileusos.utils.Utils
+import java.util.*
 
 class ClientUSOSService private constructor() : USOSApi() {
 
@@ -52,5 +53,18 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.appendQueryParameter("course_id", group.courseId)
 			.appendQueryParameter("term_id", group.termId)
 			.build().toString()
+	)
+
+	fun timetableRequest(id: String? = null, startDate: Calendar, days: Int = 7) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity.serviceUrl}${if (id == null) "/tt/user" else "/tt/staff"}").buildUpon().apply {
+			id?.also { appendQueryParameter("user_id", id) }
+			appendQueryParameter("start", dateFormat.format(startDate.time))
+			appendQueryParameter("days", days.toString())
+			appendQueryParameter(
+				"fields",
+				"start_time|end_time|name|course_id|building_name|building_id|room_number|group_number|room_id|frequency|classtype_id|unit_id|classtype_name|lecturer_ids"
+			)
+		}.build().toString()
 	)
 }

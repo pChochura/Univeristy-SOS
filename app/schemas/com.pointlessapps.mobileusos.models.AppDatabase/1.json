@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "adc50c2bac04a33928a29418abbbdd4f",
+    "identityHash": "7a9f238ae539aec28c2294a5a20e03e3",
     "entities": [
       {
         "tableName": "table_universities",
@@ -280,12 +280,118 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "table_course_events",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`course_id` TEXT NOT NULL, `unit_id` TEXT NOT NULL, `room_id` INTEGER NOT NULL, `course_name` TEXT, `start_time` TEXT NOT NULL, `end_time` TEXT, `building_name` TEXT, `building_id` TEXT, `room_number` TEXT, `group_number` TEXT, `frequency` TEXT, `classtype_id` TEXT, `classtype_name` TEXT, `lecturer_ids` TEXT, `user_id` TEXT, PRIMARY KEY(`course_id`, `unit_id`, `start_time`))",
+        "fields": [
+          {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitId",
+            "columnName": "unit_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roomId",
+            "columnName": "room_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "courseName",
+            "columnName": "course_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startTime",
+            "columnName": "start_time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endTime",
+            "columnName": "end_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buildingName",
+            "columnName": "building_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buildingId",
+            "columnName": "building_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "roomNumber",
+            "columnName": "room_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "groupNumber",
+            "columnName": "group_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "frequency",
+            "columnName": "frequency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "classtypeId",
+            "columnName": "classtype_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "classtypeName",
+            "columnName": "classtype_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lecturerIds",
+            "columnName": "lecturer_ids",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "course_id",
+            "unit_id",
+            "start_time"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'adc50c2bac04a33928a29418abbbdd4f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7a9f238ae539aec28c2294a5a20e03e3')"
     ]
   }
 }

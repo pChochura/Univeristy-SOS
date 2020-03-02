@@ -8,4 +8,17 @@
 	<color name="colorIcon">#232323</color>
 	<color name="colorNavigationIconChecked">@color/colorPrimaryDark</color>
 	<color name="colorNavigationIconUnchecked">#A8A8A8</color>
+
+
+	<color name="headerColor">#ffffff</color>
+	<color name="headerTextColor">#000000</color>
+	<color name="horizontalLineColor">#515151</color>
+	<color name="todayTextColor">#009688</color>
+	<color name="pastBackgroundColor">#CCCCCC</color>
+	<color name="futureBackgroundColor">#FFFFFF</color>
+	<color name="currentTimeLineColor">#313131</color>
+	<color name="weekendBackgroundColor">#F5F5F5</color>
+	<color name="defaultEventColor">#123123</color>
+	<color name="defaultEventTextColor">#ffffff</color>
+	<color name="white">#ffffff</color>
 </resources>

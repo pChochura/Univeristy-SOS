@@ -8,8 +8,8 @@ import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.fromJson
 
 @TypeConverters
-class ConvertersGroup {
+class ConvertersCourseEvent {
 
 	@TypeConverter
-	fun toListUser(user: String): List<User>? = Gson().fromJson(user)
+	fun toListString(name: String): List<String>? = Gson().fromJson(name)
 }

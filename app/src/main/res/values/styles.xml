@@ -9,6 +9,11 @@
 		<item name="actionBarStyle">@style/AppBar</item>
 		<item name="android:windowTranslucentStatus">true</item>
 		<item name="android:windowTranslucentNavigation">false</item>
+		<item name="textColor1">@color/colorTextPrimary</item>
+		<item name="textColor2">@color/colorTextSecondary</item>
+		<item name="backgroundColor1">@color/pastBackgroundColor</item>
+		<item name="backgroundColor2">@color/weekendBackgroundColor</item>
+		<item name="backgroundColor3">@color/futureBackgroundColor</item>
 	</style>
 
 	<style name="AppBar" parent="Widget.Design.AppBarLayout">
