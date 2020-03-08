@@ -39,7 +39,11 @@ class RepositoryUser(application: Application) {
 		val callback = MutableLiveData<User?>()
 		serviceUser.getById(id).observe {
 			callback.postValue(it)
-			insert(it ?: return@observe)
+			insert(it?.apply {
+				if (id == null) {
+					loggedIn = true
+				}
+			} ?: return@observe)
 		}
 		GlobalScope.launch {
 			callback.postValue(userDao.getById(id))

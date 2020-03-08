@@ -13,7 +13,7 @@ class ServiceUSOSTimetable private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	fun getByUser(userId: String?, startTime: Calendar, numberOfDays: Int = 7): Callback<List<CourseEvent>?> {
+	fun getByUser(userId: String?, startTime: Calendar, numberOfDays: Int): Callback<List<CourseEvent>?> {
 		val callback = Callback<List<CourseEvent>?>()
 		doAsync {
 			callback.post(

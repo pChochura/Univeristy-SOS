@@ -2,6 +2,9 @@ package com.pointlessapps.mobileusos.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getEventColorByClassType
+import com.pointlessapps.mobileusos.views.WeekView
 import java.util.*
 
 @Entity(tableName = "table_course_events", primaryKeys = ["course_id", "unit_id", "start_time"])
@@ -32,7 +35,26 @@ data class CourseEvent(
 	@ColumnInfo(name = "classtype_name")
 	var classtypeName: Name? = null,
 	@ColumnInfo(name = "lecturer_ids")
-	var lecturerIds: List<String>? = null,
-	@ColumnInfo(name = "user_id")
-	var userId: String? = null
-)
+	var lecturerIds: List<String>? = null
+) : Comparable<CourseEvent> {
+
+	private fun compositeId() =
+		(courseId.hashCode() * 31 + unitId.hashCode()) * 31 + startTime.hashCode().toLong()
+
+	private fun compositeName() =
+		"${courseName.toString()}${if (roomNumber.isNullOrBlank()) "" else " ($roomNumber)"} - ${classtypeName.toString()}"
+
+	fun toWeekViewEvent() = WeekView.WeekViewEvent(
+		compositeId(),
+		compositeName(),
+		Calendar.getInstance().apply {
+			time = startTime
+		},
+		Calendar.getInstance().apply {
+			time = endTime!!
+		}).apply {
+		color = Preferences.get().getEventColorByClassType(classtypeId ?: return@apply)
+	}
+
+	override fun compareTo(other: CourseEvent) = startTime.compareTo(other.startTime)
+}

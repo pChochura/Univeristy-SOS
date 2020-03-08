@@ -16,7 +16,7 @@ interface GradeDao {
 	@Delete
 	suspend fun delete(vararg grades: Grade)
 
-	@Query("SELECT * FROM table_grades WHERE course_id == :courseId AND term_id == :termId")
+	@Query("SELECT * FROM table_grades WHERE course_id = :courseId AND term_id = :termId")
 	suspend fun getByCourseIdAndTermId(courseId: String, termId: String): List<Grade>
 
 	@Transaction

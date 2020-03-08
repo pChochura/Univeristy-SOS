@@ -18,7 +18,9 @@ data class User(
 	@ColumnInfo(name = "student_number")
 	var studentNumber: String? = null,
 	@ColumnInfo(name = "photo_urls")
-	var photoUrls: Map<String, String>? = null
+	var photoUrls: Map<String, String>? = null,
+	@ColumnInfo(name = "logged_in")
+	var loggedIn: Boolean = false
 ) : Comparable<User> {
 
 	override fun compareTo(other: User) =

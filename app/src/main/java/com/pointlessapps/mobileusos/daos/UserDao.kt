@@ -15,6 +15,6 @@ interface UserDao {
 	@Delete
 	suspend fun delete(vararg users: User)
 
-	@Query("SELECT * FROM table_users WHERE id == :id LIMIT 1")
+	@Query("SELECT * FROM table_users WHERE id = :id OR (:id is null AND logged_in = 1) LIMIT 1")
 	suspend fun getById(id: String?): User?
 }

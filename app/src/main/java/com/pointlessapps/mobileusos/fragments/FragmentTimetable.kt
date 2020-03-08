@@ -1,9 +1,7 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.views.WeekView
@@ -21,8 +19,14 @@ class FragmentTimetable : FragmentBase() {
 	override fun created() {
 		prepareWeekView()
 
-		viewModelTimetable.getByUser(Calendar.getInstance()).observe(this) {
-			Log.d("LOG!", Gson().toJson(it))
+		observeTimetableData()
+
+		forceRefresh = true
+	}
+
+	private fun observeTimetableData(startTime: Calendar = Calendar.getInstance()) {
+		viewModelTimetable.getForDaysByUser(startTime).observe(this@FragmentTimetable) {
+			weekView.refreshDataset()
 		}
 	}
 
@@ -33,17 +37,18 @@ class FragmentTimetable : FragmentBase() {
 			weekView.setVisibleDays(5)
 			weekView.setEventTextSize(12)
 			weekView.setScrollListener { newFirstVisibleDay, _ ->
-				//			setEventsListFrom(newFirstVisibleDay)
+				viewModelTimetable.setStartTime(newFirstVisibleDay)
 			}
 			weekView.setMonthChangeListener { newYear, newMonth ->
-				return@setMonthChangeListener listOf<WeekView.WeekViewEvent>() /*allEvents[eventMonthKey.format(GregorianCalendar().apply {
-				set(Calendar.MONTH, newMonth)
-				set(Calendar.YEAR, newYear)
-			}.time)] ?: listOf()*/
+				return@setMonthChangeListener viewModelTimetable.getEventsByMonthYear(newMonth, newYear)
 			}
 			weekView.setEventClickListener { event, _ ->
-				//			showEventInfo(event)
+				showEventInfo(event)
 			}
 		}
+	}
+
+	private fun showEventInfo(event: WeekView.WeekViewEvent) {
+
 	}
 }

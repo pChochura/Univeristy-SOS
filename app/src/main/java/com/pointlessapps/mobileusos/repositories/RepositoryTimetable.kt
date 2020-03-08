@@ -3,12 +3,15 @@ package com.pointlessapps.mobileusos.repositories
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getBreakLength
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.services.ServiceUSOSTimetable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class RepositoryTimetable(application: Application) {
 
@@ -33,23 +36,49 @@ class RepositoryTimetable(application: Application) {
 		}
 	}
 
-	fun getByUser(
+	fun getForDaysByUser(
 		userId: String?,
 		startTime: Calendar,
 		numberOfDays: Int
 	): LiveData<List<CourseEvent>> {
+		startTime.apply {
+			set(Calendar.SECOND, 0)
+			set(Calendar.MINUTE, 0)
+			set(Calendar.HOUR_OF_DAY, 1)
+		}
 		val callback = MutableLiveData<List<CourseEvent>>()
 		serviceTimetable.getByUser(userId, startTime, numberOfDays).observe {
-			callback.postValue(it)
-			insert(*it?.also { events ->
-				events.forEach { event ->
-					event.userId = userId
-				}
-			}?.toTypedArray() ?: return@observe)
+			val finalEvents = setBreaks(it)
+			callback.postValue(finalEvents)
+			insert(*finalEvents?.toTypedArray() ?: return@observe)
 		}
-		GlobalScope.launch {
-			callback.postValue(timetableDao.getByUser(userId, startTime, numberOfDays))
+		if (userId == null) {
+			GlobalScope.launch {
+				callback.postValue(
+					timetableDao.getForDays(
+						startTime.timeInMillis,
+						startTime.timeInMillis + TimeUnit.DAYS.toMillis(numberOfDays.toLong())
+					)
+				)
+			}
 		}
 		return callback
+	}
+
+	private fun setBreaks(courses: List<CourseEvent>?): List<CourseEvent>? {
+		val breakLength = -Preferences.get().getBreakLength()
+		return courses?.sorted()?.also {
+			for (i in 0 until it.lastIndex) {
+				if (it[i].endTime!!.compareTo(it[i + 1].startTime) == 0) {
+					it.forEach { course ->
+						course.endTime!!.time = GregorianCalendar().apply {
+							time = course.endTime!!
+							add(Calendar.MINUTE, breakLength)
+						}.timeInMillis
+					}
+					break
+				}
+			}
+		}
 	}
 }

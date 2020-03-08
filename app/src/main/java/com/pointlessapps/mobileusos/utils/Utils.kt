@@ -17,6 +17,12 @@ object Utils {
 		}
 	}
 
+	fun monthKey(month: Int, year: Int) =
+		(if (month < 10) "0" else "") + "$month.$year"
+
+	fun dayKey(day: Int, month: Int, year: Int) =
+		(if (month < 10) "0" else "") + "$day." + (if (month < 10) "0" else "") + "$month.$year"
+
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator
 		@Volatile

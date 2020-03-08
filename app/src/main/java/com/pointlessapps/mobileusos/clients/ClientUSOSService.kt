@@ -63,7 +63,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 			appendQueryParameter("days", days.toString())
 			appendQueryParameter(
 				"fields",
-				"start_time|end_time|name|course_id|building_name|building_id|room_number|group_number|room_id|frequency|classtype_id|unit_id|classtype_name|lecturer_ids"
+				"start_time|end_time|name|course_id|course_name|building_name|building_id|room_number|group_number|room_id|frequency|classtype_id|unit_id|classtype_name|lecturer_ids"
 			)
 		}.build().toString()
 	)
