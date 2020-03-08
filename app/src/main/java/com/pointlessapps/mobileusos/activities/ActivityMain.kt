@@ -21,7 +21,7 @@ class ActivityMain : FragmentActivity() {
 			FragmentSettings()
 		).apply {
 			showIn(R.id.containerFragment)
-			selectMiddle()
+			selectFirst()
 		}
 	}
 }

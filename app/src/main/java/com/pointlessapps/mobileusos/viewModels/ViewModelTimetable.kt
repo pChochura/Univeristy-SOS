@@ -16,17 +16,16 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	private val startTime = MutableLiveData<Calendar>()
 	private var timetableForDays = startTime.switchMap {
 		repositoryTimetable.getForDaysByUser(userId, it, numberOfDays).map { courseEvents ->
-			it.forEachDaysIndexed(numberOfDays) { _, d ->
-				daysUpToDate.add(d.getDayKey())
-			}
-
 			courseEvents.map { courseEvent ->
+				daysUpToDate.add(courseEvent.startTime.getDayKey())
 				courseEvent.toWeekViewEvent()
 			}.groupBy { weekViewEvent ->
 				weekViewEvent.getMonthKey()
 			}.apply {
 				forEach { entry ->
-					if (weekViewEvents[entry.key]?.addAll(entry.value) != true) {
+					if (weekViewEvents.containsKey(entry.key)) {
+						weekViewEvents[entry.key]?.addAll(entry.value)
+					} else {
 						weekViewEvents[entry.key] = entry.value.toMutableSet()
 					}
 				}
@@ -53,6 +52,12 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 			if (!daysUpToDate.contains(date.getDayKey())) {
 				val startNumberOfDays = numberOfDays
 				numberOfDays -= i
+				(date.clone() as Calendar).forEachDaysReverseIndexed(numberOfDays) { i2, date2 ->
+					if (!daysUpToDate.contains(date2.getDayKey())) {
+						numberOfDays -= i2
+						return@forEachDaysReverseIndexed
+					}
+				}
 				this.startTime.value = date
 				numberOfDays = startNumberOfDays
 				return@forEachDaysIndexed

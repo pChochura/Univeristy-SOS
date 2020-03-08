@@ -170,9 +170,12 @@ public class WeekView extends View {
 		a.recycle();
 
 		dateTimeInterpreter = new DateTimeInterpreter() {
+
+			private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM, EEE", Locale.getDefault());
+
 			@Override
             public String interpretDate(Calendar date) {
-				return new SimpleDateFormat("dd.MM, EEE", Locale.getDefault()).format(date.getTime());
+				return simpleDateFormat.format(date.getTime());
 			}
 			@Override
             public String interpretTime(int hour) {
