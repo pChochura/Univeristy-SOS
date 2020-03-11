@@ -10,6 +10,7 @@ import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getAccessToken
 import com.pointlessapps.mobileusos.helpers.getSelectedUniversity
+import com.pointlessapps.mobileusos.utils.Utils
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

@@ -1,7 +1,9 @@
 package com.pointlessapps.mobileusos.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
+import com.pointlessapps.mobileusos.models.TimetableUnit
 import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
 import com.pointlessapps.mobileusos.utils.*
 import com.pointlessapps.mobileusos.views.WeekView
@@ -11,11 +13,9 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 
 	private val repositoryTimetable = RepositoryTimetable(application)
 
-	private var userId: String? = null
-	private var numberOfDays: Int = 7
-	private val startTime = MutableLiveData<Calendar>()
-	private var timetableForDays = startTime.switchMap {
-		repositoryTimetable.getForDaysByUser(userId, it, numberOfDays).map { courseEvents ->
+	private val timetableUnit = MutableLiveData<TimetableUnit>()
+	private var timetableForDays = timetableUnit.switchMap {
+		repositoryTimetable.getForDaysByUser(it.userId, it.startTime, it.numberOfDays).map { courseEvents ->
 			courseEvents.map { courseEvent ->
 				daysUpToDate.add(courseEvent.startTime.getDayKey())
 				courseEvent.toWeekViewEvent()
@@ -41,13 +41,12 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 		userId: String? = null,
 		numberOfDays: Int = 7
 	): LiveData<Map<String, List<WeekView.WeekViewEvent>>> {
-		this.startTime.value = startTime
-		this.userId = userId
-		this.numberOfDays = numberOfDays
+		timetableUnit.value = TimetableUnit(userId, numberOfDays, startTime)
 		return timetableForDays
 	}
 
 	fun setStartTime(startTime: Calendar) {
+		var numberOfDays = timetableUnit.value?.numberOfDays ?: 7
 		(startTime.clone() as Calendar).forEachDaysIndexed(numberOfDays) { i, date ->
 			if (!daysUpToDate.contains(date.getDayKey())) {
 				val startNumberOfDays = numberOfDays
@@ -58,7 +57,11 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 						return@forEachDaysReverseIndexed
 					}
 				}
-				this.startTime.value = date
+				if (timetableUnit.value != null) {
+					timetableUnit.value = timetableUnit.value?.copy(startTime = date, numberOfDays = numberOfDays)
+				} else {
+					timetableUnit.value = TimetableUnit(null, numberOfDays, date)
+				}
 				numberOfDays = startNumberOfDays
 				return@forEachDaysIndexed
 			}

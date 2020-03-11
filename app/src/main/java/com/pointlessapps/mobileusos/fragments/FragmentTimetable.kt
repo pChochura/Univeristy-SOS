@@ -17,9 +17,9 @@ class FragmentTimetable : FragmentBase() {
 	override fun getNavigationName() = R.string.timetable
 
 	override fun created() {
-		prepareWeekView()
-
-		observeTimetableData()
+		prepareWeekView {
+			observeTimetableData()
+		}
 
 		forceRefresh = true
 	}
@@ -30,7 +30,7 @@ class FragmentTimetable : FragmentBase() {
 		}
 	}
 
-	private fun prepareWeekView() {
+	private fun prepareWeekView(callback: (() -> Unit)? = null) {
 		root().post {
 			weekView.setStartHour(6)
 			weekView.setEndHour(20)
@@ -45,6 +45,7 @@ class FragmentTimetable : FragmentBase() {
 			weekView.setEventClickListener { event, _ ->
 				showEventInfo(event)
 			}
+			callback?.invoke()
 		}
 	}
 

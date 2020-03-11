@@ -43,6 +43,6 @@ fun Calendar.forEachDaysReverseIndexed(days: Int, function: (Int, Calendar) -> U
 	add(Calendar.DAY_OF_YEAR, days)
 	repeat(days) {
 		add(Calendar.DAY_OF_YEAR, -1)
-		function(it - 1, this)
+		function(it, this)
 	}
 }

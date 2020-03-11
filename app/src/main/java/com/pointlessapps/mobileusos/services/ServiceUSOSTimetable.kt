@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.services
 
+import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.models.User
@@ -19,7 +20,9 @@ class ServiceUSOSTimetable private constructor() {
 			callback.post(
 				clientService.run {
 					execute(timetableRequest(userId, startTime, numberOfDays))?.run {
-						gson.fromJson<List<CourseEvent>>(body)
+						gson.fromJson<List<CourseEvent>>(body.also {
+							Log.d("LOG!", "body: $it")
+						})
 					}
 				}
 			)
