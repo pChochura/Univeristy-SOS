@@ -3,7 +3,9 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<PreferenceCategory app:title="@string/timetable">
+	<PreferenceCategory
+		android:icon="@drawable/ic_timetable"
+		app:title="@string/timetable">
 
 		<SeekBarPreference
 			android:defaultValue="6"
@@ -33,9 +35,12 @@
 			app:showSeekBarValue="true"
 			app:title="@string/event_text_size" />
 
-		<PreferenceCategory app:title="@string/colors">
+		<PreferenceCategory
+			android:icon="@drawable/ic_colors"
+			app:title="@string/colors">
 
-<!--			TODO: add all class types color settings-->
+			<com.pointlessapps.mobileusos.views.PreferenceColor android:title="Projekt" />
+			<!--Itd-->
 
 		</PreferenceCategory>
 

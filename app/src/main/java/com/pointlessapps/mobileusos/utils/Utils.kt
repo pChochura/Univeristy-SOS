@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.utils
 
+import android.content.res.Resources
+import android.graphics.Point
 import android.graphics.Rect
 import android.view.View
 import android.view.Window
@@ -22,6 +24,12 @@ object Utils {
 
 	fun dayKey(day: Int, month: Int, year: Int) =
 		(if (month < 10) "0" else "") + "$day." + (if (month < 10) "0" else "") + "$month.$year"
+
+	fun getScreenSize() =
+		Point(
+			Resources.getSystem().displayMetrics.widthPixels,
+			Resources.getSystem().displayMetrics.heightPixels
+		)
 
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator
