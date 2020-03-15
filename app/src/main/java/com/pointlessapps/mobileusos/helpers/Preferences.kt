@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.Log
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.pointlessapps.mobileusos.exceptions.ExceptionNotInitialized
+import com.pointlessapps.mobileusos.models.SettingsWeekView
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.getJson
@@ -22,6 +23,7 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_SELECTED_UNIVERSITY = "selectedUniversity"
 		const val KEY_BREAK_LENGTH = "breakLength"
 		const val KEY_EVENT_COLOR = "eventColor"
+		const val KEY_SETTINGS_WEEK_VIEW = "settingsWeekView"
 
 		fun get(): AppPreferences {
 			if (instance == null) {
@@ -63,3 +65,6 @@ fun AppPreferences.getEventColorByClassType(classType: String): Int {
 
 fun AppPreferences.putEventColorByClassType(classType: String, color: Int) =
 	put("${Preferences.KEY_EVENT_COLOR}_${classType.toLowerCase(Locale.getDefault())}", color)
+
+fun AppPreferences.getWeekViewSettings() =
+	getJson<SettingsWeekView>(Preferences.KEY_SETTINGS_WEEK_VIEW)

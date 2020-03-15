@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<PreferenceCategory app:title="@string/timetable">
+
+		<SeekBarPreference
+			android:defaultValue="6"
+			android:max="24"
+			app:min="0"
+			app:showSeekBarValue="true"
+			app:title="@string/start_hour" />
+
+		<SeekBarPreference
+			android:defaultValue="20"
+			android:max="24"
+			app:min="0"
+			app:showSeekBarValue="true"
+			app:title="@string/end_hour" />
+
+		<SeekBarPreference
+			android:defaultValue="5"
+			android:max="7"
+			app:min="3"
+			app:showSeekBarValue="true"
+			app:title="@string/number_of_visible_days" />
+
+		<SeekBarPreference
+			android:defaultValue="12"
+			android:max="20"
+			app:min="12"
+			app:showSeekBarValue="true"
+			app:title="@string/event_text_size" />
+
+		<PreferenceCategory app:title="@string/colors">
+
+<!--			TODO: add all class types color settings-->
+
+		</PreferenceCategory>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>

@@ -3,6 +3,8 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getWeekViewSettings
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.views.WeekView
 import kotlinx.android.synthetic.main.fragment_timetable.*
@@ -17,9 +19,8 @@ class FragmentTimetable : FragmentBase() {
 	override fun getNavigationName() = R.string.timetable
 
 	override fun created() {
-		prepareWeekView {
-			observeTimetableData()
-		}
+		prepareWeekView()
+		observeTimetableData()
 
 		forceRefresh = true
 	}
@@ -30,12 +31,14 @@ class FragmentTimetable : FragmentBase() {
 		}
 	}
 
-	private fun prepareWeekView(callback: (() -> Unit)? = null) {
+	private fun prepareWeekView() {
 		root().post {
-			weekView.setStartHour(6)
-			weekView.setEndHour(20)
-			weekView.setVisibleDays(5)
-			weekView.setEventTextSize(12)
+			Preferences.get().getWeekViewSettings()?.apply {
+				weekView.setStartHour(startHour)
+				weekView.setEndHour(endHour)
+				weekView.setVisibleDays(numberOfVisibleDays)
+				weekView.setEventTextSize(eventTextSize)
+			}
 			weekView.setScrollListener { newFirstVisibleDay, _ ->
 				viewModelTimetable.setStartTime(newFirstVisibleDay)
 			}
@@ -45,7 +48,6 @@ class FragmentTimetable : FragmentBase() {
 			weekView.setEventClickListener { event, _ ->
 				showEventInfo(event)
 			}
-			callback?.invoke()
 		}
 	}
 

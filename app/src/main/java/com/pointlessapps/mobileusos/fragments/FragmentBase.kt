@@ -18,27 +18,18 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
 
-abstract class FragmentBase : Fragment() {
+abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 
 	private var rootView: ViewGroup? = null
-	fun root() = rootView!!
+	override fun root() = rootView!!
 
-	var bottomNavigationView: BottomNavigationView? = null
-	var onChangeFragmentListener: ((FragmentBase) -> Unit)? = null
-	var onLoadedFragmentListener: (() -> Unit)? = null
+	override var bottomNavigationView: BottomNavigationView? = null
+	override var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)? = null
+	override var onLoadedFragmentListener: (() -> Unit)? = null
+
 	var forceRefresh = false
 
-	@LayoutRes
-	abstract fun getLayoutId(): Int
-
-	@DrawableRes
-	open fun getNavigationIcon(): Int = 0
-
-	@StringRes
-	open fun getNavigationName(): Int = 0
-
-	abstract fun created()
-	open fun refreshed() = Unit
+	abstract override fun created()
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -59,7 +50,7 @@ abstract class FragmentBase : Fragment() {
 	@SuppressLint("ResourceType")
 	override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
 		return AnimatorInflater.loadAnimator(
-			context!!,
+			requireContext(),
 			if (enter) {
 				R.anim.fade_in
 			} else {
@@ -75,10 +66,10 @@ abstract class FragmentBase : Fragment() {
 	override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
 		var anim: Animation? = null
 		try {
-			anim = AnimationUtils.loadAnimation(context!!, transit).apply { setListener() }
+			anim = AnimationUtils.loadAnimation(requireContext(), transit).apply { setListener() }
 		} catch (e: Exception) {
 			try {
-				anim = AnimationUtils.loadAnimation(context!!, nextAnim).apply { setListener() }
+				anim = AnimationUtils.loadAnimation(requireContext(), nextAnim).apply { setListener() }
 			} catch (e: Exception) {
 			}
 		}

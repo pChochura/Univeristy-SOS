@@ -2,28 +2,29 @@ package com.pointlessapps.mobileusos.services
 
 import android.view.Menu
 import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.exceptions.ExceptionFragmentContainerEmpty
-import com.pointlessapps.mobileusos.fragments.FragmentBase
+import com.pointlessapps.mobileusos.fragments.FragmentBaseInterface
 import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.contentView
 
 class FragmentManager private constructor(
 	activity: FragmentActivity,
 	private val fragmentManager: androidx.fragment.app.FragmentManager,
-	private val fragments: Array<out FragmentBase>
+	private val fragments: Array<out FragmentBaseInterface>
 ) {
 	private val history = mutableListOf<Int>()
 
 	@IdRes
 	private var containerId: Int? = null
-	private var currentFragment: FragmentBase? = null
+	private var currentFragment: FragmentBaseInterface? = null
 	private var bottomNavigation: BottomNavigationView? = null
 
 	companion object {
-		fun of(activity: FragmentActivity, fragment: FragmentBase, vararg fragments: FragmentBase) =
+		fun of(activity: FragmentActivity, fragment: FragmentBaseInterface, vararg fragments: FragmentBaseInterface) =
 			FragmentManager(
 				activity,
 				activity.supportFragmentManager,
@@ -66,7 +67,7 @@ class FragmentManager private constructor(
 	fun selectLast() = selectAt(fragments.size - 1)
 	fun selectAt(position: Int) = setFragment(fragments[position])
 
-	private fun setFragment(fragment: FragmentBase) {
+	private fun setFragment(fragment: FragmentBaseInterface) {
 		if (containerId == null) {
 			throw ExceptionFragmentContainerEmpty("Fragment container cannot be null.")
 		}
@@ -78,9 +79,9 @@ class FragmentManager private constructor(
 		fragmentManager.beginTransaction().apply {
 			setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
 			if (currentFragment != null) {
-				replace(containerId!!, fragment)
+				replace(containerId!!, fragment as Fragment)
 			} else {
-				add(containerId!!, fragment)
+				add(containerId!!, fragment as Fragment)
 			}
 			commit()
 		}
