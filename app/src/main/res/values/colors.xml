@@ -21,4 +21,25 @@
 	<color name="defaultEventColor">#123123</color>
 	<color name="defaultEventTextColor">#ffffff</color>
 	<color name="white">#ffffff</color>
+
+	<color name="color1">#F2778D</color>
+	<color name="color2">#99F280</color>
+	<color name="color3">#F2DA5E</color>
+	<color name="color4">#D99B66</color>
+	<color name="color5">#F27D52</color>
+	<color name="color6">#8E59D9</color>
+	<color name="color7">#497367</color>
+	<color name="color8">#F2A950</color>
+	<color name="color9">#40231C</color>
+	<color name="color10">#8C5C51</color>
+	<color name="color11">#3E588C</color>
+	<color name="color12">#79F2D0</color>
+	<color name="color13">#4F7302</color>
+	<color name="color14">#BCD955</color>
+	<color name="color15">#D92E1E</color>
+	<color name="color16">#A56FA6</color>
+	<color name="color17">#230D26</color>
+	<color name="color18">#402CBF</color>
+	<color name="color19">#6156A6</color>
+	<color name="color20">#04C4D9</color>
 </resources>

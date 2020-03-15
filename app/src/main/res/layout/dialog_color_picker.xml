@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="15dp"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+
+	>
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="16dp"
+		android:gravity="center|top"
+		android:text="Choose Color"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		android:id="@+id/colorTitle"
+		android:textSize="30sp"
+		android:textColor="@color/colorTextPrimary"/>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/colorTitle">
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor1"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor2"
+			app:layout_constraintStart_toStartOf="parent"
+			app:tint="@color/color1" />
+
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor2"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor3"
+			app:layout_constraintStart_toEndOf="@+id/imageColor1"
+			app:tint="@color/color2" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor3"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor4"
+			app:layout_constraintStart_toEndOf="@+id/imageColor2"
+			app:tint="@color/color3" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor4"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor5"
+			app:layout_constraintStart_toEndOf="@+id/imageColor3"
+			app:tint="@color/color4" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor5"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/imageColor4"
+			app:tint="@color/color5" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor6"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor1"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor7"
+			app:layout_constraintStart_toStartOf="parent"
+			app:tint="@color/color6" />
+
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor7"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor1"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor8"
+			app:layout_constraintStart_toEndOf="@+id/imageColor6"
+			app:tint="@color/color7" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor8"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor1"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor9"
+			app:layout_constraintStart_toEndOf="@+id/imageColor7"
+			app:tint="@color/color8" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor9"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor1"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor10"
+			app:layout_constraintStart_toEndOf="@+id/imageColor8"
+			app:tint="@color/color9" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor10"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor1"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/imageColor9"
+			app:tint="@color/color10" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor11"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor10"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor12"
+			app:layout_constraintStart_toStartOf="parent"
+			app:tint="@color/color11" />
+
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor12"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor10"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor13"
+			app:layout_constraintStart_toEndOf="@+id/imageColor11"
+			app:tint="@color/color12" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor13"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor10"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor14"
+			app:layout_constraintStart_toEndOf="@+id/imageColor12"
+			app:tint="@color/color13" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor14"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor10"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor15"
+			app:layout_constraintStart_toEndOf="@+id/imageColor13"
+			app:tint="@color/color14" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor15"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toBottomOf="@id/imageColor15"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor10"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/imageColor14"
+			app:tint="@color/color15" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor16"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor15"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor17"
+			app:layout_constraintStart_toStartOf="parent"
+			app:tint="@color/color16" />
+
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor17"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor15"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor18"
+			app:layout_constraintStart_toEndOf="@+id/imageColor16"
+			app:tint="@color/color17" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor18"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor15"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor19"
+			app:layout_constraintStart_toEndOf="@+id/imageColor17"
+			app:tint="@color/color18" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor19"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor15"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/imageColor20"
+			app:layout_constraintStart_toEndOf="@+id/imageColor18"
+			app:tint="@color/color19" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/imageColor20"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:src="@drawable/ic_circle"
+			app:layout_constraintBottom_toTopOf="@+id/imageColor15"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@+id/imageColor19"
+			app:tint="@color/color20" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
