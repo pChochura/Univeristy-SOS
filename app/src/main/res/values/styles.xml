@@ -4,6 +4,7 @@
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:background">@android:color/white</item>
 		<item name="android:fontFamily">@font/josefin_sans</item>
 		<item name="windowActionBarOverlay">true</item>
 		<item name="actionBarStyle">@style/AppBar</item>
