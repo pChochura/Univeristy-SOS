@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.utils
 
+import android.content.res.Resources
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -8,6 +9,9 @@ import net.grandcentrix.tray.AppPreferences
 import java.util.*
 
 fun AppPreferences.putJson(key: String, obj: Any) = put(key, Gson().toJson(obj))
+
+val Int.dp: Int
+	get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 inline fun <reified T> AppPreferences.getJson(key: String): T? =
 	Gson().fromJson(getString(key, ""), T::class.java)
