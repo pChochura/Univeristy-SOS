@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorBackground"
+	android:orientation="vertical">
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/white"
+		android:elevation="2dp"
+		android:paddingLeft="20dp"
+		android:paddingTop="10dp"
+		android:paddingRight="20dp"
+		android:paddingBottom="10dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:text="@string/article"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="18sp" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.core.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<androidx.appcompat.widget.LinearLayoutCompat
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			android:orientation="vertical"
+			android:padding="20dp">
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/articleHeadline"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/montserrat_bold"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="18sp"
+				tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
+
+			<com.google.android.material.chip.ChipGroup
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="15dp"
+				android:clipChildren="false"
+				android:clipToPadding="false"
+				app:chipSpacingHorizontal="10dp"
+				app:chipSpacingVertical="10dp"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/courseName">
+
+				<com.google.android.material.chip.Chip
+					android:id="@+id/articleCategory"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:backgroundTint="@color/colorAccent"
+					android:checkable="false"
+					android:clickable="false"
+					android:elevation="0dp"
+					android:focusable="false"
+					android:fontFamily="@font/montserrat"
+					android:stateListAnimator="@null"
+					android:textColor="@color/white"
+					android:textSize="14sp"
+					android:visibility="gone"
+					app:chipMinTouchTargetSize="32dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					tools:text="Category 1" />
+
+				<com.google.android.material.chip.Chip
+					android:id="@+id/articleDate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:backgroundTint="@color/colorTextSecondary"
+					android:checkable="false"
+					android:clickable="false"
+					android:elevation="0dp"
+					android:focusable="false"
+					android:fontFamily="@font/montserrat"
+					android:stateListAnimator="@null"
+					android:textColor="@color/white"
+					android:textSize="14sp"
+					android:visibility="gone"
+					app:chipMinTouchTargetSize="32dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					tools:text="20.06.2020" />
+
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/articleContent"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/montserrat"
+					android:textColor="@color/colorTextPrimary"
+					android:textSize="14sp"
+					tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
+
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/articleAuthor"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/montserrat_bold"
+					android:gravity="end"
+					android:textColor="@color/colorTextPrimary"
+					android:textSize="14sp"
+					tools:text="Jan Kowalski" />
+
+			</com.google.android.material.chip.ChipGroup>
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
+
+	</androidx.core.widget.NestedScrollView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

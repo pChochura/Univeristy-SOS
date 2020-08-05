@@ -14,7 +14,7 @@ data class CourseEvent(
 	@ColumnInfo(name = "unit_id")
 	var unitId: String = "",
 	@ColumnInfo(name = "room_id")
-	var roomId: Long = 0,
+	var roomId: String? = null,
 	@ColumnInfo(name = "course_name")
 	var courseName: Name? = null,
 	@ColumnInfo(name = "start_time")
@@ -38,7 +38,7 @@ data class CourseEvent(
 	var lecturerIds: List<String>? = null
 ) : Comparable<CourseEvent> {
 
-	private fun compositeId() =
+	fun compositeId() =
 		(courseId.hashCode() * 31 + unitId.hashCode()) * 31 + startTime.hashCode().toLong()
 
 	private fun compositeName() =

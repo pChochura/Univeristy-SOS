@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:clickable="true"
+	android:focusable="true"
+	app:cardBackgroundColor="@color/white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp"
+	app:rippleColor="@color/colorTextSecondary">
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="20dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/articleName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="16sp"
+			tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/articleDescription"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			tools:text="Informuję, że do dnia 15 lipca 2020 r. został wydłużony w systemie USOSweb termin składania wniosków o przyznanie zapomogi..." />
+
+		<com.google.android.material.chip.ChipGroup
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="15dp"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			app:chipSpacingHorizontal="10dp"
+			app:chipSpacingVertical="10dp"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/courseName">
+
+			<com.google.android.material.chip.Chip
+				android:id="@+id/articleCategory"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/colorAccent"
+				android:checkable="false"
+				android:clickable="false"
+				android:elevation="0dp"
+				android:focusable="false"
+				android:fontFamily="@font/montserrat"
+				android:stateListAnimator="@null"
+				android:textColor="@color/white"
+				android:textSize="14sp"
+				android:visibility="gone"
+				app:chipMinTouchTargetSize="32dp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:text="Category 1" />
+
+			<com.google.android.material.chip.Chip
+				android:id="@+id/articleDate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/colorBackground"
+				android:checkable="false"
+				android:clickable="false"
+				android:elevation="0dp"
+				android:focusable="false"
+				android:fontFamily="@font/montserrat"
+				android:stateListAnimator="@null"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp"
+				app:chipMinTouchTargetSize="32dp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:text="20.06.2020" />
+
+		</com.google.android.material.chip.ChipGroup>
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

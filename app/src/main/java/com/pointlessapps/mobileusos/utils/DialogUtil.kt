@@ -19,8 +19,13 @@ class DialogUtil private constructor(
 	companion object {
 		const val UNDEFINED_WINDOW_SIZE = Integer.MAX_VALUE
 
-		fun create(activity: Context, id: Int, callback: (Dialog) -> Unit, vararg windowSize: Int) {
-			val dialog = DialogUtil(activity, id, windowSize)
+		fun create(
+			activity: Context,
+			layoutResId: Int,
+			callback: (Dialog) -> Unit,
+			vararg windowSize: Int
+		) {
+			val dialog = DialogUtil(activity, layoutResId, windowSize)
 			dialog.makeDialog {
 				callback.invoke(it)
 			}
@@ -29,11 +34,11 @@ class DialogUtil private constructor(
 		fun create(
 			statefulDialog: StatefulDialog,
 			activity: Context,
-			id: Int,
+			layoutResId: Int,
 			callback: (StatefulDialog) -> Unit,
 			vararg windowSize: Int
 		) {
-			val dialog = DialogUtil(activity, id, windowSize)
+			val dialog = DialogUtil(activity, layoutResId, windowSize)
 			dialog.makeDialog {
 				callback.invoke(statefulDialog.apply { this.dialog = it })
 				if (statefulDialog.showToggled) {
@@ -49,9 +54,7 @@ class DialogUtil private constructor(
 		dialog.window?.also {
 			it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 			it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-			val layoutParams = dialog.window!!.attributes
-			layoutParams.dimAmount = 0.5f
-			dialog.window!!.attributes = layoutParams
+			it.attributes?.dimAmount = 0.5f
 		}
 		val size = Utils.getScreenSize()
 		val width =

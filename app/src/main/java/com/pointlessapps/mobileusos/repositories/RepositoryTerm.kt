@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.services.ServiceUSOSTerm
-import com.pointlessapps.mobileusos.utils.Callback
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -41,6 +40,18 @@ class RepositoryTerm(application: Application) {
 		}
 		GlobalScope.launch {
 			callback.postValue(termDao.getByIds(ids).sorted())
+		}
+		return callback
+	}
+
+	fun getAll(): LiveData<List<Term>?> {
+		val callback = MutableLiveData<List<Term>?>()
+		serviceTerm.getAll().observe {
+			callback.postValue(it?.sorted())
+			insert(*it?.toTypedArray() ?: return@observe)
+		}
+		GlobalScope.launch {
+			callback.postValue(termDao.getAll().sorted())
 		}
 		return callback
 	}

@@ -2,87 +2,62 @@ package com.pointlessapps.mobileusos.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
 import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.services.SearchManager
-import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
-import com.pointlessapps.mobileusos.utils.Utils
-import com.pointlessapps.mobileusos.viewModels.ViewModelLogin
+import com.pointlessapps.mobileusos.utils.DialogUtil
+import com.pointlessapps.mobileusos.utils.dp
+import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.activity_login.*
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+import kotlinx.android.synthetic.main.dialog_pick_university.*
 
 class ActivityLogin : FragmentActivity() {
 
-	private val viewModelLogin by viewModels<ViewModelLogin>()
+	private val viewModelCommon by viewModels<ViewModelCommon>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
 
-		prepareListUniversity()
-		prepareOnKeyboardPaddingChange()
-		prepareSearch()
-
-		viewModelLogin.getAll().observe(this) {
-			if (it == null) {
-				return@observe
-			}
-
-			hideLoader()
-			(listUniversities.adapter as? AdapterUniversity)?.update(it)
-		}
+		prepareClickListeners()
 	}
 
-	private fun hideLoader() {
-		progressLoading.visibility = View.GONE
-	}
-
-	private fun prepareSearch() {
-		SearchManager.of(editSearch).setOnChangeTextListener {
-			(listUniversities.adapter as? AdapterUniversity)?.showMatching(it)
-		}
-	}
-
-	private fun prepareOnKeyboardPaddingChange() {
-		KeyboardVisibilityEvent.setEventListener(
-			this,
-			this,
-			object : KeyboardVisibilityEventListener {
-				override fun onVisibilityChanged(isOpen: Boolean) {
-					val left = listUniversities.paddingLeft
-					val right = listUniversities.paddingRight
-					val top = listUniversities.paddingTop
-					Utils.getKeyboardHeight(window) {
-						listUniversities.setPadding(left, top, right, if (isOpen) it else 0)
-					}
+	private fun prepareClickListeners() {
+		buttonLogin.setOnClickListener {
+			DialogUtil.create(this, R.layout.dialog_pick_university, { dialog ->
+				if (applicationContext == null) {
+					return@create
 				}
-			})
-	}
 
-	private fun prepareListUniversity() {
-		listUniversities.apply {
-			layoutManager = UnscrollableLinearLayoutManager(
-				applicationContext,
-				LinearLayoutManager.VERTICAL,
-				false
-			)
-			adapter = AdapterUniversity().apply {
-				onClickListener = {
-					if (it.consumerKey == null || it.consumerSecret == null) {
-						throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
-					}
-
-					HelperClientUSOS.handleLogin(this@ActivityLogin, it)
+				viewModelCommon.getAllUniversities().observe(this) {
+					(dialog.listUniversities.adapter as? AdapterUniversity)?.update(
+						it ?: return@observe
+					)
 				}
-			}
+
+				dialog.listUniversities.apply {
+					setAdapter(AdapterUniversity().apply {
+						onClickListener = { university ->
+							if (university.consumerKey == null || university.consumerSecret == null) {
+								throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
+							}
+
+							HelperClientUSOS.handleLogin(this@ActivityLogin, university)
+
+							dialog.dismiss()
+						}
+					})
+				}
+
+				SearchManager.of(dialog.inputSearchUniversities).setOnChangeTextListener {
+					(dialog.listUniversities.adapter as? AdapterUniversity)?.showMatching(it)
+				}
+			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
 		}
 	}
 

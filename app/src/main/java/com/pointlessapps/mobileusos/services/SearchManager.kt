@@ -1,18 +1,18 @@
 package com.pointlessapps.mobileusos.services
 
-import com.google.android.material.textfield.TextInputLayout
+import android.widget.TextView
 import com.pointlessapps.mobileusos.utils.OnTextChanged
 
-class SearchManager private constructor(textInputLayout: TextInputLayout) {
+class SearchManager private constructor(textView: TextView) {
 
 	private lateinit var onChangeTextListener: (String) -> Unit
 
 	companion object {
-		fun of(textInputLayout: TextInputLayout) = SearchManager(textInputLayout)
+		fun of(textView: TextView) = SearchManager(textView)
 	}
 
 	init {
-		textInputLayout.editText?.addTextChangedListener(object : OnTextChanged {
+		textView.addTextChangedListener(object : OnTextChanged {
 			override fun textChanged(text: String) {
 				onChangeTextListener.invoke(text)
 			}

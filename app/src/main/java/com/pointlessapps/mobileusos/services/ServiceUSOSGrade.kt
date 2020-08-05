@@ -1,8 +1,8 @@
 package com.pointlessapps.mobileusos.services
 
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Grade
-import com.pointlessapps.mobileusos.models.Group
 import com.pointlessapps.mobileusos.utils.Callback
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.fromJson
@@ -12,17 +12,16 @@ class ServiceUSOSGrade private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	fun getByGroups(groups: List<Group>): Callback<List<Grade>?> {
+	fun getByGroups(courses: List<Course>): Callback<List<Grade>?> {
 		val callback = Callback<List<Grade>?>()
 		val data = mutableListOf<Grade>()
 		doAsync {
-			groups.forEach { group ->
+			courses.forEach { group ->
 				callback.post(
 					data.apply {
 						clientService.run {
 							execute(userGradesRequest(group))?.run {
-								gson.fromJson<ResponseGrades>(body)
-									.courseGrades?.values?.firstOrNull()
+								gson.fromJson<ResponseCourseGrades>(body).courseGrades?.values?.firstOrNull()
 							}
 						}?.also {
 							it.courseId = group.courseId
@@ -36,8 +35,37 @@ class ServiceUSOSGrade private constructor() {
 		return callback
 	}
 
-	private class ResponseGrades {
-		internal var courseGrades: Map<String, Grade?>? = null
+	fun getByTermIds(termIds: List<String>): Callback<Map<String, Map<String, Grade?>>?> {
+		val callback = Callback<Map<String, Map<String, Grade?>>?>()
+		doAsync {
+			callback.post(
+				clientService.run {
+					execute(userGradesRequest(termIds))?.run {
+						gson.fromJson<Map<String, Map<String, ResponseCourseGradesList>>>(body)
+							.mapValues { entry ->
+								entry.value.mapValues {
+									it.value.courseGrades?.flatMap { courseGrades ->
+										courseGrades.mapValues { grade ->
+											grade.value?.courseId = it.key
+											grade.value?.termId = entry.key
+											grade.value
+										}.values.toList()
+									}?.get(0)
+								}
+							}
+					}
+				}
+			)
+		}
+		return callback
+	}
+
+	private class ResponseCourseGrades {
+		internal var courseGrades: Map<String, Grade>? = null
+	}
+
+	private class ResponseCourseGradesList {
+		internal var courseGrades: List<Map<String, Grade?>>? = null
 	}
 
 	companion object : Utils.SingletonHolder<ServiceUSOSGrade, Unit>({ ServiceUSOSGrade() })

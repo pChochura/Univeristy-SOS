@@ -1,115 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.appcompat.widget.LinearLayoutCompat
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@android:color/white">
+	android:background="@color/colorBackground"
+	android:orientation="vertical">
 
-	<com.google.android.material.appbar.AppBarLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:backgroundTint="@android:color/white"
-		app:expanded="true"
-		app:liftOnScroll="true">
+		android:background="@color/white"
+		android:elevation="2dp"
+		android:padding="15dp">
 
-		<com.google.android.material.appbar.CollapsingToolbarLayout
-			android:layout_width="match_parent"
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/userProfileImg"
+			android:layout_width="64dp"
+			android:layout_height="64dp"
+			android:src="@drawable/ic_profile_img_default"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/userName"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat_bold"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="24sp"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintLeft_toRightOf="@id/userProfileImg"
+			app:layout_constraintRight_toLeftOf="@id/buttonSettings"
+			app:layout_constraintTop_toTopOf="@id/userProfileImg" />
 
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingTop="20dp">
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/userStudentNumber"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_constraintLeft_toRightOf="@id/userProfileImg"
+			app:layout_constraintTop_toBottomOf="@id/userName" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/textUserName"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginLeft="20dp"
-					android:layout_marginRight="20dp"
-					android:paddingTop="10dp"
-					android:paddingBottom="10dp"
-					android:textColor="@color/colorTextPrimary"
-					android:textSize="24sp"
-					app:layout_constraintLeft_toLeftOf="parent"
-					app:layout_constraintRight_toLeftOf="@id/imageAvatar"
-					app:layout_constraintTop_toTopOf="parent" />
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonSettings"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:insetTop="0dp"
+			android:insetRight="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:padding="5dp"
+			app:icon="@drawable/ic_settings"
+			app:iconPadding="0dp"
+			app:iconTint="@color/colorTextSecondary"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/textStudentNumber"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_marginLeft="20dp"
-					android:layout_marginRight="20dp"
-					android:paddingTop="5dp"
-					android:paddingBottom="5dp"
-					android:textColor="@color/colorTextSecondary"
-					android:textSize="18sp"
-					app:layout_constraintLeft_toLeftOf="parent"
-					app:layout_constraintRight_toLeftOf="@id/imageAvatar"
-					app:layout_constraintTop_toBottomOf="@id/textUserName" />
-
-				<androidx.appcompat.widget.AppCompatImageView
-					android:id="@+id/imageAvatar"
-					android:layout_width="75dp"
-					android:layout_height="0dp"
-					android:layout_marginLeft="20dp"
-					android:layout_marginRight="20dp"
-					app:layout_constraintDimensionRatio="1:1"
-					app:layout_constraintRight_toRightOf="parent"
-					app:layout_constraintTop_toTopOf="parent"
-					tools:srcCompat="@tools:sample/avatars[10]" />
-
-				<androidx.constraintlayout.widget.Barrier
-					android:id="@+id/barrier1"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					app:barrierDirection="bottom"
-					app:constraint_referenced_ids="imageAvatar,textStudentNumber" />
-
-				<com.google.android.material.tabs.TabLayout
-					android:id="@+id/tabLayoutTerm"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center_horizontal|bottom"
-					android:background="@android:color/transparent"
-					android:overScrollMode="never"
-					app:layout_constraintLeft_toLeftOf="parent"
-					app:layout_constraintRight_toRightOf="parent"
-					app:layout_constraintTop_toBottomOf="@id/barrier1"
-					app:tabGravity="center"
-					app:tabIndicator="@drawable/background_rounded"
-					app:tabIndicatorColor="@color/colorAccent"
-					app:tabIndicatorGravity="center"
-					app:tabIndicatorHeight="30dp"
-					app:tabMode="scrollable"
-					app:tabSelectedTextColor="@android:color/white"
-					app:tabTextColor="@color/colorTextPrimary"
-					app:tabUnboundedRipple="true" />
-
-			</androidx.constraintlayout.widget.ConstraintLayout>
-
-		</com.google.android.material.appbar.CollapsingToolbarLayout>
-
-	</com.google.android.material.appbar.AppBarLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:clipToPadding="false"
-		android:fillViewport="true"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+		android:layout_height="match_parent">
 
-		<androidx.viewpager.widget.ViewPager
-			android:id="@+id/viewPagerGroup"
+		<androidx.appcompat.widget.LinearLayoutCompat
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:nestedScrollingEnabled="false"
-			android:overScrollMode="never" />
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			android:orientation="vertical"
+			android:padding="20dp">
+
+			<include layout="@layout/partial_profile_shortcuts" />
+
+			<include layout="@layout/partial_profile_terms" />
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
 
 	</androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat"
+		android:text="@string/shortcuts"
+		android:textColor="@color/colorTextPrimary"
+		android:textSize="14sp" />
+
+	<HorizontalScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="20dp"
+		android:clipChildren="false"
+		android:scrollbars="none">
+
+		<androidx.appcompat.widget.LinearLayoutCompat
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/buttonGrades"
+				android:layout_width="132dp"
+				android:layout_height="132dp"
+				android:layout_marginEnd="20dp"
+				android:clickable="true"
+				android:focusable="true"
+				app:cardBackgroundColor="@color/white"
+				app:cardCornerRadius="5dp"
+				app:cardElevation="0dp"
+				app:rippleColor="@color/colorTextSecondary">
+
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:orientation="vertical">
+
+					<androidx.appcompat.widget.AppCompatImageView
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:src="@drawable/ic_grades"
+						app:tint="@color/colorTextPrimary" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/grades"
+						android:textAlignment="center"
+						android:textColor="@color/colorTextPrimary"
+						android:textSize="14sp" />
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
+
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/buttonCourses"
+				android:layout_width="132dp"
+				android:layout_height="132dp"
+				android:layout_marginEnd="20dp"
+				android:clickable="true"
+				android:focusable="true"
+				app:cardBackgroundColor="@color/white"
+				app:cardCornerRadius="5dp"
+				app:cardElevation="0dp"
+				app:rippleColor="@color/colorTextSecondary">
+
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:orientation="vertical">
+
+					<androidx.appcompat.widget.AppCompatImageView
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:src="@drawable/ic_courses"
+						app:tint="@color/colorTextPrimary" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/courses"
+						android:textAlignment="center"
+						android:textColor="@color/colorTextPrimary"
+						android:textSize="14sp" />
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
+
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/buttonSurveys"
+				android:layout_width="132dp"
+				android:layout_height="132dp"
+				android:clickable="true"
+				android:focusable="true"
+				app:cardBackgroundColor="@color/white"
+				app:cardCornerRadius="5dp"
+				app:cardElevation="0dp"
+				app:rippleColor="@color/colorTextSecondary">
+
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:orientation="vertical">
+
+					<androidx.appcompat.widget.AppCompatImageView
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:src="@drawable/ic_surveys"
+						app:tint="@color/colorTextPrimary" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/surveys"
+						android:textAlignment="center"
+						android:textColor="@color/colorTextPrimary"
+						android:textSize="14sp" />
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
+
+			</com.google.android.material.card.MaterialCardView>
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
+
+	</HorizontalScrollView>
+
+</merge>

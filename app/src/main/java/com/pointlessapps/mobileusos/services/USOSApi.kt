@@ -10,7 +10,6 @@ import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getAccessToken
 import com.pointlessapps.mobileusos.helpers.getSelectedUniversity
-import com.pointlessapps.mobileusos.utils.Utils
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,14 +17,13 @@ import java.util.*
 open class USOSApi {
 
 	private val accessToken = Preferences.get().getAccessToken()
-	private val service: OAuth10aService by lazy {
-		selectedUniversity.run {
+	private val service: OAuth10aService? by lazy {
+		selectedUniversity?.run {
 			HelperClientUSOS.getService(url, consumerKey!!, consumerSecret!!)
 		}
 	}
 
 	protected val selectedUniversity = Preferences.get().getSelectedUniversity()
-		?: throw NullPointerException("Any university was selected!")
 
 	protected val dateFormat: DateFormat by lazy {
 		SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -38,8 +36,11 @@ open class USOSApi {
 			.create()
 	}
 
-	fun execute(request: OAuthRequest): Response? = service.run {
-		signRequest(accessToken, request)
-		execute(request)
-	}
+	fun execute(request: OAuthRequest?): Response? =
+		if (request == null) {
+			null
+		} else service?.run {
+			signRequest(accessToken, request)
+			execute(request)
+		}
 }

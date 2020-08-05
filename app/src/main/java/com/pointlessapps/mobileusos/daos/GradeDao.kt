@@ -1,8 +1,8 @@
 package com.pointlessapps.mobileusos.daos
 
 import androidx.room.*
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Grade
-import com.pointlessapps.mobileusos.models.Group
 
 @Dao
 interface GradeDao {
@@ -19,12 +19,23 @@ interface GradeDao {
 	@Query("SELECT * FROM table_grades WHERE course_id = :courseId AND term_id = :termId")
 	suspend fun getByCourseIdAndTermId(courseId: String, termId: String): List<Grade>
 
+	@Query("SELECT * FROM table_grades WHERE term_id = :termId")
+	suspend fun getByTermId(termId: String): List<Grade>
+
 	@Transaction
-	suspend fun getByGroups(groups: List<Group>): List<Grade> {
+	suspend fun getByGroups(courses: List<Course>): List<Grade> {
 		val list = mutableListOf<Grade>()
-		groups.forEach {
+		courses.forEach {
 			list.addAll(getByCourseIdAndTermId(it.courseId, it.termId))
 		}
 		return list
 	}
+
+	@Transaction
+	suspend fun getByTermIds(termIds: List<String>): Map<String, Map<String, Grade>> =
+		termIds.map {
+			it to getByTermId(it).associateBy { grade ->
+				grade.courseId
+			}
+		}.toMap()
 }

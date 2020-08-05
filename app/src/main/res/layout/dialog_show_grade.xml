@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="@color/white"
+	android:orientation="vertical"
+	android:padding="15dp">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/gradeName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat"
+		android:gravity="center"
+		android:text="@string/loading"
+		android:textAlignment="center"
+		android:textColor="@color/colorTextPrimary"
+		android:textSize="18sp"
+		app:layout_constraintHorizontal_chainStyle="packed" />
+
+	<com.google.android.material.chip.Chip
+		android:id="@+id/gradeValue"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="5dp"
+		android:backgroundTint="@color/colorAccent"
+		android:clickable="false"
+		android:fontFamily="@font/montserrat"
+		android:minWidth="0dp"
+		android:text="@string/empty"
+		android:textColor="@color/white"
+		android:textSize="14sp" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:layout_margin="15dp"
+		android:background="@color/colorTextSecondary" />
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="15dp"
+		android:padding="10dp"
+		android:background="@drawable/background_rounded">
+
+		<com.github.mikephil.charting.charts.BarChart
+			android:id="@+id/gradeChart"
+			android:layout_width="match_parent"
+			android:layout_height="175dp" />
+
+	</FrameLayout>
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="45dp">
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_gravity="center_vertical"
+			android:src="@drawable/ic_profile"
+			app:tint="@color/colorTextPrimary" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/gradeAuthor"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:text="@string/empty"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="45dp">
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_gravity="center_vertical"
+			android:src="@drawable/ic_calendar"
+			app:tint="@color/colorTextPrimary" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/gradeDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:text="@string/empty"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

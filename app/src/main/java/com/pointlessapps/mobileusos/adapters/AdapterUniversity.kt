@@ -21,13 +21,13 @@ class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 
 	override fun onCreate(root: View, position: Int) {
 		super.onCreate(root, position)
-		textName = root.find(R.id.textName)
-		textLocation = root.find(R.id.textLocation)
+		textName = root.find(R.id.universityName)
+		textLocation = root.find(R.id.universityLocation)
 	}
 
 	override fun onBind(root: View, position: Int) {
 		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener.invoke(list[position])
+			onClickListener?.invoke(list[position])
 		}
 
 		textName.text = list[position].name

@@ -1,88 +1,58 @@
 package com.pointlessapps.mobileusos.fragments
 
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
-import com.pointlessapps.mobileusos.adapters.AdapterPagerGroup
-import com.pointlessapps.mobileusos.models.Group
-import com.pointlessapps.mobileusos.utils.getTabs
-import com.pointlessapps.mobileusos.viewModels.ViewModelProfile
+import com.pointlessapps.mobileusos.adapters.AdapterTerm
+import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
+import kotlinx.android.synthetic.main.partial_profile_terms.view.*
 
 class FragmentProfile : FragmentBase() {
 
-	private val viewModelProfile by viewModels<ViewModelProfile>()
+	private val viewModelUser by viewModels<ViewModelUser>()
 
 	override fun getLayoutId() = R.layout.fragment_profile
-	override fun getNavigationIcon() = R.drawable.ic_person
+	override fun getNavigationIcon() = R.drawable.ic_profile
 	override fun getNavigationName() = R.string.profile
 
 	override fun created() {
-		prepareViewPagerGroup()
-
-		observeProfileData()
-		observeGroupData()
-
-		forceRefresh = true
+		prepareTermsList()
+		prepareTerms()
+		prepareProfileData()
+		prepareClickListeners()
 	}
 
-	private fun observeGroupData() {
-		viewModelProfile.getAllGroups().observe(this) {
-			if (it == null) {
-				return@observe
-			}
-
-			postTerms(it.map { group -> group.termId })
-			postGrades(it)
-			(viewPagerGroup.adapter as? AdapterPagerGroup)?.update(it)
-		}
+	private fun prepareClickListeners() {
+		root().buttonGrades.setOnClickListener { onChangeFragmentListener?.invoke(FragmentGrades()) }
+		root().buttonCourses.setOnClickListener { onChangeFragmentListener?.invoke(FragmentCourses()) }
+		root().buttonSurveys.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSurveys()) }
 	}
 
-	private fun observeProfileData() {
-		viewModelProfile.getUserById().observe(this) {
-			if (it == null) {
-				return@observe
-			}
-
-			textUserName.text = it.name()
-			textStudentNumber.text = it.studentNumber
-			it.photoUrls?.values?.firstOrNull()?.also { image ->
-				Picasso.get().load(image).into(imageAvatar)
-			}
-		}
+	private fun prepareTermsList() {
+		root().listTerms.setAdapter(AdapterTerm())
 	}
 
-	private fun postGrades(groups: List<Group>) {
-		viewModelProfile.getGradesByGroups(groups).observe(this) {
-			if (it == null) {
-				return@observe
-			}
-
-			(viewPagerGroup.adapter as? AdapterPagerGroup)?.updateGrades(it)
+	private fun prepareTerms() {
+		viewModelUser.getAllGroups().observe(this) {
+			postTerms(it?.map { group -> group.termId } ?: return@observe)
 		}
 	}
 
 	private fun postTerms(termIds: List<String>) {
-		viewModelProfile.getTermsByIds(termIds).observe(this) {
-			if (it == null) {
-				return@observe
-			}
-
-			(viewPagerGroup.adapter as? AdapterPagerGroup)?.updateTerms(it)
-			repeat(it.size - tabLayoutTerm.getTabs().count()) {
-				tabLayoutTerm.addTab(tabLayoutTerm.newTab())
-			}
+		viewModelUser.getTermsByIds(termIds).observe(this) { terms ->
+			(root().listTerms.adapter as? AdapterTerm)?.update(terms ?: return@observe)
 		}
 	}
 
-	private fun prepareViewPagerGroup() {
-		root().post {
-			tabLayoutTerm.setupWithViewPager(viewPagerGroup)
-			viewPagerGroup.adapter = AdapterPagerGroup(childFragmentManager)
-			(viewPagerGroup.parent as? NestedScrollView)?.also {
-				it.setPadding(it.paddingLeft, it.paddingTop, it.paddingRight, bottomNavigationView?.height ?: it.paddingBottom)
+	private fun prepareProfileData() {
+		viewModelUser.getUserById().observe(this) {
+			root().userName.text = it?.name()
+			root().userStudentNumber.text = it?.studentNumber
+			it?.photoUrls?.values?.firstOrNull()?.also { image ->
+				Picasso.get().load(image).into(root().userProfileImg)
 			}
 		}
 	}

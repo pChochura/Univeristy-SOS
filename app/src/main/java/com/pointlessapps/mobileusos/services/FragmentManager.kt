@@ -16,7 +16,9 @@ class FragmentManager private constructor(
 	private val fragmentManager: androidx.fragment.app.FragmentManager,
 	private val fragments: Array<out FragmentBaseInterface>
 ) {
-	private val history = mutableListOf<Int>()
+	private val history = mutableListOf<FragmentBaseInterface>()
+
+	private var startingPosition = -1
 
 	@IdRes
 	private var containerId: Int? = null
@@ -24,7 +26,11 @@ class FragmentManager private constructor(
 	private var bottomNavigation: BottomNavigationView? = null
 
 	companion object {
-		fun of(activity: FragmentActivity, fragment: FragmentBaseInterface, vararg fragments: FragmentBaseInterface) =
+		fun of(
+			activity: FragmentActivity,
+			fragment: FragmentBaseInterface,
+			vararg fragments: FragmentBaseInterface
+		) =
 			FragmentManager(
 				activity,
 				activity.supportFragmentManager,
@@ -39,12 +45,9 @@ class FragmentManager private constructor(
 				return@forEach
 			}
 		}
-		fragments.forEach {
-			it.onChangeFragmentListener = { fragment ->
-				setFragment(fragment)
-			}
-			it.bottomNavigationView = bottomNavigation
-		}
+
+		fragments.forEach(::prepareFragment)
+
 		bottomNavigation?.apply {
 			fragments.forEachIndexed { index, fragment ->
 				menu.add(Menu.NONE, index, Menu.NONE, fragment.getNavigationName())
@@ -57,6 +60,13 @@ class FragmentManager private constructor(
 		}
 	}
 
+	private fun prepareFragment(fragment: FragmentBaseInterface) {
+		fragment.onChangeFragmentListener = {
+			setFragment(it.apply { prepareFragment(this) })
+		}
+		fragment.bottomNavigationView = bottomNavigation
+	}
+
 	fun showIn(@IdRes containerId: Int) {
 		this.containerId = containerId
 		selectFirst()
@@ -65,20 +75,25 @@ class FragmentManager private constructor(
 	fun selectFirst() = selectAt(0)
 	fun selectMiddle() = selectAt(fragments.size / 2)
 	fun selectLast() = selectAt(fragments.size - 1)
-	fun selectAt(position: Int) = setFragment(fragments[position])
+	fun selectAt(position: Int) {
+		setFragment(fragments[position])
+		startingPosition = if (startingPosition == -1) position else startingPosition
+	}
 
-	private fun setFragment(fragment: FragmentBaseInterface) {
-		if (containerId == null) {
+	private fun setFragment(fragment: FragmentBaseInterface, addToHistory: Boolean = true) {
+		if (containerId === null) {
 			throw ExceptionFragmentContainerEmpty("Fragment container cannot be null.")
 		}
 
-		if (fragment == currentFragment) {
+		if (fragment === currentFragment) {
 			return
 		}
 
+		currentFragment = fragment
+
 		fragmentManager.beginTransaction().apply {
 			setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-			if (currentFragment != null) {
+			if (currentFragment !== null) {
 				replace(containerId!!, fragment as Fragment)
 			} else {
 				add(containerId!!, fragment as Fragment)
@@ -86,14 +101,40 @@ class FragmentManager private constructor(
 			commit()
 		}
 
-		val fragmentIndex = fragments.indexOfFirst { it == fragment }
+		val fragmentIndex = fragments.indexOfFirst { it === fragment }
 		if (fragmentIndex != -1) {
-			currentFragment = fragment
+			if (addToHistory) {
+				history.remove(fragment)
+			}
 
-			history.remove(fragmentIndex)
-			history.add(fragmentIndex)
-
+			bottomNavigation?.menu?.setGroupCheckable(0, true, true)
 			bottomNavigation?.selectedItemId = fragmentIndex
+		} else {
+			bottomNavigation?.menu?.setGroupCheckable(0, false, true)
 		}
+
+		if (addToHistory) {
+			history.add(fragment)
+		}
+	}
+
+	fun popHistory(): Boolean {
+		if (startingPosition == -1 ||
+			(history.size <= 1 && currentFragment === fragments[startingPosition])
+		) {
+			return false
+		}
+
+		if (history.size <= 1) {
+			setFragment(fragments[startingPosition], false)
+			history.removeAt(history.lastIndex)
+
+			return true
+		}
+
+		history.removeAt(history.lastIndex)
+		setFragment(history.last(), false)
+
+		return true
 	}
 }

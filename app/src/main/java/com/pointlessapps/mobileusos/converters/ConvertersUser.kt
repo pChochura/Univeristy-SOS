@@ -12,4 +12,9 @@ class ConvertersUser {
 
 	@TypeConverter
 	fun toStringStringMap(map: String): Map<String, String>? = Gson().fromJson(map)
+
+	@TypeConverter
+	fun toUser(user: String?): User? {
+		return Gson().fromJson(user ?: return User())
+	}
 }

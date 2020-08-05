@@ -17,5 +17,5 @@ class ConvertersTerm {
 	fun toDate(date: Long): Date? = Date(date)
 
 	@TypeConverter
-	fun toLong(date: Date): Long = date.time
+	fun toLong(date: Date?): Long = date?.time ?: 0
 }

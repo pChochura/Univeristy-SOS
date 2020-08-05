@@ -1,9 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
-import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.CourseEvent
-import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.Callback
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.fromJson
@@ -14,15 +12,45 @@ class ServiceUSOSTimetable private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	fun getByUser(userId: String?, startTime: Calendar, numberOfDays: Int): Callback<List<CourseEvent>?> {
+	fun getByUser(
+		userId: String?,
+		startTime: Calendar,
+		numberOfDays: Int
+	): Callback<List<CourseEvent>?> {
 		val callback = Callback<List<CourseEvent>?>()
 		doAsync {
 			callback.post(
 				clientService.run {
 					execute(timetableRequest(userId, startTime, numberOfDays))?.run {
-						gson.fromJson<List<CourseEvent>>(body.also {
-							Log.d("LOG!", "body: $it")
-						})
+						gson.fromJson<List<CourseEvent>>(body)
+					}
+				}
+			)
+		}
+		return callback
+	}
+
+	fun getByUnitIdAndGroupNumber(unitId: String, groupNumber: Int): Callback<List<CourseEvent>?> {
+		val callback = Callback<List<CourseEvent>?>()
+		doAsync {
+			callback.post(
+				clientService.run {
+					execute(timetableRequest(unitId, groupNumber))?.run {
+						gson.fromJson<List<CourseEvent>>(body)
+					}
+				}
+			)
+		}
+		return callback
+	}
+
+	fun getByRoomId(roomId: String): Callback<List<CourseEvent>?> {
+		val callback = Callback<List<CourseEvent>?>()
+		doAsync {
+			callback.post(
+				clientService.run {
+					execute(timetableRequest(roomId))?.run {
+						gson.fromJson<List<CourseEvent>>(body)
 					}
 				}
 			)

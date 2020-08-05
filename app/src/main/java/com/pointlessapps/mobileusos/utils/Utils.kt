@@ -1,11 +1,18 @@
 package com.pointlessapps.mobileusos.utils
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
+import android.provider.CalendarContract
 import android.view.View
 import android.view.Window
+import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.models.CourseEvent
 import org.jetbrains.anko.find
+import java.util.*
 
 object Utils {
 
@@ -31,8 +38,58 @@ object Utils {
 			Resources.getSystem().displayMetrics.heightPixels
 		)
 
+	fun getColorByClassType(classType: String) = when (classType.toLowerCase(Locale.getDefault())) {
+		"wyk" -> Color.parseColor("#FF80CBC4")
+		"ćw" -> Color.parseColor("#FFF06292")
+		"lab" -> Color.parseColor("#FFFF9E80")
+		"wf" -> Color.parseColor("#FF81C784")
+		else -> Color.parseColor("#FFAED581")
+	}
+
+	fun calendarIntent(context: Context, event: CourseEvent) {
+		val insertCalendarIntent = Intent(Intent.ACTION_INSERT)
+			.setData(CalendarContract.Events.CONTENT_URI)
+			.putExtra(CalendarContract.Events.TITLE, event.courseName.toString())
+			.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false)
+			.putExtra(
+				CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+				event.startTime.time
+			)
+			.putExtra(
+				CalendarContract.EXTRA_EVENT_END_TIME,
+				event.endTime?.time
+			)
+			.putExtra(
+				CalendarContract.Events.EVENT_LOCATION,
+				"${event.buildingName.toString()}, ${event.roomNumber}"
+			)
+			.putExtra(
+				CalendarContract.Events.DESCRIPTION,
+				context.getString(R.string.calendar_event_description)
+			)
+			.putExtra(
+				CalendarContract.Events.CALENDAR_COLOR,
+				getColorByClassType(event.classtypeId ?: "")
+			)
+			.putExtra(
+				CalendarContract.Events.ACCESS_LEVEL,
+				CalendarContract.Events.ACCESS_DEFAULT
+			)
+			.putExtra(
+				CalendarContract.Events.AVAILABILITY,
+				CalendarContract.Events.AVAILABILITY_BUSY
+			)
+		context.startActivity(
+			Intent.createChooser(
+				insertCalendarIntent,
+				context.getString(R.string.create_event_title)
+			)
+		)
+	}
+
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator
+
 		@Volatile
 		protected var instance: T? = null
 

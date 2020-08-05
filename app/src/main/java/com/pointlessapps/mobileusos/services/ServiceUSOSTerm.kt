@@ -25,5 +25,19 @@ class ServiceUSOSTerm private constructor() {
 		return callback
 	}
 
+	fun getAll(): Callback<List<Term>?> {
+		val callback = Callback<List<Term>?>()
+		doAsync {
+			callback.post(
+				clientService.run {
+					execute(termsRequest())?.run {
+						gson.fromJson<List<Term>>(body).sorted()
+					}
+				}
+			)
+		}
+		return callback
+	}
+
 	companion object : Utils.SingletonHolder<ServiceUSOSTerm, Unit>({ ServiceUSOSTerm() })
 }

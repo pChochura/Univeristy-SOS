@@ -9,10 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.annotation.DrawableRes
-import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +23,11 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 	override var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)? = null
 	override var onLoadedFragmentListener: (() -> Unit)? = null
 
-	var forceRefresh = false
+	private var forceRefresh = false
+
+	fun forceRefresh(force: Boolean = true) {
+		forceRefresh = force
+	}
 
 	abstract override fun created()
 
@@ -37,7 +37,7 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 		savedInstanceState: Bundle?
 	): View? {
 		if (rootView == null || forceRefresh) {
-			forceRefresh = false
+			forceRefresh(false)
 			rootView = inflater.inflate(getLayoutId(), container, false) as ViewGroup
 
 			created()
@@ -69,7 +69,8 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 			anim = AnimationUtils.loadAnimation(requireContext(), transit).apply { setListener() }
 		} catch (e: Exception) {
 			try {
-				anim = AnimationUtils.loadAnimation(requireContext(), nextAnim).apply { setListener() }
+				anim =
+					AnimationUtils.loadAnimation(requireContext(), nextAnim).apply { setListener() }
 			} catch (e: Exception) {
 			}
 		}

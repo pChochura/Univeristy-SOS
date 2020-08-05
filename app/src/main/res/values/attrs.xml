@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="WeekView">
-        <attr name="headerTextSize" format="dimension"/>
-        <attr name="headerTextTypeface" format="reference"/>
-        <attr name="eventTextSize" format="dimension"/>
-        <attr name="eventTextTypeface" format="reference"/>
-        <attr name="headerPaddingLeft" format="dimension"/>
-        <attr name="headerPaddingRight" format="dimension"/>
-        <attr name="headerPaddingTop" format="dimension"/>
-        <attr name="headerPaddingBottom" format="dimension"/>
-        <attr name="headerTextColor" format="color"/>
-        <attr name="headerBackgroundColor" format="color"/>
-        <attr name="hourSeparatorColor" format="color"/>
-        <attr name="todayHeaderTextColor" format="color"/>
-        <attr name="eventPadding" format="dimension"/>
-        <attr name="overlappingEventGap" format="dimension"/>
-        <attr name="eventCornerRadius" format="dimension"/>
-        <attr name="futureBackgroundColor" format="color"/>
-        <attr name="pastBackgroundColor" format="color"/>
-        <attr name="weekendBackgroundColor" format="color"/>
-        <attr name="nowLineColor" format="color"/>
-        <attr name="nowLineThickness" format="dimension"/>
-        <attr name="defaultEventColor" format="color"/>
-        <attr name="defaultEventTextColor" format="color"/>
-        <attr name="noOfVisibleDays" format="integer"/>
-        <attr name="startHour" format="integer"/>
-        <attr name="endHour" format="integer"/>
-        <attr name="daySnapping" format="boolean"/>
+        <attr name="headerTextSize" format="dimension" />
+        <attr name="headerTextTypeface" format="reference" />
+        <attr name="eventTextSize" format="dimension" />
+        <attr name="eventTextTypeface" format="reference" />
+        <attr name="headerPaddingLeft" format="dimension" />
+        <attr name="headerPaddingRight" format="dimension" />
+        <attr name="headerPaddingTop" format="dimension" />
+        <attr name="headerPaddingBottom" format="dimension" />
+        <attr name="headerTextColor" format="color" />
+        <attr name="headerBackgroundColor" format="color" />
+        <attr name="dividerLineColor" format="color" />
+        <attr name="todayHeaderTextColor" format="color" />
+        <attr name="eventPadding" format="dimension" />
+        <attr name="overlappingEventGap" format="dimension" />
+        <attr name="eventCornerRadius" format="dimension" />
+        <attr name="futureBackgroundColor" format="color" />
+        <attr name="pastBackgroundColor" format="color" />
+        <attr name="weekendBackgroundColor" format="color" />
+        <attr name="nowLineColor" format="color" />
+        <attr name="nowLineThickness" format="dimension" />
+        <attr name="defaultEventColor" format="color" />
+        <attr name="defaultEventTextColor" format="color" />
+        <attr name="noOfVisibleDays" format="integer" />
+        <attr name="startHour" format="integer" />
+        <attr name="endHour" format="integer" />
+        <attr name="daySnapping" format="boolean" />
+        <attr name="goToTodayVisible" format="boolean" />
+        <attr name="goToTodayArrowColor" format="color" />
+        <attr name="goToTodayBgColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="LoadingRecyclerView">
+        <attr name="android:orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 
-    <attr name="textColor1" format="color"/>
-    <attr name="textColor2" format="color"/>
-    <attr name="backgroundColor1" format="color"/>
-    <attr name="backgroundColor2" format="color"/>
-    <attr name="backgroundColor3" format="color"/>
+    <attr name="textColor1" format="color" />
+    <attr name="textColor2" format="color" />
+    <attr name="backgroundColor1" format="color" />
+    <attr name="backgroundColor2" format="color" />
+    <attr name="backgroundColor3" format="color" />
+
+    <attr name="weekViewPastBackgroundColor" format="color" />
+    <attr name="weekViewWeekendBackgroundColor" format="color" />
+    <attr name="weekViewHeaderTextColor" format="color" />
+    <attr name="weekViewHeaderBackgroundColor" format="color" />
+    <attr name="weekViewEventTextColor" format="color" />
+    <attr name="weekViewDividerLineColor" format="color" />
 </resources>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 	RecyclerView.Adapter<DataObjectHolder>() {
 
-	lateinit var onClickListener: (T) -> Unit
+	var onClickListener: ((T) -> Unit)? = null
 
 	abstract fun getLayoutId(): Int
 	abstract fun onBind(root: View, position: Int)
@@ -21,14 +21,12 @@ abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 				getLayoutId(),
 				parent,
 				false
-			),
-			::onCreate
+			), ::onCreate
 		)
 	}
 
-	override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
+	override fun onBindViewHolder(holder: DataObjectHolder, position: Int) =
 		onBind(holder.root, position)
-	}
 
 	override fun getItemCount() = list.size
 

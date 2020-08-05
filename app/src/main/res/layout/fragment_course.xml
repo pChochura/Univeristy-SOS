@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorBackground"
+	android:orientation="vertical">
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/white"
+		android:elevation="2dp"
+		android:paddingLeft="20dp"
+		android:paddingTop="10dp"
+		android:paddingRight="20dp"
+		android:paddingBottom="10dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:text="@string/course"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="18sp" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.core.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<androidx.appcompat.widget.LinearLayoutCompat
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			android:orientation="vertical"
+			android:padding="20dp">
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/courseName"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/montserrat_bold"
+				android:gravity="center_horizontal"
+				android:textAlignment="center"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="24sp"
+				tools:text="Bazy danych" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/courseInfo"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:fontFamily="@font/montserrat"
+				android:gravity="center_horizontal"
+				android:textAlignment="center"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp"
+				tools:text="Wykład, grupa 1" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/group_instructors"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listInstructors"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				tools:itemCount="1"
+				tools:listitem="@layout/list_item_user" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/incoming_meetings"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listMeetings"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp" />
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp">
+
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/participants"
+					android:textColor="@color/colorTextPrimary"
+					android:textSize="14sp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintLeft_toLeftOf="parent" />
+
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:gravity="bottom"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintTop_toTopOf="parent">
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/amt"
+						android:textColor="@color/colorTextSecondary"
+						android:textSize="12sp" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:id="@+id/courseParticipantsAmount"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat_bold"
+						android:textColor="@color/colorTextPrimary"
+						android:textSize="18sp"
+						tools:text="4" />
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listParticipants"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp" />
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
+
+	</androidx.core.widget.NestedScrollView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

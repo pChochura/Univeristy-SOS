@@ -14,9 +14,13 @@ import com.pointlessapps.mobileusos.utils.Utils
 		University::class,
 		User::class,
 		Term::class,
-		Group::class,
+		Course::class,
 		Grade::class,
-		CourseEvent::class
+		ExamReport::class,
+		CourseEvent::class,
+		Article::class,
+		BuildingRoom::class,
+		Building::class
 	],
 	version = 1
 )
@@ -25,7 +29,10 @@ import com.pointlessapps.mobileusos.utils.Utils
 	ConvertersUser::class,
 	ConvertersTerm::class,
 	ConvertersGroup::class,
-	ConvertersCourseEvent::class
+	ConvertersCourseEvent::class,
+	ConvertersExamReport::class,
+	ConvertersNews::class,
+	ConvertersRoom::class
 )
 abstract class AppDatabase : RoomDatabase() {
 
@@ -34,7 +41,10 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun termDao(): TermDao
 	abstract fun groupDao(): GroupDao
 	abstract fun gradeDao(): GradeDao
+	abstract fun examReportDao(): ExamReportDao
 	abstract fun timetableDao(): TimetableDao
+	abstract fun articleDao(): ArticleDao
+	abstract fun roomDao(): RoomDao
 
 	companion object : Utils.SingletonHolder<AppDatabase, Context>({
 		Room.databaseBuilder(

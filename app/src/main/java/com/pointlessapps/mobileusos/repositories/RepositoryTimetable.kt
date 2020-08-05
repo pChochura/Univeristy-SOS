@@ -65,6 +65,24 @@ class RepositoryTimetable(application: Application) {
 		return callback
 	}
 
+	fun getByUnitIdAndGroupNumber(unitId: String, groupNumber: Int): LiveData<List<CourseEvent>> {
+		val callback = MutableLiveData<List<CourseEvent>>()
+		serviceTimetable.getByUnitIdAndGroupNumber(unitId, groupNumber).observe {
+			val finalEvents = setBreaks(it)
+			callback.postValue(finalEvents?.sorted())
+		}
+		return callback
+	}
+
+	fun getByRoomId(roomId: String): LiveData<List<CourseEvent>> {
+		val callback = MutableLiveData<List<CourseEvent>>()
+		serviceTimetable.getByRoomId(roomId).observe {
+			val finalEvents = setBreaks(it)
+			callback.postValue(finalEvents?.sorted())
+		}
+		return callback
+	}
+
 	private fun setBreaks(courses: List<CourseEvent>?): List<CourseEvent>? {
 		val breakLength = -Preferences.get().getBreakLength()
 		return courses?.sorted()?.also {

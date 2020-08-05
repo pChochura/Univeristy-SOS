@@ -6,5 +6,5 @@ import com.google.gson.Gson
 class ConvertersCommon {
 
 	@TypeConverter
-	fun toString(title: Any?): String = Gson().toJson(title)
+	fun toString(any: Any?): String = Gson().toJson(any)
 }

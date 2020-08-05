@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="@color/white"
+	android:padding="10dp">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/meetingName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat_bold"
+		android:textColor="@color/colorTextPrimary"
+		android:textSize="18sp"
+		android:visibility="gone"
+		app:layout_constraintBottom_toTopOf="@id/meetingTime"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="Bazy danych, wykład, group 1" />
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/meetingDate"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat"
+		android:textColor="@color/colorTextPrimary"
+		android:textSize="14sp"
+		app:layout_constraintBottom_toBottomOf="@id/meetingTime"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toTopOf="@id/meetingTime"
+		tools:text="Wt, 3 marca 2020" />
+
+	<com.google.android.material.chip.Chip
+		android:id="@+id/meetingTime"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp"
+		android:backgroundTint="@color/colorAccent"
+		android:clickable="false"
+		android:fontFamily="@font/montserrat"
+		android:textColor="@color/white"
+		android:textSize="14sp"
+		app:chipMinTouchTargetSize="32dp"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/meetingName"
+		app:layout_goneMarginTop="0dp"
+		tools:text="14:00 - 15:45" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonRoom"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+		android:fontFamily="@font/montserrat"
+		android:letterSpacing="0"
+		android:minWidth="0dp"
+		android:minHeight="0dp"
+		android:padding="0dp"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextSecondary"
+		app:icon="@drawable/ic_room"
+		app:iconTint="@color/colorTextSecondary"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/meetingTime"
+		tools:text="D. 3" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonAddToCalendar"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+		android:fontFamily="@font/montserrat"
+		android:letterSpacing="0"
+		android:minWidth="0dp"
+		android:minHeight="0dp"
+		android:padding="0dp"
+		android:text="@string/add_to_calendar"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextSecondary"
+		app:icon="@drawable/ic_calendar_add"
+		app:iconGravity="end"
+		app:iconTint="@color/colorTextSecondary"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/meetingTime" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

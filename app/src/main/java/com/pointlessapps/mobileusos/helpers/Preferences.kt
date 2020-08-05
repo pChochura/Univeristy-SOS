@@ -1,8 +1,6 @@
 package com.pointlessapps.mobileusos.helpers
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.pointlessapps.mobileusos.exceptions.ExceptionNotInitialized
 import com.pointlessapps.mobileusos.models.SettingsWeekView
@@ -53,13 +51,7 @@ fun AppPreferences.putBreakLength(breakLength: Int) =
 
 fun AppPreferences.getEventColorByClassType(classType: String): Int {
 //	TODO: make this as a settings property
-	return when (classType.toLowerCase(Locale.getDefault())) {
-		"wyk" -> Color.parseColor("#FF80CBC4")
-		"ćw" -> Color.parseColor("#FFF06292")
-		"lab" -> Color.parseColor("#FFFF9E80")
-		"wf" -> Color.parseColor("#FF81C784")
-		else -> Color.parseColor("#FFAED581")
-	}
+	return Utils.getColorByClassType(classType)
 //	return getInt("${Preferences.KEY_EVENT_COLOR}_${classType.toLowerCase(Locale.getDefault())}", 0)
 }
 
