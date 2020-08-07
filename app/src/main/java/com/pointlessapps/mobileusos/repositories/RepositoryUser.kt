@@ -6,11 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.services.ServiceUSOSUser
-import com.pointlessapps.mobileusos.utils.Callback
-import com.pointlessapps.mobileusos.utils.CombinedLiveData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsync
 
 class RepositoryUser(application: Application) {
 
@@ -47,6 +44,14 @@ class RepositoryUser(application: Application) {
 		}
 		GlobalScope.launch {
 			callback.postValue(userDao.getById(id))
+		}
+		return callback
+	}
+
+	fun getByQuery(query: String): LiveData<List<User>?> {
+		val callback = MutableLiveData<List<User>?>()
+		serviceUser.getByQuery(query).observe {
+			callback.postValue(it)
 		}
 		return callback
 	}

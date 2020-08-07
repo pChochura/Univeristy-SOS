@@ -19,7 +19,12 @@
 		<item name="weekViewDividerLineColor">@color/colorTextSecondary</item>
 	</style>
 
-	<style name="BottomNavigationText" parent="Widget.MaterialComponents.BottomNavigationView">
+	<style name="BottomNavigationTextActive" parent="Widget.MaterialComponents.BottomNavigationView">
+		<item name="android:fontFamily">@font/montserrat_bold</item>
+		<item name="android:textSize">10sp</item>
+	</style>
+
+	<style name="BottomNavigationTextInactive" parent="Widget.MaterialComponents.BottomNavigationView">
 		<item name="android:fontFamily">@font/montserrat</item>
 		<item name="android:textSize">10sp</item>
 	</style>

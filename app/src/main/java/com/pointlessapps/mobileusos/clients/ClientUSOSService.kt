@@ -24,6 +24,19 @@ class ClientUSOSService private constructor() : USOSApi() {
 		}.build().toString()
 	)
 
+	fun usersRequest(query: String, startIndex: Int = 0) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/users/search2").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"items[user[first_name|last_name|email|titles]]|next_page"
+			)
+			.appendQueryParameter("lang", Locale.getDefault().toLanguageTag())
+			.appendQueryParameter("query", query)
+			.appendQueryParameter("num", "20")
+			.appendQueryParameter("start", startIndex.toString())
+			.build().toString()
+	)
+
 	fun userGroupRequest(courseUnitId: String, groupNumber: Int) = OAuthRequest(
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/groups/group").buildUpon()
 			.appendQueryParameter(
@@ -85,6 +98,16 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
+	fun userRecentGradesRequest() = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/grades/latest").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"value_symbol|value_description|date_modified|counts_into_average|comment|exam_id|exam_session_number"
+			)
+			.appendQueryParameter("days", "100")
+			.build().toString()
+	)
+
 	fun examReportRequest(examId: String) = OAuthRequest(
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/examrep/exam").buildUpon()
 			.appendQueryParameter(
@@ -95,18 +118,27 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
-	fun timetableRequest(id: String? = null, startDate: Calendar, days: Int = 7) = OAuthRequest(
+	fun examRequest(examIds: List<String>) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/exams/exams").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|name|description|course"
+			)
+			.appendQueryParameter("ids", examIds.joinToString("|"))
+			.build().toString()
+	)
+
+	fun timetableRequest(startDate: Calendar, days: Int = 7) = OAuthRequest(
 		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}${if (id == null) "/tt/user" else "/tt/staff"}")
-			.buildUpon().apply {
-				id?.also { appendQueryParameter("user_id", id) }
-				appendQueryParameter("start", dateFormat.format(startDate.time))
-				appendQueryParameter("days", days.toString())
-				appendQueryParameter(
-					"fields",
-					"start_time|end_time|name|course_id|course_name|building_name|building_id|room_number|group_number|room_id|frequency|classtype_id|unit_id|classtype_name|lecturer_ids"
-				)
-			}.build().toString()
+		Uri.parse("${selectedUniversity?.serviceUrl}/tt/user")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"start_time|end_time|name|course_id|course_name|building_name|building_id|room_number|group_number|room_id|frequency|classtype_id|unit_id|classtype_name|lecturer_ids"
+			)
+			.appendQueryParameter("days", days.toString())
+			.appendQueryParameter("start", dateFormat.format(startDate.time))
+			.build().toString()
 	)
 
 	fun timetableRequest(unitId: String, groupNumber: Int) = OAuthRequest(
@@ -163,9 +195,57 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|number|building[id|name|static_map_urls[600x300]|location]|capacity|attributes"
+				"id|number|building[id|name|static_map_urls[600x300]|location|campus_name]|capacity|attributes"
 			)
 			.appendQueryParameter("room_id", roomId)
+			.build().toString()
+	)
+
+	fun buildingRequest(building: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/geo/building2")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|name|static_map_urls[600x300]|location|campus_name|rooms[id|number|capacity]"
+			)
+			.appendQueryParameter("building_id", building)
+			.appendQueryParameter("langpref", "pl")
+			.build().toString()
+	)
+
+	fun emailsRequest() = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/user")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|subject|status|date"
+			)
+			.build().toString()
+	)
+
+	fun emailRequest(emailId: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/message")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|subject|status|date|content|attachments[id|filename|size|description|url]"
+			)
+			.appendQueryParameter("message_id", emailId)
+			.build().toString()
+	)
+
+	fun emailRecipientsRequest(emailId: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/recipients")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"email|user[first_name|last_name|titles|email|photo_urls[200x200]]"
+			)
+			.appendQueryParameter("message_id", emailId)
 			.build().toString()
 	)
 }

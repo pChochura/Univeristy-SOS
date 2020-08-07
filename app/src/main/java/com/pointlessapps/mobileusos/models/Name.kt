@@ -2,8 +2,7 @@ package com.pointlessapps.mobileusos.models
 
 import java.util.*
 
-class Name : Comparable<Name> {
-	var pl: String? = null
+class Name(private var pl: String? = null) : Comparable<Name> {
 	var en: String? = null
 
 	override fun toString() =

@@ -15,8 +15,12 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	private val repositoryGroup = RepositoryGroup(application)
 	private val repositoryGrade = RepositoryGrade(application)
 	private val repositoryExamReport = RepositoryExamReport(application)
+	private val repositoryExam = RepositoryExam(application)
+	private val repositoryEmail = RepositoryEmail(application)
 
 	fun getUserById(id: String? = null) = repositoryUser.getById(id)
+
+	fun getUsersByQuery(query: String) = repositoryUser.getByQuery(query)
 
 	fun getAllGroups() = repositoryGroup.getAll()
 
@@ -34,5 +38,15 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getGradesByTermIds(termIds: List<String>) = repositoryGrade.getByTermIds(termIds)
 
+	fun getRecentGrades() = repositoryGrade.getRecentGrades()
+
 	fun getExamReportById(examId: String) = repositoryExamReport.getById(examId)
+
+	fun getExamsByIds(examIds: List<String>) = repositoryExam.getByIds(examIds)
+
+	fun getAllEmails() = repositoryEmail.getAll()
+
+	fun getEmailById(emailId: String) = repositoryEmail.getById(emailId)
+
+	fun getEmailRecipients(emailId: String) = repositoryEmail.getRecipientsById(emailId)
 }

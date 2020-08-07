@@ -27,18 +27,14 @@
 
 	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:clipChildren="false"
+		android:clipToPadding="false">
 
-		<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recyclerView"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/recyclerView"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content" />
-
-		</androidx.appcompat.widget.LinearLayoutCompat>
+			android:layout_height="wrap_content" />
 
 	</androidx.core.widget.NestedScrollView>
 

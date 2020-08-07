@@ -9,6 +9,9 @@ data class Building(
 	var location: Location? = null,
 	@ColumnInfo(name = "static_map_urls")
 	var staticMapUrls: Map<String, String>? = null,
+	@ColumnInfo(name = "campus_name")
+	var campusName: Name? = null,
+	var rooms: List<BuildingRoom>? = null,
 	var name: Name? = null,
 	@PrimaryKey
 	var id: String = ""

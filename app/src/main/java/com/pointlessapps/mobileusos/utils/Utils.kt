@@ -6,13 +6,18 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
+import android.net.Uri
+import android.os.Build
 import android.provider.CalendarContract
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import android.view.Window
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.CourseEvent
 import org.jetbrains.anko.find
 import java.util.*
+
 
 object Utils {
 
@@ -86,6 +91,32 @@ object Utils {
 			)
 		)
 	}
+
+	fun phoneIntent(context: Context, phoneNumber: String) {
+		context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber")))
+	}
+
+	fun mapsIntent(
+		context: Context,
+		lat: Float?,
+		long: Float?,
+		name: String?
+	) {
+		val gmmIntentUri = Uri.parse("geo:$lat,$long?q=${Uri.encode(name)}")
+		val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+		mapIntent.setPackage("com.google.android.apps.maps")
+		mapIntent.resolveActivity(context.packageManager ?: return)
+			?.let {
+				context.startActivity(mapIntent)
+			}
+	}
+
+	fun parseHtml(input: String): Spanned =
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			Html.fromHtml(input, Html.FROM_HTML_MODE_COMPACT)
+		} else {
+			Html.fromHtml(input)
+		}
 
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator

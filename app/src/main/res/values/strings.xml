@@ -47,4 +47,23 @@
 	<string name="building_location">Building location</string>
 	<string name="available">Available</string>
 	<string name="meeting_name">%s, %s, group %s</string>
+	<string name="email_content">Email content</string>
+	<string name="recipient">Recipient</string>
+	<string name="attachments">Attachments</string>
+	<string name="usos_mail_acceptance">If you want to receive emails as well as sending them you have to log in into your USOS mail account</string>
+	<string name="login">Log in</string>
+	<string name="ignore">Ignore</string>
+	<string name="recipients">Recipients</string>
+	<string name="type_to_search">Type to search</string>
+	<string name="subject">Subject</string>
+	<string name="some_topic">Some topic</string>
+	<string name="some_content">Some content</string>
+	<string name="recent_grades">Recent grades</string>
+	<string name="no_recent_grades">There are no recent grades</string>
+	<string name="show_more">Show more</string>
+	<string name="show_less">Show less</string>
+	<string name="building">Building</string>
+	<string name="phone_numbers">Phone numbers</string>
+	<string name="rooms">Rooms</string>
+	<string name="no_phone_numbers">There are no phone numbers</string>
 </resources>

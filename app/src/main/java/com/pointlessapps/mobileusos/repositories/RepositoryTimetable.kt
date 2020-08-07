@@ -36,8 +36,7 @@ class RepositoryTimetable(application: Application) {
 		}
 	}
 
-	fun getForDaysByUser(
-		userId: String?,
+	fun getForDays(
 		startTime: Calendar,
 		numberOfDays: Int
 	): LiveData<List<CourseEvent>> {
@@ -47,20 +46,18 @@ class RepositoryTimetable(application: Application) {
 			set(Calendar.HOUR_OF_DAY, 1)
 		}
 		val callback = MutableLiveData<List<CourseEvent>>()
-		serviceTimetable.getByUser(userId, startTime, numberOfDays).observe {
+		serviceTimetable.getByUser(startTime, numberOfDays).observe {
 			val finalEvents = setBreaks(it)
 			callback.postValue(finalEvents)
 			insert(*finalEvents?.toTypedArray() ?: return@observe)
 		}
-		if (userId == null) {
-			GlobalScope.launch {
-				callback.postValue(
-					timetableDao.getForDays(
-						startTime.timeInMillis,
-						startTime.timeInMillis + TimeUnit.DAYS.toMillis(numberOfDays.toLong())
-					)
+		GlobalScope.launch {
+			callback.postValue(
+				timetableDao.getForDays(
+					startTime.timeInMillis,
+					startTime.timeInMillis + TimeUnit.DAYS.toMillis(numberOfDays.toLong())
 				)
-			}
+			)
 		}
 		return callback
 	}

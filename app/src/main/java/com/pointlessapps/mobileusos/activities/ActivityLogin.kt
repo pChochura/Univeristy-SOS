@@ -35,9 +35,10 @@ class ActivityLogin : FragmentActivity() {
 				}
 
 				viewModelCommon.getAllUniversities().observe(this) {
-					(dialog.listUniversities.adapter as? AdapterUniversity)?.update(
-						it ?: return@observe
-					)
+					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
+						update(it ?: listOf())
+						showMatching(dialog.inputSearchUniversities.text.toString())
+					}
 				}
 
 				dialog.listUniversities.apply {

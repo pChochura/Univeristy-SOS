@@ -56,4 +56,13 @@ class RepositoryGrade(application: Application) {
 		}
 		return callback
 	}
+
+	fun getRecentGrades(): LiveData<List<Grade>?> {
+		val callback = MutableLiveData<List<Grade>?>()
+		serviceGrade.getRecentGrades().observe { list ->
+			callback.postValue(list)
+			insert(*list?.toTypedArray() ?: return@observe)
+		}
+		return callback
+	}
 }

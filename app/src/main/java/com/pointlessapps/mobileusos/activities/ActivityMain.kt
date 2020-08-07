@@ -18,7 +18,7 @@ class ActivityMain : FragmentActivity() {
 			this,
 			FragmentTimetable(),
 			FragmentCalendar(),
-			FragmentMail(),
+			FragmentMails(),
 			FragmentNews(),
 			FragmentProfile()
 		).apply {

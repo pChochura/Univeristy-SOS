@@ -1,22 +1,19 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.content.Intent
-import android.net.Uri
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import com.google.android.material.chip.Chip
+import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.adapters.AdapterAttributes
 import com.pointlessapps.mobileusos.adapters.AdapterMeeting
+import com.pointlessapps.mobileusos.models.BuildingRoom
+import com.pointlessapps.mobileusos.models.Name
+import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_room.view.*
-import org.jetbrains.anko.find
 
 class FragmentRoom(private val roomName: String?, private val roomId: String) : FragmentBase() {
 
@@ -30,6 +27,7 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 
 		prepareData()
 		prepareMeetingsList()
+		prepareAttributesList()
 	}
 
 	private fun prepareData() {
@@ -37,47 +35,47 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 			root().roomName.text = room.number.toString()
 
 			room.building?.name?.toString()?.also { buildingName ->
-				root().buildingName.text = buildingName
+				root().buttonBuilding.text = buildingName
+
+				root().buttonBuilding.setOnClickListener {
+					onChangeFragmentListener?.invoke(
+						FragmentBuilding(
+							room.building ?: return@setOnClickListener
+						)
+					)
+				}
 			}
 
 			room.building?.staticMapUrls?.values?.first()?.also { map ->
 				Picasso.get().load(map).into(root().buildingMap)
 				root().buildingMap.setOnClickListener {
-					val gmmIntentUri =
-						Uri.parse(
-							"geo:${room.building?.location?.lat},${room.building?.location?.long}?q=${Uri.encode(
-								room.building?.name?.toString()
-							)}"
-						)
-					val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-					mapIntent.setPackage("com.google.android.apps.maps")
-					mapIntent.resolveActivity(activity?.packageManager ?: return@setOnClickListener)
-						?.let {
-							startActivity(mapIntent)
-						}
+					Utils.mapsIntent(
+						requireContext(),
+						room.building?.location?.lat,
+						room.building?.location?.long,
+						room.building?.name?.toString()
+					)
 				}
 			}
 
-			root().roomAttributes.removeAllViews()
+			(root().listAttributes.adapter as? AdapterAttributes)?.update(
+				listOf(
+					BuildingRoom.Attribute(
+						"capacity",
+						Name(getString(R.string.capacity)),
+						room.capacity
+					),
+					*(room.attributes ?: listOf()).toTypedArray()
+				)
+			)
+		}
+	}
 
-			room.capacity?.also {
-				root().roomAttributes.addView((LayoutInflater.from(requireContext())
-					.inflate(R.layout.list_item_room_attribute, null) as ViewGroup).apply {
-					find<AppCompatTextView>(R.id.attributeName).text = getString(R.string.capacity)
-					find<Chip>(R.id.attributeValue).text = room.capacity.toString()
-					setPadding(0)
-				})
-			}
-
-			room.attributes?.forEach { attribute ->
-				root().roomAttributes.addView((LayoutInflater.from(requireContext())
-					.inflate(R.layout.list_item_room_attribute, null) as ViewGroup).apply {
-					find<AppCompatTextView>(R.id.attributeName).text =
-						attribute.description.toString()
-					find<Chip>(R.id.attributeValue).text =
-						(attribute.count ?: getString(R.string.available)).toString()
-				})
-			}
+	private fun prepareAttributesList() {
+		root().listAttributes.apply {
+			adapter = AdapterAttributes()
+			layoutManager =
+				UnscrollableLinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 		}
 	}
 

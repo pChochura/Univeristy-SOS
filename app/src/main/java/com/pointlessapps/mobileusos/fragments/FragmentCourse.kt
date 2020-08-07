@@ -7,6 +7,7 @@ import com.pointlessapps.mobileusos.adapters.AdapterMeeting
 import com.pointlessapps.mobileusos.adapters.AdapterUser
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.utils.Utils
+import com.pointlessapps.mobileusos.utils.capitalize
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.fragment_course.view.*
@@ -29,9 +30,11 @@ class FragmentCourse(private val course: Course) : FragmentBase() {
 	private fun prepareCourseData() {
 		root().courseName.text = course.courseName.toString()
 		root().courseInfo.text =
-			getString(R.string.course_info, course.classType.toString().apply {
-				first().toUpperCase()
-			}, course.groupNumber)
+			getString(
+				R.string.course_info,
+				course.classType.toString().capitalize(),
+				course.groupNumber
+			)
 	}
 
 	private fun prepareInstructorsList() {

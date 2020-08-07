@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.services
 
+import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Grade
@@ -41,7 +42,9 @@ class ServiceUSOSGrade private constructor() {
 			callback.post(
 				clientService.run {
 					execute(userGradesRequest(termIds))?.run {
-						gson.fromJson<Map<String, Map<String, ResponseCourseGradesList>>>(body)
+						gson.fromJson<Map<String, Map<String, ResponseCourseGradesList>>>(body.also {
+							Log.d("LOG!", "grades: $it")
+						})
 							.mapValues { entry ->
 								entry.value.mapValues {
 									it.value.courseGrades?.flatMap { courseGrades ->
@@ -53,6 +56,20 @@ class ServiceUSOSGrade private constructor() {
 									}?.get(0)
 								}
 							}
+					}
+				}
+			)
+		}
+		return callback
+	}
+
+	fun getRecentGrades(): Callback<List<Grade>?> {
+		val callback = Callback<List<Grade>?>()
+		doAsync {
+			callback.post(
+				clientService.run {
+					execute(userRecentGradesRequest())?.run {
+						gson.fromJson<List<Grade>>(body)
 					}
 				}
 			)

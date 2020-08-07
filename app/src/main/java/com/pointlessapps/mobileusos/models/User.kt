@@ -10,7 +10,7 @@ data class User(
 	@PrimaryKey
 	var id: String = UUID.randomUUID().toString(),
 	@ColumnInfo(name = "title")
-	var title: Title? = null,
+	var titles: Title? = null,
 	@ColumnInfo(name = "email")
 	var email: String? = null,
 	@ColumnInfo(name = "first_name")
@@ -30,10 +30,10 @@ data class User(
 
 	fun name(): String {
 		var name = "$firstName $lastName"
-		title?.before?.also {
+		titles?.before?.also {
 			name = "$it $name"
 		}
-		title?.after?.also {
+		titles?.after?.also {
 			name = "$name $it"
 		}
 		return name

@@ -19,8 +19,8 @@ class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 
 	override fun getLayoutId() = R.layout.list_item_university
 
-	override fun onCreate(root: View, position: Int) {
-		super.onCreate(root, position)
+	override fun onCreate(root: View) {
+		super.onCreate(root)
 		textName = root.find(R.id.universityName)
 		textLocation = root.find(R.id.universityLocation)
 	}

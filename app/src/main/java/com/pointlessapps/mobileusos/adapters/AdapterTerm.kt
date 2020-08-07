@@ -21,9 +21,10 @@ class AdapterTerm : AdapterSimple<Term>(mutableListOf()) {
 	}
 
 	override fun getLayoutId() = R.layout.list_item_term
+	override fun isCollapsible() = true
 
-	override fun onCreate(root: View, position: Int) {
-		super.onCreate(root, position)
+	override fun onCreate(root: View) {
+		super.onCreate(root)
 		textName = root.find(R.id.termName)
 		textId = root.find(R.id.termId)
 		textFinishDate = root.find(R.id.termFinishDate)

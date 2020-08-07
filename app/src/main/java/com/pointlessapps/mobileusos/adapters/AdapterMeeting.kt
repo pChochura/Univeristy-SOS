@@ -10,7 +10,10 @@ import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterMeeting(private val extended: Boolean = false) :
+class AdapterMeeting(
+	private val showCourseName: Boolean = false,
+	private val showRoomButton: Boolean = true
+) :
 	AdapterSimple<CourseEvent>(mutableListOf()) {
 
 	private val dateFormat = SimpleDateFormat("EEE, dd MMMM yyyy", Locale.getDefault())
@@ -30,17 +33,21 @@ class AdapterMeeting(private val extended: Boolean = false) :
 	}
 
 	override fun getLayoutId() = R.layout.list_item_meeting
+	override fun isCollapsible() = true
 
-	override fun onCreate(root: View, position: Int) {
-		super.onCreate(root, position)
+	override fun onCreate(root: View) {
+		super.onCreate(root)
 		textName = root.find(R.id.meetingName)
 		textDate = root.find(R.id.meetingDate)
 		textTime = root.find(R.id.meetingTime)
 		buttonRoom = root.find(R.id.buttonRoom)
 		buttonAddToCalendar = root.find(R.id.buttonAddToCalendar)
 
-		if (extended) {
+		if (showCourseName) {
 			textName.visibility = View.VISIBLE
+		}
+
+		if (!showRoomButton) {
 			buttonRoom.visibility = View.GONE
 		}
 	}

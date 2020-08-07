@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:clickable="true"
+	android:focusable="true"
+	app:cardBackgroundColor="@color/white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp"
+	app:rippleColor="@color/colorTextSecondary">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:padding="10dp">
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/icon"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:background="@drawable/ic_circle"
+			android:backgroundTint="@color/colorBackground"
+			android:padding="8dp"
+			android:src="@drawable/ic_room"
+			android:tint="@color/colorTextPrimary"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/roomName"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toRightOf="@id/icon"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="D. 3" />
+
+		<com.google.android.material.chip.Chip
+			android:id="@+id/roomCapacity"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:backgroundTint="@color/colorAccent"
+			android:checkable="false"
+			android:clickable="false"
+			android:elevation="0dp"
+			android:focusable="false"
+			android:fontFamily="@font/montserrat"
+			android:stateListAnimator="@null"
+			android:textColor="@color/white"
+			android:textSize="14sp"
+			app:chipMinTouchTargetSize="32dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="342" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

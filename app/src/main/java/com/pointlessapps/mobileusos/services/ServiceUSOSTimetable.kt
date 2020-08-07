@@ -13,7 +13,6 @@ class ServiceUSOSTimetable private constructor() {
 	private val clientService = ClientUSOSService.init()
 
 	fun getByUser(
-		userId: String?,
 		startTime: Calendar,
 		numberOfDays: Int
 	): Callback<List<CourseEvent>?> {
@@ -21,7 +20,7 @@ class ServiceUSOSTimetable private constructor() {
 		doAsync {
 			callback.post(
 				clientService.run {
-					execute(timetableRequest(userId, startTime, numberOfDays))?.run {
+					execute(timetableRequest(startTime, numberOfDays))?.run {
 						gson.fromJson<List<CourseEvent>>(body)
 					}
 				}

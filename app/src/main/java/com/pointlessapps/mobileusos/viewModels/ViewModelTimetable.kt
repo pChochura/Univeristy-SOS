@@ -15,7 +15,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 
 	private val timetableUnit = MutableLiveData<TimetableUnit>()
 	private var timetableForDays = timetableUnit.switchMap {
-		repositoryTimetable.getForDaysByUser(it.userId, it.startTime, it.numberOfDays)
+		repositoryTimetable.getForDays(it.startTime, it.numberOfDays)
 			.map { courseEvents ->
 				courseEvents.map { courseEvent ->
 					this.courseEvents.add(courseEvent)
@@ -39,20 +39,20 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	private val daysUpToDate = mutableSetOf<String>()
 	val courseEvents = mutableListOf<CourseEvent>()
 
-	fun getForDaysByUser(
-		startTime: Calendar,
-		userId: String? = null,
+	fun getForDays(
+		startTime: Calendar = Calendar.getInstance(),
 		numberOfDays: Int = 7
 	): LiveData<Map<String, List<WeekView.WeekViewEvent>>> {
-		timetableUnit.value = TimetableUnit(userId, numberOfDays, startTime)
+		timetableUnit.value = TimetableUnit(numberOfDays, startTime)
 		return timetableForDays
 	}
 
 	fun getBytUnitIdAndGroupNumber(unitId: String, groupNumber: Int) =
 		repositoryTimetable.getByUnitIdAndGroupNumber(unitId, groupNumber)
 
-	fun getByRoomId(roomId: String) =
-		repositoryTimetable.getByRoomId(roomId)
+	fun getByRoomId(roomId: String) = repositoryTimetable.getByRoomId(roomId)
+
+	fun getIncoming() = repositoryTimetable.getForDays(Calendar.getInstance(), 7)
 
 	fun setStartTime(startTime: Calendar) {
 		var numberOfDays = timetableUnit.value?.numberOfDays ?: 7
@@ -71,7 +71,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 						timetableUnit.value =
 							timetableUnit.value?.copy(startTime = date, numberOfDays = numberOfDays)
 					} else {
-						timetableUnit.value = TimetableUnit(null, numberOfDays, date)
+						timetableUnit.value = TimetableUnit(numberOfDays, date)
 					}
 				}
 

@@ -1,18 +1,27 @@
 package com.pointlessapps.mobileusos.fragments
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.adapters.AdapterMeeting
+import com.pointlessapps.mobileusos.adapters.AdapterRecentGrade
 import com.pointlessapps.mobileusos.adapters.AdapterTerm
+import com.pointlessapps.mobileusos.utils.Utils
+import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
-import kotlinx.android.synthetic.main.partial_profile_terms.view.*
+import java.util.*
 
 class FragmentProfile : FragmentBase() {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
+	private val viewModelTimetable by viewModels<ViewModelTimetable>()
+	private val currentTerm = MutableLiveData<String?>()
 
 	override fun getLayoutId() = R.layout.fragment_profile
 	override fun getNavigationIcon() = R.drawable.ic_profile
@@ -20,7 +29,8 @@ class FragmentProfile : FragmentBase() {
 
 	override fun created() {
 		prepareTermsList()
-		prepareTerms()
+		prepareGradesList()
+		prepareMeetingsList()
 		prepareProfileData()
 		prepareClickListeners()
 	}
@@ -31,11 +41,72 @@ class FragmentProfile : FragmentBase() {
 		root().buttonSurveys.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSurveys()) }
 	}
 
-	private fun prepareTermsList() {
-		root().listTerms.setAdapter(AdapterTerm())
+	private fun prepareGradesList() {
+		root().listRecentGrades.apply {
+			setAdapter(AdapterRecentGrade().apply {
+				onClickListener = {
+					FragmentGrades.showGradeDialog(this@FragmentProfile, it, viewModelUser)
+				}
+			})
+			setLayoutManager(
+				LinearLayoutManager(
+					requireContext(),
+					RecyclerView.HORIZONTAL,
+					false
+				)
+			)
+		}
+
+		val dateToCheck = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -7) }.time
+
+		currentTerm.observe(this) { term ->
+			if (term == null) {
+				return@observe
+			}
+
+			// TODO: displaying course name... Somehow
+			viewModelUser.getGradesByTermIds(listOf(term)).observe(this) { grades ->
+				root().listRecentGrades.setEmptyText(getString(R.string.no_recent_grades))
+
+				var gradesList =
+					grades?.toList()?.firstOrNull()?.second?.values?.toList() ?: return@observe
+				gradesList =
+					gradesList.filter { it?.dateModified?.compareTo(dateToCheck) ?: 1 > 0 }
+						.filterNotNull()
+
+				(root().listRecentGrades.adapter as? AdapterRecentGrade)?.apply {
+					update(gradesList.sortedBy {
+						it.dateModified
+					})
+				}
+			}
+		}
 	}
 
-	private fun prepareTerms() {
+	private fun prepareMeetingsList() {
+		root().listMeetings.apply {
+			setAdapter(AdapterMeeting(true).apply {
+				onAddToCalendarClickListener = {
+					Utils.calendarIntent(requireContext(), it)
+				}
+				onRoomClickListener = {
+					it.roomId?.apply {
+						onChangeFragmentListener?.invoke(FragmentRoom(it.roomNumber, this))
+					}
+				}
+			})
+		}
+
+		viewModelTimetable.getIncoming().observe(this) {
+			(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
+
+			root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
+		}
+	}
+
+	private fun prepareTermsList() {
+		root().listTerms.setAdapter(AdapterTerm())
+
 		viewModelUser.getAllGroups().observe(this) {
 			postTerms(it?.map { group -> group.termId } ?: return@observe)
 		}
@@ -43,6 +114,7 @@ class FragmentProfile : FragmentBase() {
 
 	private fun postTerms(termIds: List<String>) {
 		viewModelUser.getTermsByIds(termIds).observe(this) { terms ->
+			this.currentTerm.value = terms?.min()?.id
 			(root().listTerms.adapter as? AdapterTerm)?.update(terms ?: return@observe)
 		}
 	}

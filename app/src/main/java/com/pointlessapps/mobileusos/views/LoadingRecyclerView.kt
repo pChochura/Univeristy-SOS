@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
@@ -19,11 +20,20 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 		get() = recyclerView.adapter
 
 	init {
-		View.inflate(context, R.layout.view_loading_recycler_view, this)
 		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.LoadingRecyclerView, 0, 0)
 		val orientation =
 			a.getInt(R.styleable.LoadingRecyclerView_android_orientation, RecyclerView.VERTICAL)
 		a.recycle()
+
+		View.inflate(
+			context,
+			if (orientation == RecyclerView.VERTICAL) {
+				R.layout.view_loading_recycler_view
+			} else {
+				R.layout.view_loading_recycler_view_horizontal
+			},
+			this
+		)
 
 		recyclerView.layoutManager = UnscrollableLinearLayoutManager(context, orientation, false)
 	}
@@ -54,7 +64,7 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 		}
 	}
 
-	fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
+	fun setLayoutManager(layoutManager: LinearLayoutManager) {
 		recyclerView.layoutManager = layoutManager
 	}
 

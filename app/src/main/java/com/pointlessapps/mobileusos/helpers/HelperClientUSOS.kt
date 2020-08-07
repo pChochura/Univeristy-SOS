@@ -12,8 +12,6 @@ import com.github.scribejava.core.oauth.OAuth10aService
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.clients.ClientUSOS
 import com.pointlessapps.mobileusos.models.University
-import com.pointlessapps.mobileusos.utils.getJson
-import com.pointlessapps.mobileusos.utils.putJson
 import org.jetbrains.anko.doAsync
 
 object HelperClientUSOS {
@@ -74,7 +72,9 @@ object HelperClientUSOS {
 					"email",
 					"other_emails",
 					"grades",
-					"offline_access"
+					"offline_access",
+					"mailclient",
+					"surveys_filling"
 				)
 			)
 }

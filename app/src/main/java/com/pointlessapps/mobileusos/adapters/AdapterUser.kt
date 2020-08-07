@@ -21,8 +21,8 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 
 	override fun getLayoutId() = R.layout.list_item_user
 
-	override fun onCreate(root: View, position: Int) {
-		super.onCreate(root, position)
+	override fun onCreate(root: View) {
+		super.onCreate(root)
 		textName = root.find(R.id.userName)
 		imageProfile = root.find(R.id.userProfileImg)
 	}

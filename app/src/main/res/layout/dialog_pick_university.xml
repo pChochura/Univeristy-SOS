@@ -14,9 +14,9 @@
 		android:id="@+id/listUniversities"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
+		android:clipChildren="false"
 		android:clipToPadding="false"
 		android:paddingBottom="15dp"
-		android:clipChildren="false"
 		app:layout_constraintBottom_toTopOf="@id/inputSearchUniversities"
 		app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +28,7 @@
 		android:background="@drawable/background_rounded"
 		android:backgroundTint="@color/colorBackground"
 		android:drawableEnd="@drawable/ic_search"
+		android:fontFamily="@font/montserrat"
 		android:hint="@string/search_for_university"
 		android:paddingLeft="10dp"
 		android:paddingRight="10dp"

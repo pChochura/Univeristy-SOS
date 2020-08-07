@@ -38,7 +38,7 @@ class FragmentTimetable : FragmentBase() {
 	}
 
 	private fun observeTimetableData(startTime: Calendar = Calendar.getInstance()) {
-		viewModelTimetable.getForDaysByUser(startTime).observe(this@FragmentTimetable) {
+		viewModelTimetable.getForDays(startTime).observe(this@FragmentTimetable) {
 			weekView.refreshDataset()
 		}
 	}
@@ -85,7 +85,7 @@ class FragmentTimetable : FragmentBase() {
 					dialog.eventLecturer.text = it?.name()
 				}
 
-			dialog.eventRoom.setOnClickListener {
+			dialog.buttonRoom.setOnClickListener {
 				onChangeFragmentListener?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
 
 				dialog.dismiss()

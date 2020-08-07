@@ -11,7 +11,9 @@ data class BuildingRoom(
 	var number: String? = null,
 	@PrimaryKey
 	var id: String = ""
-) {
+) : Comparable<BuildingRoom> {
+
+	override fun compareTo(other: BuildingRoom) = compareValuesBy(this, other, { number })
 
 	data class Attribute(var id: String, var description: Name, var count: Int?)
 }

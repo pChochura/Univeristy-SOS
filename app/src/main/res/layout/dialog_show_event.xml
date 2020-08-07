@@ -105,33 +105,44 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/buttonRoom"
 		android:layout_width="match_parent"
 		android:layout_height="45dp"
-		android:background="?android:attr/selectableItemBackground"
 		android:clickable="true"
-		android:focusable="true">
+		android:focusable="true"
+		app:cardBackgroundColor="@color/white"
+		app:cardCornerRadius="0dp"
+		app:cardElevation="0dp"
+		app:cardUseCompatPadding="false"
+		app:rippleColor="@color/colorTextSecondary">
 
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_room"
-			app:tint="@color/colorTextPrimary" />
+		<androidx.appcompat.widget.LinearLayoutCompat
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/eventRoom"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:fontFamily="@font/montserrat"
-			android:text="@string/loading"
-			android:textColor="@color/colorTextPrimary"
-			android:textSize="14sp" />
+			<androidx.appcompat.widget.AppCompatImageView
+				android:layout_width="24dp"
+				android:layout_height="24dp"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/ic_room"
+				app:tint="@color/colorTextPrimary" />
 
-	</androidx.appcompat.widget.LinearLayoutCompat>
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/eventRoom"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/loading"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
+
+	</com.google.android.material.card.MaterialCardView>
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"

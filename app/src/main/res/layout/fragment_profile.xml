@@ -82,7 +82,52 @@
 
 			<include layout="@layout/partial_profile_shortcuts" />
 
-			<include layout="@layout/partial_profile_terms" />
+			<androidx.appcompat.widget.AppCompatTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/recent_grades"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listRecentGrades"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:clipChildren="false"
+				android:clipToPadding="false"
+				android:orientation="horizontal" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/incoming_meetings"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listMeetings"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:fontFamily="@font/montserrat"
+				android:text="@string/terms"
+				android:textColor="@color/colorTextPrimary"
+				android:textSize="14sp" />
+
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+				android:id="@+id/listTerms"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp" />
 
 		</androidx.appcompat.widget.LinearLayoutCompat>
 

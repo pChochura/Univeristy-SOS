@@ -21,13 +21,14 @@
 
 		<androidx.appcompat.widget.AppCompatTextView
 			android:id="@+id/gradeName"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:textColor="@color/colorTextPrimary"
 			android:textSize="14sp"
 			app:fontFamily="@font/montserrat"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toLeftOf="@id/gradeValue"
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Bazy danych" />
 

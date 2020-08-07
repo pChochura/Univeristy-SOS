@@ -51,16 +51,23 @@
 				android:textSize="24sp"
 				tools:text="D. 3" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/buildingName"
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/buttonBuilding"
+				style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:fontFamily="@font/montserrat"
-				android:gravity="center_horizontal"
-				android:textAlignment="center"
+				android:insetTop="0dp"
+				android:insetBottom="0dp"
+				android:letterSpacing="0"
+				android:minHeight="0dp"
+				android:padding="10dp"
+				android:textAllCaps="false"
 				android:textColor="@color/colorTextPrimary"
 				android:textSize="14sp"
+				app:backgroundTint="@color/white"
+				app:rippleColor="@color/colorTextSecondary"
 				tools:text="Budynek D - Wydział Elktrotechniki i Informatyki" />
 
 			<androidx.appcompat.widget.AppCompatTextView
@@ -72,15 +79,16 @@
 				android:textColor="@color/colorTextPrimary"
 				android:textSize="14sp" />
 
-			<androidx.appcompat.widget.LinearLayoutCompat
-				android:id="@+id/roomAttributes"
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/listAttributes"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
 				android:backgroundTint="@color/white"
-				android:orientation="vertical"
-				android:padding="10dp" />
+				android:padding="10dp"
+				tools:itemCount="3"
+				tools:listitem="@layout/list_item_room_attribute" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:layout_width="wrap_content"
