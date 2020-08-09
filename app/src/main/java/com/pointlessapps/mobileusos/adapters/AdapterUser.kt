@@ -20,6 +20,7 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 	}
 
 	override fun getLayoutId() = R.layout.list_item_user
+	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)
@@ -28,6 +29,10 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 	}
 
 	override fun onBind(root: View, position: Int) {
+		root.find<View>(R.id.bg).setOnClickListener {
+			onClickListener?.invoke(list[position])
+		}
+
 		textName.text = list[position].name()
 
 		list[position].photoUrls?.values?.firstOrNull()?.also {

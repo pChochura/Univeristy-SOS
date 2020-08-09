@@ -66,4 +66,25 @@
 	<string name="phone_numbers">Phone numbers</string>
 	<string name="rooms">Rooms</string>
 	<string name="no_phone_numbers">There are no phone numbers</string>
+	<string name="no_rooms">There are no rooms</string>
+	<string name="description">Description</string>
+	<string name="learning_outcomes">Learning outcomes</string>
+	<string name="assessment_criteria">Assessment criteria</string>
+	<string name="user">User</string>
+	<string name="office_hours">Office hours</string>
+	<string name="interests">Interests</string>
+	<string name="employment_functions">Employment functions</string>
+	<string name="email">Email</string>
+	<string name="function">Function:</string>
+	<string name="faculty">Faculty:</string>
+	<string name="no_employment_functions">There are not employment functions</string>
+	<string name="no_instructors">There are no instructors</string>
+	<string name="discard">Discard</string>
+	<string name="save_draft">Save draft</string>
+	<string name="discard_email_message">All your content will be erased and you won\'t be able to come back to it.</string>
+	<string name="discard_email_title">Do you want to discard all changes?</string>
+	<string name="academic_calendar">Academic calendar</string>
+	<string name="events">Events</string>
+	<string name="date_period">%1$td.%1$tm.%1$tY - %2$td.%2$tm.%2$tY</string>
+	<string name="day_off">Day off</string>
 </resources>

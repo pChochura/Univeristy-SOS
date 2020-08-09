@@ -91,12 +91,12 @@ class FragmentGrades : FragmentBase() {
 					dialog.gradeName.text = grade.courseName?.toString()
 					grade.valueSymbol?.also { dialog.gradeValue.text = it }
 					grade.dateModified?.also {
-						dialog.gradeDate.text = SimpleDateFormat(
+						dialog.buttonGradeDate.text = SimpleDateFormat(
 							"yyyy-MM-dd H:mm",
 							Locale.getDefault()
 						).format(it)
 					}
-					grade.modificationAuthor?.also { dialog.gradeAuthor.text = it.name() }
+					grade.modificationAuthor?.also { dialog.buttonGradeAuthor.text = it.name() }
 
 					viewModelUser.getExamReportById(grade.examId ?: return@create)
 						.observe(fragment) { examReport ->

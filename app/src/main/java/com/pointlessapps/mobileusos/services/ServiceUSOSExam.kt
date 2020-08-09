@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.services
 
-import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Exam
 import com.pointlessapps.mobileusos.utils.Callback
@@ -18,10 +17,7 @@ class ServiceUSOSExam private constructor() {
 			callback.post(
 				clientService.run {
 					execute(examRequest(ids))?.run {
-						gson.fromJson<Map<String, Exam>>(body.also {
-							Log.d("LOG!", "ids: $ids")
-							Log.d("LOG!", "exams: $it")
-						}).values.toList()
+						gson.fromJson<Map<String, Exam>>(body).values.toList()
 					}
 				}
 			)

@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.services
 
+import android.util.Log
 import com.github.scribejava.core.model.OAuthRequest
 import com.github.scribejava.core.model.Response
 import com.github.scribejava.core.oauth.OAuth10aService
@@ -15,6 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class USOSApi {
+
+	companion object {
+		private const val TAG = "USOS API"
+	}
 
 	private val accessToken = Preferences.get().getAccessToken()
 	private val service: OAuth10aService? by lazy {
@@ -38,9 +43,12 @@ open class USOSApi {
 
 	fun execute(request: OAuthRequest?): Response? =
 		if (request == null) {
+			Log.w(TAG, "Request is null")
 			null
-		} else service?.run {
-			signRequest(accessToken, request)
-			execute(request)
+		} else {
+			service?.run {
+				signRequest(accessToken, request)
+				execute(request)
+			}
 		}
 }

@@ -80,93 +80,61 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonLecturer"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 		android:layout_width="match_parent"
-		android:layout_height="45dp">
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/loading"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextPrimary"
+		app:backgroundTint="@color/white"
+		app:icon="@drawable/ic_profile"
+		app:iconTint="@color/colorTextPrimary"
+		app:rippleColor="@color/colorTextSecondary" />
 
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_profile"
-			app:tint="@color/colorTextPrimary" />
-
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/eventLecturer"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:fontFamily="@font/montserrat"
-			android:text="@string/loading"
-			android:textColor="@color/colorTextPrimary"
-			android:textSize="14sp" />
-
-	</androidx.appcompat.widget.LinearLayoutCompat>
-
-	<com.google.android.material.card.MaterialCardView
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonRoom"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 		android:layout_width="match_parent"
-		android:layout_height="45dp"
-		android:clickable="true"
-		android:focusable="true"
-		app:cardBackgroundColor="@color/white"
-		app:cardCornerRadius="0dp"
-		app:cardElevation="0dp"
-		app:cardUseCompatPadding="false"
-		app:rippleColor="@color/colorTextSecondary">
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/loading"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextPrimary"
+		app:backgroundTint="@color/white"
+		app:icon="@drawable/ic_room"
+		app:iconTint="@color/colorTextPrimary"
+		app:rippleColor="@color/colorTextSecondary" />
 
-		<androidx.appcompat.widget.LinearLayoutCompat
-			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-
-			<androidx.appcompat.widget.AppCompatImageView
-				android:layout_width="24dp"
-				android:layout_height="24dp"
-				android:layout_gravity="center_vertical"
-				android:src="@drawable/ic_room"
-				app:tint="@color/colorTextPrimary" />
-
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/eventRoom"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_vertical"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/loading"
-				android:textColor="@color/colorTextPrimary"
-				android:textSize="14sp" />
-
-		</androidx.appcompat.widget.LinearLayoutCompat>
-
-	</com.google.android.material.card.MaterialCardView>
-
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonBuilding"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 		android:layout_width="match_parent"
-		android:layout_height="45dp">
-
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_building"
-			app:tint="@color/colorTextPrimary" />
-
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/eventBuilding"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:fontFamily="@font/montserrat"
-			android:text="@string/loading"
-			android:textColor="@color/colorTextPrimary"
-			android:textSize="14sp" />
-
-	</androidx.appcompat.widget.LinearLayoutCompat>
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/loading"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextPrimary"
+		app:backgroundTint="@color/white"
+		app:icon="@drawable/ic_building"
+		app:iconTint="@color/colorTextPrimary"
+		app:rippleColor="@color/colorTextSecondary" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

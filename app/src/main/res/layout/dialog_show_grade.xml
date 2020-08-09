@@ -45,8 +45,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="15dp"
-		android:padding="10dp"
-		android:background="@drawable/background_rounded">
+		android:background="@drawable/background_rounded"
+		android:padding="10dp">
 
 		<com.github.mikephil.charting.charts.BarChart
 			android:id="@+id/gradeChart"
@@ -55,54 +55,44 @@
 
 	</FrameLayout>
 
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonGradeAuthor"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 		android:layout_width="match_parent"
-		android:layout_height="45dp">
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/empty"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextPrimary"
+		app:backgroundTint="@color/white"
+		app:icon="@drawable/ic_profile"
+		app:iconTint="@color/colorTextPrimary"
+		app:rippleColor="@color/colorTextSecondary" />
 
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_profile"
-			app:tint="@color/colorTextPrimary" />
-
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/gradeAuthor"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:fontFamily="@font/montserrat"
-			android:text="@string/empty"
-			android:textColor="@color/colorTextPrimary"
-			android:textSize="14sp" />
-
-	</androidx.appcompat.widget.LinearLayoutCompat>
-
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonGradeDate"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
 		android:layout_width="match_parent"
-		android:layout_height="45dp">
-
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_gravity="center_vertical"
-			android:src="@drawable/ic_calendar"
-			app:tint="@color/colorTextPrimary" />
-
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/gradeDate"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:fontFamily="@font/montserrat"
-			android:text="@string/empty"
-			android:textColor="@color/colorTextPrimary"
-			android:textSize="14sp" />
-
-	</androidx.appcompat.widget.LinearLayoutCompat>
+		android:layout_height="wrap_content"
+		android:clickable="false"
+		android:focusable="false"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/empty"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="@color/colorTextPrimary"
+		app:backgroundTint="@color/white"
+		app:icon="@drawable/ic_calendar"
+		app:iconTint="@color/colorTextPrimary"
+		app:rippleColor="@color/colorTextSecondary" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

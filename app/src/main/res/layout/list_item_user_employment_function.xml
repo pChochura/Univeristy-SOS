@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="@color/white"
+	android:orientation="vertical"
+	android:padding="10dp">
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:text="@string/function"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/textFunction"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp"
+			tools:text="Some function" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:text="@string/faculty"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/textFaculty"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp"
+			tools:text="Some faculty" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,12 +2,10 @@ package com.pointlessapps.mobileusos.fragments
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPhoneNumber
 import com.pointlessapps.mobileusos.adapters.AdapterRoom
 import com.pointlessapps.mobileusos.models.Building
-import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.squareup.picasso.Picasso
@@ -23,6 +21,16 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 		preparePhonesList()
 		prepareRoomsList()
 		prepareData()
+
+		viewModelCommon.getBuildingById(building.id).observe(this) {
+			building = it ?: return@observe
+			prepareData()
+
+			(root().listRooms.adapter as? AdapterRoom)?.update(it.rooms ?: return@observe)
+			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
+				it.allPhoneNumbers ?: return@observe
+			)
+		}
 	}
 
 	private fun prepareData() {
@@ -44,26 +52,26 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 	private fun preparePhonesList() {
 		root().listPhoneNumbers.apply {
 			setAdapter(AdapterPhoneNumber().apply {
-				onClickListener = { Utils.phoneIntent(requireContext(), it) }
+				onClickListener = { Utils.phoneIntent(requireContext(), it.number) }
 			})
 
 			setEmptyText(getString(R.string.no_phone_numbers))
 		}
+
+		(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
+			building.phoneNumbers?.map { Building.PhoneNumber(it) } ?: return
+		)
 	}
 
 	private fun prepareRoomsList() {
 		root().listRooms.apply {
-			adapter = AdapterRoom().apply {
+			setAdapter(AdapterRoom().apply {
 				onClickListener = {
 					onChangeFragmentListener?.invoke(FragmentRoom(it.number, it.id))
 				}
-			}
-			layoutManager =
-				UnscrollableLinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-		}
+			})
 
-		viewModelCommon.getBuildingById(building.id).observe(this) {
-			(root().listRooms.adapter as? AdapterRoom)?.update(it?.rooms ?: return@observe)
+			setEmptyText(getString(R.string.no_rooms))
 		}
 	}
 }

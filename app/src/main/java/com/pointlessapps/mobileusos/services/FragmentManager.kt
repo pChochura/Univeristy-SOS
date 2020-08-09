@@ -64,6 +64,7 @@ class FragmentManager private constructor(
 		fragment.onChangeFragmentListener = {
 			setFragment(it.apply { prepareFragment(this) })
 		}
+		fragment.onForceGoBackListener = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation
 	}
 
@@ -118,7 +119,11 @@ class FragmentManager private constructor(
 		}
 	}
 
-	fun popHistory(): Boolean {
+	fun popHistory(force: Boolean = false): Boolean {
+		if (!force && currentFragment?.onBackPressedListener?.invoke() == true) {
+			return true
+		}
+
 		if (startingPosition == -1 ||
 			(history.size <= 1 && currentFragment === fragments[startingPosition])
 		) {

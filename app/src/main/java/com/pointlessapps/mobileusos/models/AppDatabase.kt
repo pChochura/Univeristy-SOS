@@ -22,7 +22,8 @@ import com.pointlessapps.mobileusos.utils.Utils
 		BuildingRoom::class,
 		Building::class,
 		Email::class,
-		Exam::class
+		Exam::class,
+		CalendarEvent::class
 	],
 	version = 1
 )
@@ -53,6 +54,7 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun emailDao(): EmailDao
 	abstract fun examDao(): ExamDao
 	abstract fun buildingDao(): BuildingDao
+	abstract fun calendarDao(): CalendarDao
 
 	companion object : Utils.SingletonHolder<AppDatabase, Context>({
 		Room.databaseBuilder(

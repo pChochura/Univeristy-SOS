@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.services.ServiceUSOSUser
 import kotlinx.coroutines.GlobalScope
@@ -48,9 +49,37 @@ class RepositoryUser(application: Application) {
 		return callback
 	}
 
+	fun getByIds(ids: List<String>): LiveData<List<User>?> {
+		val callback = MutableLiveData<List<User>?>()
+		serviceUser.getByIds(ids).observe {
+			callback.postValue(it)
+			insert(*it?.toTypedArray() ?: return@observe)
+		}
+		GlobalScope.launch {
+			callback.postValue(userDao.getByIds(ids))
+		}
+		return callback
+	}
+
 	fun getByQuery(query: String): LiveData<List<User>?> {
 		val callback = MutableLiveData<List<User>?>()
 		serviceUser.getByQuery(query).observe {
+			callback.postValue(it)
+		}
+		return callback
+	}
+
+	fun getAllFaculties(): LiveData<List<String>?> {
+		val callback = MutableLiveData<List<String>?>()
+		serviceUser.getAllFaculties().observe {
+			callback.postValue(it)
+		}
+		return callback
+	}
+
+	fun getCoursesByIds(ids: List<String>): LiveData<List<Course>?> {
+		val callback = MutableLiveData<List<Course>?>()
+		serviceUser.getCoursesByIds(ids).observe {
 			callback.postValue(it)
 		}
 		return callback

@@ -20,7 +20,13 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getUserById(id: String? = null) = repositoryUser.getById(id)
 
+	fun getUserByIds(ids: List<String>) = repositoryUser.getByIds(ids)
+
 	fun getUsersByQuery(query: String) = repositoryUser.getByQuery(query)
+
+	fun getAllFaculties() = repositoryUser.getAllFaculties()
+
+	fun getCoursesByIds(ids: List<String>) = repositoryUser.getCoursesByIds(ids)
 
 	fun getAllGroups() = repositoryGroup.getAll()
 

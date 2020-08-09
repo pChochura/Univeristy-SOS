@@ -53,7 +53,7 @@ abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 
 	override fun getItemCount() = when {
 		isCollapsed() -> onCollapseMaxItemCount() + 1
-		isCollapsible() && list.size > 0 -> list.size + 1
+		isCollapsibleInternal() && list.size > 0 -> list.size + 1
 		else -> list.size
 	}
 
@@ -66,14 +66,14 @@ abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 	override fun getItemViewType(position: Int) =
 		if (isCollapsed() && position == itemCount - 1) {
 			+ViewType.SHOW_MORE
-		} else if (isCollapsible() && !isCollapsed() && position == itemCount - 1) {
+		} else if (isCollapsibleInternal() && !isCollapsed() && position == itemCount - 1) {
 			+ViewType.SHOW_LESS
 		} else {
 			+ViewType.SIMPLE
 		}
 
-	private fun isCollapsed() =
-		collapsed && isCollapsible() && (list.size > onCollapseMaxItemCount())
+	private fun isCollapsed() = collapsed && isCollapsibleInternal()
+	private fun isCollapsibleInternal() = isCollapsible() && (list.size > onCollapseMaxItemCount())
 
 	open fun update(list: List<T>) {
 		this.list.apply {

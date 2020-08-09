@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<com.google.android.material.card.MaterialCardView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="10dp"
-	android:background="@drawable/background_rounded"
-	android:backgroundTint="@color/white"
-	android:gravity="center_vertical"
-	android:padding="10dp">
+	app:cardBackgroundColor="@color/white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp"
+	app:rippleColor="@color/colorTextSecondary">
 
-	<de.hdodenhof.circleimageview.CircleImageView
-		android:id="@+id/userProfileImg"
-		android:layout_width="32dp"
-		android:layout_height="32dp"
-		android:src="@drawable/ic_profile_img_default"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
-	<androidx.appcompat.widget.AppCompatTextView
-		android:id="@+id/userName"
-		android:layout_width="wrap_content"
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="10dp"
-		android:layout_marginRight="10dp"
-		android:fontFamily="@font/montserrat"
-		android:textColor="@color/colorTextPrimary"
-		android:textSize="14sp"
-		tools:text="Jan Kowalski" />
+		android:gravity="center_vertical"
+		android:padding="10dp">
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/userProfileImg"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:src="@drawable/ic_profile_img_default"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/userName"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp"
+			tools:text="Jan Kowalski" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

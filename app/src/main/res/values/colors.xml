@@ -6,6 +6,7 @@
 	<color name="colorBackground">#EFEFEF</color>
 	<color name="colorTextPrimary">#515151</color>
 	<color name="colorTextSecondary">#ABABAB</color>
+	<color name="colorTextRed">#C80000</color>
 	<color name="colorNavigationIconChecked">@color/colorAccent</color>
 	<color name="colorNavigationIconUnchecked">@color/colorTextPrimary</color>
 
@@ -21,4 +22,9 @@
 	<color name="defaultEventColor">#123123</color>
 	<color name="defaultEventTextColor">#ffffff</color>
 	<color name="white">#ffffff</color>
+
+	<color name="color1">#FFEB3B</color>
+	<color name="color2">#FF9800</color>
+	<color name="color3">#E91E63</color>
+	<color name="color4">#4CAF50</color>
 </resources>

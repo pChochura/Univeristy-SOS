@@ -11,6 +11,14 @@ class ConvertersUser {
 	fun toTitle(title: String): User.Title? = Gson().fromJson(title)
 
 	@TypeConverter
+	fun toEmploymentFunction(employmentFunction: String): List<User.EmploymentFunction>? =
+		Gson().fromJson(employmentFunction)
+
+	@TypeConverter
+	fun fromEmploymentFunction(employmentFunction: List<User.EmploymentFunction>?): String =
+		Gson().toJson(employmentFunction)
+
+	@TypeConverter
 	fun toStringStringMap(map: String): Map<String, String>? = Gson().fromJson(map)
 
 	@TypeConverter

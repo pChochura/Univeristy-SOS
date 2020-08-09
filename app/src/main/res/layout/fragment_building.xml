@@ -113,13 +113,11 @@
 				android:textColor="@color/colorTextPrimary"
 				android:textSize="14sp" />
 
-			<androidx.recyclerview.widget.RecyclerView
+			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
 				android:id="@+id/listRooms"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
-				tools:itemCount="5"
-				tools:listitem="@layout/list_item_room" />
+				android:layout_marginTop="10dp" />
 
 		</androidx.appcompat.widget.LinearLayoutCompat>
 

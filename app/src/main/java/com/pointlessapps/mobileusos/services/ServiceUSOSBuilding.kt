@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.services
 
-import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.utils.Callback
@@ -18,9 +17,7 @@ class ServiceUSOSBuilding private constructor() {
 			callback.post(
 				clientService.run {
 					execute(buildingRequest(buildingId))?.run {
-						gson.fromJson<Building>(body.also {
-							Log.d("LOG!", "buidlings: $it")
-						})
+						gson.fromJson<Building>(body)
 					}
 				}
 			)

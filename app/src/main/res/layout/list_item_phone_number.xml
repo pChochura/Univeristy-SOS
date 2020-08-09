@@ -14,20 +14,23 @@
 	app:cardElevation="0dp"
 	app:rippleColor="@color/colorTextSecondary">
 
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_vertical"
 		android:padding="10dp">
 
 		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/icon"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
 			android:background="@drawable/ic_circle"
 			android:backgroundTint="@color/colorBackground"
 			android:padding="8dp"
 			android:src="@drawable/ic_phone"
-			android:tint="@color/colorTextPrimary" />
+			android:tint="@color/colorTextPrimary"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
 		<androidx.appcompat.widget.AppCompatTextView
 			android:id="@+id/phoneNumber"
@@ -38,8 +41,27 @@
 			android:fontFamily="@font/montserrat"
 			android:textColor="@color/colorTextPrimary"
 			android:textSize="14sp"
+			app:layout_constraintBottom_toTopOf="@id/comment"
+			app:layout_constraintLeft_toRightOf="@id/icon"
+			app:layout_constraintTop_toTopOf="parent"
 			tools:text="+48 231239 432" />
 
-	</androidx.appcompat.widget.LinearLayoutCompat>
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/comment"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toRightOf="@id/icon"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/phoneNumber"
+			tools:text="Some comment, I don't know what is going to be here. Nevermind" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

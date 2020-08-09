@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:cardBackgroundColor="@android:color/transparent"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<View
+			android:id="@+id/border"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@drawable/border"
+			android:visibility="gone" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/dayNumber"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:padding="10dp"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="14sp"
+			tools:text="21" />
+
+		<com.google.android.flexbox.FlexboxLayout
+			android:id="@+id/eventsContainer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			app:alignContent="center"
+			app:alignItems="center"
+			app:dividerDrawable="@drawable/divider"
+			app:flexWrap="wrap"
+			app:justifyContent="center"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:showDivider="middle">
+
+			<View
+				android:layout_width="10dp"
+				android:layout_height="10dp"
+				android:background="@drawable/ic_circle"
+				android:backgroundTint="@color/colorAccent" />
+
+		</com.google.android.flexbox.FlexboxLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

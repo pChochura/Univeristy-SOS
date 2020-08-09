@@ -13,6 +13,16 @@ data class User(
 	var titles: Title? = null,
 	@ColumnInfo(name = "email")
 	var email: String? = null,
+	@ColumnInfo(name = "room")
+	var room: BuildingRoom? = null,
+	@ColumnInfo(name = "office_hours")
+	var officeHours: Name? = null,
+	@ColumnInfo(name = "interests")
+	var interests: Name? = null,
+	@ColumnInfo(name = "phone_numbers")
+	var phoneNumbers: List<String>? = null,
+	@ColumnInfo(name = "employment_functions")
+	var employmentFunctions: List<EmploymentFunction>? = null,
 	@ColumnInfo(name = "first_name")
 	val firstName: String? = null,
 	@ColumnInfo(name = "last_name")
@@ -39,8 +49,17 @@ data class User(
 		return name
 	}
 
-	class Title {
-		var before: String? = null
-		var after: String? = null
+	class Title(var before: String?, var after: String?)
+
+	class EmploymentFunction(
+		var function: Name?,
+		var faculty: Faculty,
+		var isOfficial: Boolean = false
+	)
+
+	class Faculty(var id: String, var name: Name?) {
+		companion object {
+			const val BASE_FACULTY_ID = "0000000"
+		}
 	}
 }

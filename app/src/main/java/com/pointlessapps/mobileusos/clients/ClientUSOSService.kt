@@ -19,18 +19,28 @@ class ClientUSOSService private constructor() : USOSApi() {
 			}
 			appendQueryParameter(
 				"fields",
-				"id|titles|email|first_name|last_name|student_number|photo_urls[200x200]"
+				"id|titles|email|first_name|last_name|student_number|photo_urls[200x200]|room|employment_functions|interests|office_hours|phone_numbers"
 			)
 		}.build().toString()
+	)
+
+	fun usersRequest(userIds: List<String>) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/users/users").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|first_name|last_name|email|titles|photo_urls[200x200]"
+			)
+			.appendQueryParameter("user_ids", userIds.joinToString("|"))
+			.build().toString()
 	)
 
 	fun usersRequest(query: String, startIndex: Int = 0) = OAuthRequest(
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/users/search2").buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"items[user[first_name|last_name|email|titles]]|next_page"
+				"items[user[id|first_name|last_name|email|titles]]|next_page"
 			)
-			.appendQueryParameter("lang", Locale.getDefault().toLanguageTag())
+			.appendQueryParameter("lang", "pl")
 			.appendQueryParameter("query", query)
 			.appendQueryParameter("num", "20")
 			.appendQueryParameter("start", startIndex.toString())
@@ -41,7 +51,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/groups/group").buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"course_unit_id|class_type_id|term_id|course_id|class_type|course_name|group_number|lecturers|participants"
+				"course_unit_id|class_type_id|term_id|course_id|class_type|course_name|group_number|lecturers|participants|course_learning_outcomes|course_description|course_assessment_criteria"
 			)
 			.appendQueryParameter("course_unit_id", courseUnitId)
 			.appendQueryParameter("group_number", groupNumber.toString())
@@ -55,6 +65,23 @@ class ClientUSOSService private constructor() : USOSApi() {
 				"course_unit_id|class_type_id|term_id|course_id|class_type|course_name|group_number|lecturers"
 			)
 			.appendQueryParameter("active_terms", "true")
+			.build().toString()
+	)
+
+	fun userCoursesRequest() = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/courses/user").buildUpon()
+			.appendQueryParameter("fields", "course_editions[course_id|user_groups[course_fac_id]]")
+			.appendQueryParameter("active_terms", "true")
+			.build().toString()
+	)
+
+	fun userCoursesRequest(ids: List<String>) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/courses/courses").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|name|fac_id"
+			)
+			.appendQueryParameter("course_ids", ids.joinToString("|"))
 			.build().toString()
 	)
 
@@ -207,7 +234,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|name|static_map_urls[600x300]|location|campus_name|rooms[id|number|capacity]"
+				"id|name|static_map_urls[600x300]|location|campus_name|rooms[id|number|capacity]|phone_numbers|all_phone_numbers"
 			)
 			.appendQueryParameter("building_id", building)
 			.appendQueryParameter("langpref", "pl")
@@ -246,6 +273,20 @@ class ClientUSOSService private constructor() : USOSApi() {
 				"email|user[first_name|last_name|titles|email|photo_urls[200x200]]"
 			)
 			.appendQueryParameter("message_id", emailId)
+			.build().toString()
+	)
+
+	fun calendarRequest(faculty: String, startDate: Date, endDate: Date) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/calendar/search")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|name|start_date|end_date|type|is_day_off|faculty[id]"
+			)
+			.appendQueryParameter("faculty_id", faculty)
+			.appendQueryParameter("start_date", dateFormat.format(startDate))
+			.appendQueryParameter("end_date", dateFormat.format(endDate))
 			.build().toString()
 	)
 }

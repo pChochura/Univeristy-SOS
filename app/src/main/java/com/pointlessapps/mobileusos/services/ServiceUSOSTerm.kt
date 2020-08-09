@@ -17,7 +17,8 @@ class ServiceUSOSTerm private constructor() {
 			callback.post(
 				clientService.run {
 					execute(termsRequest(ids))?.run {
-						gson.fromJson<Map<String, Term>>(body).values.toList().sorted()
+						gson.fromJson<Map<String, Term?>>(body).values.toList().filterNotNull()
+							.sorted()
 					}
 				}
 			)
@@ -31,7 +32,7 @@ class ServiceUSOSTerm private constructor() {
 			callback.post(
 				clientService.run {
 					execute(termsRequest())?.run {
-						gson.fromJson<List<Term>>(body).sorted()
+						gson.fromJson<List<Term?>>(body).filterNotNull().sorted()
 					}
 				}
 			)

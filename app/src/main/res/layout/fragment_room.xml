@@ -67,6 +67,8 @@
 				android:textColor="@color/colorTextPrimary"
 				android:textSize="14sp"
 				app:backgroundTint="@color/white"
+				app:cornerRadius="5dp"
+				app:elevation="0dp"
 				app:rippleColor="@color/colorTextSecondary"
 				tools:text="Budynek D - Wydział Elktrotechniki i Informatyki" />
 

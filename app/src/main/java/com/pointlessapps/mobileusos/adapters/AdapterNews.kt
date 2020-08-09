@@ -1,8 +1,6 @@
 package com.pointlessapps.mobileusos.adapters
 
 import android.content.Context
-import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import com.intrusoft.sectionedrecyclerview.Section
 import com.intrusoft.sectionedrecyclerview.SectionRecyclerViewAdapter
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.Article
+import com.pointlessapps.mobileusos.utils.Utils
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,24 +61,15 @@ class AdapterNews(private val context: Context, sections: List<SectionHeader> = 
 			onClickListener(article)
 		}
 
-		itemView.textName.text = stripHtmlTags(article.headlineHtml.toString())
+		itemView.textName.text = Utils.stripHtmlTags(article.headlineHtml.toString())
 		itemView.textDescription.text =
-			ellipsize(stripHtmlTags(article.contentHtml.toString()))
+			ellipsize(Utils.stripHtmlTags(article.contentHtml.toString()))
 		itemView.textDate.text = dateFormat.format(article.publicationDate ?: return)
 		article.category?.name?.toString()?.takeUnless { it.isBlank() }?.also {
 			itemView.textCategory.text = it
 			itemView.textCategory.visibility = View.VISIBLE
 		}
 	}
-
-	private fun stripHtmlTags(html: String) =
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-			Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT).toString()
-				.replace(Regex(" +|\t+|\n+"), " ").replace(Regex(" {2,}"), "")
-		} else {
-			Html.fromHtml(html).toString().replace(Regex(" +|\t+|\n+"), " ")
-				.replace(Regex(" {2,}"), "")
-		}
 
 	private fun ellipsize(text: String): String {
 		val shorten = text.take(150)

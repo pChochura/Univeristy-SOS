@@ -118,6 +118,15 @@ object Utils {
 			Html.fromHtml(input)
 		}
 
+	fun stripHtmlTags(html: String) =
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT).toString()
+				.replace(Regex(" +|\t+|\n+"), " ").replace(Regex(" {2,}"), "")
+		} else {
+			Html.fromHtml(html).toString().replace(Regex(" +|\t+|\n+"), " ")
+				.replace(Regex(" {2,}"), "")
+		}
+
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator
 

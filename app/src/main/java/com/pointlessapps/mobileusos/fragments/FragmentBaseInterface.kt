@@ -17,12 +17,15 @@ interface FragmentBaseInterface {
 	fun getNavigationName(): Int = 0
 
 	fun created() = Unit
-
 	fun refreshed() = Unit
 
 	fun root(): ViewGroup? = null
 
+	fun forceGoBack() = Unit
+
 	var bottomNavigationView: BottomNavigationView?
 	var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)?
 	var onLoadedFragmentListener: (() -> Unit)?
+	var onBackPressedListener: (() -> Boolean)?
+	var onForceGoBackListener: (() -> Unit)?
 }

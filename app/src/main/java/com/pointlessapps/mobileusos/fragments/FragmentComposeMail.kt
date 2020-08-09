@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -7,14 +8,18 @@ import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAutocomplete
 import com.pointlessapps.mobileusos.models.Email
+import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.addChip
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
+import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
 
-class FragmentComposeMail(private val email: Email? = null) : FragmentBase() {
+class FragmentComposeMail(
+	private val email: Email? = null,
+	private val recipients: MutableList<Email.Recipient> = mutableListOf()
+) : FragmentBase() {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
-	private val recipients = mutableListOf<Email.Recipient>()
 
 	override fun getLayoutId() = R.layout.fragment_compose_mail
 
@@ -22,6 +27,36 @@ class FragmentComposeMail(private val email: Email? = null) : FragmentBase() {
 		prepareData()
 		prepareClickListeners()
 		prepareRecipientsList()
+
+		onBackPressedListener = {
+			DialogUtil.create(
+				requireContext(),
+				R.layout.dialog_message,
+				{ dialog ->
+					dialog.messageMain.text = getString(R.string.discard_email_title)
+					dialog.messageSecondary.text = getString(R.string.discard_email_message)
+					dialog.buttonPrimary.text = getString(R.string.discard)
+					dialog.buttonSecondary.text = getString(R.string.save_draft)
+
+					dialog.buttonPrimary.setOnClickListener {
+						dialog.dismiss()
+						forceGoBack()
+					}
+					dialog.buttonSecondary.setOnClickListener {
+						dialog.dismiss()
+						saveDraft()
+						forceGoBack()
+					}
+				},
+				DialogUtil.UNDEFINED_WINDOW_SIZE,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+			)
+			true
+		}
+	}
+
+	private fun saveDraft() {
+
 	}
 
 	private fun prepareRecipientsList() {
@@ -50,6 +85,10 @@ class FragmentComposeMail(private val email: Email? = null) : FragmentBase() {
 						} ?: listOf())
 					}
 			}
+		}
+
+		recipients.forEach {
+			root().listRecipients.addChip(it.name()) { recipients.remove(it) }
 		}
 	}
 

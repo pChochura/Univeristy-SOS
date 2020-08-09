@@ -16,10 +16,16 @@ data class Term(
 	var endDate: Date? = null,
 	@ColumnInfo(name = "order_key")
 	var orderKey: Long? = null
-) : Comparable<Term> {
+) : Comparable<Term?> {
 
-	override fun compareTo(other: Term) =
-		compareValuesBy(other, this, { it.orderKey }, { it.startDate }, { it.endDate }, { it.id })
+	override fun compareTo(other: Term?) =
+		compareValuesBy(
+			other,
+			this,
+			{ it?.orderKey },
+			{ it?.startDate },
+			{ it?.endDate },
+			{ it?.id })
 
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true

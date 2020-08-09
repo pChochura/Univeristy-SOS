@@ -429,7 +429,7 @@ public class WeekView extends View {
 		}
 		if (snappingEnabled && !isTouching) {
 			float wantedOffset = Math.round(offsetX / dayWidth) * dayWidth;
-			int diff = (int) (offsetX - wantedOffset);
+			int diff = (int) Math.ceil(offsetX - wantedOffset);
 			if (Math.abs(diff) >= snappingThreshold) {
 				if (scroller.isFinished()) {
 					scroller.startScroll((int) offsetX, (int) offsetY, -diff, 0, scrollDuration);
@@ -713,7 +713,7 @@ public class WeekView extends View {
 		canvas.clipRect(0, headerHeight, headerWidth, getBottom());
 
 //		Draw hours labels
-		for (int i = startHour, index = 0; i < endHour; i++, index++) {
+		for (int i = startHour, index = 0; i <= endHour; i++, index++) {
 			if (dateTimeInterpreter == null) {
 				throw new RuntimeException("DateTimeInterpreter cannot be null!");
 			}
@@ -821,7 +821,7 @@ public class WeekView extends View {
 		}
 
 		float x = headerWidth + goToTodayRadius * 2f;
-		float y = getBottom() - 150f - goToTodayRadius;
+		float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
 		float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
 
 		if (flipped == -1) {
@@ -839,7 +839,7 @@ public class WeekView extends View {
 
 		goToTodayPaint.setStrokeWidth(WeekViewUtil.dpToPx(getContext(), 2));
 		canvas.drawLines(new float[]{
-				x + goToTodayRadius * 0.25f * flipped, getBottom() - 150f - goToTodayRadius - goToTodayRadius * 0.45f,
+				x + goToTodayRadius * 0.25f * flipped, y - goToTodayRadius * 0.45f,
 				x - goToTodayRadius * 0.25f * flipped, y,
 				x + goToTodayRadius * 0.25f * flipped, y + goToTodayRadius * 0.45f,
 				x - goToTodayRadius * 0.25f * flipped, y,
@@ -889,7 +889,7 @@ public class WeekView extends View {
 			// If the tap was on go to today button scroll there
 			if (goToTodayVisible && !WeekViewUtil.isSameDay(firstVisibleDay, today)) {
 				float x = headerWidth + goToTodayRadius * 2f;
-				float y = getBottom() - 150f - goToTodayRadius;
+				float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
 				float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
 				float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius * 0.5f;
 				float maxX = minX + goToTodayRadius;

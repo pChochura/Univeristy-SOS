@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getWeekViewSettings
+import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -78,15 +79,27 @@ class FragmentTimetable : FragmentBase() {
 			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
 			dialog.eventEndTime.text = hourFormat.format(event.endTime?.time ?: return@create)
 			dialog.eventType.text = event.classtypeName.toString()
-			dialog.eventRoom.text = event.roomNumber
-			dialog.eventBuilding.text = event.buildingName.toString()
+			dialog.buttonRoom.text = event.roomNumber
+			dialog.buttonBuilding.text = event.buildingName.toString()
 			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
 				.observe(this) {
-					dialog.eventLecturer.text = it?.name()
+					dialog.buttonLecturer.text = it?.name()
 				}
 
 			dialog.buttonRoom.setOnClickListener {
 				onChangeFragmentListener?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
+
+				dialog.dismiss()
+			}
+
+			dialog.buttonBuilding.setOnClickListener {
+				onChangeFragmentListener?.invoke(
+					FragmentBuilding(
+						Building(
+							id = event.buildingId ?: return@setOnClickListener
+						)
+					)
+				)
 
 				dialog.dismiss()
 			}

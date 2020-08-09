@@ -22,12 +22,16 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 	override var bottomNavigationView: BottomNavigationView? = null
 	override var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)? = null
 	override var onLoadedFragmentListener: (() -> Unit)? = null
+	override var onBackPressedListener: (() -> Boolean)? = null
+	override var onForceGoBackListener: (() -> Unit)? = null
 
 	private var forceRefresh = false
 
 	fun forceRefresh(force: Boolean = true) {
 		forceRefresh = force
 	}
+
+	override fun forceGoBack(): Unit = onForceGoBackListener?.invoke() ?: Unit
 
 	abstract override fun created()
 
