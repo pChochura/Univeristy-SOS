@@ -17,7 +17,9 @@
 			android:id="@+id/border"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="@drawable/border"
+			android:alpha="0.3"
+			android:background="@drawable/background_rounded"
+			android:backgroundTint="@color/colorAccent"
 			android:visibility="gone" />
 
 		<androidx.appcompat.widget.AppCompatTextView
@@ -43,15 +45,7 @@
 			app:flexWrap="wrap"
 			app:justifyContent="center"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:showDivider="middle">
-
-			<View
-				android:layout_width="10dp"
-				android:layout_height="10dp"
-				android:background="@drawable/ic_circle"
-				android:backgroundTint="@color/colorAccent" />
-
-		</com.google.android.flexbox.FlexboxLayout>
+			app:showDivider="middle" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

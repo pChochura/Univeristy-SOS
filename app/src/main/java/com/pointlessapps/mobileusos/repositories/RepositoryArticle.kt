@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Article
+import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.services.ServiceUSOSArticle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,9 +53,14 @@ class RepositoryArticle(application: Application) {
 			} ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(articleDao.getAllCategories().filterNot { category ->
-				category.name?.toString().isNullOrBlank()
-			})
+			callback.postValue(
+				listOf(
+					*articleDao.getAllCategories().filterNot { category ->
+						category.name?.toString().isNullOrBlank()
+					}.toTypedArray(),
+					Article.Category("default", Name("Bez kategorii", "No category"))
+				)
+			)
 		}
 		return callback
 	}

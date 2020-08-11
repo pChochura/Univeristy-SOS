@@ -87,4 +87,11 @@
 	<string name="events">Events</string>
 	<string name="date_period">%1$td.%1$tm.%1$tY - %2$td.%2$tm.%2$tY</string>
 	<string name="day_off">Day off</string>
+	<string name="mon">Mon</string>
+	<string name="tue">Tue</string>
+	<string name="wed">Wed</string>
+	<string name="thu">Thu</string>
+	<string name="fri">Fri</string>
+	<string name="sat">Sat</string>
+	<string name="sun">Sun</string>
 </resources>

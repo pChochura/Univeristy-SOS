@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.github.mikephil.charting.components.AxisBase
@@ -81,7 +80,7 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	companion object {
-		fun showGradeDialog(fragment: Fragment, grade: Grade, viewModelUser: ViewModelUser) {
+		fun showGradeDialog(fragment: FragmentBase, grade: Grade, viewModelUser: ViewModelUser) {
 			DialogUtil.create(
 				fragment.requireContext(),
 				R.layout.dialog_show_grade,
@@ -97,6 +96,16 @@ class FragmentGrades : FragmentBase() {
 						).format(it)
 					}
 					grade.modificationAuthor?.also { dialog.buttonGradeAuthor.text = it.name() }
+
+					dialog.buttonGradeAuthor.setOnClickListener {
+						fragment.onChangeFragmentListener?.invoke(
+							FragmentUser(
+								grade.modificationAuthor?.id ?: return@setOnClickListener
+							)
+						)
+
+						dialog.dismiss()
+					}
 
 					viewModelUser.getExamReportById(grade.examId ?: return@create)
 						.observe(fragment) { examReport ->

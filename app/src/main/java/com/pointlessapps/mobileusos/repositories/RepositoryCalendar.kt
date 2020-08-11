@@ -44,7 +44,7 @@ class RepositoryCalendar(application: Application) {
 			insert(*it.toTypedArray())
 		}
 		GlobalScope.launch {
-			callback.postValue(calendarDao.getByFaculties(faculties, startDate, endDate))
+			callback.postValue(calendarDao.getByFaculties(faculties, startDate.time, endDate.time))
 		}
 		return callback
 	}

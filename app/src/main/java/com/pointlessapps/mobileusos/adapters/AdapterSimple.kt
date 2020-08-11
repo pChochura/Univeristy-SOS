@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import org.jetbrains.anko.find
 
-abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
+abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 	RecyclerView.Adapter<DataObjectHolder>() {
 
 	var onClickListener: ((T) -> Unit)? = null
@@ -57,14 +57,16 @@ abstract class AdapterSimple<T>(protected val list: MutableList<T>) :
 		else -> list.size
 	}
 
-	override fun getItemId(position: Int) = if (position in 0 until list.size) {
-		list[position].hashCode().toLong()
-	} else {
-		position.toLong()
+	override fun getItemId(position: Int) = when (true) {
+		!hasStableIds() -> RecyclerView.NO_ID
+		position in 0 until list.size -> list[position].hashCode().toLong()
+		else -> position.toLong()
 	}
 
 	override fun getItemViewType(position: Int) =
-		if (isCollapsed() && position == itemCount - 1) {
+		if (!hasStableIds()) {
+			+ViewType.SIMPLE
+		} else if (isCollapsed() && position == itemCount - 1) {
 			+ViewType.SHOW_MORE
 		} else if (isCollapsibleInternal() && !isCollapsed() && position == itemCount - 1) {
 			+ViewType.SHOW_LESS

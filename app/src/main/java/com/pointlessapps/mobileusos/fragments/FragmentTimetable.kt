@@ -86,6 +86,16 @@ class FragmentTimetable : FragmentBase() {
 					dialog.buttonLecturer.text = it?.name()
 				}
 
+			dialog.buttonLecturer.setOnClickListener {
+				onChangeFragmentListener?.invoke(
+					FragmentUser(
+						event.lecturerIds?.firstOrNull() ?: return@setOnClickListener
+					)
+				)
+
+				dialog.dismiss()
+			}
+
 			dialog.buttonRoom.setOnClickListener {
 				onChangeFragmentListener?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
 

@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.adapters
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.card.MaterialCardView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.User
 import com.squareup.picasso.Picasso
@@ -26,6 +27,11 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 		super.onCreate(root)
 		textName = root.find(R.id.userName)
 		imageProfile = root.find(R.id.userProfileImg)
+
+		if (onClickListener == null) {
+			root.find<View>(R.id.bg).isClickable = false
+			root.find<MaterialCardView>(R.id.bg).setRippleColorResource(android.R.color.transparent)
+		}
 	}
 
 	override fun onBind(root: View, position: Int) {

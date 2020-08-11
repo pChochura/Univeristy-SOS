@@ -40,7 +40,9 @@ class FragmentNews : FragmentBase() {
 		viewModelCommon.getAllNews().observe(this) {
 			(root().listNews.adapter as AdapterNews).update(
 				it.filter { article -> article.headlineHtml != null && article.contentHtml != null }
-					.groupBy { article -> article.publicationDate?.time ?: lastWeekDate - lastWeekDate > 0 }
+					.groupBy { article ->
+						(article.publicationDate?.time ?: lastWeekDate) - lastWeekDate <= 0
+					}
 					.map { entry ->
 						AdapterNews.SectionHeader(
 							getString(if (entry.key) R.string.older else R.string.last_week),

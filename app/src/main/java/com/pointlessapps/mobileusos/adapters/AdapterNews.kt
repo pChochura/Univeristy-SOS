@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.intrusoft.sectionedrecyclerview.Section
@@ -65,10 +66,8 @@ class AdapterNews(private val context: Context, sections: List<SectionHeader> = 
 		itemView.textDescription.text =
 			ellipsize(Utils.stripHtmlTags(article.contentHtml.toString()))
 		itemView.textDate.text = dateFormat.format(article.publicationDate ?: return)
-		article.category?.name?.toString()?.takeUnless { it.isBlank() }?.also {
-			itemView.textCategory.text = it
-			itemView.textCategory.visibility = View.VISIBLE
-		}
+		itemView.textCategory.text = article.category?.name?.toString()
+		itemView.textCategory.isGone = article.category?.name?.toString().isNullOrBlank()
 	}
 
 	private fun ellipsize(text: String): String {
@@ -76,7 +75,6 @@ class AdapterNews(private val context: Context, sections: List<SectionHeader> = 
 		val index = shorten.lastIndexOf(' ')
 		return shorten.take(if (index < 130) 150 else index).plus("…")
 	}
-
 
 	class SectionHeader(private val header: String, private val courses: List<Article>) :
 		Section<Article> {

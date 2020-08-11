@@ -4,47 +4,150 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/buttonPrevious"
-		style="@style/Widget.MaterialComponents.Button.TextButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:insetTop="0dp"
-		android:insetBottom="0dp"
-		android:minWidth="0dp"
-		android:minHeight="0dp"
-		android:padding="10dp"
-		app:icon="@drawable/ic_arrow_left"
-		app:iconSize="32dp"
-		app:iconTint="@color/colorTextPrimary" />
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 
-	<androidx.appcompat.widget.AppCompatTextView
-		android:id="@+id/monthName"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:fontFamily="@font/montserrat_bold"
-		android:gravity="center"
-		android:textAlignment="center"
-		android:textColor="@color/colorTextPrimary"
-		android:textSize="24sp"
-		tools:text="July" />
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonPrevious"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:padding="10dp"
+			app:icon="@drawable/ic_arrow_left"
+			app:iconSize="32dp"
+			app:iconTint="@color/colorTextPrimary" />
 
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/buttonNext"
-		style="@style/Widget.MaterialComponents.Button.TextButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:insetTop="0dp"
-		android:insetBottom="0dp"
-		android:minWidth="0dp"
-		android:minHeight="0dp"
-		android:padding="10dp"
-		app:icon="@drawable/ic_arrow_right"
-		app:iconSize="32dp"
-		app:iconTint="@color/colorTextPrimary" />
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/monthName"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:fontFamily="@font/montserrat_bold"
+			android:gravity="center"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextPrimary"
+			android:textSize="24sp"
+			tools:text="July" />
 
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonNext"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:padding="10dp"
+			app:icon="@drawable/ic_arrow_right"
+			app:iconSize="32dp"
+			app:iconTint="@color/colorTextPrimary" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<com.google.android.flexbox.FlexboxLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/mon"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/tue"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/wed"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/thu"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/fri"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/sat"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/sun"
+			android:textAlignment="center"
+			android:textColor="@color/colorTextSecondary"
+			android:textSize="14sp"
+			app:layout_flexBasisPercent="10%"
+			app:layout_flexGrow="1"
+			app:layout_flexShrink="1" />
+
+	</com.google.android.flexbox.FlexboxLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

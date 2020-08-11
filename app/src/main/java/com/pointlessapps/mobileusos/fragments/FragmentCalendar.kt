@@ -48,11 +48,9 @@ class FragmentCalendar : FragmentBase() {
 		prepareCalendar()
 		prepareEventsList()
 
-		startDate.observe(this) {
-			viewModelCommon.getCalendarByFaculties(listOf(User.Faculty.BASE_FACULTY_ID), it)
+		startDate.observe(this) { date ->
+			viewModelCommon.getCalendarByFaculties(listOf(User.Faculty.BASE_FACULTY_ID), date)
 				.observe(this) { list ->
-					root().loadingContainer.isVisible = false
-
 					allEvents.addAll(list?.filter { event ->
 						allEvents.find { it.id == event.id } == null
 					} ?: return@observe)
@@ -80,7 +78,8 @@ class FragmentCalendar : FragmentBase() {
 						addView(View(requireContext()).apply {
 							layoutParams = ViewGroup.LayoutParams(6.dp, 6.dp)
 							setBackgroundResource(R.drawable.ic_circle)
-							backgroundTintList = ColorStateList.valueOf(getColorForEvent(it))
+							backgroundTintList =
+								ColorStateList.valueOf(it.getColor(requireContext()))
 						})
 					}
 				}
@@ -146,16 +145,6 @@ class FragmentCalendar : FragmentBase() {
 		root().calendar.setup(firstMonth, lastMonth, DayOfWeek.MONDAY)
 		root().calendar.scrollToMonth(YearMonth.now())
 	}
-
-	private fun getColorForEvent(event: CalendarEvent) = ContextCompat.getColor(
-		requireContext(), when (event.type) {
-			"break" -> R.color.color1
-			"public_holidays" -> R.color.color2
-			"exam_session" -> R.color.color3
-			"academic_year" -> R.color.color4
-			else -> R.color.colorAccent
-		}
-	)
 
 	private fun updateEventList() {
 		val events = getEventsFromDay(selectedDay)

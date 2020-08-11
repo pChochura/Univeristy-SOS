@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.adapters
 
+import android.content.res.ColorStateList
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
@@ -13,10 +14,7 @@ class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textDate: AppCompatTextView
 	private lateinit var textDayOff: Chip
-
-	init {
-		setHasStableIds(true)
-	}
+	private lateinit var imageColor: View
 
 	override fun getLayoutId() = R.layout.list_item_calendar_event
 
@@ -25,6 +23,7 @@ class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 		textName = root.find(R.id.eventName)
 		textDate = root.find(R.id.eventDate)
 		textDayOff = root.find(R.id.eventDayOff)
+		imageColor = root.find(R.id.eventColor)
 	}
 
 	override fun onBind(root: View, position: Int) {
@@ -35,5 +34,7 @@ class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 			list[position].endDate
 		)
 		textDayOff.isVisible = list[position].isDayOff ?: false
+		imageColor.backgroundTintList =
+			ColorStateList.valueOf(list[position].getColor(root.context))
 	}
 }
