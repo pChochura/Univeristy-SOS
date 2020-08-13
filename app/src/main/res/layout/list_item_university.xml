@@ -15,7 +15,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="5dp"
-		android:textColor="@color/colorTextPrimary"
+		android:textColor="?colorTextPrimary"
 		android:textSize="14sp"
 		app:layout_constraintBottom_toTopOf="@id/universityLocation"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +24,7 @@
 		android:id="@+id/universityLocation"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/colorTextSecondary"
+		android:textColor="?colorTextSecondary"
 		android:textSize="12sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/universityName" />

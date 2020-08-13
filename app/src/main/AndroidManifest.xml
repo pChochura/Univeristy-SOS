@@ -23,6 +23,7 @@
 
 		<activity
 			android:name=".activities.ActivityLogin"
+			android:configChanges="uiMode"
 			android:launchMode="singleInstance"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme"
@@ -39,6 +40,7 @@
 
 		<activity
 			android:name=".activities.ActivityMain"
+			android:configChanges="uiMode"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme" />
 	</application>

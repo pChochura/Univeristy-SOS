@@ -9,10 +9,10 @@
 	android:layout_marginBottom="10dp"
 	android:clickable="true"
 	android:focusable="true"
-	app:cardBackgroundColor="@color/white"
+	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
 	app:cardElevation="0dp"
-	app:rippleColor="@color/colorTextSecondary">
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="16sp"
 			tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
 
@@ -35,7 +35,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/colorTextSecondary"
+			android:textColor="?colorTextSecondary"
 			android:textSize="14sp"
 			tools:text="Informuję, że do dnia 15 lipca 2020 r. został wydłużony w systemie USOSweb termin składania wniosków o przyznanie zapomogi..." />
 
@@ -55,14 +55,14 @@
 				android:id="@+id/articleCategory"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:backgroundTint="@color/colorAccent"
+				android:backgroundTint="?colorAccent"
 				android:checkable="false"
 				android:clickable="false"
 				android:elevation="0dp"
 				android:focusable="false"
 				android:fontFamily="@font/montserrat"
 				android:stateListAnimator="@null"
-				android:textColor="@color/white"
+				android:textColor="?white"
 				android:textSize="14sp"
 				android:visibility="gone"
 				app:chipMinTouchTargetSize="32dp"
@@ -75,14 +75,14 @@
 				android:id="@+id/articleDate"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:backgroundTint="@color/colorBackground"
+				android:backgroundTint="?colorBackground"
 				android:checkable="false"
 				android:clickable="false"
 				android:elevation="0dp"
 				android:focusable="false"
 				android:fontFamily="@font/montserrat"
 				android:stateListAnimator="@null"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				app:chipMinTouchTargetSize="32dp"
 				app:layout_constraintBottom_toBottomOf="parent"

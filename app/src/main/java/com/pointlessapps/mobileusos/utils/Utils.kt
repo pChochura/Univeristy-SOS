@@ -13,6 +13,9 @@ import android.text.Html
 import android.text.Spanned
 import android.view.View
 import android.view.Window
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.core.content.res.use
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.CourseEvent
 import org.jetbrains.anko.find
@@ -126,6 +129,13 @@ object Utils {
 			Html.fromHtml(html).toString().replace(Regex(" +|\t+|\n+"), " ")
 				.replace(Regex(" {2,}"), "")
 		}
+
+	@ColorInt
+	fun Context.themeColor(@AttrRes themeAttrId: Int) = obtainStyledAttributes(
+		intArrayOf(themeAttrId)
+	).use {
+		it.getColor(0, Color.MAGENTA)
+	}
 
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator

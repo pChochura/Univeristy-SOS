@@ -39,6 +39,7 @@ class FragmentProfile : FragmentBase() {
 		root().buttonGrades.setOnClickListener { onChangeFragmentListener?.invoke(FragmentGrades()) }
 		root().buttonCourses.setOnClickListener { onChangeFragmentListener?.invoke(FragmentCourses()) }
 		root().buttonSurveys.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSurveys()) }
+		root().buttonSettings.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSettings()) }
 	}
 
 	private fun prepareGradesList() {

@@ -64,6 +64,11 @@ class FragmentManager private constructor(
 		fragment.onChangeFragmentListener = {
 			setFragment(it.apply { prepareFragment(this) })
 		}
+		fragment.onForceRecreate = {
+			fragment.forceRefresh = true
+			fragmentManager.beginTransaction().detach(fragment as Fragment)
+				.attach(fragment as Fragment).commit()
+		}
 		fragment.onForceGoBackListener = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation
 	}

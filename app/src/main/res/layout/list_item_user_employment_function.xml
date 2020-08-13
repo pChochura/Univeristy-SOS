@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/background_rounded"
-	android:backgroundTint="@color/white"
+	android:backgroundTint="?white"
 	android:orientation="vertical"
 	android:padding="10dp">
 
@@ -18,7 +18,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat"
 			android:text="@string/function"
-			android:textColor="@color/colorTextSecondary"
+			android:textColor="?colorTextSecondary"
 			android:textSize="14sp" />
 
 		<androidx.appcompat.widget.AppCompatTextView
@@ -28,7 +28,7 @@
 			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
 			tools:text="Some function" />
 
@@ -44,7 +44,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat"
 			android:text="@string/faculty"
-			android:textColor="@color/colorTextSecondary"
+			android:textColor="?colorTextSecondary"
 			android:textSize="14sp" />
 
 		<androidx.appcompat.widget.AppCompatTextView
@@ -54,7 +54,7 @@
 			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
 			tools:text="Some faculty" />
 

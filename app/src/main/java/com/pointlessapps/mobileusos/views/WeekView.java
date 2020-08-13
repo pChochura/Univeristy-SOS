@@ -555,6 +555,10 @@ public class WeekView extends View {
 		this.endHour = endHour;
 	}
 
+	public void setSnappingEnabled(boolean snappingEnabled) {
+		this.snappingEnabled = snappingEnabled;
+	}
+
 	public Calendar getFirstVisibleDay() {
 		return firstVisibleDay;
 	}

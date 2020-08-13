@@ -7,10 +7,10 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="10dp"
-	app:cardBackgroundColor="@color/white"
+	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
 	app:cardElevation="0dp"
-	app:rippleColor="@color/colorTextSecondary">
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"
@@ -34,7 +34,7 @@
 			android:layout_marginLeft="10dp"
 			android:layout_marginRight="10dp"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
 			tools:text="Jan Kowalski" />
 

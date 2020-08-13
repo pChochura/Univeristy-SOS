@@ -5,8 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
-import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getWeekViewSettings
+import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
@@ -45,11 +44,11 @@ class FragmentTimetable : FragmentBase() {
 	}
 
 	private fun prepareWeekView() {
-		Preferences.get().getWeekViewSettings()?.apply {
-			weekView.setStartHour(startHour)
-			weekView.setEndHour(endHour)
-			weekView.setVisibleDays(numberOfVisibleDays)
-			weekView.setEventTextSize(eventTextSize)
+		Preferences.get().apply {
+			weekView.setStartHour(getTimetableStartHour())
+			weekView.setEndHour(getTimetableEndHour())
+			weekView.setVisibleDays(getTimetableVisibleDays())
+			weekView.setSnappingEnabled(getTimetableSnapToFullDay())
 		}
 		weekView.setScrollListener { newFirstVisibleDay, _ ->
 			viewModelTimetable.setStartTime(newFirstVisibleDay)

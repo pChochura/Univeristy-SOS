@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
@@ -21,11 +20,11 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 
 	override var bottomNavigationView: BottomNavigationView? = null
 	override var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)? = null
-	override var onLoadedFragmentListener: (() -> Unit)? = null
+	override var onForceRecreate: (() -> Unit)? = null
 	override var onBackPressedListener: (() -> Boolean)? = null
 	override var onForceGoBackListener: (() -> Unit)? = null
 
-	private var forceRefresh = false
+	override var forceRefresh = false
 
 	fun forceRefresh(force: Boolean = true) {
 		forceRefresh = force
@@ -60,34 +59,20 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 			} else {
 				R.anim.fade_out
 			}
-		).apply {
-			doOnEnd {
-				onLoadedFragmentListener?.invoke()
-			}
-		}
+		)
 	}
 
 	override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
 		var anim: Animation? = null
 		try {
-			anim = AnimationUtils.loadAnimation(requireContext(), transit).apply { setListener() }
+			anim = AnimationUtils.loadAnimation(requireContext(), transit)
 		} catch (e: Exception) {
 			try {
 				anim =
-					AnimationUtils.loadAnimation(requireContext(), nextAnim).apply { setListener() }
+					AnimationUtils.loadAnimation(requireContext(), nextAnim)
 			} catch (e: Exception) {
 			}
 		}
 		return anim
-	}
-
-	private fun Animation.setListener() {
-		setAnimationListener(object : Animation.AnimationListener {
-			override fun onAnimationRepeat(anim: Animation?) = Unit
-			override fun onAnimationStart(anim: Animation?) = Unit
-			override fun onAnimationEnd(anim: Animation?) {
-				onLoadedFragmentListener?.invoke()
-			}
-		})
 	}
 }

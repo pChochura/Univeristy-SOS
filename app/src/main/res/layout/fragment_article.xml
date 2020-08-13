@@ -5,13 +5,13 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorBackground"
+	android:background="?colorBackground"
 	android:orientation="vertical">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/white"
+		android:background="?white"
 		android:elevation="2dp"
 		android:paddingLeft="20dp"
 		android:paddingTop="10dp"
@@ -23,7 +23,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:text="@string/article"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="18sp" />
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
@@ -45,7 +45,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/montserrat_bold"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="18sp"
 				tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
 
@@ -106,7 +106,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/montserrat"
-					android:textColor="@color/colorTextPrimary"
+					android:textColor="?colorTextPrimary"
 					android:textSize="14sp"
 					tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
 
@@ -116,7 +116,7 @@
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/montserrat_bold"
 					android:gravity="end"
-					android:textColor="@color/colorTextPrimary"
+					android:textColor="?colorTextPrimary"
 					android:textSize="14sp"
 					tools:text="Jan Kowalski" />
 

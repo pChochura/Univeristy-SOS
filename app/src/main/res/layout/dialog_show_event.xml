@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/background_rounded"
-	android:backgroundTint="@color/white"
+	android:backgroundTint="?white"
 	android:orientation="vertical"
 	android:padding="15dp">
 
@@ -17,14 +17,14 @@
 		android:gravity="center"
 		android:text="@string/loading"
 		android:textAlignment="center"
-		android:textColor="@color/colorTextPrimary"
+		android:textColor="?colorTextPrimary"
 		android:textSize="18sp" />
 
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"
 		android:layout_margin="15dp"
-		android:background="@color/colorTextSecondary" />
+		android:background="?colorTextSecondary" />
 
 	<androidx.appcompat.widget.AppCompatTextView
 		android:id="@+id/eventType"
@@ -34,7 +34,7 @@
 		android:gravity="center"
 		android:text="@string/loading"
 		android:textAlignment="center"
-		android:textColor="@color/colorTextSecondary"
+		android:textColor="?colorTextSecondary"
 		android:textSize="14sp" />
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +51,7 @@
 			android:fontFamily="@font/montserrat_bold"
 			android:gravity="center"
 			android:textAlignment="center"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="24sp"
 			app:layout_constraintRight_toLeftOf="@id/divider" />
 
@@ -59,7 +59,7 @@
 			android:id="@+id/divider"
 			android:layout_width="15dp"
 			android:layout_height="1px"
-			android:background="@color/colorTextPrimary"
+			android:background="?colorTextPrimary"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
 			app:layout_constraintRight_toRightOf="parent"
@@ -74,7 +74,7 @@
 			android:fontFamily="@font/montserrat_bold"
 			android:gravity="center"
 			android:textAlignment="center"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="24sp"
 			app:layout_constraintLeft_toRightOf="@id/divider" />
 
@@ -93,11 +93,11 @@
 		android:text="@string/loading"
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextPrimary"
-		app:backgroundTint="@color/white"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
 		app:icon="@drawable/ic_profile"
-		app:iconTint="@color/colorTextPrimary"
-		app:rippleColor="@color/colorTextSecondary" />
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonRoom"
@@ -112,11 +112,11 @@
 		android:text="@string/loading"
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextPrimary"
-		app:backgroundTint="@color/white"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
 		app:icon="@drawable/ic_room"
-		app:iconTint="@color/colorTextPrimary"
-		app:rippleColor="@color/colorTextSecondary" />
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonBuilding"
@@ -131,10 +131,10 @@
 		android:text="@string/loading"
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextPrimary"
-		app:backgroundTint="@color/white"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
 		app:icon="@drawable/ic_building"
-		app:iconTint="@color/colorTextPrimary"
-		app:rippleColor="@color/colorTextSecondary" />
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

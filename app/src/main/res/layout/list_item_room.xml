@@ -9,10 +9,10 @@
 	android:layout_marginBottom="10dp"
 	android:clickable="true"
 	android:focusable="true"
-	app:cardBackgroundColor="@color/white"
+	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
 	app:cardElevation="0dp"
-	app:rippleColor="@color/colorTextSecondary">
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -25,10 +25,10 @@
 			android:layout_width="32dp"
 			android:layout_height="32dp"
 			android:background="@drawable/ic_circle"
-			android:backgroundTint="@color/colorBackground"
+			android:backgroundTint="?colorBackground"
 			android:padding="8dp"
 			android:src="@drawable/ic_room"
-			android:tint="@color/colorTextPrimary"
+			android:tint="?colorTextPrimary"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +40,7 @@
 			android:layout_marginLeft="10dp"
 			android:layout_marginRight="10dp"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toRightOf="@id/icon"
@@ -58,7 +58,7 @@
 			android:focusable="false"
 			android:fontFamily="@font/montserrat"
 			android:stateListAnimator="@null"
-			android:textColor="@color/white"
+			android:textColor="?white"
 			android:textSize="14sp"
 			app:chipMinTouchTargetSize="32dp"
 			app:layout_constraintBottom_toBottomOf="parent"

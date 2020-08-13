@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
 	<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -5,16 +6,33 @@
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:fontFamily">@font/montserrat</item>
-		<item name="textColor1">@color/colorTextPrimary</item>
-		<item name="textColor2">@color/colorTextSecondary</item>
-		<item name="backgroundColor1">@color/pastBackgroundColor</item>
-		<item name="backgroundColor2">@color/weekendBackgroundColor</item>
-		<item name="backgroundColor3">@color/futureBackgroundColor</item>
+		<item name="colorTextPrimary">@color/colorTextPrimary</item>
+		<item name="colorTextSecondary">@color/colorTextSecondary</item>
+		<item name="colorBackground">@color/colorBackground</item>
+		<item name="white">@color/white</item>
 
 		<item name="weekViewPastBackgroundColor">#dddddd</item>
 		<item name="weekViewWeekendBackgroundColor">@color/colorBackground</item>
 		<item name="weekViewHeaderTextColor">@color/colorTextPrimary</item>
 		<item name="weekViewHeaderBackgroundColor">@color/white</item>
+		<item name="weekViewEventTextColor">@color/colorTextPrimary</item>
+		<item name="weekViewDividerLineColor">@color/colorTextSecondary</item>
+	</style>
+
+	<style name="AppTheme.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+		<item name="colorPrimary">#313131</item>
+		<item name="colorPrimaryDark">#252525</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:fontFamily">@font/montserrat</item>
+		<item name="colorTextPrimary">@color/white</item>
+		<item name="colorTextSecondary">@color/colorTextSecondary</item>
+		<item name="colorBackground">#313131</item>
+		<item name="white">#252525</item>
+
+		<item name="weekViewPastBackgroundColor">#121212</item>
+		<item name="weekViewWeekendBackgroundColor">#313131</item>
+		<item name="weekViewHeaderTextColor">@color/white</item>
+		<item name="weekViewHeaderBackgroundColor">#252525</item>
 		<item name="weekViewEventTextColor">@color/colorTextPrimary</item>
 		<item name="weekViewDividerLineColor">@color/colorTextSecondary</item>
 	</style>

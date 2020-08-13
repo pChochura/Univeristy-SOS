@@ -3,13 +3,11 @@ package com.pointlessapps.mobileusos.helpers
 import android.content.Context
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.pointlessapps.mobileusos.exceptions.ExceptionNotInitialized
-import com.pointlessapps.mobileusos.models.SettingsWeekView
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.getJson
 import com.pointlessapps.mobileusos.utils.putJson
 import net.grandcentrix.tray.AppPreferences
-import java.util.*
 
 class Preferences private constructor(context: Context?) {
 
@@ -19,9 +17,21 @@ class Preferences private constructor(context: Context?) {
 
 		const val KEY_ACCESS_TOKEN = "accessToken"
 		const val KEY_SELECTED_UNIVERSITY = "selectedUniversity"
-		const val KEY_BREAK_LENGTH = "breakLength"
-		const val KEY_EVENT_COLOR = "eventColor"
-		const val KEY_SETTINGS_WEEK_VIEW = "settingsWeekView"
+
+		const val KEY_TIMETABLE_START_HOUR = "timetableStartHour"
+		const val KEY_TIMETABLE_END_HOUR = "timetableEndHour"
+		const val KEY_TIMETABLE_VISIBLE_DAYS = "timetableVisibleDays"
+		const val KEY_TIMETABLE_SNAP_TO_FULL_DAY = "timetableSnapToFullDay"
+		const val KEY_TIMETABLE_ADD_EVENT = "timetableAddEvent"
+
+		const val KEY_NOTIFICATIONS_ENABLED = "notificationsEnabled"
+		const val KEY_NOTIFICATIONS_GRADES = "notificationsGrades"
+		const val KEY_NOTIFICATIONS_NEWS = "notificationsNews"
+		const val KEY_NOTIFICATIONS_SURVEYS = "notificationsSurveys"
+
+		const val KEY_SYSTEM_DARK_MODE = "systemDarkMode"
+		const val KEY_SYSTEM_DEFAULT_TAB = "systemDefaultTab"
+		const val KEY_SYSTEM_DEFAULT_LANGUAGE = "systemDefaultLanguage"
 
 		fun get(): AppPreferences {
 			if (instance == null) {
@@ -38,25 +48,93 @@ fun AppPreferences.getAccessToken() = getJson<OAuth1AccessToken>(Preferences.KEY
 fun AppPreferences.putAccessToken(accessToken: OAuth1AccessToken) =
 	putJson(Preferences.KEY_ACCESS_TOKEN, accessToken)
 
+
 fun AppPreferences.getSelectedUniversity() =
 	getJson<University>(Preferences.KEY_SELECTED_UNIVERSITY)
 
 fun AppPreferences.putSelectedUniversity(university: University) =
 	putJson(Preferences.KEY_SELECTED_UNIVERSITY, university)
 
-fun AppPreferences.getBreakLength() = getInt(Preferences.KEY_BREAK_LENGTH, 15)
 
-fun AppPreferences.putBreakLength(breakLength: Int) =
-	put(Preferences.KEY_BREAK_LENGTH, breakLength)
+fun AppPreferences.getTimetableStartHour() =
+	getInt(Preferences.KEY_TIMETABLE_START_HOUR, 6)
 
-fun AppPreferences.getEventColorByClassType(classType: String): Int {
-//	TODO: make this as a settings property
-	return Utils.getColorByClassType(classType)
-//	return getInt("${Preferences.KEY_EVENT_COLOR}_${classType.toLowerCase(Locale.getDefault())}", 0)
-}
+fun AppPreferences.putTimetableStartHour(value: Int) =
+	put(Preferences.KEY_TIMETABLE_START_HOUR, value)
 
-fun AppPreferences.putEventColorByClassType(classType: String, color: Int) =
-	put("${Preferences.KEY_EVENT_COLOR}_${classType.toLowerCase(Locale.getDefault())}", color)
 
-fun AppPreferences.getWeekViewSettings() =
-	getJson<SettingsWeekView>(Preferences.KEY_SETTINGS_WEEK_VIEW)
+fun AppPreferences.getTimetableEndHour() =
+	getInt(Preferences.KEY_TIMETABLE_END_HOUR, 20)
+
+fun AppPreferences.putTimetableEndHour(value: Int) =
+	put(Preferences.KEY_TIMETABLE_END_HOUR, value)
+
+
+fun AppPreferences.getTimetableVisibleDays() =
+	getInt(Preferences.KEY_TIMETABLE_VISIBLE_DAYS, 5)
+
+fun AppPreferences.putTimetableVisibleDays(value: Int) =
+	put(Preferences.KEY_TIMETABLE_VISIBLE_DAYS, value)
+
+
+fun AppPreferences.getTimetableSnapToFullDay() =
+	getBoolean(Preferences.KEY_TIMETABLE_SNAP_TO_FULL_DAY, true)
+
+fun AppPreferences.putTimetableSnapToFullDay(value: Boolean) =
+	put(Preferences.KEY_TIMETABLE_SNAP_TO_FULL_DAY, value)
+
+
+fun AppPreferences.getTimetableAddEvent() =
+	getBoolean(Preferences.KEY_TIMETABLE_ADD_EVENT, false)
+
+fun AppPreferences.putTimetableAddEvent(value: Boolean) =
+	put(Preferences.KEY_TIMETABLE_ADD_EVENT, value)
+
+
+fun AppPreferences.getNotificationsEnabled() =
+	getBoolean(Preferences.KEY_NOTIFICATIONS_ENABLED, false)
+
+fun AppPreferences.putNotificationsEnabled(value: Boolean) =
+	put(Preferences.KEY_NOTIFICATIONS_ENABLED, value)
+
+
+fun AppPreferences.getNotificationsGrades() =
+	getBoolean(Preferences.KEY_NOTIFICATIONS_GRADES, false)
+
+fun AppPreferences.putNotificationsGrades(value: Boolean) =
+	put(Preferences.KEY_NOTIFICATIONS_GRADES, value)
+
+
+fun AppPreferences.getNotificationsNews() =
+	getBoolean(Preferences.KEY_NOTIFICATIONS_NEWS, false)
+
+fun AppPreferences.putNotificationsNews(value: Boolean) =
+	put(Preferences.KEY_NOTIFICATIONS_NEWS, value)
+
+
+fun AppPreferences.getNotificationsSurveys() =
+	getBoolean(Preferences.KEY_NOTIFICATIONS_SURVEYS, false)
+
+fun AppPreferences.putNotificationsSurveys(value: Boolean) =
+	put(Preferences.KEY_NOTIFICATIONS_SURVEYS, value)
+
+
+fun AppPreferences.getSystemDarkMode() =
+	getBoolean(Preferences.KEY_SYSTEM_DARK_MODE, false)
+
+fun AppPreferences.putSystemDarkMode(value: Boolean) =
+	put(Preferences.KEY_SYSTEM_DARK_MODE, value)
+
+
+fun AppPreferences.getSystemDefaultTab() =
+	getInt(Preferences.KEY_SYSTEM_DEFAULT_TAB, 0)
+
+fun AppPreferences.putSystemDefaultTab(value: Int) =
+	put(Preferences.KEY_SYSTEM_DEFAULT_TAB, value)
+
+
+fun AppPreferences.getSystemDefaultLanguage() =
+	getString(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, "PL")
+
+fun AppPreferences.putSystemDefaultLanguage(value: String) =
+	put(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, value)

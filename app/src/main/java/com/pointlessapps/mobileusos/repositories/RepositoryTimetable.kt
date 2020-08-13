@@ -3,8 +3,6 @@ package com.pointlessapps.mobileusos.repositories
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getBreakLength
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.services.ServiceUSOSTimetable
@@ -81,7 +79,7 @@ class RepositoryTimetable(application: Application) {
 	}
 
 	private fun setBreaks(courses: List<CourseEvent>?): List<CourseEvent>? {
-		val breakLength = -Preferences.get().getBreakLength()
+		val breakLength = -15
 		return courses?.sorted()?.also {
 			for (i in 0 until it.lastIndex) {
 				if (it[i].endTime!!.compareTo(it[i + 1].startTime) == 0) {

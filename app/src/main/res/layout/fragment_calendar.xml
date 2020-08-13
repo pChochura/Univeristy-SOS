@@ -5,14 +5,14 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorBackground"
+	android:background="?colorBackground"
 	android:orientation="vertical">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:id="@+id/topBar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/white"
+		android:background="?white"
 		android:elevation="2dp"
 		android:paddingLeft="20dp"
 		android:paddingTop="10dp"
@@ -24,7 +24,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:text="@string/academic_calendar"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="18sp" />
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
@@ -59,7 +59,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/events"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<androidx.recyclerview.widget.RecyclerView

@@ -8,8 +8,8 @@
 	android:backgroundTint="@color/colorAccent"
 	android:clickable="false"
 	android:fontFamily="@font/montserrat"
-	android:textColor="@color/white"
+	android:textColor="?white"
 	android:textSize="14sp"
 	app:chipMinTouchTargetSize="32dp"
-	app:rippleColor="@color/colorTextSecondary"
+	app:rippleColor="?colorTextSecondary"
 	tools:text="Some text" />

@@ -19,6 +19,7 @@ import com.pointlessapps.mobileusos.adapters.AdapterGrade
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
+import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_show_grade.*
@@ -129,8 +130,7 @@ class FragmentGrades : FragmentBase() {
 											"%.0f%%".format(barEntry.y)
 									}
 									color = ContextCompat.getColor(context, R.color.colorAccent)
-									valueTextColor =
-										ContextCompat.getColor(context, R.color.colorTextPrimary)
+									valueTextColor = context.themeColor(R.attr.colorTextPrimary)
 								}).apply {
 									barWidth = 1.5f
 								}
@@ -157,7 +157,7 @@ class FragmentGrades : FragmentBase() {
 				description.isEnabled = false
 				isHighlightPerDragEnabled = false
 				isHighlightPerTapEnabled = false
-				setNoDataTextColor(ContextCompat.getColor(context, R.color.colorTextPrimary))
+				setNoDataTextColor(context.themeColor(R.attr.colorTextPrimary))
 				setNoDataTextTypeface(ResourcesCompat.getFont(context, R.font.montserrat))
 				setScaleEnabled(false)
 				xAxis.apply {
@@ -202,7 +202,7 @@ class FragmentGrades : FragmentBase() {
 			granularity = 1f
 			isGranularityEnabled = true
 			setCenterAxisLabels(false)
-			textColor = ContextCompat.getColor(context, R.color.colorTextPrimary)
+			textColor = context.themeColor(R.attr.colorTextPrimary)
 		}
 	}
 }

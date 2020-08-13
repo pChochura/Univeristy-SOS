@@ -7,7 +7,7 @@
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="10dp"
 	android:background="@drawable/background_rounded"
-	android:backgroundTint="@color/white"
+	android:backgroundTint="?white"
 	android:padding="10dp">
 
 	<androidx.appcompat.widget.AppCompatTextView
@@ -15,7 +15,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="@font/montserrat_bold"
-		android:textColor="@color/colorTextPrimary"
+		android:textColor="?colorTextPrimary"
 		android:textSize="18sp"
 		android:visibility="gone"
 		app:layout_constraintBottom_toTopOf="@id/meetingTime"
@@ -28,7 +28,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="@font/montserrat"
-		android:textColor="@color/colorTextPrimary"
+		android:textColor="?colorTextPrimary"
 		android:textSize="14sp"
 		app:layout_constraintBottom_toBottomOf="@id/meetingTime"
 		app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +43,7 @@
 		android:backgroundTint="@color/colorAccent"
 		android:clickable="false"
 		android:fontFamily="@font/montserrat"
-		android:textColor="@color/white"
+		android:textColor="?white"
 		android:textSize="14sp"
 		app:chipMinTouchTargetSize="32dp"
 		app:layout_constraintRight_toRightOf="parent"
@@ -64,9 +64,9 @@
 		android:minHeight="0dp"
 		android:padding="0dp"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextSecondary"
+		android:textColor="?colorTextSecondary"
 		app:icon="@drawable/ic_room"
-		app:iconTint="@color/colorTextSecondary"
+		app:iconTint="?colorTextSecondary"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/meetingTime"
 		tools:text="D. 3" />
@@ -85,10 +85,10 @@
 		android:padding="0dp"
 		android:text="@string/add_to_calendar"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextSecondary"
+		android:textColor="?colorTextSecondary"
 		app:icon="@drawable/ic_calendar_add"
 		app:iconGravity="end"
-		app:iconTint="@color/colorTextSecondary"
+		app:iconTint="?colorTextSecondary"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/meetingTime" />
 

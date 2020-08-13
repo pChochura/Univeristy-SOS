@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.fragments.*
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
+import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
 import com.pointlessapps.mobileusos.services.FragmentManager
 
 class ActivityMain : FragmentActivity() {
@@ -12,6 +15,10 @@ class ActivityMain : FragmentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		if (Preferences.get().getSystemDarkMode()) {
+			setTheme(R.style.AppTheme_Dark)
+		}
+
 		setContentView(R.layout.activity_main)
 
 		fragmentManager = FragmentManager.of(
@@ -23,7 +30,7 @@ class ActivityMain : FragmentActivity() {
 			FragmentProfile()
 		).apply {
 			showIn(R.id.containerFragment)
-			selectFirst()
+			selectAt(Preferences.get().getSystemDefaultTab())
 		}
 	}
 

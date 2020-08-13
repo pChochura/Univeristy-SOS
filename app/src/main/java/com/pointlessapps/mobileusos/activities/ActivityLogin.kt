@@ -9,6 +9,8 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
 import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.services.SearchManager
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.dp
@@ -22,6 +24,10 @@ class ActivityLogin : FragmentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		if (Preferences.get().getSystemDarkMode()) {
+			setTheme(R.style.AppTheme_Dark)
+		}
+
 		setContentView(R.layout.activity_login)
 
 		prepareClickListeners()

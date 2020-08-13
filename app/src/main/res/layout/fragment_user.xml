@@ -5,13 +5,13 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorBackground"
+	android:background="?colorBackground"
 	android:orientation="vertical">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/white"
+		android:background="?white"
 		android:elevation="2dp"
 		android:paddingLeft="20dp"
 		android:paddingTop="10dp"
@@ -23,7 +23,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:text="@string/user"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="18sp" />
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
@@ -48,7 +48,7 @@
 				android:fontFamily="@font/montserrat_bold"
 				android:src="@drawable/ic_profile_img_default"
 				android:textAlignment="center"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="24sp"
 				tools:text="D. 3" />
 
@@ -59,7 +59,7 @@
 				android:layout_gravity="center_horizontal"
 				android:layout_marginTop="10dp"
 				android:fontFamily="@font/montserrat"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				tools:text="Jan Kowalski prof. PRz" />
 
@@ -69,7 +69,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/email"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.google.android.material.card.MaterialCardView
@@ -77,10 +77,10 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
-				app:cardBackgroundColor="@color/white"
+				app:cardBackgroundColor="?white"
 				app:cardCornerRadius="5dp"
 				app:cardElevation="0dp"
-				app:rippleColor="@color/colorTextSecondary">
+				app:rippleColor="?colorTextSecondary">
 
 				<androidx.appcompat.widget.LinearLayoutCompat
 					android:layout_width="match_parent"
@@ -92,13 +92,13 @@
 						android:layout_width="32dp"
 						android:layout_height="32dp"
 						android:background="@drawable/ic_circle"
-						android:backgroundTint="@color/colorBackground"
+						android:backgroundTint="?colorBackground"
 						android:padding="8dp"
 						android:src="@drawable/ic_mail"
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:tint="@color/colorTextSecondary" />
+						app:tint="?colorTextSecondary" />
 
 					<androidx.appcompat.widget.AppCompatTextView
 						android:id="@+id/userEmail"
@@ -107,7 +107,7 @@
 						android:layout_marginLeft="10dp"
 						android:layout_marginRight="10dp"
 						android:fontFamily="@font/montserrat"
-						android:textColor="@color/colorTextPrimary"
+						android:textColor="?colorTextPrimary"
 						android:textSize="14sp"
 						tools:text="jKowalski@stud.prz.edu.pl" />
 
@@ -122,7 +122,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/room"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.google.android.material.card.MaterialCardView
@@ -132,10 +132,10 @@
 				android:layout_marginTop="10dp"
 				android:clickable="true"
 				android:focusable="true"
-				app:cardBackgroundColor="@color/white"
+				app:cardBackgroundColor="?white"
 				app:cardCornerRadius="5dp"
 				app:cardElevation="0dp"
-				app:rippleColor="@color/colorTextSecondary">
+				app:rippleColor="?colorTextSecondary">
 
 				<androidx.appcompat.widget.LinearLayoutCompat
 					android:layout_width="match_parent"
@@ -148,7 +148,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/montserrat_bold"
-						android:textColor="@color/colorTextPrimary"
+						android:textColor="?colorTextPrimary"
 						android:textSize="14sp"
 						tools:text="D. 3" />
 
@@ -158,7 +158,7 @@
 						android:layout_height="wrap_content"
 						android:layout_marginTop="10dp"
 						android:fontFamily="@font/montserrat"
-						android:textColor="@color/colorTextPrimary"
+						android:textColor="?colorTextPrimary"
 						android:textSize="14sp"
 						tools:text="Budynek D - Wydział Elktrotechniki i Informatyki" />
 
@@ -185,7 +185,7 @@
 				android:textAllCaps="false"
 				app:icon="@drawable/ic_arrow_down"
 				app:iconGravity="end"
-				app:iconTint="@color/colorTextPrimary" />
+				app:iconTint="?colorTextPrimary" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:id="@+id/userOfficeHours"
@@ -193,10 +193,10 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
-				android:backgroundTint="@color/white"
+				android:backgroundTint="?white"
 				android:fontFamily="@font/montserrat"
 				android:padding="10dp"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				android:visibility="gone" />
 
@@ -219,7 +219,7 @@
 				android:textAllCaps="false"
 				app:icon="@drawable/ic_arrow_down"
 				app:iconGravity="end"
-				app:iconTint="@color/colorTextPrimary" />
+				app:iconTint="?colorTextPrimary" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:id="@+id/userInterests"
@@ -227,10 +227,10 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
-				android:backgroundTint="@color/white"
+				android:backgroundTint="?white"
 				android:fontFamily="@font/montserrat"
 				android:padding="10dp"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				android:visibility="gone" />
 
@@ -240,7 +240,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/phone_numbers"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
@@ -255,7 +255,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/employment_functions"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.pointlessapps.mobileusos.views.LoadingRecyclerView

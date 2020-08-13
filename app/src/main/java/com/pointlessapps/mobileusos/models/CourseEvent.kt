@@ -2,8 +2,7 @@ package com.pointlessapps.mobileusos.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getEventColorByClassType
+import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.views.WeekView
 import java.util.*
 
@@ -53,7 +52,7 @@ data class CourseEvent(
 		Calendar.getInstance().apply {
 			time = endTime!!
 		}).apply {
-		color = Preferences.get().getEventColorByClassType(classtypeId ?: return@apply)
+		color = Utils.getColorByClassType(classtypeId ?: return@apply)
 	}
 
 	override fun compareTo(other: CourseEvent) = startTime.compareTo(other.startTime)

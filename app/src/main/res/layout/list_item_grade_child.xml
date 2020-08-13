@@ -9,10 +9,10 @@
 	android:layout_marginBottom="10dp"
 	android:clickable="true"
 	android:focusable="true"
-	app:cardBackgroundColor="@color/white"
+	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
 	app:cardElevation="0dp"
-	app:rippleColor="@color/colorTextSecondary">
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 			android:id="@+id/gradeName"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
 			app:fontFamily="@font/montserrat"
 			app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
 			android:backgroundTint="@color/colorAccent"
 			android:clickable="false"
 			android:fontFamily="@font/montserrat"
-			android:textColor="@color/white"
+			android:textColor="?white"
 			android:textSize="14sp"
 			app:chipMinTouchTargetSize="32dp"
 			app:layout_constraintBottom_toBottomOf="parent"

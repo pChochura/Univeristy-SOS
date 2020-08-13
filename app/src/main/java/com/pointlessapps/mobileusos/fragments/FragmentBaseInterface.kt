@@ -23,9 +23,11 @@ interface FragmentBaseInterface {
 
 	fun forceGoBack() = Unit
 
+	var forceRefresh: Boolean
+
 	var bottomNavigationView: BottomNavigationView?
 	var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)?
-	var onLoadedFragmentListener: (() -> Unit)?
+	var onForceRecreate: (() -> Unit)?
 	var onBackPressedListener: (() -> Boolean)?
 	var onForceGoBackListener: (() -> Unit)?
 }

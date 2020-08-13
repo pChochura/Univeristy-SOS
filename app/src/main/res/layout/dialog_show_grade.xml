@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@drawable/background_rounded"
-	android:backgroundTint="@color/white"
+	android:backgroundTint="?white"
 	android:orientation="vertical"
 	android:padding="15dp">
 
@@ -17,7 +17,7 @@
 		android:gravity="center"
 		android:text="@string/loading"
 		android:textAlignment="center"
-		android:textColor="@color/colorTextPrimary"
+		android:textColor="?colorTextPrimary"
 		android:textSize="18sp"
 		app:layout_constraintHorizontal_chainStyle="packed" />
 
@@ -32,20 +32,21 @@
 		android:fontFamily="@font/montserrat"
 		android:minWidth="0dp"
 		android:text="@string/empty"
-		android:textColor="@color/white"
+		android:textColor="?white"
 		android:textSize="14sp" />
 
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"
 		android:layout_margin="15dp"
-		android:background="@color/colorTextSecondary" />
+		android:background="?colorTextSecondary" />
 
 	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="15dp"
 		android:background="@drawable/background_rounded"
+		android:backgroundTint="?colorBackground"
 		android:padding="10dp">
 
 		<com.github.mikephil.charting.charts.BarChart
@@ -68,11 +69,11 @@
 		android:text="@string/empty"
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextPrimary"
-		app:backgroundTint="@color/white"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
 		app:icon="@drawable/ic_profile"
-		app:iconTint="@color/colorTextPrimary"
-		app:rippleColor="@color/colorTextSecondary" />
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonGradeDate"
@@ -89,10 +90,10 @@
 		android:text="@string/empty"
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
-		android:textColor="@color/colorTextPrimary"
-		app:backgroundTint="@color/white"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
 		app:icon="@drawable/ic_calendar"
-		app:iconTint="@color/colorTextPrimary"
-		app:rippleColor="@color/colorTextSecondary" />
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

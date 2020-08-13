@@ -21,6 +21,7 @@ import com.pointlessapps.mobileusos.adapters.AdapterEvent
 import com.pointlessapps.mobileusos.models.CalendarEvent
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
+import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
@@ -86,14 +87,11 @@ class FragmentCalendar : FragmentBase() {
 
 				container.dayNumber.apply {
 					setTextColor(
-						ContextCompat.getColor(
-							requireContext(),
-							if (day.date.dayOfWeek == DayOfWeek.SUNDAY) {
-								R.color.colorTextRed
-							} else {
-								R.color.colorTextPrimary
-							}
-						)
+						if (day.date.dayOfWeek == DayOfWeek.SUNDAY) {
+							ContextCompat.getColor(requireContext(), R.color.colorTextRed)
+						} else {
+							requireContext().themeColor(R.attr.colorTextPrimary)
+						}
 					)
 					alpha = if (day.owner == DayOwner.THIS_MONTH) {
 						1f

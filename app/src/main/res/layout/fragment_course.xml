@@ -5,13 +5,13 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorBackground"
+	android:background="?colorBackground"
 	android:orientation="vertical">
 
 	<androidx.appcompat.widget.LinearLayoutCompat
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/white"
+		android:background="?white"
 		android:elevation="2dp"
 		android:paddingLeft="20dp"
 		android:paddingTop="10dp"
@@ -23,7 +23,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:text="@string/course"
-			android:textColor="@color/colorTextPrimary"
+			android:textColor="?colorTextPrimary"
 			android:textSize="18sp" />
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
@@ -47,7 +47,7 @@
 				android:fontFamily="@font/montserrat_bold"
 				android:gravity="center_horizontal"
 				android:textAlignment="center"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="24sp"
 				tools:text="Bazy danych" />
 
@@ -59,7 +59,7 @@
 				android:fontFamily="@font/montserrat"
 				android:gravity="center_horizontal"
 				android:textAlignment="center"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				tools:text="Wykład, grupa 1" />
 
@@ -69,7 +69,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/group_instructors"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
@@ -97,9 +97,10 @@
 				android:text="@string/description"
 				android:textAlignment="viewStart"
 				android:textAllCaps="false"
+				android:textColor="?colorTextPrimary"
 				app:icon="@drawable/ic_arrow_down"
 				app:iconGravity="end"
-				app:iconTint="@color/colorTextPrimary" />
+				app:iconTint="?colorTextPrimary" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:id="@+id/courseDescription"
@@ -107,10 +108,10 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
-				android:backgroundTint="@color/white"
+				android:backgroundTint="?white"
 				android:fontFamily="@font/montserrat"
 				android:padding="10dp"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				android:visibility="gone" />
 
@@ -131,9 +132,10 @@
 				android:text="@string/learning_outcomes"
 				android:textAlignment="viewStart"
 				android:textAllCaps="false"
+				android:textColor="?colorTextPrimary"
 				app:icon="@drawable/ic_arrow_down"
 				app:iconGravity="end"
-				app:iconTint="@color/colorTextPrimary" />
+				app:iconTint="?colorTextPrimary" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:id="@+id/courseLearningOutcomes"
@@ -141,10 +143,10 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
-				android:backgroundTint="@color/white"
+				android:backgroundTint="?white"
 				android:fontFamily="@font/montserrat"
 				android:padding="10dp"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				android:visibility="gone" />
 
@@ -165,9 +167,10 @@
 				android:text="@string/assessment_criteria"
 				android:textAlignment="viewStart"
 				android:textAllCaps="false"
+				android:textColor="?colorTextPrimary"
 				app:icon="@drawable/ic_arrow_down"
 				app:iconGravity="end"
-				app:iconTint="@color/colorTextPrimary" />
+				app:iconTint="?colorTextPrimary" />
 
 			<androidx.appcompat.widget.AppCompatTextView
 				android:id="@+id/courseAssessmentCriteria"
@@ -175,10 +178,10 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/background_rounded"
-				android:backgroundTint="@color/white"
+				android:backgroundTint="?white"
 				android:fontFamily="@font/montserrat"
 				android:padding="10dp"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
 				android:visibility="gone" />
 
@@ -188,7 +191,7 @@
 				android:layout_marginTop="20dp"
 				android:fontFamily="@font/montserrat"
 				android:text="@string/incoming_meetings"
-				android:textColor="@color/colorTextPrimary"
+				android:textColor="?colorTextPrimary"
 				android:textSize="14sp" />
 
 			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
@@ -207,7 +210,7 @@
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/montserrat"
 					android:text="@string/participants"
-					android:textColor="@color/colorTextPrimary"
+					android:textColor="?colorTextPrimary"
 					android:textSize="14sp"
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintLeft_toLeftOf="parent" />
@@ -227,7 +230,7 @@
 						android:layout_marginRight="10dp"
 						android:fontFamily="@font/montserrat"
 						android:text="@string/amt"
-						android:textColor="@color/colorTextSecondary"
+						android:textColor="?colorTextSecondary"
 						android:textSize="12sp" />
 
 					<androidx.appcompat.widget.AppCompatTextView
@@ -235,7 +238,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/montserrat_bold"
-						android:textColor="@color/colorTextPrimary"
+						android:textColor="?colorTextPrimary"
 						android:textSize="18sp"
 						tools:text="4" />
 

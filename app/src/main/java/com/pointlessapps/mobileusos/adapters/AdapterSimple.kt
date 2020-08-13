@@ -57,7 +57,7 @@ abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 		else -> list.size
 	}
 
-	override fun getItemId(position: Int) = when (true) {
+	override fun getItemId(position: Int) = when {
 		!hasStableIds() -> RecyclerView.NO_ID
 		position in 0 until list.size -> list[position].hashCode().toLong()
 		else -> position.toLong()
