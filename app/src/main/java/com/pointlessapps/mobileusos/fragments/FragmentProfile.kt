@@ -65,21 +65,28 @@ class FragmentProfile : FragmentBase() {
 				return@observe
 			}
 
-			// TODO: displaying course name... Somehow
 			viewModelUser.getGradesByTermIds(listOf(term)).observe(this) { grades ->
 				root().listRecentGrades.setEmptyText(getString(R.string.no_recent_grades))
 
 				var gradesList =
 					grades?.toList()?.firstOrNull()?.second?.values?.toList() ?: return@observe
 				gradesList =
-					gradesList.filter { it?.dateModified?.compareTo(dateToCheck) ?: 1 > 0 }
+					gradesList.filter { (it?.dateModified?.compareTo(dateToCheck) ?: 1) > 0 }
 						.filterNotNull()
 
-				(root().listRecentGrades.adapter as? AdapterRecentGrade)?.apply {
-					update(gradesList.sortedBy {
-						it.dateModified
-					})
-				}
+				viewModelUser.getCoursesByIds(gradesList.map { grade -> grade.courseId })
+					.observe(this) {
+						val courses = it?.associateBy { course -> course.courseId }
+						gradesList.forEach { grade ->
+							grade.courseName = courses?.get(grade.courseId)?.courseName
+						}
+
+						(root().listRecentGrades.adapter as? AdapterRecentGrade)?.apply {
+							update(gradesList.sortedBy { grade ->
+								grade.dateModified
+							})
+						}
+					}
 			}
 		}
 	}

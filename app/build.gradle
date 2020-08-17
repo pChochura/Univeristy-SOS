@@ -3,16 +3,26 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+	signingConfigs {
+		release {
+			storeFile file('/Users/pawel.chochura/Downloads/main.jks')
+			storePassword '781468136'
+			keyAlias 'usosmobilekey'
+			keyPassword '781468136'
+		}
+	}
 	compileSdkVersion 30
 	buildToolsVersion "29.0.2"
 	defaultConfig {
 		applicationId "com.pointlessapps.mobileusos"
 		minSdkVersion 22
 		targetSdkVersion 30
-		versionName "0.1.0"
-		versionCode 100
+		versionName "0.2.0"
+		versionCode 200
+		signingConfig signingConfigs.release
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -30,6 +40,7 @@ android {
 		release {
 			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			signingConfig signingConfigs.release
 		}
 	}
 	compileOptions {
@@ -61,14 +72,14 @@ dependencies {
 	implementation 'com.google.firebase:firebase-auth:19.3.2'
 	implementation 'com.google.firebase:firebase-firestore:21.5.0'
 	implementation 'com.google.firebase:firebase-messaging:20.2.4'
+	implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
 	implementation 'org.jetbrains.anko:anko-commons:0.10.8'
-	implementation 'com.github.scribejava:scribejava-core:6.9.0'
+	implementation 'com.github.scribejava:scribejava-core:7.0.0'
 	implementation 'net.grandcentrix.tray:tray:0.12.0'
 	implementation 'com.squareup.picasso:picasso:2.71828'
 	implementation 'com.github.ptrbrynt:FirestoreLiveData:1.1.1'
 	implementation 'androidx.preference:preference:1.1.1'
 	implementation 'com.github.yukuku:ambilwarna:2.0.1'
-	implementation 'com.google.guava:guava:27.0.1-android'
 	implementation 'com.github.IntruderShanky:Sectioned-RecyclerView:2.1.1'
 	implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'

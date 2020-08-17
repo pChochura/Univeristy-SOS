@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.services.ServiceFirebaseUniversity
-import com.pointlessapps.mobileusos.utils.Callback
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -40,7 +39,7 @@ class RepositoryUniversity(application: Application) {
 			insert(*it?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(universityDao.getAll().sorted())
+			callback.postValue(universityDao.getAll()?.sorted())
 		}
 		return callback
 	}

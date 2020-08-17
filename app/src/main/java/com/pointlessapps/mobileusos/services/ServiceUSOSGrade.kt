@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Grade
@@ -74,11 +76,15 @@ class ServiceUSOSGrade private constructor() {
 		return callback
 	}
 
+	@Keep
 	private class ResponseCourseGrades {
+		@SerializedName("course_grades")
 		internal var courseGrades: Map<String, Grade>? = null
 	}
 
+	@Keep
 	private class ResponseCourseGradesList {
+		@SerializedName("course_grades")
 		internal var courseGrades: List<Map<String, Grade?>>? = null
 	}
 

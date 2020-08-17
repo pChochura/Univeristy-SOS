@@ -40,13 +40,6 @@ class ActivityLogin : FragmentActivity() {
 					return@create
 				}
 
-				viewModelCommon.getAllUniversities().observe(this) {
-					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
-						update(it ?: listOf())
-						showMatching(dialog.inputSearchUniversities.text.toString())
-					}
-				}
-
 				dialog.listUniversities.apply {
 					setAdapter(AdapterUniversity().apply {
 						onClickListener = { university ->
@@ -59,6 +52,13 @@ class ActivityLogin : FragmentActivity() {
 							dialog.dismiss()
 						}
 					})
+				}
+
+				viewModelCommon.getAllUniversities().observe(this) {
+					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
+						update(it ?: listOf())
+						showMatching(dialog.inputSearchUniversities.text.toString())
+					}
 				}
 
 				SearchManager.of(dialog.inputSearchUniversities).setOnChangeTextListener {

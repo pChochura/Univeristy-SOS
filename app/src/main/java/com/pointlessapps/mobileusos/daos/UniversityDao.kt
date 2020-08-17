@@ -16,5 +16,5 @@ interface UniversityDao {
 	suspend fun delete(vararg universities: University)
 
 	@Query("SELECT * FROM table_universities")
-	suspend fun getAll(): List<University>
+	suspend fun getAll(): List<University>?
 }

@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Article
 import com.pointlessapps.mobileusos.utils.Callback
@@ -39,7 +41,9 @@ class ServiceUSOSArticle private constructor() {
 		return callback
 	}
 
+	@Keep
 	class Response {
+		@SerializedName("items")
 		var items: List<Map<String, Article>>? = null
 	}
 

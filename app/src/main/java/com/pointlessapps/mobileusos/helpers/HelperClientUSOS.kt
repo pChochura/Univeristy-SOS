@@ -18,14 +18,16 @@ object HelperClientUSOS {
 
 	private const val LOGIN_TABS_REQUEST_CODE = 123
 	private const val CALLBACK_URL_HOST = "usosauth"
+	private var university: University? = null
 	private var requestToken: OAuth1RequestToken? = null
 	private var service: OAuth10aService? = null
 
 	fun handleLogin(activity: Activity, university: University) {
 		doAsync {
-			Preferences.get().putSelectedUniversity(university)
-			service = getService(university.url, university.consumerKey!!, university.consumerSecret!!)
+			service =
+				getService(university.url, university.consumerKey!!, university.consumerSecret!!)
 			service?.apply {
+				this@HelperClientUSOS.university = university
 				this@HelperClientUSOS.requestToken = requestToken
 
 				activity.startActivityForResult(CustomTabsIntent.Builder().apply {
@@ -53,6 +55,7 @@ object HelperClientUSOS {
 						service?.getAccessToken(requestToken, verifier)
 							?: throw NullPointerException("oauthService cannot be null.")
 					Preferences.get().putAccessToken(accessToken)
+					Preferences.get().putSelectedUniversity(this@HelperClientUSOS.university!!)
 					successCallback.invoke()
 				}
 			}

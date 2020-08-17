@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.utils.Callback
@@ -39,7 +41,9 @@ class ServiceUSOSGroup private constructor() {
 		return callback
 	}
 
+	@Keep
 	private class ResponseGroups {
+		@SerializedName("groups")
 		internal var groups: Map<String, List<Course>>? = null
 	}
 

@@ -32,8 +32,8 @@ class RepositoryEmail(application: Application) {
 		}
 	}
 
-	fun getAll(): LiveData<List<Email>> {
-		val callback = MutableLiveData<List<Email>>()
+	fun getAll(): LiveData<List<Email>?> {
+		val callback = MutableLiveData<List<Email>?>()
 		serviceEmail.getAll().observe {
 			callback.postValue(it?.sorted() ?: return@observe)
 			insert(*it.toTypedArray())

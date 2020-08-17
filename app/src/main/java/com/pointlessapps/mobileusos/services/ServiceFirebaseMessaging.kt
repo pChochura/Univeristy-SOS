@@ -7,21 +7,19 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivitySplash
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.repositories.RepositoryEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ServiceFirebaseMessaging : FirebaseMessagingService() {
 
 	override fun onMessageReceived(message: RemoteMessage) {
+		Preferences.init(applicationContext)
 		val prefs = Preferences.get()
 		if (!prefs.getNotificationsEnabled()) {
 			return
@@ -38,16 +36,15 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 	}
 
 	override fun onNewToken(token: String) {
+		Preferences.init(applicationContext)
+		if (Preferences.get().getAccessToken() == null) {
+			return
+		}
+
 		val repositoryEvents = RepositoryEvent()
 		repositoryEvents.registerFCMToken(token) {
 			if (it == null) {
-				CoroutineScope(Dispatchers.Main).launch {
-					Toast.makeText(
-						applicationContext,
-						R.string.token_registration_failed,
-						Toast.LENGTH_SHORT
-					).show()
-				}
+				FirebaseCrashlytics.getInstance().log("FCM token registration failed")
 			}
 		}
 	}

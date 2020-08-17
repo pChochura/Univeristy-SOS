@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.User
@@ -88,18 +90,28 @@ class ServiceUSOSUser private constructor() {
 		return callback
 	}
 
+	@Keep
 	class ResponseUserByQuery {
+		@SerializedName("items")
 		var items: List<Map<String, User>>? = null
 	}
 
+	@Keep
 	class ResponseFacultiesByQuery {
+		@SerializedName("course_editions")
 		var courseEditions: Map<String, List<Temp>>? = null
 
+		@Keep
 		class Temp {
+			@SerializedName("course_id")
 			var courseId: String? = null
+
+			@SerializedName("user_groups")
 			var userGroups: List<Temp2>? = null
 
+			@Keep
 			class Temp2 {
+				@SerializedName("course_fac_id")
 				var courseFacId: String? = null
 			}
 		}
