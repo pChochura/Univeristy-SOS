@@ -53,6 +53,47 @@ class ServiceUSOSEmail private constructor() {
 		return callback
 	}
 
+	fun create(subject: String, content: String, callback: (String?) -> Unit) {
+		doAsync {
+			callback(
+				clientService.run {
+					execute(createEmailRequest(subject, content))?.run {
+						gson.fromJson<Map<String, String>>(body)["message_id"]
+					}
+				}
+			)
+		}
+	}
+
+	fun updateRecipients(
+		id: String,
+		userIds: List<String>,
+		emails: List<String>,
+		callback: (Any?) -> Unit
+	) {
+		doAsync {
+			callback(
+				clientService.run {
+					execute(updateEmailRecipientsRequest(id, userIds, emails))?.run {
+						gson.fromJson<Any?>(body)
+					}
+				}
+			)
+		}
+	}
+
+	fun addAttachment(id: String, data: ByteArray, filename: String, callback: (String?) -> Unit) {
+		doAsync {
+			callback(
+				clientService.run {
+					execute(addEmailAttachmentRequest(id, data, filename))?.run {
+						gson.fromJson<Map<String, String>>(body)["attachment_id"]
+					}
+				}
+			)
+		}
+	}
+
 	companion object :
 		Utils.SingletonHolder<ServiceUSOSEmail, Unit>({ ServiceUSOSEmail() })
 }

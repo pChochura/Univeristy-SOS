@@ -55,4 +55,21 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	fun getEmailById(emailId: String) = repositoryEmail.getById(emailId)
 
 	fun getEmailRecipients(emailId: String) = repositoryEmail.getRecipientsById(emailId)
+
+	fun createEmail(subject: String, content: String, callback: (String?) -> Unit) =
+		repositoryEmail.create(subject, content, callback)
+
+	fun updateEmailRecipients(
+		id: String,
+		userIds: List<String>,
+		emails: List<String>,
+		callback: (Any?) -> Unit
+	) = repositoryEmail.updateRecipients(id, userIds, emails, callback)
+
+	fun addEmailAttachment(
+		id: String,
+		data: ByteArray,
+		filename: String,
+		callback: (String?) -> Unit
+	) = repositoryEmail.addAttachment(id, data, filename, callback)
 }

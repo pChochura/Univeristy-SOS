@@ -1,6 +1,7 @@
 package com.pointlessapps.mobileusos.clients
 
 import android.net.Uri
+import com.github.scribejava.core.httpclient.multipart.MultipartPayload
 import com.github.scribejava.core.model.OAuthRequest
 import com.github.scribejava.core.model.Verb
 import com.pointlessapps.mobileusos.models.Course
@@ -276,6 +277,46 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
+	fun createEmailRequest(subject: String, content: String) = OAuthRequest(
+		Verb.POST,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/create_message")
+			.buildUpon()
+			.appendQueryParameter("subject", subject)
+			.appendQueryParameter("content", content)
+			.appendQueryParameter("attachments_lifetime", "365")
+			.build().toString()
+	)
+
+	fun updateEmailRecipientsRequest(id: String, userIds: List<String>, emails: List<String>) =
+		OAuthRequest(
+			Verb.POST,
+			Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/update_recipients_group")
+				.buildUpon()
+				.appendQueryParameter("message_id", id)
+				.appendQueryParameter("strict", "false")
+				.apply {
+					if (userIds.isNotEmpty()) {
+						appendQueryParameter("user_ids", userIds.joinToString("|"))
+					}
+					if (emails.isNotEmpty()) {
+						appendQueryParameter("emails", emails.joinToString("|"))
+					}
+				}
+				.build().toString()
+		)
+
+	fun addEmailAttachmentRequest(id: String, data: ByteArray, filename: String) =
+		OAuthRequest(
+			Verb.POST,
+			"${selectedUniversity?.serviceUrl}/mailclient/put_attachment"
+		).apply {
+			multipartPayload = MultipartPayload().apply {
+				addFileBodyPart(data, "data")
+				addBodyParameter("message_id", id)
+				addBodyParameter("filename", filename)
+			}
+		}
+
 	fun calendarRequest(faculty: String, startDate: Date, endDate: Date) = OAuthRequest(
 		Verb.GET,
 		Uri.parse("${selectedUniversity?.serviceUrl}/calendar/search")
@@ -287,6 +328,14 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.appendQueryParameter("faculty_id", faculty)
 			.appendQueryParameter("start_date", dateFormat.format(startDate))
 			.appendQueryParameter("end_date", dateFormat.format(endDate))
+			.build().toString()
+	)
+
+	fun registerFCMTokenRequest(token: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/events/register_fcm_token")
+			.buildUpon()
+			.appendQueryParameter("fcm_registration_token", token)
 			.build().toString()
 	)
 }

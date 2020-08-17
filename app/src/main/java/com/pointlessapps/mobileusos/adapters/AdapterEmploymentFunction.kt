@@ -17,7 +17,7 @@ class AdapterEmploymentFunction : AdapterSimple<User.EmploymentFunction>(mutable
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_user_employment_function
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_user_employment_function
 	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {

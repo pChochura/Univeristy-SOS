@@ -21,7 +21,7 @@ class AdapterRecentGrade : AdapterSimple<Grade>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_grade_square
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_grade_square
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)

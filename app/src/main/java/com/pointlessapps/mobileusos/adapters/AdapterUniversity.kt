@@ -17,7 +17,7 @@ class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_university
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_university
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)

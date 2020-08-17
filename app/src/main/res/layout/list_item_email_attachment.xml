@@ -19,13 +19,12 @@
 		android:padding="10dp">
 
 		<androidx.appcompat.widget.AppCompatImageView
-			android:id="@+id/itemImg"
 			android:layout_width="48dp"
 			android:layout_height="48dp"
 			android:background="@drawable/ic_circle"
 			android:backgroundTint="?colorBackground"
 			android:padding="12dp"
-			android:src="@drawable/ic_profile"
+			android:src="@drawable/ic_attachment"
 			android:tint="?colorTextPrimary"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
@@ -39,22 +38,22 @@
 			android:orientation="vertical">
 
 			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/itemTitle"
+				android:id="@+id/attachmentName"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/montserrat"
 				android:textColor="?colorTextPrimary"
 				android:textSize="18sp"
-				tools:text="Jan Kowalski" />
+				tools:text="Document.pdf" />
 
 			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/itemDescription"
+				android:id="@+id/attachmentSize"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/montserrat"
 				android:textColor="?colorTextSecondary"
 				android:textSize="14sp"
-				tools:text="20.06.2020" />
+				tools:text="0.5MB" />
 
 		</androidx.appcompat.widget.LinearLayoutCompat>
 

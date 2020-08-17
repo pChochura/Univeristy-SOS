@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="?white"
+	android:orientation="vertical"
+	android:padding="20dp">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:fontFamily="@font/montserrat_bold"
+		android:gravity="center"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="18sp"
+		tools:text="Select a default tab" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/listItems"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		tools:listitem="@layout/list_item_university" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

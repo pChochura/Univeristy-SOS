@@ -21,7 +21,7 @@ class AdapterAttributes : AdapterSimple<BuildingRoom.Attribute>(mutableListOf())
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_room_attribute
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_room_attribute
 	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {

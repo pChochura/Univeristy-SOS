@@ -32,7 +32,7 @@ class AdapterMeeting(
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_meeting
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_meeting
 	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {

@@ -150,7 +150,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="10dp"
 					tools:itemCount="1"
-					tools:listitem="@layout/list_item_email_item" />
+					tools:listitem="@layout/list_item_email_attachment" />
 
 			</androidx.appcompat.widget.LinearLayoutCompat>
 

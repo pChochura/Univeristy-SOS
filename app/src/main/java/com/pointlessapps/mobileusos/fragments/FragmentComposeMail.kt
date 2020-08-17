@@ -1,14 +1,19 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.content.Intent
+import android.view.KeyEvent
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.adapters.AdapterAttachment
 import com.pointlessapps.mobileusos.adapters.AdapterAutocomplete
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.DialogUtil
+import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.addChip
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_message.*
@@ -20,6 +25,7 @@ class FragmentComposeMail(
 ) : FragmentBase() {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
+	private val attachments = mutableListOf<Email.Attachment>()
 
 	override fun getLayoutId() = R.layout.fragment_compose_mail
 
@@ -27,6 +33,8 @@ class FragmentComposeMail(
 		prepareData()
 		prepareClickListeners()
 		prepareRecipientsList()
+		prepareRecipientsEditorListener()
+		prepareAttachmentsList()
 
 		onBackPressedListener = {
 			DialogUtil.create(
@@ -55,8 +63,34 @@ class FragmentComposeMail(
 		}
 	}
 
-	private fun saveDraft() {
+	private fun prepareRecipientsEditorListener() {
+		root().inputRecipients.setOnKeyListener { _, keyCode, keyEvent ->
+			if (keyEvent.action == KeyEvent.ACTION_DOWN) {
+				when (keyCode) {
+					KeyEvent.KEYCODE_DEL -> {
+						if (root().inputRecipients.text.isNullOrEmpty() && recipients.isNotEmpty()) {
+							recipients.removeAt(recipients.lastIndex)
+							root().listRecipients.removeViewAt(root().listRecipients.childCount - 2)
 
+							return@setOnKeyListener true
+						}
+					}
+					KeyEvent.KEYCODE_ENTER -> {
+						val recipient =
+							Email.Recipient(root().inputRecipients.text.toString(), null)
+						recipients.add(recipient)
+						root().listRecipients.addChip(recipient.email!!) {
+							recipients.remove(recipient)
+						}
+
+						root().inputRecipients.text.clear()
+						return@setOnKeyListener true
+					}
+				}
+			}
+
+			return@setOnKeyListener false
+		}
 	}
 
 	private fun prepareRecipientsList() {
@@ -92,10 +126,35 @@ class FragmentComposeMail(
 		}
 	}
 
+	private fun prepareAttachmentsList() {
+		root().listAttachments.apply {
+			adapter = AdapterAttachment(true).apply {
+				onClickListener = {
+
+				}
+				onAddClickListener = {
+					val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+					intent.type = "*/*"
+					intent.addCategory(Intent.CATEGORY_DEFAULT)
+					startActivityForResult(
+						Intent.createChooser(
+							intent,
+							getString(R.string.choose_an_attachment)
+						), 100
+					)
+				}
+			}
+			layoutManager =
+				UnscrollableLinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+		}
+	}
+
 	private fun prepareData() {
 		email?.also {
 			root().inputSubject.setText(it.subject ?: "")
 			root().inputContent.setText(it.content ?: "")
+
+			attachments.addAll(it.attachments ?: listOf())
 
 			viewModelUser.getEmailRecipients(it.id).observe(this) { recipients ->
 				this.recipients.apply {
@@ -106,6 +165,32 @@ class FragmentComposeMail(
 					root().listRecipients.addChip(recipient.name()) {
 						this.recipients.remove(recipient)
 					}
+				}
+			}
+		}
+	}
+
+	private fun saveDraft() {
+		if (email == null) {
+			viewModelUser.createEmail(
+				root().inputSubject.text.toString(),
+				root().inputContent.text.toString()
+			) { id ->
+				if (id == null) {
+					return@createEmail
+				}
+
+				val parts = recipients.partition { it.user !== null }
+				viewModelUser.updateEmailRecipients(
+					id,
+					parts.first.map { it.user!!.id },
+					parts.second.map { it.email!! }
+				) { }
+
+				attachments.forEach { attachment ->
+//					viewModelUser.addEmailAttachment(id, data, attachment.filename!!) {
+//						attachment.id = it ?: return@addEmailAttachment
+//					}
 				}
 			}
 		}

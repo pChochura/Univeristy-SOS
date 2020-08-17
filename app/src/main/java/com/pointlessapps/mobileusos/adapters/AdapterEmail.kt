@@ -22,7 +22,7 @@ class AdapterEmail : AdapterSimple<Email>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_email
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_email
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)

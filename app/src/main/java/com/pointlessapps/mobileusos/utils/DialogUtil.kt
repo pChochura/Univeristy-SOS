@@ -20,12 +20,12 @@ class DialogUtil private constructor(
 		const val UNDEFINED_WINDOW_SIZE = Integer.MAX_VALUE
 
 		fun create(
-			activity: Context,
+			context: Context,
 			layoutResId: Int,
 			callback: (Dialog) -> Unit,
 			vararg windowSize: Int
 		) {
-			val dialog = DialogUtil(activity, layoutResId, windowSize)
+			val dialog = DialogUtil(context, layoutResId, windowSize)
 			dialog.makeDialog {
 				callback.invoke(it)
 			}
@@ -33,12 +33,12 @@ class DialogUtil private constructor(
 
 		fun create(
 			statefulDialog: StatefulDialog,
-			activity: Context,
+			context: Context,
 			layoutResId: Int,
 			callback: (StatefulDialog) -> Unit,
 			vararg windowSize: Int
 		) {
-			val dialog = DialogUtil(activity, layoutResId, windowSize)
+			val dialog = DialogUtil(context, layoutResId, windowSize)
 			dialog.makeDialog {
 				callback.invoke(statefulDialog.apply { this.dialog = it })
 				if (statefulDialog.showToggled) {

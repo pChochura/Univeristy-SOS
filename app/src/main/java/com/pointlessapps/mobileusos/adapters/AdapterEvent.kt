@@ -16,7 +16,7 @@ class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 	private lateinit var textDayOff: Chip
 	private lateinit var imageColor: View
 
-	override fun getLayoutId() = R.layout.list_item_calendar_event
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_calendar_event
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)

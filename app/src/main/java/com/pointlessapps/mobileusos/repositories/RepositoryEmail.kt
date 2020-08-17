@@ -63,4 +63,21 @@ class RepositoryEmail(application: Application) {
 		}
 		return callback
 	}
+
+	fun create(subject: String, content: String, callback: (String?) -> Unit) =
+		serviceEmail.create(subject, content, callback)
+
+	fun updateRecipients(
+		id: String,
+		userIds: List<String>,
+		emails: List<String>,
+		callback: (Any?) -> Unit
+	) = serviceEmail.updateRecipients(id, userIds, emails, callback)
+
+	fun addAttachment(
+		id: String,
+		data: ByteArray,
+		filename: String,
+		callback: (String?) -> Unit
+	) = serviceEmail.addAttachment(id, data, filename, callback)
 }

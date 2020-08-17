@@ -13,7 +13,7 @@ abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 	var onClickListener: ((T) -> Unit)? = null
 	private var collapsed = true
 
-	abstract fun getLayoutId(): Int
+	abstract fun getLayoutId(viewType: Int): Int
 	abstract fun onBind(root: View, position: Int)
 
 	open fun onCollapseMaxItemCount() = 3
@@ -23,12 +23,16 @@ abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
 		return DataObjectHolder(
 			LayoutInflater.from(parent.context!!).inflate(
-				getInternalLayoutId(viewType),
+				if (isCollapsible()) {
+					getInternalLayoutId(viewType)
+				} else {
+					getLayoutId(viewType)
+				},
 				parent,
 				false
 			)
 		) { view, _ ->
-			if (viewType == +ViewType.SIMPLE) {
+			if (!isCollapsible() || viewType == +ViewType.SIMPLE) {
 				onCreate(view)
 			} else {
 				view.find<View>(R.id.buttonCollapse).setOnClickListener {
@@ -40,7 +44,7 @@ abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 	}
 
 	private fun getInternalLayoutId(viewType: Int) = when (viewType) {
-		+ViewType.SIMPLE -> getLayoutId()
+		+ViewType.SIMPLE -> getLayoutId(viewType)
 		+ViewType.SHOW_MORE -> R.layout.list_item_show_more
 		else -> R.layout.list_item_show_less
 	}
@@ -86,7 +90,7 @@ abstract class AdapterSimple<T>(protected open val list: MutableList<T>) :
 	}
 
 	enum class ViewType {
-		SIMPLE, SHOW_MORE, SHOW_LESS;
+		SIMPLE, SHOW_MORE, SHOW_LESS, ADD;
 
 		operator fun unaryPlus() = ordinal
 	}
@@ -97,6 +101,6 @@ class DataObjectHolder(itemView: View, onCreateCallback: (View, Int) -> Unit) :
 	val root = itemView
 
 	init {
-		onCreateCallback.invoke(root, adapterPosition)
+		onCreateCallback.invoke(root, bindingAdapterPosition)
 	}
 }

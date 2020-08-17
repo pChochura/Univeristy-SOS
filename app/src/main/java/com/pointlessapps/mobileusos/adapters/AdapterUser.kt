@@ -20,7 +20,7 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_user
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_user
 	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {

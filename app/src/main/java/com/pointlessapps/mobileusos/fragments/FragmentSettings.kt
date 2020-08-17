@@ -1,10 +1,20 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.slider.RangeSlider
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.adapters.AdapterSimple
 import com.pointlessapps.mobileusos.helpers.*
+import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.views.SettingsItem
 import com.pointlessapps.mobileusos.views.SettingsItemGroup
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import org.jetbrains.anko.find
 
 class FragmentSettings : FragmentBase() {
 
@@ -36,19 +46,33 @@ class FragmentSettings : FragmentBase() {
 			listOf(
 				SettingsItem(
 					requireContext(),
-					getString(R.string.start_hour),
-					getString(R.string.start_hour_description),
-					{ "%02d:00".format(prefs.getTimetableStartHour()) }
+					getString(R.string.visible_period),
+					getString(R.string.visible_period_description),
+					{
+						"%02d:00 - %02d:00".format(
+							prefs.getTimetableStartHour(),
+							prefs.getTimetableEndHour()
+						)
+					}
 				) {
+					DialogUtil.create(requireContext(), R.layout.dialog_time_picker, { dialog ->
+						var currentMin = prefs.getTimetableStartHour().toFloat()
+						var currentMax = prefs.getTimetableEndHour().toFloat()
+						dialog.find<RangeSlider>(R.id.periodPicker).apply {
+							setLabelFormatter { "%02.0f:00".format(it) }
+							setValues(currentMin, currentMax)
 
-				},
-				SettingsItem(
-					requireContext(),
-					getString(R.string.end_hour),
-					getString(R.string.end_hour_description),
-					{ "%02d:00".format(prefs.getTimetableEndHour()) }
-				) {
+							addOnChangeListener { _, _, _ ->
+							}
+						}
 
+						dialog.find<View>(R.id.buttonSecondary)
+							.setOnClickListener { dialog.dismiss() }
+						dialog.find<View>(R.id.buttonPrimary).setOnClickListener {
+							prefs.putTimetableStartHour(currentMin.toInt())
+							prefs.putTimetableEndHour(currentMax.toInt())
+						}
+					}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 				},
 				SettingsItem(
 					requireContext(),
@@ -56,7 +80,31 @@ class FragmentSettings : FragmentBase() {
 					getString(R.string.number_of_visible_days_description),
 					{ prefs.getTimetableVisibleDays().toString() }
 				) {
-
+					DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
+						dialog.find<AppCompatTextView>(R.id.title).text =
+							getString(R.string.number_of_visible_days_title)
+						dialog.find<RecyclerView>(R.id.listItems).apply {
+							adapter = object :
+								AdapterSimple<String>((3..7).map(Int::toString).toMutableList()) {
+								override fun getLayoutId(viewType: Int) = R.layout.list_item_simple
+								override fun onBind(root: View, position: Int) {
+									(root as? MaterialButton)?.apply {
+										text = list[position]
+										setOnClickListener {
+											prefs.putTimetableVisibleDays(
+												list[position].toIntOrNull()
+													?: prefs.getTimetableVisibleDays()
+											)
+											dialog.dismiss()
+											refresh()
+										}
+									}
+								}
+							}
+							layoutManager =
+								LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+						}
+					}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 				},
 				SettingsItem(
 					requireContext(),
@@ -160,7 +208,36 @@ class FragmentSettings : FragmentBase() {
 						)[prefs.getSystemDefaultTab()]
 					}
 				) {
-
+					DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
+						dialog.find<AppCompatTextView>(R.id.title).text =
+							getString(R.string.default_tab_title)
+						dialog.find<RecyclerView>(R.id.listItems).apply {
+							adapter = object :
+								AdapterSimple<String>(
+									mutableListOf(
+										getString(R.string.timetable),
+										getString(R.string.calendar),
+										getString(R.string.mail),
+										getString(R.string.news),
+										getString(R.string.profile)
+									)
+								) {
+								override fun getLayoutId(viewType: Int) = R.layout.list_item_simple
+								override fun onBind(root: View, position: Int) {
+									(root as? MaterialButton)?.apply {
+										text = list[position]
+										setOnClickListener {
+											prefs.putSystemDefaultTab(position)
+											dialog.dismiss()
+											refresh()
+										}
+									}
+								}
+							}
+							layoutManager =
+								LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+						}
+					}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 				},
 				SettingsItem(
 					requireContext(),

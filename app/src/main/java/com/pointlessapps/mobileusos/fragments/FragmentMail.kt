@@ -14,7 +14,6 @@ import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_mail.view.*
-import kotlinx.android.synthetic.main.list_item_email_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,15 +58,15 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 		}
 
 		viewModelUser.getEmailRecipients(email.id).observe(this) {
-			root().itemTitle.text = it?.joinToString { item -> item.name() }
-			root().itemDescription.text = dateFormat.format(email.date ?: Date())
+			root().emailRecipient.text = it?.joinToString { item -> item.name() }
+			root().emailDate.text = dateFormat.format(email.date ?: Date())
 
 			if (it?.size == 1) {
 				Picasso.get()
 					.load(it.firstOrNull()?.user?.photoUrls?.values?.first() ?: return@observe)
-					.into(root().itemImg)
+					.into(root().emailRecipientImg)
 
-				root().itemImg.setColorFilter(Color.TRANSPARENT)
+				root().emailRecipientImg.setColorFilter(Color.TRANSPARENT)
 			}
 		}
 	}

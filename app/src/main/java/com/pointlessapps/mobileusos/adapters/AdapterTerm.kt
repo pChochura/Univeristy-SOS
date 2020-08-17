@@ -20,7 +20,7 @@ class AdapterTerm : AdapterSimple<Term>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId() = R.layout.list_item_term
+	override fun getLayoutId(viewType: Int) = R.layout.list_item_term
 	override fun isCollapsible() = true
 
 	override fun onCreate(root: View) {
