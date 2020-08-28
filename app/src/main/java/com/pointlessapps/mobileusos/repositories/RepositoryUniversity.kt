@@ -32,14 +32,14 @@ class RepositoryUniversity(application: Application) {
 		}
 	}
 
-	fun getAll(): LiveData<List<University>?> {
-		val callback = MutableLiveData<List<University>?>()
+	fun getAll(): LiveData<Pair<List<University>?, Boolean>> {
+		val callback = MutableLiveData<Pair<List<University>?, Boolean>>()
 		serviceUniversity.getAll().observe {
-			callback.postValue(it?.sorted())
+			callback.postValue(it?.sorted() to true)
 			insert(*it?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(universityDao.getAll()?.sorted())
+			callback.postValue(universityDao.getAll()?.sorted() to false)
 		}
 		return callback
 	}

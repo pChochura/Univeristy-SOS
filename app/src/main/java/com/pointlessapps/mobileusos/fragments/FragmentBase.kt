@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.fragments
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -75,4 +76,6 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 		}
 		return anim
 	}
+
+	override fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {}
 }

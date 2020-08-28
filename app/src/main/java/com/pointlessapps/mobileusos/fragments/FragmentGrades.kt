@@ -39,10 +39,10 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	private fun prepareGrades() {
-		viewModelUser.getAllGroups().observe(this) { groups ->
+		viewModelUser.getAllGroups().observe(this) { (groups, online) ->
 			val termIds = groups?.map { group -> group.termId } ?: return@observe
 
-			viewModelUser.getTermsByIds(termIds).observe(this) { terms ->
+			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, online2) ->
 				viewModelUser.getGradesByTermIds(termIds).observe(this) { grades ->
 					if (grades == null) {
 						return@observe
@@ -67,6 +67,11 @@ class FragmentGrades : FragmentBase() {
 								)
 							}?.sortedByDescending { it.getSectionHeader().orderKey }
 						)
+
+					root().listGrades.apply {
+						setEmptyText(getString(R.string.no_grades))
+						setLoaded(online && online2)
+					}
 				}
 			}
 		}

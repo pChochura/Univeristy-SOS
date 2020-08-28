@@ -115,13 +115,13 @@ class FragmentProfile : FragmentBase() {
 	private fun prepareTermsList() {
 		root().listTerms.setAdapter(AdapterTerm())
 
-		viewModelUser.getAllGroups().observe(this) {
-			postTerms(it?.map { group -> group.termId } ?: return@observe)
+		viewModelUser.getAllGroups().observe(this) { (terms, _) ->
+			postTerms(terms?.map { group -> group.termId } ?: return@observe)
 		}
 	}
 
 	private fun postTerms(termIds: List<String>) {
-		viewModelUser.getTermsByIds(termIds).observe(this) { terms ->
+		viewModelUser.getTermsByIds(termIds).observe(this) { (terms, _) ->
 			this.currentTerm.value = terms?.min()?.id
 			(root().listTerms.adapter as? AdapterTerm)?.update(terms ?: return@observe)
 		}

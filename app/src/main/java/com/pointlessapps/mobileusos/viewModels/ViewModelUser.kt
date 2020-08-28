@@ -33,7 +33,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	fun getGroupByIdAndGroupNumber(courseUnitId: String, groupNumber: Int) =
 		repositoryGroup.getByIdAndGroupNumber(courseUnitId, groupNumber)
 
-	fun getTermsByIds(termIds: List<String>): LiveData<List<Term>?> {
+	fun getTermsByIds(termIds: List<String>): LiveData<Pair<List<Term>?, Boolean>> {
 		return repositoryTerm.getByIds(termIds.distinct().takeIf { it.isNotEmpty() }
 			?: return MutableLiveData())
 	}

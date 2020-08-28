@@ -32,14 +32,14 @@ class RepositoryTerm(application: Application) {
 		}
 	}
 
-	fun getByIds(ids: List<String>): LiveData<List<Term>?> {
-		val callback = MutableLiveData<List<Term>?>()
+	fun getByIds(ids: List<String>): LiveData<Pair<List<Term>?, Boolean>> {
+		val callback = MutableLiveData<Pair<List<Term>?, Boolean>>()
 		serviceTerm.getByIds(ids).observe {
-			callback.postValue(it?.sorted())
+			callback.postValue(it?.sorted() to true)
 			insert(*it?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(termDao.getByIds(ids).sorted())
+			callback.postValue(termDao.getByIds(ids).sorted() to false)
 		}
 		return callback
 	}

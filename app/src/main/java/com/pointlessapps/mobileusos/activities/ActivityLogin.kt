@@ -56,8 +56,15 @@ class ActivityLogin : FragmentActivity() {
 
 				viewModelCommon.getAllUniversities().observe(this) {
 					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
-						update(it ?: listOf())
+						update(it.first ?: listOf())
 						showMatching(dialog.inputSearchUniversities.text.toString())
+					}
+
+					dialog.listUniversities.apply {
+						setEmptyText(getString(R.string.no_universities))
+						setEmptyIcon(R.drawable.ic_no_universities)
+
+						setLoaded(it.second)
 					}
 				}
 

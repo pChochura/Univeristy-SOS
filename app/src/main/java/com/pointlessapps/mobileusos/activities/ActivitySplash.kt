@@ -25,6 +25,7 @@ class ActivitySplash : AppCompatActivity() {
 				}
 			)
 		)
+		overridePendingTransition(0, 0);
 		finish()
 	}
 }

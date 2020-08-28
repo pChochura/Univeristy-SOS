@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.intrusoft.sectionedrecyclerview.Section
@@ -41,6 +42,10 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 				"${it.groups[1]?.value}.${it.groups[2]?.value}"
 			}?.toDoubleOrNull() ?: 2.0
 		} / grades.count())
+
+		if (grades.count() == 0) {
+			(itemView.textAverage.parent as View).isGone = true
+		}
 	}
 
 	override fun onCreateChildViewHolder(itemView: ViewGroup, viewType: Int) =
@@ -60,6 +65,9 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 
 		itemView.textName.text = grade.courseName?.toString()
 		itemView.textValue.text = grade.valueSymbol
+		if (grade.valueSymbol.isNullOrBlank()) {
+			itemView.textValue.isGone = true
+		}
 	}
 
 	class SectionHeader(private val term: Term, private val grades: List<Grade>) : Section<Grade> {

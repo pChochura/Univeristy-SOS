@@ -1,6 +1,9 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -19,10 +22,15 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
 
+
 class FragmentComposeMail(
 	private val email: Email? = null,
 	private val recipients: MutableList<Email.Recipient> = mutableListOf()
 ) : FragmentBase() {
+
+	companion object {
+		const val PICK_FILE_REQUEST_CODE = 1243
+	}
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private val attachments = mutableListOf<Email.Attachment>()
@@ -140,7 +148,7 @@ class FragmentComposeMail(
 						Intent.createChooser(
 							intent,
 							getString(R.string.choose_an_attachment)
-						), 100
+						), PICK_FILE_REQUEST_CODE
 					)
 				}
 			}
@@ -201,4 +209,27 @@ class FragmentComposeMail(
 			// TODO: send email
 		}
 	}
+
+	override fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data?.data != null) {
+			attachments.add(
+				Email.Attachment(
+					id = "",
+					filename = getFilename(data.data!!),
+					description = "",
+					url = ""
+				)
+			)
+
+			(root().listAttachments.adapter as? AdapterAttachment)?.update(attachments)
+		}
+	}
+
+	private fun getFilename(uri: Uri) =
+		requireActivity().contentResolver.query(uri, null, null, null, null)?.run {
+			moveToFirst()
+			val filename = getString(getColumnIndex(OpenableColumns.DISPLAY_NAME))
+			close()
+			return@run filename
+		}
 }

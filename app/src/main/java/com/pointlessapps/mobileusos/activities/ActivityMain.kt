@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.pointlessapps.mobileusos.R
@@ -32,6 +33,11 @@ class ActivityMain : FragmentActivity() {
 			showIn(R.id.containerFragment)
 			selectAt(Preferences.get().getSystemDefaultTab())
 		}
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		fragmentManager.currentFragment?.handleOnActivityResult(requestCode, resultCode, data)
 	}
 
 	override fun onBackPressed() {

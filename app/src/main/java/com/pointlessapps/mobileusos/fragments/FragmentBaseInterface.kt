@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.content.Intent
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
@@ -22,6 +23,7 @@ interface FragmentBaseInterface {
 	fun root(): ViewGroup? = null
 
 	fun forceGoBack() = Unit
+	fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = Unit
 
 	var forceRefresh: Boolean
 

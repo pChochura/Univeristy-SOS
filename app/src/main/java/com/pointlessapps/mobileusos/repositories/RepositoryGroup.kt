@@ -32,14 +32,14 @@ class RepositoryGroup(application: Application) {
 		}
 	}
 
-	fun getAll(): LiveData<List<Course>?> {
-		val callback = MutableLiveData<List<Course>?>()
+	fun getAll(): LiveData<Pair<List<Course>?, Boolean>> {
+		val callback = MutableLiveData<Pair<List<Course>?, Boolean>>()
 		serviceGroup.getAll().observe {
-			callback.postValue(it?.sorted())
+			callback.postValue(it?.sorted() to true)
 			insert(*it?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(groupDao.getAll().sorted())
+			callback.postValue(groupDao.getAll().sorted() to false)
 		}
 		return callback
 	}

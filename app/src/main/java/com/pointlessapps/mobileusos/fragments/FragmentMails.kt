@@ -27,11 +27,10 @@ class FragmentMails : FragmentBase() {
 			}
 		})
 
-		viewModelUser.getAllEmails().observe(this) {
-			if (it !== null) {
-				root().listEmails.setEmptyText(getString(R.string.no_emails))
-				(root().listEmails.adapter as? AdapterEmail)?.update(it)
-			}
+		viewModelUser.getAllEmails().observe(this) { (emails, online) ->
+			root().listEmails.setEmptyText(getString(R.string.no_emails))
+			root().listEmails.setLoaded(online)
+			(root().listEmails.adapter as? AdapterEmail)?.update(emails)
 		}
 	}
 

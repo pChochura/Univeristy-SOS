@@ -22,8 +22,9 @@ class FragmentManager private constructor(
 
 	@IdRes
 	private var containerId: Int? = null
-	private var currentFragment: FragmentBaseInterface? = null
 	private var bottomNavigation: BottomNavigationView? = null
+	var currentFragment: FragmentBaseInterface? = null
+		private set
 
 	companion object {
 		fun of(

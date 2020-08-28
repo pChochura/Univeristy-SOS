@@ -19,10 +19,10 @@ class FragmentCourses : FragmentBase() {
 	}
 
 	private fun prepareCourses() {
-		viewModelUser.getAllGroups().observe(this) { groups ->
+		viewModelUser.getAllGroups().observe(this) { (groups, online) ->
 			val termIds = groups?.map { group -> group.termId } ?: return@observe
 
-			viewModelUser.getTermsByIds(termIds).observe(this) { terms ->
+			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, online2) ->
 				val values = groups.groupBy { it.termId }
 					.mapValues { it.value.groupBy { group -> group.courseId } }
 
@@ -34,6 +34,11 @@ class FragmentCourses : FragmentBase() {
 						)
 					}
 				)
+
+				root().listCourses.apply {
+					setEmptyText(getString(R.string.no_courses))
+					setLoaded(online && online2)
+				}
 			}
 		}
 	}

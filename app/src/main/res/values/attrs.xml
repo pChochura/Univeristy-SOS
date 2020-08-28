@@ -36,6 +36,7 @@
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
         </attr>
+        <attr name="android:padding" format="dimension" />
     </declare-styleable>
 
     <attr name="white" format="color" />
