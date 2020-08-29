@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.repositories.*
 
@@ -20,11 +19,9 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getUserById(id: String? = null) = repositoryUser.getById(id)
 
-	fun getUserByIds(ids: List<String>) = repositoryUser.getByIds(ids)
+	fun getUsersByIds(ids: List<String>) = repositoryUser.getByIds(ids)
 
 	fun getUsersByQuery(query: String) = repositoryUser.getByQuery(query)
-
-	fun getAllFaculties() = repositoryUser.getAllFaculties()
 
 	fun getCoursesByIds(ids: List<String>) = repositoryUser.getCoursesByIds(ids)
 
@@ -38,17 +35,11 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 			?: return MutableLiveData())
 	}
 
-	fun getAllTerms() = repositoryTerm.getAll()
-
-	fun getGradesByGroups(courses: List<Course>) = repositoryGrade.getByGroups(courses)
-
 	fun getGradesByTermIds(termIds: List<String>) = repositoryGrade.getByTermIds(termIds)
 
 	fun getRecentGrades() = repositoryGrade.getRecentGrades()
 
 	fun getExamReportById(examId: String) = repositoryExamReport.getById(examId)
-
-	fun getExamsByIds(examIds: List<String>) = repositoryExam.getByIds(examIds)
 
 	fun getAllEmails() = repositoryEmail.getAll()
 

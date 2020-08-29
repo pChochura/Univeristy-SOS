@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -39,7 +38,7 @@ class FragmentCalendar : FragmentBase() {
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 
 	private var selectedDay = LocalDate.now()
-	private var startDate = MutableLiveData<Date>(Calendar.getInstance().time)
+	private var startDate = MutableLiveData(Calendar.getInstance().time)
 
 	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar
@@ -57,8 +56,15 @@ class FragmentCalendar : FragmentBase() {
 					} ?: return@observe)
 					updateEventList()
 					root().calendar.notifyCalendarChanged()
+					root().pullRefresh.isRefreshing = false
 				}
 		}
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
+
+	override fun refreshed() {
+		startDate.value = startDate.value
 	}
 
 	private fun prepareEventsList() {

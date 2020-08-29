@@ -79,13 +79,13 @@ class ServiceUSOSGrade private constructor() {
 	@Keep
 	private class ResponseCourseGrades {
 		@SerializedName("course_grades")
-		internal var courseGrades: Map<String, Grade>? = null
+		var courseGrades: Map<String, Grade>? = null
 	}
 
 	@Keep
 	private class ResponseCourseGradesList {
 		@SerializedName("course_grades")
-		internal var courseGrades: List<Map<String, Grade?>>? = null
+		var courseGrades: List<Map<String, Grade?>>? = null
 	}
 
 	companion object : Utils.SingletonHolder<ServiceUSOSGrade, Unit>({ ServiceUSOSGrade() })

@@ -1,8 +1,8 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.view.LayoutInflater
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.material.chip.Chip
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterNews
@@ -23,23 +23,23 @@ class FragmentNews : FragmentBase() {
 
 	override fun created() {
 		prepareNewsList()
-		prepareCategoriesList()
+		refreshed()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
-	private fun prepareNewsList() {
-		root().listNews.setAdapter(AdapterNews(requireContext()).apply {
-			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentArticle(it))
-			}
-		})
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
 
 		val lastWeekDate = Calendar.getInstance().apply {
 			add(Calendar.DAY_OF_MONTH, -7)
 		}.timeInMillis
 
-		viewModelCommon.getAllNews().observe(this) {
-			(root().listNews.adapter as AdapterNews).update(
-				it.filter { article -> article.headlineHtml != null && article.contentHtml != null }
+		var loaded = false
+
+		viewModelCommon.getAllNews().observe(this) { (news, online) ->
+			(root().listNews.adapter as? AdapterNews)?.update(
+				news.filter { article -> article.headlineHtml != null && article.contentHtml != null }
 					.groupBy { article ->
 						(article.publicationDate?.time ?: lastWeekDate) - lastWeekDate <= 0
 					}
@@ -52,10 +52,33 @@ class FragmentNews : FragmentBase() {
 			)
 
 			root().listNews.setEmptyText(getString(R.string.no_new_articles))
+			if (online) {
+				if (loaded) {
+					root().pullRefresh.isRefreshing = false
+					root().horizontalProgressBar.isInvisible = true
+				}
+				loaded = true
+			}
+		}
+
+		prepareCategoriesList {
+			if (loaded) {
+				root().pullRefresh.isRefreshing = false
+				root().horizontalProgressBar.isInvisible = true
+			}
+			loaded = true
 		}
 	}
 
-	private fun prepareCategoriesList() {
+	private fun prepareNewsList() {
+		root().listNews.setAdapter(AdapterNews(requireContext()).apply {
+			onClickListener = {
+				onChangeFragmentListener?.invoke(FragmentArticle(it))
+			}
+		})
+	}
+
+	private fun prepareCategoriesList(callback: (() -> Unit)? = null) {
 		viewModelCommon.getAllNewsCategories().observe(this) {
 			root().listCategories.removeAllViews()
 			it.forEach { category ->
@@ -79,6 +102,8 @@ class FragmentNews : FragmentBase() {
 						})
 				}
 			}
+
+			callback?.invoke()
 		}
 	}
 }

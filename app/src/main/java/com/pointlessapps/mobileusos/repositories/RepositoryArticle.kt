@@ -33,14 +33,14 @@ class RepositoryArticle(application: Application) {
 		}
 	}
 
-	fun getAll(): LiveData<List<Article>> {
-		val callback = MutableLiveData<List<Article>>()
+	fun getAll(): LiveData<Pair<List<Article>, Boolean>> {
+		val callback = MutableLiveData<Pair<List<Article>, Boolean>>()
 		serviceArticle.getAll().observe {
-			callback.postValue(it ?: return@observe)
+			callback.postValue((it ?: return@observe) to true)
 			insert(*it.toTypedArray())
 		}
 		GlobalScope.launch {
-			callback.postValue(articleDao.getAll())
+			callback.postValue(articleDao.getAll() to false)
 		}
 		return callback
 	}

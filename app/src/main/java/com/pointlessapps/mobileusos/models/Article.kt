@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.models
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -24,6 +25,7 @@ data class Article(
 	@SerializedName("event")
 	var event: Event? = null,
 	@SerializedName("category")
+	@Embedded()
 	var category: Category? = null,
 	@SerializedName("author")
 	var author: String? = null,
@@ -46,7 +48,9 @@ data class Article(
 	@Keep
 	data class Category(
 		@SerializedName("id")
+		@ColumnInfo(name = "category_id")
 		var id: String,
+		@ColumnInfo(name = "category_name")
 		@SerializedName("name")
 		var name: Name?
 	)

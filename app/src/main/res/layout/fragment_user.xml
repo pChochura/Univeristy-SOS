@@ -28,244 +28,259 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
-	<androidx.core.widget.NestedScrollView
+	<ProgressBar
+		android:id="@+id/horizontalProgressBar"
+		style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="-7dp"
+		android:indeterminate="true" />
+
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/pullRefresh"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.core.widget.NestedScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="vertical"
-			android:padding="20dp">
+			android:layout_height="match_parent">
 
-			<de.hdodenhof.circleimageview.CircleImageView
-				android:id="@+id/userProfileImg"
-				android:layout_width="64dp"
-				android:layout_height="64dp"
-				android:layout_gravity="center_horizontal"
-				android:fontFamily="@font/montserrat_bold"
-				android:src="@drawable/ic_profile_img_default"
-				android:textAlignment="center"
-				android:textColor="?colorTextPrimary"
-				android:textSize="24sp"
-				tools:text="D. 3" />
-
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/userName"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:layout_marginTop="10dp"
-				android:fontFamily="@font/montserrat"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp"
-				tools:text="Jan Kowalski prof. PRz" />
-
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/email"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
-
-			<com.google.android.material.card.MaterialCardView
-				android:id="@+id/buttonEmail"
+			<androidx.appcompat.widget.LinearLayoutCompat
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
-				app:cardBackgroundColor="?white"
-				app:cardCornerRadius="5dp"
-				app:cardElevation="0dp"
-				app:rippleColor="?colorTextSecondary">
+				android:clipChildren="false"
+				android:clipToPadding="false"
+				android:orientation="vertical"
+				android:padding="20dp">
 
-				<androidx.appcompat.widget.LinearLayoutCompat
+				<de.hdodenhof.circleimageview.CircleImageView
+					android:id="@+id/userProfileImg"
+					android:layout_width="64dp"
+					android:layout_height="64dp"
+					android:layout_gravity="center_horizontal"
+					android:fontFamily="@font/montserrat_bold"
+					android:src="@drawable/ic_profile_img_default"
+					android:textAlignment="center"
+					android:textColor="?colorTextPrimary"
+					android:textSize="24sp"
+					tools:text="D. 3" />
+
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/userName"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal"
+					android:layout_marginTop="10dp"
+					android:fontFamily="@font/montserrat"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp"
+					tools:text="Jan Kowalski prof. PRz" />
+
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/email"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
+
+				<com.google.android.material.card.MaterialCardView
+					android:id="@+id/buttonEmail"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:gravity="center_vertical"
-					android:padding="10dp">
+					android:layout_marginTop="10dp"
+					app:cardBackgroundColor="?white"
+					app:cardCornerRadius="5dp"
+					app:cardElevation="0dp"
+					app:rippleColor="?colorTextSecondary">
 
-					<androidx.appcompat.widget.AppCompatImageView
-						android:layout_width="32dp"
-						android:layout_height="32dp"
-						android:background="@drawable/ic_circle"
-						android:backgroundTint="?colorBackground"
-						android:padding="8dp"
-						android:src="@drawable/ic_mail"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toTopOf="parent"
-						app:tint="?colorTextSecondary" />
-
-					<androidx.appcompat.widget.AppCompatTextView
-						android:id="@+id/userEmail"
-						android:layout_width="wrap_content"
+					<androidx.appcompat.widget.LinearLayoutCompat
+						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="10dp"
-						android:layout_marginRight="10dp"
-						android:fontFamily="@font/montserrat"
-						android:textColor="?colorTextPrimary"
-						android:textSize="14sp"
-						tools:text="jKowalski@stud.prz.edu.pl" />
+						android:gravity="center_vertical"
+						android:padding="10dp">
 
-				</androidx.appcompat.widget.LinearLayoutCompat>
+						<androidx.appcompat.widget.AppCompatImageView
+							android:layout_width="32dp"
+							android:layout_height="32dp"
+							android:background="@drawable/ic_circle"
+							android:backgroundTint="?colorBackground"
+							android:padding="8dp"
+							android:src="@drawable/ic_mail"
+							app:layout_constraintBottom_toBottomOf="parent"
+							app:layout_constraintLeft_toLeftOf="parent"
+							app:layout_constraintTop_toTopOf="parent"
+							app:tint="?colorTextSecondary" />
 
-			</com.google.android.material.card.MaterialCardView>
+						<androidx.appcompat.widget.AppCompatTextView
+							android:id="@+id/userEmail"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="10dp"
+							android:layout_marginRight="10dp"
+							android:fontFamily="@font/montserrat"
+							android:textColor="?colorTextPrimary"
+							android:textSize="14sp"
+							tools:text="jKowalski@stud.prz.edu.pl" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/labelRoom"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/room"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+					</androidx.appcompat.widget.LinearLayoutCompat>
 
-			<com.google.android.material.card.MaterialCardView
-				android:id="@+id/buttonRoom"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
-				android:clickable="true"
-				android:focusable="true"
-				app:cardBackgroundColor="?white"
-				app:cardCornerRadius="5dp"
-				app:cardElevation="0dp"
-				app:rippleColor="?colorTextSecondary">
+				</com.google.android.material.card.MaterialCardView>
 
-				<androidx.appcompat.widget.LinearLayoutCompat
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/labelRoom"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/room"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
+
+				<com.google.android.material.card.MaterialCardView
+					android:id="@+id/buttonRoom"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:padding="10dp">
+					android:layout_marginTop="10dp"
+					android:clickable="true"
+					android:focusable="true"
+					app:cardBackgroundColor="?white"
+					app:cardCornerRadius="5dp"
+					app:cardElevation="0dp"
+					app:rippleColor="?colorTextSecondary">
 
-					<androidx.appcompat.widget.AppCompatTextView
-						android:id="@+id/userRoom"
-						android:layout_width="wrap_content"
+					<androidx.appcompat.widget.LinearLayoutCompat
+						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:fontFamily="@font/montserrat_bold"
-						android:textColor="?colorTextPrimary"
-						android:textSize="14sp"
-						tools:text="D. 3" />
+						android:orientation="vertical"
+						android:padding="10dp">
 
-					<androidx.appcompat.widget.AppCompatTextView
-						android:id="@+id/userBuilding"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="10dp"
-						android:fontFamily="@font/montserrat"
-						android:textColor="?colorTextPrimary"
-						android:textSize="14sp"
-						tools:text="Budynek D - Wydział Elktrotechniki i Informatyki" />
+						<androidx.appcompat.widget.AppCompatTextView
+							android:id="@+id/userRoom"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:fontFamily="@font/montserrat_bold"
+							android:textColor="?colorTextPrimary"
+							android:textSize="14sp"
+							tools:text="D. 3" />
 
-				</androidx.appcompat.widget.LinearLayoutCompat>
+						<androidx.appcompat.widget.AppCompatTextView
+							android:id="@+id/userBuilding"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="10dp"
+							android:fontFamily="@font/montserrat"
+							android:textColor="?colorTextPrimary"
+							android:textSize="14sp"
+							tools:text="Budynek D - Wydział Elktrotechniki i Informatyki" />
 
-			</com.google.android.material.card.MaterialCardView>
+					</androidx.appcompat.widget.LinearLayoutCompat>
 
-			<com.google.android.material.button.MaterialButton
-				android:id="@+id/buttonOfficeHours"
-				style="@style/Widget.MaterialComponents.Button.TextButton"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginTop="10dp"
-				android:insetTop="0dp"
-				android:insetBottom="0dp"
-				android:letterSpacing="0"
-				android:minHeight="0dp"
-				android:paddingLeft="0dp"
-				android:paddingTop="5dp"
-				android:paddingRight="0dp"
-				android:paddingBottom="5dp"
-				android:text="@string/office_hours"
-				android:textAlignment="viewStart"
-				android:textAllCaps="false"
-				app:icon="@drawable/ic_arrow_down"
-				app:iconGravity="end"
-				app:iconTint="?colorTextPrimary" />
+				</com.google.android.material.card.MaterialCardView>
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/userOfficeHours"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
-				android:background="@drawable/background_rounded"
-				android:backgroundTint="?white"
-				android:fontFamily="@font/montserrat"
-				android:padding="10dp"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp"
-				android:visibility="gone" />
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/buttonOfficeHours"
+					style="@style/Widget.MaterialComponents.Button.TextButton"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:insetTop="0dp"
+					android:insetBottom="0dp"
+					android:letterSpacing="0"
+					android:minHeight="0dp"
+					android:paddingLeft="0dp"
+					android:paddingTop="5dp"
+					android:paddingRight="0dp"
+					android:paddingBottom="5dp"
+					android:text="@string/office_hours"
+					android:textAlignment="viewStart"
+					android:textAllCaps="false"
+					app:icon="@drawable/ic_arrow_down"
+					app:iconGravity="end"
+					app:iconTint="?colorTextPrimary" />
 
-			<com.google.android.material.button.MaterialButton
-				android:id="@+id/buttonInterests"
-				style="@style/Widget.MaterialComponents.Button.TextButton"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginTop="10dp"
-				android:insetTop="0dp"
-				android:insetBottom="0dp"
-				android:letterSpacing="0"
-				android:minHeight="0dp"
-				android:paddingLeft="0dp"
-				android:paddingTop="5dp"
-				android:paddingRight="0dp"
-				android:paddingBottom="5dp"
-				android:text="@string/interests"
-				android:textAlignment="viewStart"
-				android:textAllCaps="false"
-				app:icon="@drawable/ic_arrow_down"
-				app:iconGravity="end"
-				app:iconTint="?colorTextPrimary" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/userOfficeHours"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:background="@drawable/background_rounded"
+					android:backgroundTint="?white"
+					android:fontFamily="@font/montserrat"
+					android:padding="10dp"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp"
+					android:visibility="gone" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/userInterests"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
-				android:background="@drawable/background_rounded"
-				android:backgroundTint="?white"
-				android:fontFamily="@font/montserrat"
-				android:padding="10dp"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp"
-				android:visibility="gone" />
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/buttonInterests"
+					style="@style/Widget.MaterialComponents.Button.TextButton"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:insetTop="0dp"
+					android:insetBottom="0dp"
+					android:letterSpacing="0"
+					android:minHeight="0dp"
+					android:paddingLeft="0dp"
+					android:paddingTop="5dp"
+					android:paddingRight="0dp"
+					android:paddingBottom="5dp"
+					android:text="@string/interests"
+					android:textAlignment="viewStart"
+					android:textAllCaps="false"
+					app:icon="@drawable/ic_arrow_down"
+					app:iconGravity="end"
+					app:iconTint="?colorTextPrimary" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/phone_numbers"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/userInterests"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:background="@drawable/background_rounded"
+					android:backgroundTint="?white"
+					android:fontFamily="@font/montserrat"
+					android:padding="10dp"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp"
+					android:visibility="gone" />
 
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listPhoneNumbers"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/phone_numbers"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/employment_functions"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listPhoneNumbers"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp" />
 
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listEmploymentFunctions"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/employment_functions"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
 
-		</androidx.appcompat.widget.LinearLayoutCompat>
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listEmploymentFunctions"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp" />
 
-	</androidx.core.widget.NestedScrollView>
+			</androidx.appcompat.widget.LinearLayoutCompat>
+
+		</androidx.core.widget.NestedScrollView>
+
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

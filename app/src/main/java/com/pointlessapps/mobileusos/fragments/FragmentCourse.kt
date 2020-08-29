@@ -3,9 +3,9 @@ package com.pointlessapps.mobileusos.fragments
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.material.button.MaterialButton
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterMeeting
@@ -16,6 +16,8 @@ import com.pointlessapps.mobileusos.utils.capitalize
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.fragment_course.view.*
+import org.jetbrains.anko.doAsync
+import java.util.concurrent.CountDownLatch
 
 class FragmentCourse(private var course: Course) : FragmentBase() {
 
@@ -29,8 +31,19 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 		prepareMeetingsList()
 		prepareParticipantsList()
 
-		prepareCourseData()
+		refreshed()
 		prepareClickListeners()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
+
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
+		prepareCourseData()
+		prepareData {
+			root().pullRefresh.isRefreshing = false
+			root().horizontalProgressBar.isInvisible = true
+		}
 	}
 
 	private fun prepareClickListeners() {
@@ -70,17 +83,53 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 			Utils.stripHtmlTags(course.courseLearningOutcomes.toString())
 	}
 
+	private fun prepareData(callback: (() -> Unit)? = null) {
+		val loaded = CountDownLatch(3)
+
+		viewModelUser.getUsersByIds(course.lecturers?.map { it.id } ?: return)
+			.observe(this) { (users, online) ->
+				(root().listInstructors.adapter as? AdapterUser)?.update(users ?: return@observe)
+				root().listInstructors.setEmptyText(getString(R.string.no_instructors))
+
+				if (online) {
+					loaded.countDown()
+				}
+			}
+
+		viewModelTimetable.getBytUnitIdAndGroupNumber(course.courseUnitId, course.groupNumber)
+			.observe(this) {
+				(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
+				loaded.countDown()
+			}
+
+		viewModelUser.getGroupByIdAndGroupNumber(course.courseUnitId, course.groupNumber)
+			.observe(this) { (group, online) ->
+				course = group ?: return@observe
+
+				(root().listParticipants.adapter as? AdapterUser)?.update(
+					group.participants ?: return@observe
+				)
+
+				root().courseParticipantsAmount.text = (group.participants?.count() ?: 0).toString()
+				prepareCourseData()
+
+				if (online) {
+					loaded.countDown()
+				}
+			}
+
+		doAsync {
+			loaded.await()
+			callback?.invoke()
+		}
+	}
+
 	private fun prepareInstructorsList() {
 		root().listInstructors.setAdapter(AdapterUser().apply {
 			onClickListener = {
 				onChangeFragmentListener?.invoke(FragmentUser(it.id))
 			}
 		})
-
-		viewModelUser.getUserByIds(course.lecturers?.map { it.id } ?: return).observe(this) {
-			(root().listInstructors.adapter as? AdapterUser)?.update(it ?: return@observe)
-			root().listInstructors.setEmptyText(getString(R.string.no_instructors))
-		}
 	}
 
 	private fun prepareMeetingsList() {
@@ -92,11 +141,6 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 			}
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
-
-		viewModelTimetable.getBytUnitIdAndGroupNumber(course.courseUnitId, course.groupNumber)
-			.observe(this) {
-				(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
-			}
 	}
 
 	private fun prepareParticipantsList() {
@@ -105,17 +149,5 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 		})
 
 		root().courseParticipantsAmount.text = (course.participants?.count() ?: 0).toString()
-
-		viewModelUser.getGroupByIdAndGroupNumber(course.courseUnitId, course.groupNumber)
-			.observe(this) { group ->
-				course = group ?: return@observe
-
-				(root().listParticipants.adapter as? AdapterUser)?.update(
-					group.participants ?: return@observe
-				)
-
-				root().courseParticipantsAmount.text = (group.participants?.count() ?: 0).toString()
-				prepareCourseData()
-			}
 	}
 }

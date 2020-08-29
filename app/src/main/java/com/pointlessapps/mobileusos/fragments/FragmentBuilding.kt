@@ -1,7 +1,7 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPhoneNumber
 import com.pointlessapps.mobileusos.adapters.AdapterRoom
@@ -20,20 +20,36 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 	override fun created() {
 		preparePhonesList()
 		prepareRoomsList()
-		prepareData()
+		refreshed()
 
-		viewModelCommon.getBuildingById(building.id).observe(this) {
-			building = it ?: return@observe
-			prepareData()
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
 
-			(root().listRooms.adapter as? AdapterRoom)?.update(it.rooms ?: return@observe)
-			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
-				it.allPhoneNumbers ?: return@observe
-			)
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
+		prepareData {
+			root().horizontalProgressBar.isInvisible = true
+			root().pullRefresh.isRefreshing = false
 		}
 	}
 
-	private fun prepareData() {
+	private fun prepareData(callback: (() -> Unit)? = null) {
+		viewModelCommon.getBuildingById(building.id).observe(this) { (building, online) ->
+			this.building = building
+			prepareDataStatic()
+
+			(root().listRooms.adapter as? AdapterRoom)?.update(building.rooms ?: return@observe)
+			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
+				building.allPhoneNumbers ?: return@observe
+			)
+
+			if (online) {
+				callback?.invoke()
+			}
+		}
+	}
+
+	private fun prepareDataStatic() {
 		root().buildingName.text = building.name?.toString()
 		root().campusName.text = building.campusName?.toString()
 		building.staticMapUrls?.values?.first()?.also { map ->

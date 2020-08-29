@@ -1,7 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterCourse
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -16,9 +15,17 @@ class FragmentCourses : FragmentBase() {
 	override fun created() {
 		prepareCoursesList()
 		prepareCourses()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
-	private fun prepareCourses() {
+	override fun refreshed() {
+		prepareCourses {
+			root().pullRefresh.isRefreshing = false
+		}
+	}
+
+	private fun prepareCourses(callback: (() -> Unit)? = null) {
 		viewModelUser.getAllGroups().observe(this) { (groups, online) ->
 			val termIds = groups?.map { group -> group.termId } ?: return@observe
 
@@ -38,6 +45,10 @@ class FragmentCourses : FragmentBase() {
 				root().listCourses.apply {
 					setEmptyText(getString(R.string.no_courses))
 					setLoaded(online && online2)
+				}
+
+				if (online && online2) {
+					callback?.invoke()
 				}
 			}
 		}

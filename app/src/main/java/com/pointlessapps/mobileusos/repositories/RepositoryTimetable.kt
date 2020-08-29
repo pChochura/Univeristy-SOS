@@ -37,24 +37,24 @@ class RepositoryTimetable(application: Application) {
 	fun getForDays(
 		startTime: Calendar,
 		numberOfDays: Int
-	): LiveData<List<CourseEvent>> {
+	): LiveData<Pair<List<CourseEvent>, Boolean>> {
 		startTime.apply {
 			set(Calendar.SECOND, 0)
 			set(Calendar.MINUTE, 0)
 			set(Calendar.HOUR_OF_DAY, 1)
 		}
-		val callback = MutableLiveData<List<CourseEvent>>()
+		val callback = MutableLiveData<Pair<List<CourseEvent>, Boolean>>()
 		serviceTimetable.getByUser(startTime, numberOfDays).observe {
 			val finalEvents = setBreaks(it)
-			callback.postValue(finalEvents)
-			insert(*finalEvents?.toTypedArray() ?: return@observe)
+			callback.postValue((finalEvents ?: return@observe) to true)
+			insert(*finalEvents.toTypedArray())
 		}
 		GlobalScope.launch {
 			callback.postValue(
 				timetableDao.getForDays(
 					startTime.timeInMillis,
 					startTime.timeInMillis + TimeUnit.DAYS.toMillis(numberOfDays.toLong())
-				)
+				) to false
 			)
 		}
 		return callback

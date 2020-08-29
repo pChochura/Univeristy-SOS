@@ -75,7 +75,7 @@ class ServiceUSOSEmail private constructor() {
 			callback(
 				clientService.run {
 					execute(updateEmailRecipientsRequest(id, userIds, emails))?.run {
-						gson.fromJson<Any?>(body)
+						gson.fromJson(body)
 					}
 				}
 			)

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttachment
 import com.pointlessapps.mobileusos.models.Email

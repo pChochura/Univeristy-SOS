@@ -33,10 +33,10 @@ class RepositoryUser(application: Application) {
 		}
 	}
 
-	fun getById(id: String?): LiveData<User?> {
-		val callback = MutableLiveData<User?>()
+	fun getById(id: String?): LiveData<Pair<User?, Boolean>> {
+		val callback = MutableLiveData<Pair<User?, Boolean>>()
 		serviceUser.getById(id).observe {
-			callback.postValue(it)
+			callback.postValue(it to true)
 			insert(it?.apply {
 				if (id == null) {
 					loggedIn = true
@@ -44,19 +44,19 @@ class RepositoryUser(application: Application) {
 			} ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(userDao.getById(id))
+			callback.postValue(userDao.getById(id) to false)
 		}
 		return callback
 	}
 
-	fun getByIds(ids: List<String>): LiveData<List<User>?> {
-		val callback = MutableLiveData<List<User>?>()
+	fun getByIds(ids: List<String>): LiveData<Pair<List<User>?, Boolean>> {
+		val callback = MutableLiveData<Pair<List<User>?, Boolean>>()
 		serviceUser.getByIds(ids).observe {
-			callback.postValue(it)
+			callback.postValue(it to true)
 			insert(*it?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(userDao.getByIds(ids))
+			callback.postValue(userDao.getByIds(ids) to false)
 		}
 		return callback
 	}
@@ -64,14 +64,6 @@ class RepositoryUser(application: Application) {
 	fun getByQuery(query: String): LiveData<List<User>?> {
 		val callback = MutableLiveData<List<User>?>()
 		serviceUser.getByQuery(query).observe {
-			callback.postValue(it)
-		}
-		return callback
-	}
-
-	fun getAllFaculties(): LiveData<List<String>?> {
-		val callback = MutableLiveData<List<String>?>()
-		serviceUser.getAllFaculties().observe {
 			callback.postValue(it)
 		}
 		return callback

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
-import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.services.ServiceUSOSGrade
 import kotlinx.coroutines.GlobalScope
@@ -33,26 +32,14 @@ class RepositoryGrade(application: Application) {
 		}
 	}
 
-	fun getByGroups(courses: List<Course>): LiveData<List<Grade>?> {
-		val callback = MutableLiveData<List<Grade>?>()
-		serviceGrade.getByGroups(courses).observe {
-			callback.postValue(it)
-			insert(*it?.toTypedArray() ?: return@observe)
-		}
-		GlobalScope.launch {
-			callback.postValue(gradeDao.getByGroups(courses))
-		}
-		return callback
-	}
-
-	fun getByTermIds(termIds: List<String>): LiveData<Map<String, Map<String, Grade?>>?> {
-		val callback = MutableLiveData<Map<String, Map<String, Grade?>>?>()
+	fun getByTermIds(termIds: List<String>): LiveData<Pair<Map<String, Map<String, Grade?>>?, Boolean>> {
+		val callback = MutableLiveData<Pair<Map<String, Map<String, Grade?>>?, Boolean>>()
 		serviceGrade.getByTermIds(termIds).observe { map ->
-			callback.postValue(map)
+			callback.postValue(map to true)
 			insert(*map?.values?.flatMap { it.values }?.toTypedArray() ?: return@observe)
 		}
 		GlobalScope.launch {
-			callback.postValue(gradeDao.getByTermIds(termIds))
+			callback.postValue(gradeDao.getByTermIds(termIds) to false)
 		}
 		return callback
 	}

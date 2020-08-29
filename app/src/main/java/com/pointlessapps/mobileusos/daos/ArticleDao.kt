@@ -15,9 +15,9 @@ interface ArticleDao {
 	@Delete
 	suspend fun delete(vararg articles: Article)
 
-	@Query("SELECT * FROM table_news")
+	@Query("SELECT * FROM table_news ORDER BY publication_date DESC")
 	suspend fun getAll(): List<Article>
 
-	@Query("SELECT category FROM table_news")
+	@Query("SELECT category_id, category_name FROM table_news")
 	suspend fun getAllCategories(): List<Article.Category>
 }

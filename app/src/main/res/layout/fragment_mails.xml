@@ -29,29 +29,36 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
-	<androidx.core.widget.NestedScrollView
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/pullRefresh"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/topBar">
 
-		<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.core.widget.NestedScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="vertical"
-			android:paddingBottom="80dp">
+			android:layout_height="match_parent">
 
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listEmails"
+			<androidx.appcompat.widget.LinearLayoutCompat
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="20dp" />
+				android:clipChildren="false"
+				android:clipToPadding="false"
+				android:orientation="vertical"
+				android:paddingBottom="80dp">
 
-		</androidx.appcompat.widget.LinearLayoutCompat>
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listEmails"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="20dp" />
 
-	</androidx.core.widget.NestedScrollView>
+			</androidx.appcompat.widget.LinearLayoutCompat>
+
+		</androidx.core.widget.NestedScrollView>
+
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/buttonAdd"

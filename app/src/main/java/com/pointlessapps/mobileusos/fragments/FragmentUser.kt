@@ -3,9 +3,9 @@ package com.pointlessapps.mobileusos.fragments
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.material.button.MaterialButton
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEmploymentFunction
@@ -26,13 +26,23 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 	override fun getLayoutId() = R.layout.fragment_user
 
 	override fun created() {
-		prepareData()
+		refreshed()
 		preparePhoneNumbersList()
 		prepareEmploymentFunctionsList()
 		prepareClickListeners()
 
 		setCollapsible(root().buttonOfficeHours, root().userOfficeHours)
 		setCollapsible(root().buttonInterests, root().userInterests)
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
+
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
+		prepareData {
+			root().pullRefresh.isRefreshing = false
+			root().horizontalProgressBar.isInvisible = true
+		}
 	}
 
 	private fun prepareClickListeners() {
@@ -59,20 +69,20 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 		}
 	}
 
-	private fun prepareData() {
-		viewModelUser.getUserById(userId).observe(this) {
-			if (it == null) {
+	private fun prepareData(callback: (() -> Unit)? = null) {
+		viewModelUser.getUserById(userId).observe(this) { (user, online) ->
+			if (user == null) {
 				return@observe
 			}
-			user = it
+			this.user = user
 
 			(root().listEmploymentFunctions.adapter as? AdapterEmploymentFunction)?.update(
-				it.employmentFunctions ?: listOf()
+				user.employmentFunctions ?: listOf()
 			)
 			root().listEmploymentFunctions.setEmptyText(getString(R.string.no_employment_functions))
 
 			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
-				it.phoneNumbers?.map { number ->
+				user.phoneNumbers?.map { number ->
 					Building.PhoneNumber(
 						number
 					)
@@ -80,17 +90,21 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 			)
 			root().listPhoneNumbers.setEmptyText(getString(R.string.no_phone_numbers))
 
-			root().userEmail.text = it.email
-			root().userOfficeHours.text = it.officeHours?.toString()
-			root().userInterests.text = it.interests?.toString()
-			root().userRoom.text = it.room?.number
-			root().userBuilding.text = it.room?.building?.name?.toString()
-			root().userName.text = it.name()
+			root().userEmail.text = user.email
+			root().userOfficeHours.text = user.officeHours?.toString()
+			root().userInterests.text = user.interests?.toString()
+			root().userRoom.text = user.room?.number
+			root().userBuilding.text = user.room?.building?.name?.toString()
+			root().userName.text = user.name()
 
-			Picasso.get().load(it.photoUrls?.values?.firstOrNull() ?: return@observe)
+			Picasso.get().load(user.photoUrls?.values?.firstOrNull() ?: return@observe)
 				.into(root().userProfileImg)
 
 			hideEmptyElements()
+
+			if (online) {
+				callback?.invoke()
+			}
 		}
 	}
 

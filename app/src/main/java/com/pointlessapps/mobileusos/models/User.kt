@@ -78,9 +78,7 @@ data class User(
 		@SerializedName("function")
 		var function: Name?,
 		@SerializedName("faculty")
-		var faculty: Faculty,
-		@SerializedName("is_official")
-		var isOfficial: Boolean = false
+		var faculty: Faculty
 	)
 
 	@Keep

@@ -6,7 +6,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -36,14 +35,22 @@ class FragmentGrades : FragmentBase() {
 	override fun created() {
 		prepareGradesList()
 		prepareGrades()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
-	private fun prepareGrades() {
+	override fun refreshed() {
+		prepareGrades {
+			root().pullRefresh.isRefreshing = false
+		}
+	}
+
+	private fun prepareGrades(callback: (() -> Unit)? = null) {
 		viewModelUser.getAllGroups().observe(this) { (groups, online) ->
 			val termIds = groups?.map { group -> group.termId } ?: return@observe
 
 			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, online2) ->
-				viewModelUser.getGradesByTermIds(termIds).observe(this) { grades ->
+				viewModelUser.getGradesByTermIds(termIds).observe(this) { (grades, online3) ->
 					if (grades == null) {
 						return@observe
 					}
@@ -71,6 +78,10 @@ class FragmentGrades : FragmentBase() {
 					root().listGrades.apply {
 						setEmptyText(getString(R.string.no_grades))
 						setLoaded(online && online2)
+					}
+
+					if (online && online2 && online3) {
+						callback?.invoke()
 					}
 				}
 			}

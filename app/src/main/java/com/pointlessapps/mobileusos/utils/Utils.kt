@@ -5,34 +5,20 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
 import android.text.Html
 import android.text.Spanned
-import android.view.View
-import android.view.Window
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.res.use
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.CourseEvent
-import org.jetbrains.anko.find
 import java.util.*
 
 
 object Utils {
-
-	fun getKeyboardHeight(window: Window, callback: (Int) -> Unit) {
-		window.decorView.find<View>(android.R.id.content).apply {
-			viewTreeObserver.addOnGlobalLayoutListener {
-				val r = Rect()
-				window.decorView.getWindowVisibleDisplayFrame(r)
-				callback(height - r.bottom)
-			}
-		}
-	}
 
 	fun monthKey(month: Int, year: Int) =
 		(if (month < 10) "0" else "") + "$month.$year"

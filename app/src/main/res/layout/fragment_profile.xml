@@ -2,9 +2,9 @@
 <androidx.appcompat.widget.LinearLayoutCompat
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:background="?colorBackground"
 	android:orientation="vertical">
 
@@ -33,11 +33,11 @@
 			android:fontFamily="@font/montserrat_bold"
 			android:textColor="?colorTextPrimary"
 			android:textSize="24sp"
-			tools:text="Jan Kowalski"
 			app:layout_constraintHorizontal_bias="0"
 			app:layout_constraintLeft_toRightOf="@id/userProfileImg"
 			app:layout_constraintRight_toLeftOf="@id/buttonSettings"
-			app:layout_constraintTop_toTopOf="@id/userProfileImg" />
+			app:layout_constraintTop_toTopOf="@id/userProfileImg"
+			tools:text="Jan Kowalski" />
 
 		<androidx.appcompat.widget.AppCompatTextView
 			android:id="@+id/userStudentNumber"
@@ -48,9 +48,9 @@
 			android:fontFamily="@font/montserrat"
 			android:textColor="?colorTextSecondary"
 			android:textSize="14sp"
-			tools:text="1242132"
 			app:layout_constraintLeft_toRightOf="@id/userProfileImg"
-			app:layout_constraintTop_toBottomOf="@id/userName" />
+			app:layout_constraintTop_toBottomOf="@id/userName"
+			tools:text="1242132" />
 
 		<com.google.android.material.button.MaterialButton
 			android:id="@+id/buttonSettings"
@@ -71,69 +71,84 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
-	<androidx.core.widget.NestedScrollView
+	<ProgressBar
+		android:id="@+id/horizontalProgressBar"
+		style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="-7dp"
+		android:indeterminate="true" />
+
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/pullRefresh"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.core.widget.NestedScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="vertical"
-			android:padding="20dp">
+			android:layout_height="match_parent">
 
-			<include layout="@layout/partial_profile_shortcuts" />
-
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
+			<androidx.appcompat.widget.LinearLayoutCompat
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/recent_grades"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
-
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listRecentGrades"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp"
 				android:clipChildren="false"
 				android:clipToPadding="false"
-				android:orientation="horizontal" />
+				android:orientation="vertical"
+				android:padding="20dp">
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/incoming_meetings"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+				<include layout="@layout/partial_profile_shortcuts" />
 
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listMeetings"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/recent_grades"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/terms"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listRecentGrades"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:clipChildren="false"
+					android:clipToPadding="false"
+					android:orientation="horizontal" />
 
-			<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-				android:id="@+id/listTerms"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/incoming_meetings"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
 
-		</androidx.appcompat.widget.LinearLayoutCompat>
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listMeetings"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp" />
 
-	</androidx.core.widget.NestedScrollView>
+				<androidx.appcompat.widget.AppCompatTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/terms"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
+
+				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+					android:id="@+id/listTerms"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp" />
+
+			</androidx.appcompat.widget.LinearLayoutCompat>
+
+		</androidx.core.widget.NestedScrollView>
+
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -16,7 +16,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	private val timetableUnit = MutableLiveData<TimetableUnit>()
 	private var timetableForDays = timetableUnit.switchMap {
 		repositoryTimetable.getForDays(it.startTime, it.numberOfDays)
-			.map { courseEvents ->
+			.map { (courseEvents, _) ->
 				courseEvents.map { courseEvent ->
 					this.courseEvents.add(courseEvent)
 					daysUpToDate.add(courseEvent.startTime.getDayKey())

@@ -32,14 +32,14 @@ class RepositoryRoom(application: Application) {
 		}
 	}
 
-	fun getById(roomId: String): LiveData<BuildingRoom> {
-		val callback = MutableLiveData<BuildingRoom>()
+	fun getById(roomId: String): LiveData<Pair<BuildingRoom, Boolean>> {
+		val callback = MutableLiveData<Pair<BuildingRoom, Boolean>>()
 		serviceRoom.getById(roomId).observe {
-			callback.postValue(it ?: return@observe)
+			callback.postValue((it ?: return@observe) to true)
 			insert(it)
 		}
 		GlobalScope.launch {
-			callback.postValue(roomDao.getById(roomId) ?: return@launch)
+			callback.postValue((roomDao.getById(roomId) ?: return@launch) to false)
 		}
 		return callback
 	}

@@ -7,7 +7,7 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.BuildingRoom
 import org.jetbrains.anko.find
 
-class AdapterRoom() : AdapterSimple<BuildingRoom>(mutableListOf()) {
+class AdapterRoom : AdapterSimple<BuildingRoom>(mutableListOf()) {
 
 	private val wholeList = mutableListOf(*list.toTypedArray())
 

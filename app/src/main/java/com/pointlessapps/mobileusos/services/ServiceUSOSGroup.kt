@@ -44,7 +44,7 @@ class ServiceUSOSGroup private constructor() {
 	@Keep
 	private class ResponseGroups {
 		@SerializedName("groups")
-		internal var groups: Map<String, List<Course>>? = null
+		var groups: Map<String, List<Course>>? = null
 	}
 
 	companion object : Utils.SingletonHolder<ServiceUSOSGroup, Unit>({ ServiceUSOSGroup() })

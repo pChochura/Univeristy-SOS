@@ -1,7 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEmail
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -18,6 +17,22 @@ class FragmentMails : FragmentBase() {
 	override fun created() {
 		prepareEmailsList()
 		prepareClickListeners()
+
+		refreshed()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
+
+	override fun refreshed() {
+		viewModelUser.getAllEmails().observe(this) { (emails, online) ->
+			root().listEmails.setEmptyText(getString(R.string.no_emails))
+			root().listEmails.setLoaded(online)
+			(root().listEmails.adapter as? AdapterEmail)?.update(emails)
+
+			if (online) {
+				root().pullRefresh.isRefreshing = false
+			}
+		}
 	}
 
 	private fun prepareEmailsList() {

@@ -3,8 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:background="?colorBackground"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="?colorBackground">
 
 	<FrameLayout
 		android:id="@+id/containerFragment"
@@ -21,9 +21,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="?white"
-		app:itemRippleColor="?colorTextSecondary"
 		app:itemIconSize="20dp"
 		app:itemIconTint="@drawable/bottom_navigation_colors"
+		app:itemRippleColor="?colorTextSecondary"
 		app:itemTextAppearanceActive="@style/BottomNavigationTextActive"
 		app:itemTextAppearanceInactive="@style/BottomNavigationTextInactive"
 		app:itemTextColor="@drawable/bottom_navigation_colors"

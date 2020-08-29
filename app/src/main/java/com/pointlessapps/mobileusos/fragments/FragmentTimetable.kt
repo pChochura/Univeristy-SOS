@@ -2,7 +2,6 @@ package com.pointlessapps.mobileusos.fragments
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.helpers.*
@@ -12,7 +11,7 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.pointlessapps.mobileusos.views.WeekView
 import kotlinx.android.synthetic.main.dialog_show_event.*
-import kotlinx.android.synthetic.main.fragment_timetable.*
+import kotlinx.android.synthetic.main.fragment_timetable.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,30 +32,35 @@ class FragmentTimetable : FragmentBase() {
 		}
 	}
 
+	override fun refreshed() {
+		prepareWeekView()
+		observeTimetableData(root().weekView.firstVisibleDay)
+	}
+
 	private fun prepareClickListeners() {
-		buttonRefresh.setOnClickListener { weekView.refreshDataset() }
+		root().buttonRefresh.setOnClickListener { root().weekView.refreshDataset() }
 	}
 
 	private fun observeTimetableData(startTime: Calendar = Calendar.getInstance()) {
 		viewModelTimetable.getForDays(startTime).observe(this@FragmentTimetable) {
-			weekView.refreshDataset()
+			root().weekView.refreshDataset()
 		}
 	}
 
 	private fun prepareWeekView() {
 		Preferences.get().apply {
-			weekView.setStartHour(getTimetableStartHour())
-			weekView.setEndHour(getTimetableEndHour())
-			weekView.setVisibleDays(getTimetableVisibleDays())
-			weekView.setSnappingEnabled(getTimetableSnapToFullDay())
+			root().weekView.setStartHour(getTimetableStartHour())
+			root().weekView.setEndHour(getTimetableEndHour())
+			root().weekView.setVisibleDays(getTimetableVisibleDays())
+			root().weekView.setSnappingEnabled(getTimetableSnapToFullDay())
 		}
-		weekView.setScrollListener { newFirstVisibleDay, _ ->
+		root().weekView.setScrollListener { newFirstVisibleDay, _ ->
 			viewModelTimetable.setStartTime(newFirstVisibleDay)
 		}
-		weekView.setMonthChangeListener { newYear, newMonth ->
+		root().weekView.setMonthChangeListener { newYear, newMonth ->
 			return@setMonthChangeListener viewModelTimetable.getEventsByMonthYear(newMonth, newYear)
 		}
-		weekView.setEventClickListener { event, _ -> showEventInfo(event) }
+		root().weekView.setEventClickListener { event, _ -> showEventInfo(event) }
 	}
 
 	private fun showEventInfo(weekViewEvent: WeekView.WeekViewEvent) {
@@ -65,7 +69,7 @@ class FragmentTimetable : FragmentBase() {
 		if (event == null) {
 			Snackbar.make(
 				view ?: return,
-				"Something went wrong while downloading this event",
+				getString(R.string.event_download_error),
 				Snackbar.LENGTH_SHORT
 			)
 
@@ -81,8 +85,8 @@ class FragmentTimetable : FragmentBase() {
 			dialog.buttonRoom.text = event.roomNumber
 			dialog.buttonBuilding.text = event.buildingName.toString()
 			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
-				.observe(this) {
-					dialog.buttonLecturer.text = it?.name()
+				.observe(this) { (user, _) ->
+					dialog.buttonLecturer.text = user?.name()
 				}
 
 			dialog.buttonLecturer.setOnClickListener {

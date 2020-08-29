@@ -29,55 +29,57 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
-	<androidx.core.widget.NestedScrollView
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/pullRefresh"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.core.widget.NestedScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:orientation="vertical"
-			android:paddingTop="10dp"
-			android:paddingBottom="10dp">
+			android:layout_height="match_parent">
 
-			<com.kizitonwose.calendarview.CalendarView
-				android:id="@+id/calendar"
+			<androidx.appcompat.widget.LinearLayoutCompat
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				app:cv_dayViewResource="@layout/calendar_day"
-				app:cv_maxRowCount="6"
-				app:cv_monthHeaderResource="@layout/calendar_header"
-				app:cv_orientation="horizontal"
-				app:cv_outDateStyle="endOfGrid"
-				app:cv_scrollMode="paged"
-				app:cv_wrappedPageHeightAnimationDuration="300" />
+				android:clipChildren="false"
+				android:clipToPadding="false"
+				android:orientation="vertical"
+				android:padding="20dp">
 
-			<androidx.appcompat.widget.AppCompatTextView
-				android:id="@+id/labelEvents"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="20dp"
-				android:layout_marginTop="20dp"
-				android:layout_marginRight="20dp"
-				android:fontFamily="@font/montserrat"
-				android:text="@string/events"
-				android:textColor="?colorTextPrimary"
-				android:textSize="14sp" />
+				<com.kizitonwose.calendarview.CalendarView
+					android:id="@+id/calendar"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:cv_dayViewResource="@layout/calendar_day"
+					app:cv_maxRowCount="6"
+					app:cv_monthHeaderResource="@layout/calendar_header"
+					app:cv_orientation="horizontal"
+					app:cv_outDateStyle="endOfGrid"
+					app:cv_scrollMode="paged"
+					app:cv_wrappedPageHeightAnimationDuration="300" />
 
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/listEvents"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="20dp"
-				android:layout_marginTop="10dp"
-				android:layout_marginRight="20dp"
-				tools:itemCount="2"
-				tools:listitem="@layout/list_item_calendar_event" />
+				<androidx.appcompat.widget.AppCompatTextView
+					android:id="@+id/labelEvents"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:fontFamily="@font/montserrat"
+					android:text="@string/events"
+					android:textColor="?colorTextPrimary"
+					android:textSize="14sp" />
 
-		</androidx.appcompat.widget.LinearLayoutCompat>
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/listEvents"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					tools:itemCount="2"
+					tools:listitem="@layout/list_item_calendar_event" />
 
-	</androidx.core.widget.NestedScrollView>
+			</androidx.appcompat.widget.LinearLayoutCompat>
+
+		</androidx.core.widget.NestedScrollView>
+
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

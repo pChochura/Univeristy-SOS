@@ -44,14 +44,17 @@ class RepositoryGroup(application: Application) {
 		return callback
 	}
 
-	fun getByIdAndGroupNumber(courseUnitId: String, groupNumber: Int): LiveData<Course?> {
-		val callback = MutableLiveData<Course?>()
+	fun getByIdAndGroupNumber(
+		courseUnitId: String,
+		groupNumber: Int
+	): LiveData<Pair<Course?, Boolean>> {
+		val callback = MutableLiveData<Pair<Course?, Boolean>>()
 		serviceGroup.getByIdAndGroupNumber(courseUnitId, groupNumber).observe {
-			callback.postValue(it ?: return@observe)
+			callback.postValue((it ?: return@observe) to true)
 			insert(it)
 		}
 		GlobalScope.launch {
-			callback.postValue(groupDao.getByIdAndGroupNumber(courseUnitId, groupNumber))
+			callback.postValue(groupDao.getByIdAndGroupNumber(courseUnitId, groupNumber) to false)
 		}
 		return callback
 	}

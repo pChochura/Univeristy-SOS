@@ -1,7 +1,7 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttributes
@@ -25,13 +25,23 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 	override fun created() {
 		roomName?.also { root().roomName.text = it }
 
-		prepareData()
+		refreshed()
 		prepareMeetingsList()
 		prepareAttributesList()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
-	private fun prepareData() {
-		viewModelCommon.getRoomById(roomId).observe(this) { room ->
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
+		prepareData {
+			root().pullRefresh.isRefreshing = false
+			root().horizontalProgressBar.isInvisible = true
+		}
+	}
+
+	private fun prepareData(callback: (() -> Unit)? = null) {
+		viewModelCommon.getRoomById(roomId).observe(this) { (room, online) ->
 			root().roomName.text = room.number.toString()
 
 			room.building?.name?.toString()?.also { buildingName ->
@@ -68,6 +78,10 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 					*(room.attributes ?: listOf()).toTypedArray()
 				)
 			)
+
+			if (online) {
+				callback?.invoke()
+			}
 		}
 	}
 

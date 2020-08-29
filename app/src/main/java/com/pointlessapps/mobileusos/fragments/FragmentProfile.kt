@@ -1,8 +1,8 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
@@ -15,7 +15,9 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
+import org.jetbrains.anko.doAsync
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class FragmentProfile : FragmentBase() {
 
@@ -31,8 +33,18 @@ class FragmentProfile : FragmentBase() {
 		prepareTermsList()
 		prepareGradesList()
 		prepareMeetingsList()
-		prepareProfileData()
 		prepareClickListeners()
+		refreshed()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
+	}
+
+	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
+		prepareData {
+			root().pullRefresh.isRefreshing = false
+			root().horizontalProgressBar.isInvisible = true
+		}
 	}
 
 	private fun prepareClickListeners() {
@@ -57,6 +69,10 @@ class FragmentProfile : FragmentBase() {
 				)
 			)
 		}
+	}
+
+	private fun prepareData(callback: (() -> Unit)? = null) {
+		val loaded = CountDownLatch(4)
 
 		val dateToCheck = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -7) }.time
 
@@ -65,7 +81,7 @@ class FragmentProfile : FragmentBase() {
 				return@observe
 			}
 
-			viewModelUser.getGradesByTermIds(listOf(term)).observe(this) { grades ->
+			viewModelUser.getGradesByTermIds(listOf(term)).observe(this) { (grades, online) ->
 				root().listRecentGrades.setEmptyText(getString(R.string.no_recent_grades))
 
 				var gradesList =
@@ -86,8 +102,37 @@ class FragmentProfile : FragmentBase() {
 								grade.dateModified
 							})
 						}
+
+						if (online) {
+							loaded.countDown()
+						}
 					}
 			}
+		}
+
+		viewModelTimetable.getIncoming().observe(this) { (events, online) ->
+			(root().listMeetings.adapter as? AdapterMeeting)?.update(events)
+
+			root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
+
+			if (online) {
+				loaded.countDown()
+			}
+		}
+
+		viewModelUser.getAllGroups().observe(this) { (terms, online) ->
+			postTerms(terms?.map { group -> group.termId } ?: return@observe)
+
+			if (online) {
+				loaded.countDown()
+			}
+		}
+
+		prepareProfileData { loaded.countDown() }
+
+		doAsync {
+			loaded.await()
+			callback?.invoke()
 		}
 	}
 
@@ -104,35 +149,33 @@ class FragmentProfile : FragmentBase() {
 				}
 			})
 		}
-
-		viewModelTimetable.getIncoming().observe(this) {
-			(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
-
-			root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
-		}
 	}
 
 	private fun prepareTermsList() {
 		root().listTerms.setAdapter(AdapterTerm())
-
-		viewModelUser.getAllGroups().observe(this) { (terms, _) ->
-			postTerms(terms?.map { group -> group.termId } ?: return@observe)
-		}
 	}
 
-	private fun postTerms(termIds: List<String>) {
-		viewModelUser.getTermsByIds(termIds).observe(this) { (terms, _) ->
-			this.currentTerm.value = terms?.min()?.id
+	private fun postTerms(termIds: List<String>, callback: (() -> Unit)? = null) {
+		viewModelUser.getTermsByIds(termIds).observe(this) { (terms, online) ->
+			this.currentTerm.value = terms?.minOrNull()?.id
 			(root().listTerms.adapter as? AdapterTerm)?.update(terms ?: return@observe)
+
+			if (online) {
+				callback?.invoke()
+			}
 		}
 	}
 
-	private fun prepareProfileData() {
-		viewModelUser.getUserById().observe(this) {
-			root().userName.text = it?.name()
-			root().userStudentNumber.text = it?.studentNumber
-			it?.photoUrls?.values?.firstOrNull()?.also { image ->
+	private fun prepareProfileData(callback: (() -> Unit)? = null) {
+		viewModelUser.getUserById().observe(this) { (user, online) ->
+			root().userName.text = user?.name()
+			root().userStudentNumber.text = user?.studentNumber
+			user?.photoUrls?.values?.firstOrNull()?.also { image ->
 				Picasso.get().load(image).into(root().userProfileImg)
+			}
+
+			if (online) {
+				callback?.invoke()
 			}
 		}
 	}
