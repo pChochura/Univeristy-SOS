@@ -30,7 +30,7 @@
 	<string name="course_info">%s, group %d</string>
 	<string name="no_incoming_meetings">There are no incoming meetings</string>
 	<string name="no_new_articles">There are no new articles</string>
-	<string name="time_period">%tR - %tR</string>
+	<string name="time_period" translatable="false">%tR - %tR</string>
 	<string name="calendar_event_description">Incoming university event</string>
 	<string name="create_event_title">Add this event to the calendar</string>
 	<string name="empty_surveys_description">There are no more surveys to fill out</string>
@@ -78,7 +78,7 @@
 	<string name="discard_email_title">Do you want to discard all changes?</string>
 	<string name="academic_calendar">Academic calendar</string>
 	<string name="events">Events</string>
-	<string name="date_period">%1$td.%1$tm.%1$tY - %2$td.%2$tm.%2$tY</string>
+	<string name="date_period" translatable="false">%1$td.%1$tm.%1$tY - %2$td.%2$tm.%2$tY</string>
 	<string name="day_off">Day off</string>
 	<string name="mon">Mon</string>
 	<string name="tue">Tue</string>
@@ -87,7 +87,7 @@
 	<string name="fri">Fri</string>
 	<string name="sat">Sat</string>
 	<string name="sun">Sun</string>
-	<string name="visible_period_description">Indicates how many hours visible will be visible</string>
+	<string name="visible_period_description">Indicates how many hours will be visible</string>
 	<string name="snap_to_a_full_day">Snap to a full day</string>
 	<string name="snap_to_a_full_day_description">Scrolls to a full visible day when you let go your finger</string>
 	<string name="off">off</string>
@@ -103,24 +103,24 @@
 	<string name="news_notifications_description">Show notification when an article was posted</string>
 	<string name="surveys_notifications">Surveys notifications</string>
 	<string name="surveys_notifications_description">Show notification when a new survey appeared</string>
-	<string name="system">System</string>
+	<string name="system" translatable="false">System</string>
 	<string name="dark_mode">Dark mode</string>
-	<string name="dark_mode_description">Discover the dark side of the app!</string>
+	<string name="dark_mode_description">Discover the dark side of the app! Requires restart.</string>
 	<string name="default_tab">Default tab</string>
 	<string name="default_tab_description">Select which tab should be open at startup</string>
 	<string name="default_language">Default language</string>
-	<string name="default_language_description">Indicates the language in which the data will be downloaded</string>
-	<string name="pl">PL</string>
+	<string name="default_language_description">Indicates the language in which the data will be downloaded. Requires restart.</string>
+	<string name="pl" translatable="false">PL</string>
 	<string name="logout">Logout</string>
 	<string name="logout_description">Remove all cached data and logout from your USOS account</string>
 	<string name="number_of_visible_days_description">Indicates how many days should be visible at once</string>
-	<string name="en">EN</string>
+	<string name="en" translatable="false">EN</string>
 	<string name="confirm">Confirm</string>
 	<string name="cancel">Cancel</string>
 	<string name="select_visible_period">Select visible period</string>
 	<string name="default_tab_title">Select a default tab</string>
 	<string name="number_of_visible_days_title">How many days should be visible?</string>
-	<string name="default_notification_channel_id">all_notifications</string>
+	<string name="default_notification_channel_id" translatable="false">all_notifications</string>
 	<string name="default_notification_channel">All notifications</string>
 	<string name="add_an_attachment">Add an attachment</string>
 	<string name="tap_to_add">Tap to add</string>
@@ -130,4 +130,16 @@
 	<string name="no_courses">There are no courses</string>
 	<string name="no_grades">There are no grades</string>
 	<string name="event_download_error">Something went wrong while downloading this event</string>
+	<string name="january">January</string>
+	<string name="february">February</string>
+	<string name="march">March</string>
+	<string name="april">April</string>
+	<string name="may">May</string>
+	<string name="june">June</string>
+	<string name="july">July</string>
+	<string name="august">August</string>
+	<string name="september">September</string>
+	<string name="october">October</string>
+	<string name="november">November</string>
+	<string name="december">December</string>
 </resources>

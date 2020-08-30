@@ -245,12 +245,14 @@ class FragmentSettings : FragmentBase() {
 					getString(R.string.default_language_description),
 					{ prefs.getSystemDefaultLanguage() ?: getString(R.string.pl) }
 				) {
-					prefs.putSystemDefaultLanguage(
-						when (prefs.getSystemDefaultLanguage()) {
-							getString(R.string.pl) -> getString(R.string.en)
-							else -> getString(R.string.pl)
-						}
-					)
+					when (prefs.getSystemDefaultLanguage()) {
+						getString(R.string.pl) -> getString(R.string.en)
+						else -> getString(R.string.pl)
+					}.also {
+						prefs.putSystemDefaultLanguage(it)
+						LocaleHelper.withLocale(context)
+						onForceRecreate?.invoke()
+					}
 				},
 				SettingsItem(
 					requireContext(),

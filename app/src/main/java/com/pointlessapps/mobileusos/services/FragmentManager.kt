@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.services
 
+import android.content.Intent
 import android.view.Menu
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -12,7 +13,7 @@ import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.contentView
 
 class FragmentManager private constructor(
-	activity: FragmentActivity,
+	private val activity: FragmentActivity,
 	private val fragmentManager: androidx.fragment.app.FragmentManager,
 	private val fragments: Array<out FragmentBaseInterface>
 ) {
@@ -66,9 +67,14 @@ class FragmentManager private constructor(
 			setFragment(it.apply { prepareFragment(this) })
 		}
 		fragment.onForceRecreate = {
-			fragment.forceRefresh = true
-			fragmentManager.beginTransaction().detach(fragment as Fragment)
-				.attach(fragment as Fragment).commit()
+			activity.startActivity(
+				Intent(
+					activity,
+					activity::class.java
+				)
+			)
+			activity.overridePendingTransition(0, 0)
+			activity.finish()
 		}
 		fragment.onForceGoBackListener = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation

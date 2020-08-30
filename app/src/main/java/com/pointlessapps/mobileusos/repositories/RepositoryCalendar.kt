@@ -37,14 +37,20 @@ class RepositoryCalendar(application: Application) {
 		faculties: List<String>,
 		startDate: Date,
 		endDate: Date
-	): LiveData<List<CalendarEvent>?> {
-		val callback = MutableLiveData<List<CalendarEvent>?>()
+	): LiveData<Pair<List<CalendarEvent>, Boolean>> {
+		val callback = MutableLiveData<Pair<List<CalendarEvent>, Boolean>>()
 		serviceCalendar.getByFaculties(faculties, startDate, endDate).observe {
-			callback.postValue(it ?: return@observe)
+			callback.postValue(it to true)
 			insert(*it.toTypedArray())
 		}
 		GlobalScope.launch {
-			callback.postValue(calendarDao.getByFaculties(faculties, startDate.time, endDate.time))
+			callback.postValue(
+				calendarDao.getByFaculties(
+					faculties,
+					startDate.time,
+					endDate.time
+				) to false
+			)
 		}
 		return callback
 	}

@@ -25,11 +25,9 @@ class FragmentTimetable : FragmentBase() {
 	override fun getNavigationName() = R.string.timetable
 
 	override fun created() {
-		root().post {
-			prepareClickListeners()
-			prepareWeekView()
-			observeTimetableData()
-		}
+		prepareClickListeners()
+		prepareWeekView()
+		observeTimetableData()
 	}
 
 	override fun refreshed() {

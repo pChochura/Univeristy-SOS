@@ -29,6 +29,14 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
+	<ProgressBar
+		android:id="@+id/horizontalProgressBar"
+		style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="-7dp"
+		android:indeterminate="true" />
+
 	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 		android:id="@+id/pullRefresh"
 		android:layout_width="match_parent"

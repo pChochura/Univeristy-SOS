@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -25,11 +26,11 @@ import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
 import org.jetbrains.anko.find
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
-import java.time.format.TextStyle
 import java.util.*
 
 class FragmentCalendar : FragmentBase() {
@@ -39,6 +40,7 @@ class FragmentCalendar : FragmentBase() {
 
 	private var selectedDay = LocalDate.now()
 	private var startDate = MutableLiveData(Calendar.getInstance().time)
+	private val monthNameFormat = SimpleDateFormat("MMMM", Locale.getDefault())
 
 	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar
@@ -50,13 +52,15 @@ class FragmentCalendar : FragmentBase() {
 
 		startDate.observe(this) { date ->
 			viewModelCommon.getCalendarByFaculties(listOf(User.Faculty.BASE_FACULTY_ID), date)
-				.observe(this) { list ->
-					allEvents.addAll(list?.filter { event ->
+				.observe(this) { (list, online) ->
+					allEvents.addAll(list.filter { event ->
 						allEvents.find { it.id == event.id } == null
-					} ?: return@observe)
+					})
 					updateEventList()
 					root().calendar.notifyCalendarChanged()
+
 					root().pullRefresh.isRefreshing = false
+					root().horizontalProgressBar.isInvisible = online
 				}
 		}
 
@@ -64,6 +68,7 @@ class FragmentCalendar : FragmentBase() {
 	}
 
 	override fun refreshed() {
+		root().horizontalProgressBar.isInvisible = false
 		startDate.value = startDate.value
 	}
 
@@ -131,7 +136,7 @@ class FragmentCalendar : FragmentBase() {
 			override fun create(view: View) = HeaderViewContainer(view)
 			override fun bind(container: HeaderViewContainer, month: CalendarMonth) {
 				container.monthName.text =
-					month.yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+					requireContext().resources.getStringArray(R.array.month_names)[month.month - 1]
 
 				container.buttonNext.setOnClickListener {
 					root().calendar.scrollToMonth(month.yearMonth.plusMonths(1))

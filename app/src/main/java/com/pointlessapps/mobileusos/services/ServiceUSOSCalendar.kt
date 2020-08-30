@@ -16,8 +16,8 @@ class ServiceUSOSCalendar private constructor() {
 		faculties: List<String>,
 		startDate: Date,
 		endDate: Date
-	): Callback<List<CalendarEvent>?> {
-		val callback = Callback<List<CalendarEvent>?>()
+	): Callback<List<CalendarEvent>> {
+		val callback = Callback<List<CalendarEvent>>()
 		val data = mutableListOf<CalendarEvent>()
 		doAsync {
 			faculties.forEach { faculty ->

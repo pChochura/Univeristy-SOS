@@ -1,10 +1,13 @@
 package com.pointlessapps.mobileusos.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.fragments.*
+import com.pointlessapps.mobileusos.helpers.LocaleHelper
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
@@ -33,6 +36,15 @@ class ActivityMain : FragmentActivity() {
 			showIn(R.id.containerFragment)
 			selectAt(Preferences.get().getSystemDefaultTab())
 		}
+	}
+
+	override fun attachBaseContext(newBase: Context) {
+		super.attachBaseContext(LocaleHelper.withLocale(newBase))
+	}
+
+	override fun onConfigurationChanged(newConfig: Configuration) {
+		super.onConfigurationChanged(newConfig)
+		LocaleHelper.withLocale(this)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
