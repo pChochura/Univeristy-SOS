@@ -137,4 +137,5 @@
 	<string name="surveys">Ankiety</string>
 	<string name="off" translatable="false">wył</string>
 	<string name="on">wł</string>
+	<string name="are_you_sure">Czy na pewno?</string>
 </resources>

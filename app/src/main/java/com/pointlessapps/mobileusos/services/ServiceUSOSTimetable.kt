@@ -12,7 +12,7 @@ class ServiceUSOSTimetable private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	fun getByUser(
+	fun getForDays(
 		startTime: Calendar,
 		numberOfDays: Int
 	): Callback<List<CourseEvent>?> {

@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
@@ -33,10 +32,10 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isInvisible = true
+			root().horizontalProgressBar.isRefreshing = false
 		}
 	}
 

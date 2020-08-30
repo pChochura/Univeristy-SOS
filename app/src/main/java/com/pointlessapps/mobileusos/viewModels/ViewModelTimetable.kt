@@ -1,51 +1,62 @@
 package com.pointlessapps.mobileusos.viewModels
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getTimetableVisibleDays
 import com.pointlessapps.mobileusos.models.CourseEvent
-import com.pointlessapps.mobileusos.models.TimetableUnit
 import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
-import com.pointlessapps.mobileusos.utils.*
+import com.pointlessapps.mobileusos.utils.Utils
+import com.pointlessapps.mobileusos.utils.forEachDays
+import com.pointlessapps.mobileusos.utils.getDayKey
+import com.pointlessapps.mobileusos.utils.getMonthKey
 import com.pointlessapps.mobileusos.views.WeekView
 import java.util.*
+import kotlin.collections.set
 
 class ViewModelTimetable(application: Application) : AndroidViewModel(application) {
 
+	private val prefs by lazy { Preferences.get() }
 	private val repositoryTimetable = RepositoryTimetable(application)
 
-	private val timetableUnit = MutableLiveData<TimetableUnit>()
-	private var timetableForDays = timetableUnit.switchMap {
-		repositoryTimetable.getForDays(it.startTime, it.numberOfDays)
-			.map { (courseEvents, _) ->
-				courseEvents.map { courseEvent ->
-					this.courseEvents.add(courseEvent)
-					daysUpToDate.add(courseEvent.startTime.getDayKey())
-					courseEvent.toWeekViewEvent()
-				}.groupBy { weekViewEvent ->
-					weekViewEvent.getMonthKey()
-				}.apply {
-					forEach { entry ->
-						if (weekViewEvents.containsKey(entry.key)) {
-							weekViewEvents[entry.key]?.addAll(entry.value)
-						} else {
-							weekViewEvents[entry.key] = entry.value.toMutableSet()
-						}
-					}
-				}
-			}
-	}
-
 	private val weekViewEvents = mutableMapOf<String, MutableSet<WeekView.WeekViewEvent>>()
-	private val daysUpToDate = mutableSetOf<String>()
+	private val cache = mutableSetOf<String>()
 	val courseEvents = mutableListOf<CourseEvent>()
 
-	fun getForDays(
-		startTime: Calendar = Calendar.getInstance(),
-		numberOfDays: Int = 7
-	): LiveData<Map<String, List<WeekView.WeekViewEvent>>> {
-		timetableUnit.value = TimetableUnit(numberOfDays, startTime)
-		return timetableForDays
+	fun clearCache() = cache.clear()
+
+	fun prepareForDate(date: Calendar, callback: (() -> Unit)? = null) {
+		val days = prefs.getTimetableVisibleDays()
+		date.add(Calendar.DAY_OF_YEAR, -days / 2)
+		(date.clone() as Calendar).forEachDays(days + days / 2) { day ->
+			if (!cache.contains(day.getDayKey())) {
+				(day.clone() as Calendar).forEachDays(7) { day2 ->
+					cache.add(day2.getDayKey())
+				}
+
+				repositoryTimetable.getForDays(date, 7) { value ->
+					courseEvents.addAll(value.first)
+					value.first.map(CourseEvent::toWeekViewEvent)
+						.groupBy(WeekView.WeekViewEvent::getMonthKey).forEach {
+							if (weekViewEvents.containsKey(it.key)) {
+								weekViewEvents[it.key]?.addAll(it.value)
+							} else {
+								weekViewEvents[it.key] = it.value.toMutableSet()
+							}
+						}
+
+					if (value.second) {
+						callback?.invoke()
+					}
+				}
+
+				return@forEachDays
+			}
+		}
 	}
+
+	fun getEventsByMonthYear(month: Int, year: Int) =
+		weekViewEvents[Utils.monthKey(month, year)]?.toList() ?: listOf()
 
 	fun getBytUnitIdAndGroupNumber(unitId: String, groupNumber: Int) =
 		repositoryTimetable.getByUnitIdAndGroupNumber(unitId, groupNumber)
@@ -53,34 +64,4 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	fun getByRoomId(roomId: String) = repositoryTimetable.getByRoomId(roomId)
 
 	fun getIncoming() = repositoryTimetable.getForDays(Calendar.getInstance(), 7)
-
-	fun setStartTime(startTime: Calendar) {
-		var numberOfDays = timetableUnit.value?.numberOfDays ?: 7
-		(startTime.clone() as Calendar).forEachDaysIndexed(numberOfDays) { i, date ->
-			if (!daysUpToDate.contains(date.getDayKey())) {
-				val startNumberOfDays = numberOfDays
-				numberOfDays -= i
-				(date.clone() as Calendar).forEachDaysReverseIndexed(numberOfDays) { i2, date2 ->
-					if (!daysUpToDate.contains(date2.getDayKey())) {
-						numberOfDays -= i2
-						return@forEachDaysReverseIndexed
-					}
-				}
-				if (numberOfDays > 0) {
-					if (timetableUnit.value != null) {
-						timetableUnit.value =
-							timetableUnit.value?.copy(startTime = date, numberOfDays = numberOfDays)
-					} else {
-						timetableUnit.value = TimetableUnit(numberOfDays, date)
-					}
-				}
-
-				numberOfDays = startNumberOfDays
-				return@forEachDaysIndexed
-			}
-		}
-	}
-
-	fun getEventsByMonthYear(month: Int, year: Int) =
-		weekViewEvents[Utils.monthKey(month, year)]?.toList() ?: listOf()
 }

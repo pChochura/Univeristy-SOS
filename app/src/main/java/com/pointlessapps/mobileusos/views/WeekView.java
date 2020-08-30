@@ -29,7 +29,7 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import com.pointlessapps.mobileusos.R;
 
@@ -88,6 +88,8 @@ public class WeekView extends View {
 	private boolean goToTodayVisible;
 	private boolean snappingEnabled;
 	private boolean isTouching;
+
+	private boolean refreshDatasetPending = false;
 
 	@ColorInt
 	private int headerColor;
@@ -224,12 +226,13 @@ public class WeekView extends View {
 			computeMaxOffset();
 			computeNumberOfVisibleDays(numberOfVisibleDays);
 			computeScale();
+			scrollToToday();
 			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
 			updateFirstVisibleDay();
 		});
 
 		today = Calendar.getInstance();
-		scroller = new OverScroller(context, new FastOutLinearInInterpolator());
+		scroller = new OverScroller(context, new LinearOutSlowInInterpolator());
 
 		eventsByMonths = new HashMap<>();
 		eventRects = new ArrayList<>();
@@ -458,7 +461,7 @@ public class WeekView extends View {
 		}
 	}
 
-	public void refreshDataset() {
+	private void updateDataset() {
 		if (firstVisibleDay == null || monthChangeListener == null) {
 			return;
 		}
@@ -500,6 +503,10 @@ public class WeekView extends View {
 		invalidate();
 	}
 
+	public void refreshDataset() {
+		refreshDatasetPending = true;
+	}
+
 	public void scrollToHour(@IntRange(from = 0, to = 24) int hour) {
 		hour = Math.max(startHour, Math.min(endHour, hour)) - startHour; //Make sure the hour is correct
 
@@ -507,9 +514,11 @@ public class WeekView extends View {
 		invalidate();
 	}
 
-	public void scrollToDate(@NonNull Calendar date) {
-		long dayDiff = TimeUnit.MILLISECONDS.toDays(today.getTimeInMillis() - date.getTimeInMillis());
-		scroller.startScroll((int) offsetX, (int) offsetY, (int) (dayDiff * dayWidth - offsetX), 0, scrollDuration);
+	public void scrollToDate(Calendar date) {
+		Calendar temp = (Calendar) firstVisibleDay.clone();
+		temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
+		long dayDiff = TimeUnit.MILLISECONDS.toDays(temp.getTimeInMillis() - date.getTimeInMillis());
+		scroller.startScroll((int) offsetX, (int) offsetY, (int) (dayDiff * dayWidth), 0, scrollDuration);
 		invalidate();
 	}
 
@@ -579,10 +588,13 @@ public class WeekView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		today = Calendar.getInstance();
-
 		updateOffsets();
 		updateFirstVisibleDay();
+
+		if (refreshDatasetPending) {
+			updateDataset();
+			refreshDatasetPending = false;
+		}
 
 		drawDaysColors(canvas);
 		drawHorizontalLines(canvas);
@@ -820,13 +832,19 @@ public class WeekView extends View {
 	}
 
 	private void drawGoToToday(Canvas canvas) {
-		if (WeekViewUtil.isSameDay(firstVisibleDay, today) || !goToTodayVisible) {
+		if (!goToTodayVisible) {
+			return;
+		}
+
+		Calendar temp = (Calendar) firstVisibleDay.clone();
+		temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
+		if (WeekViewUtil.isSameDay(temp, today)) {
 			return;
 		}
 
 		float x = headerWidth + goToTodayRadius * 2f;
 		float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
-		float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
+		float flipped = temp.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
 
 		if (flipped == -1) {
 			x = getRight() - goToTodayRadius * 2f;
@@ -891,19 +909,23 @@ public class WeekView extends View {
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// If the tap was on go to today button scroll there
-			if (goToTodayVisible && !WeekViewUtil.isSameDay(firstVisibleDay, today)) {
-				float x = headerWidth + goToTodayRadius * 2f;
-				float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
-				float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
-				float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius * 0.5f;
-				float maxX = minX + goToTodayRadius;
-				float minY = y - goToTodayRadius * 0.5f;
-				float maxY = minY + goToTodayRadius;
+			if (goToTodayVisible) {
+				Calendar temp = (Calendar) firstVisibleDay.clone();
+				temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
+				if (!WeekViewUtil.isSameDay(temp, today)) {
+					float x = headerWidth + goToTodayRadius * 2f;
+					float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
+					float flipped = temp.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
+					float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius;
+					float maxX = minX + goToTodayRadius * 2f;
+					float minY = y - goToTodayRadius;
+					float maxY = minY + goToTodayRadius * 2f;
 
-				if (e.getX() >= minX && e.getX() <= maxX && e.getY() >= minY && e.getY() <= maxY) {
-					scrollToToday();
+					if (e.getX() >= minX && e.getX() <= maxX && e.getY() >= minY && e.getY() <= maxY) {
+						scrollToToday();
 
-					return true;
+						return true;
+					}
 				}
 			}
 

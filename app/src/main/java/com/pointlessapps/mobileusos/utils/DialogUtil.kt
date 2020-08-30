@@ -35,12 +35,12 @@ class DialogUtil private constructor(
 			statefulDialog: StatefulDialog,
 			context: Context,
 			layoutResId: Int,
-			callback: (StatefulDialog) -> Unit,
+			callback: StatefulDialog.(Dialog) -> Unit,
 			vararg windowSize: Int
 		) {
 			val dialog = DialogUtil(context, layoutResId, windowSize)
 			dialog.makeDialog {
-				callback.invoke(statefulDialog.apply { this.dialog = it })
+				callback.invoke(statefulDialog.apply { this.dialog = it }, it)
 				if (statefulDialog.showToggled) {
 					statefulDialog.toggle()
 				}

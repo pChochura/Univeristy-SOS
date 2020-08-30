@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,10 +39,10 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isInvisible = true
+			root().horizontalProgressBar.isRefreshing = false
 		}
 	}
 

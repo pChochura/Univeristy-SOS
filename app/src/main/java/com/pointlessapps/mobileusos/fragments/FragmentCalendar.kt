@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +25,6 @@ import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
 import org.jetbrains.anko.find
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -40,7 +38,6 @@ class FragmentCalendar : FragmentBase() {
 
 	private var selectedDay = LocalDate.now()
 	private var startDate = MutableLiveData(Calendar.getInstance().time)
-	private val monthNameFormat = SimpleDateFormat("MMMM", Locale.getDefault())
 
 	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar
@@ -60,7 +57,7 @@ class FragmentCalendar : FragmentBase() {
 					root().calendar.notifyCalendarChanged()
 
 					root().pullRefresh.isRefreshing = false
-					root().horizontalProgressBar.isInvisible = online
+					root().horizontalProgressBar.isRefreshing = !online
 				}
 		}
 
@@ -68,7 +65,7 @@ class FragmentCalendar : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 		startDate.value = startDate.value
 	}
 

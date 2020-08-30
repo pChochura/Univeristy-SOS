@@ -32,6 +32,11 @@ fun Calendar.getDayKey() =
 fun Date.getDayKey() =
 	Calendar.getInstance().apply { timeInMillis = this@getDayKey.time }.getDayKey()
 
+fun Calendar.forEachDays(days: Int, function: (Calendar) -> Unit) = repeat(days) {
+	add(Calendar.DAY_OF_YEAR, 1)
+	function(this)
+}
+
 fun Calendar.forEachDaysIndexed(days: Int, function: (Int, Calendar) -> Unit) = (1..days).forEach {
 	add(Calendar.DAY_OF_YEAR, 1)
 	function(it - 1, this)

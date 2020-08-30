@@ -21,10 +21,10 @@ import java.util.*
 object Utils {
 
 	fun monthKey(month: Int, year: Int) =
-		(if (month < 10) "0" else "") + "$month.$year"
+		"%20d.%d".format(month, year)
 
 	fun dayKey(day: Int, month: Int, year: Int) =
-		(if (month < 10) "0" else "") + "$day." + (if (month < 10) "0" else "") + "$month.$year"
+		"%20d.%20d.%d".format(day, month, year)
 
 	fun getScreenSize() =
 		Point(

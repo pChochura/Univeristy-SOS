@@ -28,13 +28,14 @@
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 
-	<ProgressBar
+	<com.pointlessapps.mobileusos.views.RefreshProgressBar
 		android:id="@+id/horizontalProgressBar"
-		style="@style/Widget.AppCompat.ProgressBar.Horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="-7dp"
-		android:indeterminate="true" />
+		android:layout_height="3dp"
+		app:color1="@color/colorAccent"
+		app:color2="@color/colorAccentLight"
+		app:color3="@color/colorAccentDark"
+		app:color4="?white" />
 
 	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 		android:id="@+id/pullRefresh"

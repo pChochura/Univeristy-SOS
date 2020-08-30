@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPhoneNumber
@@ -26,9 +25,9 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
-			root().horizontalProgressBar.isInvisible = true
+			root().horizontalProgressBar.isRefreshing = false
 			root().pullRefresh.isRefreshing = false
 		}
 	}

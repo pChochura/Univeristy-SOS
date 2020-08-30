@@ -79,4 +79,14 @@
 		app:todayHeaderTextColor="@color/colorAccent"
 		app:weekendBackgroundColor="?weekViewWeekendBackgroundColor" />
 
+	<com.pointlessapps.mobileusos.views.RefreshProgressBar
+		android:id="@+id/horizontalProgressBar"
+		android:layout_width="match_parent"
+		android:layout_height="3dp"
+		app:color1="@color/colorAccent"
+		app:color2="@color/colorAccentLight"
+		app:color3="@color/colorAccentDark"
+		app:color4="?white"
+		app:layout_constraintTop_toBottomOf="@id/topBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

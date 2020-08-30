@@ -1,19 +1,26 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.RangeSlider
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.activities.ActivityLogin
 import com.pointlessapps.mobileusos.adapters.AdapterSimple
 import com.pointlessapps.mobileusos.helpers.*
+import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.views.SettingsItem
 import com.pointlessapps.mobileusos.views.SettingsItemGroup
+import kotlinx.android.synthetic.main.dialog_logout.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 
 class FragmentSettings : FragmentBase() {
@@ -95,6 +102,7 @@ class FragmentSettings : FragmentBase() {
 												list[position].toIntOrNull()
 													?: prefs.getTimetableVisibleDays()
 											)
+											onForceRefreshAllFragments?.invoke()
 											dialog.dismiss()
 											refresh()
 										}
@@ -259,7 +267,39 @@ class FragmentSettings : FragmentBase() {
 					getString(R.string.logout),
 					getString(R.string.logout_description)
 				) {
+					DialogUtil.create(
+						object : DialogUtil.StatefulDialog() {
+							override fun toggle() {
+								dialog.progressBar.isVisible = true
+								dialog.messageMain.setText(R.string.loading)
+								dialog.messageSecondary.isGone = true
+								dialog.buttonPrimary.isGone = true
+								dialog.buttonSecondary.isGone = true
+							}
+						},
+						requireContext(), R.layout.dialog_logout, { dialog ->
+							dialog.buttonPrimary.setOnClickListener {
+								toggle()
 
+								doAsync {
+									Preferences.get().clear()
+									AppDatabase.init(requireContext()).clearAllTables()
+									dialog.dismiss()
+									requireActivity().apply {
+										startActivity(
+											Intent(
+												requireContext(),
+												ActivityLogin::class.java
+											)
+										)
+										finish()
+									}
+								}
+							}
+
+							dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+						}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
+					)
 				}
 			)
 		}

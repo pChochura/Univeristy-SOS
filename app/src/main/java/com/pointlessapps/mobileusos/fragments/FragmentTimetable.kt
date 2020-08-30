@@ -26,22 +26,22 @@ class FragmentTimetable : FragmentBase() {
 
 	override fun created() {
 		prepareClickListeners()
-		prepareWeekView()
-		observeTimetableData()
+		refreshed()
 	}
 
 	override fun refreshed() {
+		root().horizontalProgressBar.isRefreshing = true
 		prepareWeekView()
-		observeTimetableData(root().weekView.firstVisibleDay)
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonRefresh.setOnClickListener { root().weekView.refreshDataset() }
-	}
-
-	private fun observeTimetableData(startTime: Calendar = Calendar.getInstance()) {
-		viewModelTimetable.getForDays(startTime).observe(this@FragmentTimetable) {
-			root().weekView.refreshDataset()
+		root().buttonRefresh.setOnClickListener {
+			root().horizontalProgressBar.isRefreshing = true
+			viewModelTimetable.clearCache()
+			viewModelTimetable.prepareForDate(root().weekView.firstVisibleDay) {
+				root().weekView.refreshDataset()
+				root().horizontalProgressBar.isRefreshing = false
+			}
 		}
 	}
 
@@ -53,7 +53,11 @@ class FragmentTimetable : FragmentBase() {
 			root().weekView.setSnappingEnabled(getTimetableSnapToFullDay())
 		}
 		root().weekView.setScrollListener { newFirstVisibleDay, _ ->
-			viewModelTimetable.setStartTime(newFirstVisibleDay)
+			root().horizontalProgressBar.isRefreshing = true
+			viewModelTimetable.prepareForDate(newFirstVisibleDay) {
+				root().weekView.refreshDataset()
+				root().horizontalProgressBar.isRefreshing = false
+			}
 		}
 		root().weekView.setMonthChangeListener { newYear, newMonth ->
 			return@setMonthChangeListener viewModelTimetable.getEventsByMonthYear(newMonth, newYear)

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,13 +70,13 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 			recyclerView.visibility = View.INVISIBLE
 			emptyText.isNullOrEmpty().also {
 				progressBar.isVisible = it
-				horizontalProgressBar.isInvisible = loaded
+				horizontalProgressBar.isRefreshing = !loaded
 				textEmpty.isVisible = !it
 				iconEmpty.isVisible = emptyIcon !== null && !it
 			}
 		} else {
 			recyclerView.isVisible = true
-			horizontalProgressBar.isGone = loaded
+			horizontalProgressBar.isRefreshing = !loaded
 			textEmpty.isGone = true
 			iconEmpty.isGone = true
 			progressBar.isGone = true

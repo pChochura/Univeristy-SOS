@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.exceptions.ExceptionFragmentContainerEmpty
+import com.pointlessapps.mobileusos.fragments.FragmentBase
 import com.pointlessapps.mobileusos.fragments.FragmentBaseInterface
 import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.contentView
@@ -75,6 +76,10 @@ class FragmentManager private constructor(
 			)
 			activity.overridePendingTransition(0, 0)
 			activity.finish()
+		}
+		fragment.onForceRefreshAllFragments = {
+			(fragment as FragmentBase).forceRefresh()
+			history.forEach { (it as FragmentBase).forceRefresh() }
 		}
 		fragment.onForceGoBackListener = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation

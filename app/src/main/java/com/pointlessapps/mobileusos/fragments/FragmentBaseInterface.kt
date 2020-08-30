@@ -30,6 +30,7 @@ interface FragmentBaseInterface {
 	var bottomNavigationView: BottomNavigationView?
 	var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)?
 	var onForceRecreate: (() -> Unit)?
+	var onForceRefreshAllFragments: (() -> Unit)?
 	var onBackPressedListener: (() -> Boolean)?
 	var onForceGoBackListener: (() -> Unit)?
 }

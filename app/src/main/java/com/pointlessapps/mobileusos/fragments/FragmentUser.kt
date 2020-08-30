@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.fragments
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.button.MaterialButton
@@ -38,10 +37,10 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isInvisible = true
+			root().horizontalProgressBar.isRefreshing = false
 		}
 	}
 

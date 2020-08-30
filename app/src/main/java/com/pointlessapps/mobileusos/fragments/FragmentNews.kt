@@ -1,7 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.view.LayoutInflater
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.pointlessapps.mobileusos.R
@@ -29,7 +28,7 @@ class FragmentNews : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isInvisible = false
+		root().horizontalProgressBar.isRefreshing = true
 
 		val lastWeekDate = Calendar.getInstance().apply {
 			add(Calendar.DAY_OF_MONTH, -7)
@@ -55,7 +54,7 @@ class FragmentNews : FragmentBase() {
 			if (online) {
 				if (loaded) {
 					root().pullRefresh.isRefreshing = false
-					root().horizontalProgressBar.isInvisible = true
+					root().horizontalProgressBar.isRefreshing = false
 				}
 				loaded = true
 			}
@@ -64,7 +63,7 @@ class FragmentNews : FragmentBase() {
 		prepareCategoriesList {
 			if (loaded) {
 				root().pullRefresh.isRefreshing = false
-				root().horizontalProgressBar.isInvisible = true
+				root().horizontalProgressBar.isRefreshing = false
 			}
 			loaded = true
 		}
