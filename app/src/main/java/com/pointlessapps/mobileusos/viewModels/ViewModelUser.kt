@@ -2,9 +2,6 @@ package com.pointlessapps.mobileusos.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.repositories.*
 
 class ViewModelUser(application: Application) : AndroidViewModel(application) {
@@ -30,10 +27,8 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	fun getGroupByIdAndGroupNumber(courseUnitId: String, groupNumber: Int) =
 		repositoryGroup.getByIdAndGroupNumber(courseUnitId, groupNumber)
 
-	fun getTermsByIds(termIds: List<String>): LiveData<Pair<List<Term>?, Boolean>> {
-		return repositoryTerm.getByIds(termIds.distinct().takeIf { it.isNotEmpty() }
-			?: return MutableLiveData())
-	}
+	fun getTermsByIds(termIds: List<String>) =
+		repositoryTerm.getByIds(termIds.distinct().takeIf { it.isNotEmpty() } ?: listOf())
 
 	fun getGradesByTermIds(termIds: List<String>) = repositoryGrade.getByTermIds(termIds)
 
@@ -47,20 +42,12 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getEmailRecipients(emailId: String) = repositoryEmail.getRecipientsById(emailId)
 
-	fun createEmail(subject: String, content: String, callback: (String?) -> Unit) =
-		repositoryEmail.create(subject, content, callback)
+	fun createEmail(subject: String, content: String) =
+		repositoryEmail.create(subject, content)
 
-	fun updateEmailRecipients(
-		id: String,
-		userIds: List<String>,
-		emails: List<String>,
-		callback: (Any?) -> Unit
-	) = repositoryEmail.updateRecipients(id, userIds, emails, callback)
+	fun updateEmailRecipients(id: String, userIds: List<String>, emails: List<String>) =
+		repositoryEmail.updateRecipients(id, userIds, emails)
 
-	fun addEmailAttachment(
-		id: String,
-		data: ByteArray,
-		filename: String,
-		callback: (String?) -> Unit
-	) = repositoryEmail.addAttachment(id, data, filename, callback)
+	fun addEmailAttachment(id: String, data: ByteArray, filename: String) =
+		repositoryEmail.addAttachment(id, data, filename)
 }

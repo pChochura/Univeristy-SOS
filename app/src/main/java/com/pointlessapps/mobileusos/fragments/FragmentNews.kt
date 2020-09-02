@@ -8,7 +8,9 @@ import com.pointlessapps.mobileusos.adapters.AdapterNews
 import com.pointlessapps.mobileusos.models.Article
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.fragment_news.view.*
+import org.jetbrains.anko.doAsync
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class FragmentNews : FragmentBase() {
 
@@ -34,9 +36,9 @@ class FragmentNews : FragmentBase() {
 			add(Calendar.DAY_OF_MONTH, -7)
 		}.timeInMillis
 
-		var loaded = false
+		val loaded = CountDownLatch(2)
 
-		viewModelCommon.getAllNews().observe(this) { (news, online) ->
+		viewModelCommon.getAllNews().observe(this) { (news) ->
 			(root().listNews.adapter as? AdapterNews)?.update(
 				news.filter { article -> article.headlineHtml != null && article.contentHtml != null }
 					.groupBy { article ->
@@ -51,21 +53,14 @@ class FragmentNews : FragmentBase() {
 			)
 
 			root().listNews.setEmptyText(getString(R.string.no_new_articles))
-			if (online) {
-				if (loaded) {
-					root().pullRefresh.isRefreshing = false
-					root().horizontalProgressBar.isRefreshing = false
-				}
-				loaded = true
-			}
-		}
+		}.onFinished { loaded.countDown() }
 
-		prepareCategoriesList {
-			if (loaded) {
-				root().pullRefresh.isRefreshing = false
-				root().horizontalProgressBar.isRefreshing = false
-			}
-			loaded = true
+		prepareCategoriesList { loaded.countDown() }
+
+		doAsync {
+			loaded.await()
+			root().pullRefresh.isRefreshing = false
+			root().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
@@ -78,9 +73,9 @@ class FragmentNews : FragmentBase() {
 	}
 
 	private fun prepareCategoriesList(callback: (() -> Unit)? = null) {
-		viewModelCommon.getAllNewsCategories().observe(this) {
+		viewModelCommon.getAllNewsCategories().observe(this) { (list) ->
 			root().listCategories.removeAllViews()
-			it.forEach { category ->
+			list.forEach { category ->
 				root().listCategories.apply {
 					addView(
 						(LayoutInflater.from(requireContext())

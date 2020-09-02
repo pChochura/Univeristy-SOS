@@ -86,23 +86,18 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 		val loaded = CountDownLatch(3)
 
 		viewModelUser.getUsersByIds(course.lecturers?.map { it.id } ?: return)
-			.observe(this) { (users, online) ->
-				(root().listInstructors.adapter as? AdapterUser)?.update(users ?: return@observe)
+			.observe(this) { (users) ->
+				(root().listInstructors.adapter as? AdapterUser)?.update(users)
 				root().listInstructors.setEmptyText(getString(R.string.no_instructors))
-
-				if (online) {
-					loaded.countDown()
-				}
-			}
+			}.onFinished { loaded.countDown() }
 
 		viewModelTimetable.getBytUnitIdAndGroupNumber(course.courseUnitId, course.groupNumber)
-			.observe(this) {
-				(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
-				loaded.countDown()
-			}
+			.observe(this) { (list) ->
+				(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
+			}.onFinished { loaded.countDown() }
 
 		viewModelUser.getGroupByIdAndGroupNumber(course.courseUnitId, course.groupNumber)
-			.observe(this) { (group, online) ->
+			.observe(this) { (group) ->
 				course = group ?: return@observe
 
 				(root().listParticipants.adapter as? AdapterUser)?.update(
@@ -111,11 +106,7 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 
 				root().courseParticipantsAmount.text = (group.participants?.count() ?: 0).toString()
 				prepareCourseData()
-
-				if (online) {
-					loaded.countDown()
-				}
-			}
+			}.onFinished { loaded.countDown() }
 
 		doAsync {
 			loaded.await()

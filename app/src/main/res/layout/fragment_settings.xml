@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="?colorBackground"
@@ -37,7 +38,123 @@
 			android:clipChildren="false"
 			android:clipToPadding="false"
 			android:orientation="vertical"
-			android:padding="20dp" />
+			android:padding="20dp">
+
+			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				app:header="@string/timetable">
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemVisiblePeriod"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/visible_period_description"
+					app:title="@string/visible_period" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemVisibleDays"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/number_of_visible_days_description"
+					app:title="@string/number_of_visible_days" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemSnapToFullDay"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/snap_to_a_full_day_description"
+					app:isSwitch="true"
+					app:title="@string/snap_to_a_full_day" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemAddEvent"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/add_an_event_description"
+					app:isSwitch="true"
+					app:title="@string/add_an_event" />
+
+			</com.pointlessapps.mobileusos.views.SettingsItemGroup>
+
+			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:header="@string/notifications">
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemEnableNotifications"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/enable_notifications_description"
+					app:isSwitch="true"
+					app:title="@string/enable_notifications" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemGradesNotifications"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/grades_notifications_description"
+					app:isSwitch="true"
+					app:title="@string/grades_notifications" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemNewsNotifications"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/news_notifications_description"
+					app:isSwitch="true"
+					app:title="@string/news_notifications" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemSurveysNotifications"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/surveys_notifications_description"
+					app:isSwitch="true"
+					app:title="@string/surveys_notifications" />
+
+			</com.pointlessapps.mobileusos.views.SettingsItemGroup>
+
+			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:header="@string/system">
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemDarkMode"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/dark_mode_description"
+					app:isSwitch="true"
+					app:title="@string/dark_mode" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemDefaultTab"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/default_tab_description"
+					app:title="@string/default_tab" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemDefaultLanguage"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/default_language_description"
+					app:title="@string/default_language" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemLoogut"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/logout_description"
+					app:hasBubble="false"
+					app:title="@string/logout" />
+
+			</com.pointlessapps.mobileusos.views.SettingsItemGroup>
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
 
 	</androidx.core.widget.NestedScrollView>
 

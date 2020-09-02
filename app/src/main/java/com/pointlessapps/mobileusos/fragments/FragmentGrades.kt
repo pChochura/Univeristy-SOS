@@ -18,6 +18,7 @@ import com.pointlessapps.mobileusos.adapters.AdapterGrade
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
+import com.pointlessapps.mobileusos.utils.SourceType
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -46,18 +47,14 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	private fun prepareGrades(callback: (() -> Unit)? = null) {
-		viewModelUser.getAllGroups().observe(this) { (groups, online) ->
-			val termIds = groups?.map { group -> group.termId } ?: return@observe
+		viewModelUser.getAllGroups().observe(this) { (groups, sourceType1) ->
+			val termIds = groups.map { group -> group.termId }
 
-			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, online2) ->
-				viewModelUser.getGradesByTermIds(termIds).observe(this) { (grades, online3) ->
-					if (grades == null) {
-						return@observe
-					}
-
+			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, sourceType2) ->
+				viewModelUser.getGradesByTermIds(termIds).observe(this) { (grades) ->
 					(root().listGrades.adapter as? AdapterGrade)
 						?.notifyDataChanged(
-							terms?.map {
+							terms.map {
 								AdapterGrade.SectionHeader(
 									it,
 									groups.distinctBy { group -> group.courseId }
@@ -72,15 +69,16 @@ class FragmentGrades : FragmentBase() {
 											)
 										}
 								)
-							}?.sortedByDescending { it.getSectionHeader().orderKey }
+							}.sortedByDescending { it.getSectionHeader().orderKey }
 						)
 
 					root().listGrades.apply {
 						setEmptyText(getString(R.string.no_grades))
-						setLoaded(online && online2)
+						setLoaded(false)
 					}
-
-					if (online && online2 && online3) {
+				}.onFinished {
+					if (sourceType1 === SourceType.ONLINE && sourceType2 === SourceType.ONLINE) {
+						root().listGrades.setLoaded(true)
 						callback?.invoke()
 					}
 				}
@@ -125,16 +123,16 @@ class FragmentGrades : FragmentBase() {
 					}
 
 					viewModelUser.getExamReportById(grade.examId ?: return@create)
-						.observe(fragment) { examReport ->
+						.observe(fragment) { (examReport) ->
 							val values =
-								examReport.gradesDistribution?.map { distribution ->
+								examReport?.gradesDistribution?.map { distribution ->
 									BarEntry(
 										distribution.gradeSymbol.replace(Regex("(\\d),(\\d).*")) {
 											"${it.groups[1]?.value}.${it.groups[2]?.value}"
 										}.toFloat() * 2 - 4,
 										distribution.percentage.toFloat()
 									)
-								}
+								} ?: listOf()
 
 							dialog.gradeChart.apply {
 								this.data = BarData(BarDataSet(values, "").apply {

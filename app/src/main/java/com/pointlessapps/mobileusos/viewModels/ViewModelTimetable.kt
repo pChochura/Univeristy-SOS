@@ -34,7 +34,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 					cache.add(day2.getDayKey())
 				}
 
-				repositoryTimetable.getForDays(date, 7) { value ->
+				repositoryTimetable.getForDays(date, 7).onOnceCallback { value ->
 					courseEvents.addAll(value.first)
 					value.first.map(CourseEvent::toWeekViewEvent)
 						.groupBy(WeekView.WeekViewEvent::getMonthKey).forEach {
@@ -44,11 +44,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 								weekViewEvents[it.key] = it.value.toMutableSet()
 							}
 						}
-
-					if (value.second) {
-						callback?.invoke()
-					}
-				}
+				}.onFinished { callback?.invoke() }
 
 				return@forEachDays
 			}

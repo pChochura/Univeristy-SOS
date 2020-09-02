@@ -40,7 +40,11 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		viewModelCommon.getRoomById(roomId).observe(this) { (room, online) ->
+		viewModelCommon.getRoomById(roomId).observe(this) { (room) ->
+			if (room === null) {
+				return@observe
+			}
+
 			root().roomName.text = room.number.toString()
 
 			room.building?.name?.toString()?.also { buildingName ->
@@ -77,11 +81,7 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 					*(room.attributes ?: listOf()).toTypedArray()
 				)
 			)
-
-			if (online) {
-				callback?.invoke()
-			}
-		}
+		}.onFinished { callback?.invoke() }
 	}
 
 	private fun prepareAttributesList() {
@@ -98,8 +98,8 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 
-		viewModelTimetable.getByRoomId(roomId).observe(this) {
-			(root().listMeetings.adapter as? AdapterMeeting)?.update(it)
+		viewModelTimetable.getByRoomId(roomId).observe(this) { (list) ->
+			(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
 		}
 	}
 }

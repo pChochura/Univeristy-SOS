@@ -1,4 +1,4 @@
-package com.pointlessapps.mobileusos.services
+package com.pointlessapps.mobileusos.managers
 
 import android.content.Intent
 import android.view.Menu

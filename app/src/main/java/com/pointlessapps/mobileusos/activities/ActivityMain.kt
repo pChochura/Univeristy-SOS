@@ -11,7 +11,7 @@ import com.pointlessapps.mobileusos.helpers.LocaleHelper
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
-import com.pointlessapps.mobileusos.services.FragmentManager
+import com.pointlessapps.mobileusos.managers.FragmentManager
 
 class ActivityMain : FragmentActivity() {
 

@@ -44,6 +44,15 @@
         <attr name="color3" format="color" />
         <attr name="color4" format="color" />
     </declare-styleable>
+    <declare-styleable name="SettingsItemGroup">
+        <attr name="header" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SettingsItem">
+        <attr name="title" format="string" />
+        <attr name="description" format="string" />
+        <attr name="hasBubble" format="boolean" />
+        <attr name="isSwitch" format="boolean" />
+    </declare-styleable>
 
     <attr name="white" format="color" />
     <attr name="colorTextPrimary" format="color" />

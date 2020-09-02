@@ -1,0 +1,70 @@
+package com.pointlessapps.mobileusos.utils
+
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import java.util.concurrent.TimeUnit
+
+class ObserverWrapper<T>(
+	private val liveData: MutableLiveData<Pair<T, SourceType>> = MutableLiveData(),
+	block: (ObserverWrapper<T>.() -> Unit)? = null
+) {
+
+	private var onOnceCallback: ((Pair<T, SourceType>) -> Unit)? = null
+	private var onFinishedCallback: (() -> Unit)? = null
+	private var finished = false
+
+	init {
+		block?.invoke(this)
+	}
+
+	fun onFinished(callback: () -> Unit) {
+		onFinishedCallback = callback
+	}
+
+	fun observe(owner: LifecycleOwner, observer: (Pair<T, SourceType>) -> Unit) =
+		liveData.observe(owner) {
+			observer(it)
+			if (it.second === SourceType.ONLINE || finished) {
+				finished()
+			}
+		}.run { this@ObserverWrapper }
+
+	fun onOnceCallback(callback: (Pair<T, SourceType>) -> Unit): ObserverWrapper<T> {
+		this.onOnceCallback = {
+			callback(it)
+			if (it.second === SourceType.ONLINE || finished) {
+				finished()
+			}
+		}
+		return this
+	}
+
+	fun postValue(sourceType: SourceType = SourceType.OFFLINE, valueCallback: suspend () -> T) {
+		GlobalScope.launch {
+			(runCatching {
+				withTimeout(TimeUnit.SECONDS.toMillis(10)) { valueCallback() }
+			}.getOrElse {
+				finished()
+				return@launch
+			} to sourceType).also {
+				if (onOnceCallback !== null) {
+					onOnceCallback?.invoke(it)
+				} else {
+					liveData.postValue(it)
+				}
+			}
+		}
+	}
+
+	private fun finished() {
+		onFinishedCallback?.invoke()
+		finished = true
+	}
+}
+
+enum class SourceType {
+	ONLINE, OFFLINE
+}

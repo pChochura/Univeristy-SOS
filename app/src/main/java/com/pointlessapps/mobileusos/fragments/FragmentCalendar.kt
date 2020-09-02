@@ -49,7 +49,7 @@ class FragmentCalendar : FragmentBase() {
 
 		startDate.observe(this) { date ->
 			viewModelCommon.getCalendarByFaculties(listOf(User.Faculty.BASE_FACULTY_ID), date)
-				.observe(this) { (list, online) ->
+				.observe(this) { (list) ->
 					allEvents.addAll(list.filter { event ->
 						allEvents.find { it.id == event.id } == null
 					})
@@ -57,7 +57,9 @@ class FragmentCalendar : FragmentBase() {
 					root().calendar.notifyCalendarChanged()
 
 					root().pullRefresh.isRefreshing = false
-					root().horizontalProgressBar.isRefreshing = !online
+					root().horizontalProgressBar.isRefreshing = true
+				}.onFinished {
+					root().horizontalProgressBar.isRefreshing = false
 				}
 		}
 

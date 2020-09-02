@@ -21,7 +21,6 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
 
-
 class FragmentComposeMail(
 	private val email: Email? = null,
 	private val recipients: MutableList<Email.Recipient> = mutableListOf()
@@ -117,13 +116,13 @@ class FragmentComposeMail(
 
 			addTextChangedListener {
 				viewModelUser.getUsersByQuery(it.toString())
-					.observe(this@FragmentComposeMail) { list ->
-						(adapter as? AdapterAutocomplete)?.update(list?.map { user ->
+					.observe(this@FragmentComposeMail) { (list) ->
+						(adapter as? AdapterAutocomplete)?.update(list.map { user ->
 							Email.Recipient(
 								null,
 								user
 							)
-						} ?: listOf())
+						})
 					}
 			}
 		}
@@ -163,12 +162,12 @@ class FragmentComposeMail(
 
 			attachments.addAll(it.attachments ?: listOf())
 
-			viewModelUser.getEmailRecipients(it.id).observe(this) { recipients ->
+			viewModelUser.getEmailRecipients(it.id).observe(this) { (recipients) ->
 				this.recipients.apply {
 					clear()
-					addAll(recipients ?: listOf())
+					addAll(recipients)
 				}
-				recipients?.forEach { recipient ->
+				recipients.forEach { recipient ->
 					root().listRecipients.addChip(recipient.name()) {
 						this.recipients.remove(recipient)
 					}
@@ -182,9 +181,9 @@ class FragmentComposeMail(
 			viewModelUser.createEmail(
 				root().inputSubject.text.toString(),
 				root().inputContent.text.toString()
-			) { id ->
+			).observe(this) { (id) ->
 				if (id == null) {
-					return@createEmail
+					return@observe
 				}
 
 				val parts = recipients.partition { it.user !== null }
@@ -192,11 +191,11 @@ class FragmentComposeMail(
 					id,
 					parts.first.map { it.user!!.id },
 					parts.second.map { it.email!! }
-				) { }
+				).observe(this) { }
 
 				attachments.forEach { attachment ->
-//					viewModelUser.addEmailAttachment(id, data, attachment.filename!!) {
-//						attachment.id = it ?: return@addEmailAttachment
+//					viewModelUser.addEmailAttachment(id, data, attachment.filename!!).observe(this) { (id) ->
+//						attachment.id = id ?: return@observe
 //					}
 				}
 			}

@@ -8,7 +8,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pointlessapps.mobileusos.R
@@ -41,12 +40,7 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 			return
 		}
 
-		val repositoryEvents = RepositoryEvent()
-		repositoryEvents.registerFCMToken(token) {
-			if (it == null) {
-				FirebaseCrashlytics.getInstance().log("FCM token registration failed")
-			}
-		}
+		RepositoryEvent().registerFCMToken(token)
 	}
 
 	private fun sendNotification(messageBody: String) {

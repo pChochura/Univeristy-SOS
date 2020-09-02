@@ -69,7 +69,7 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		viewModelUser.getUserById(userId).observe(this) { (user, online) ->
+		viewModelUser.getUserById(userId).observe(this) { (user) ->
 			if (user == null) {
 				return@observe
 			}
@@ -100,11 +100,7 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 				.into(root().userProfileImg)
 
 			hideEmptyElements()
-
-			if (online) {
-				callback?.invoke()
-			}
-		}
+		}.onFinished { callback?.invoke() }
 	}
 
 	private fun hideEmptyElements() {

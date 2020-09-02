@@ -33,19 +33,15 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		viewModelCommon.getBuildingById(building.id).observe(this) { (building, online) ->
-			this.building = building
+		viewModelCommon.getBuildingById(building.id).observe(this) { (building) ->
+			this.building = building ?: return@observe
 			prepareDataStatic()
 
 			(root().listRooms.adapter as? AdapterRoom)?.update(building.rooms ?: return@observe)
 			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
 				building.allPhoneNumbers ?: return@observe
 			)
-
-			if (online) {
-				callback?.invoke()
-			}
-		}
+		}.onFinished { callback?.invoke() }
 	}
 
 	private fun prepareDataStatic() {

@@ -1,11 +1,11 @@
 package com.pointlessapps.mobileusos.repositories
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.BuildingRoom
 import com.pointlessapps.mobileusos.services.ServiceUSOSRoom
+import com.pointlessapps.mobileusos.utils.ObserverWrapper
+import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -14,33 +14,18 @@ class RepositoryRoom(application: Application) {
 	private val roomDao = AppDatabase.init(application).roomDao()
 	private val serviceRoom = ServiceUSOSRoom.init()
 
-	fun insert(vararg buildingRoom: BuildingRoom) {
+	private fun insert(vararg buildingRoom: BuildingRoom) {
 		GlobalScope.launch {
 			roomDao.insert(*buildingRoom)
 		}
 	}
 
-	fun update(vararg buildingRoom: BuildingRoom) {
-		GlobalScope.launch {
-			roomDao.update(*buildingRoom)
+	fun getById(roomId: String) = ObserverWrapper<BuildingRoom?> {
+		postValue { roomDao.getById(roomId) }
+		postValue(SourceType.ONLINE) {
+			serviceRoom.getById(roomId).also {
+				insert(it ?: return@also)
+			}
 		}
-	}
-
-	fun delete(vararg buildingRoom: BuildingRoom) {
-		GlobalScope.launch {
-			roomDao.delete(*buildingRoom)
-		}
-	}
-
-	fun getById(roomId: String): LiveData<Pair<BuildingRoom, Boolean>> {
-		val callback = MutableLiveData<Pair<BuildingRoom, Boolean>>()
-		serviceRoom.getById(roomId).observe {
-			callback.postValue((it ?: return@observe) to true)
-			insert(it)
-		}
-		GlobalScope.launch {
-			callback.postValue((roomDao.getById(roomId) ?: return@launch) to false)
-		}
-		return callback
 	}
 }

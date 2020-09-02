@@ -1,102 +1,92 @@
 package com.pointlessapps.mobileusos.views
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.chip.Chip
+import androidx.core.view.isGone
 import com.pointlessapps.mobileusos.R
-import org.jetbrains.anko.find
+import kotlinx.android.synthetic.main.settings_item.view.*
 
 class SettingsItem(
 	context: Context,
-	private val title: String = "",
-	private val description: String = "",
-	private val action: (() -> String)? = null,
-	private val switch: (() -> Boolean)? = null,
-	private val enabled: (() -> Boolean)? = null,
-	ID: Int = View.generateViewId(),
-	private val onClickListener: (SettingsItem.() -> Unit)? = null
-) : ConstraintLayout(context) {
-	constructor(context: Context) : this(context, "")
+	attrs: AttributeSet?
+) : ConstraintLayout(context, attrs) {
+	constructor(context: Context) : this(context, null)
 
-	private val bg: MaterialCardView
-	private val textTitle: AppCompatTextView
-	private val textDescription: AppCompatTextView
-	private val textAction: Chip
+	private val root: View = View.inflate(
+		context,
+		R.layout.settings_item,
+		this
+	)
+
+	var enabled: (() -> Boolean) = { true }
+		set(value) {
+			field = value
+			setEnabled()
+		}
+
+	var value: (() -> String) = { "" }
+		set(value) {
+			field = value
+			setAction()
+		}
+
+	var valueSwitch: (() -> Boolean)? = null
+		set(value) {
+			field = value
+			setSwitchAction()
+		}
 
 	init {
-		id = ID
+		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.SettingsItem, 0, 0)
+		val title = a.getString(R.styleable.SettingsItem_title)
+		val description = a.getString(R.styleable.SettingsItem_description)
+		val hasBubble = a.getBoolean(R.styleable.SettingsItem_hasBubble, true)
+		a.recycle()
 
-		val root: View = View.inflate(
-			context,
-			R.layout.settings_item,
-			this
-		)
+		root.itemTitle.text = title
+		root.itemDescription.text = description
+		root.itemAction.isGone = !hasBubble
 
-		bg = root.find(R.id.bg)
-		textTitle = root.find(R.id.itemTitle)
-		textDescription = root.find(R.id.itemDescription)
-		textAction = root.find(R.id.itemAction)
+		isClickable = true
+		isFocusable = true
 
-		refresh()
+		setAction()
+		setSwitchAction()
+		setEnabled()
+	}
+
+	private fun setEnabled() {
+		enabled().also {
+			root.bg.isClickable = it
+			root.bg.isFocusable = it
+			root.bg.alpha = if (it) 1f else 0.3f
+		}
+	}
+
+	private fun setAction() {
+		root.itemAction.text = value()
+	}
+
+	private fun setSwitchAction() {
+		if (valueSwitch?.invoke() ?: return) {
+			root.itemAction.setText(R.string.on)
+			root.itemAction.setChipBackgroundColorResource(R.color.colorAccent)
+		} else {
+			root.itemAction.setText(R.string.off)
+			root.itemAction.setChipBackgroundColorResource(R.color.colorTextSecondary)
+		}
 	}
 
 	fun refresh() {
-		textTitle.text = title
-		textDescription.text = description
-
-		setAction(textAction)
-
-		if (enabled?.invoke() != false) {
-			bg.alpha = 1f
-			bg.isClickable = true
-			bg.isFocusable = true
-			bg.setRippleColorResource(R.color.colorTextSecondary)
-
-			onClickListener?.also { callback ->
-				bg.setOnClickListener {
-					callback()
-					setAction(textAction)
-
-					refresh()
-				}
-			}
-		} else {
-			bg.alpha = 0.3f
-			bg.isClickable = false
-			bg.isFocusable = false
-			bg.setRippleColorResource(android.R.color.transparent)
-		}
+		setEnabled()
+		setAction()
+		setSwitchAction()
 	}
 
-	private fun setAction(textAction: Chip) {
-		action?.also {
-			textAction.apply {
-				text = it()
-				isVisible = true
-			}
-		}
-		switch?.also {
-			textAction.apply {
-				text = context.getString(
-					if (it() && enabled?.invoke() != false) {
-						R.string.on
-					} else {
-						R.string.off
-					}
-				)
-				setChipBackgroundColorResource(
-					if (it() && enabled?.invoke() != false) {
-						R.color.colorAccent
-					} else {
-						R.color.colorTextSecondary
-					}
-				)
-				isVisible = true
-			}
-		}
+	fun onTapped(callback: (SettingsItem) -> Unit) = root.bg.setOnClickListener {
+		callback(this)
+		refresh()
 	}
 }

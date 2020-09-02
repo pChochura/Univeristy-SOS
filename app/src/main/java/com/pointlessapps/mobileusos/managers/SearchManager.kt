@@ -1,4 +1,4 @@
-package com.pointlessapps.mobileusos.services
+package com.pointlessapps.mobileusos.managers
 
 import android.widget.TextView
 import com.pointlessapps.mobileusos.utils.OnTextChanged

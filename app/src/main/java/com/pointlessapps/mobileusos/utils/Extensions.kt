@@ -29,25 +29,9 @@ fun WeekView.WeekViewEvent.getMonthKey() =
 fun Calendar.getDayKey() =
 	Utils.dayKey(get(Calendar.DAY_OF_YEAR), get(Calendar.MONTH), get(Calendar.YEAR))
 
-fun Date.getDayKey() =
-	Calendar.getInstance().apply { timeInMillis = this@getDayKey.time }.getDayKey()
-
 fun Calendar.forEachDays(days: Int, function: (Calendar) -> Unit) = repeat(days) {
 	add(Calendar.DAY_OF_YEAR, 1)
 	function(this)
-}
-
-fun Calendar.forEachDaysIndexed(days: Int, function: (Int, Calendar) -> Unit) = (1..days).forEach {
-	add(Calendar.DAY_OF_YEAR, 1)
-	function(it - 1, this)
-}
-
-fun Calendar.forEachDaysReverseIndexed(days: Int, function: (Int, Calendar) -> Unit) {
-	add(Calendar.DAY_OF_YEAR, days)
-	repeat(days) {
-		add(Calendar.DAY_OF_YEAR, -1)
-		function(it, this)
-	}
 }
 
 fun String.capitalize() = "${this[0].toUpperCase()}${this.substring(1)}"

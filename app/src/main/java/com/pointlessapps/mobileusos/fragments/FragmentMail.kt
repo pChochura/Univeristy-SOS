@@ -32,37 +32,37 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 	private fun prepareData() {
 		root().emailSubject.text = email.subject
 
-		viewModelUser.getEmailById(email.id).observe(this) {
-			if (it != null) {
-				email = it
+		viewModelUser.getEmailById(email.id).observe(this) { (email) ->
+			if (email != null) {
+				this.email = email
 			}
 
-			root().emailSubject.text = it?.subject
-			root().emailContent.text = Utils.parseHtml(it?.content ?: "")
+			root().emailSubject.text = email?.subject
+			root().emailContent.text = Utils.parseHtml(email?.content ?: "")
 			root().emailContent.movementMethod = LinkMovementMethod.getInstance()
 
-			it?.attachments?.also { list ->
+			email?.attachments?.also { list ->
 				(root().listAttachments.adapter as? AdapterAttachment)?.update(list)
 			}
 
-			if (it?.attachments?.isEmpty() == true) {
+			if (email?.attachments?.isEmpty() == true) {
 				root().labelAttachments.visibility = View.GONE
 				root().listAttachments.visibility = View.GONE
 				root().divider.visibility = View.GONE
 			}
 
-			if (it?.status == "draft") {
+			if (email?.status == "draft") {
 				root().buttonEdit.visibility = View.VISIBLE
 			}
 		}
 
-		viewModelUser.getEmailRecipients(email.id).observe(this) {
-			root().emailRecipient.text = it?.joinToString { item -> item.name() }
+		viewModelUser.getEmailRecipients(email.id).observe(this) { (list) ->
+			root().emailRecipient.text = list.joinToString { item -> item.name() }
 			root().emailDate.text = dateFormat.format(email.date ?: Date())
 
-			if (it?.size == 1) {
+			if (list.size == 1) {
 				Picasso.get()
-					.load(it.firstOrNull()?.user?.photoUrls?.values?.first() ?: return@observe)
+					.load(list.firstOrNull()?.user?.photoUrls?.values?.first() ?: return@observe)
 					.into(root().emailRecipientImg)
 
 				root().emailRecipientImg.setColorFilter(Color.TRANSPARENT)

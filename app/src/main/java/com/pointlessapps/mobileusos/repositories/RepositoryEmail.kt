@@ -1,11 +1,11 @@
 package com.pointlessapps.mobileusos.repositories
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.services.ServiceUSOSEmail
+import com.pointlessapps.mobileusos.utils.ObserverWrapper
+import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -14,70 +14,42 @@ class RepositoryEmail(application: Application) {
 	private val emailDao = AppDatabase.init(application).emailDao()
 	private val serviceEmail = ServiceUSOSEmail.init()
 
-	fun insert(vararg email: Email) {
+	private fun insert(vararg email: Email) {
 		GlobalScope.launch {
 			emailDao.insert(*email)
 		}
 	}
 
-	fun update(vararg email: Email) {
-		GlobalScope.launch {
-			emailDao.update(*email)
+	fun getAll() = ObserverWrapper<List<Email>> {
+		postValue { emailDao.getAll().sorted() }
+		postValue(SourceType.ONLINE) {
+			serviceEmail.getAll().sorted().also {
+				insert(*it.toTypedArray())
+			}
 		}
 	}
 
-	fun delete(vararg email: Email) {
-		GlobalScope.launch {
-			emailDao.delete(*email)
+	fun getById(emailId: String) = ObserverWrapper<Email?> {
+		postValue { emailDao.getById(emailId) }
+		postValue(SourceType.ONLINE) {
+			serviceEmail.getById(emailId)?.also {
+				insert(it)
+			}
 		}
 	}
 
-	fun getAll(): LiveData<Pair<List<Email>, Boolean>> {
-		val callback = MutableLiveData<Pair<List<Email>, Boolean>>()
-		serviceEmail.getAll().observe {
-			callback.postValue((it?.sorted() ?: return@observe) to true)
-			insert(*it.toTypedArray())
+	fun getRecipientsById(emailId: String) = ObserverWrapper<List<Email.Recipient>> {
+		postValue(SourceType.ONLINE) {
+			serviceEmail.getRecipientsById(emailId)
 		}
-		GlobalScope.launch {
-			callback.postValue(emailDao.getAll().sorted() to false)
-		}
-		return callback
 	}
 
-	fun getById(emailId: String): LiveData<Email?> {
-		val callback = MutableLiveData<Email?>()
-		serviceEmail.getById(emailId).observe {
-			callback.postValue(it ?: return@observe)
-			insert(it)
-		}
-		GlobalScope.launch {
-			callback.postValue(emailDao.getById(emailId))
-		}
-		return callback
-	}
+	fun create(subject: String, content: String) =
+		ObserverWrapper<String?> { postValue { serviceEmail.create(subject, content) } }
 
-	fun getRecipientsById(emailId: String): LiveData<List<Email.Recipient>?> {
-		val callback = MutableLiveData<List<Email.Recipient>?>()
-		serviceEmail.getRecipientsById(emailId).observe {
-			callback.postValue(it ?: return@observe)
-		}
-		return callback
-	}
+	fun updateRecipients(id: String, userIds: List<String>, emails: List<String>) =
+		ObserverWrapper<Unit> { postValue { serviceEmail.updateRecipients(id, userIds, emails) } }
 
-	fun create(subject: String, content: String, callback: (String?) -> Unit) =
-		serviceEmail.create(subject, content, callback)
-
-	fun updateRecipients(
-		id: String,
-		userIds: List<String>,
-		emails: List<String>,
-		callback: (Any?) -> Unit
-	) = serviceEmail.updateRecipients(id, userIds, emails, callback)
-
-	fun addAttachment(
-		id: String,
-		data: ByteArray,
-		filename: String,
-		callback: (String?) -> Unit
-	) = serviceEmail.addAttachment(id, data, filename, callback)
+	fun addAttachment(id: String, data: ByteArray, filename: String) =
+		ObserverWrapper<String?> { postValue { serviceEmail.addAttachment(id, data, filename) } }
 }

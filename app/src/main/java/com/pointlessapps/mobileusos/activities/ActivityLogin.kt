@@ -10,7 +10,7 @@ import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
-import com.pointlessapps.mobileusos.services.SearchManager
+import com.pointlessapps.mobileusos.managers.SearchManager
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
@@ -55,16 +55,16 @@ class ActivityLogin : FragmentActivity() {
 
 				viewModelCommon.getAllUniversities().observe(this) {
 					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
-						update(it.first ?: listOf())
+						update(it.first)
 						showMatching(dialog.inputSearchUniversities.text.toString())
 					}
 
 					dialog.listUniversities.apply {
 						setEmptyText(getString(R.string.no_universities))
 						setEmptyIcon(R.drawable.ic_no_universities)
-
-						setLoaded(it.second)
 					}
+				}.onFinished {
+					dialog.listUniversities.setLoaded(true)
 				}
 
 				SearchManager.of(dialog.inputSearchUniversities).setOnChangeTextListener {

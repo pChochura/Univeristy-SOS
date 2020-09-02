@@ -24,14 +24,13 @@ class FragmentMails : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		viewModelUser.getAllEmails().observe(this) { (emails, online) ->
+		viewModelUser.getAllEmails().observe(this) { (emails) ->
 			root().listEmails.setEmptyText(getString(R.string.no_emails))
-			root().listEmails.setLoaded(online)
+			root().listEmails.setLoaded(false)
 			(root().listEmails.adapter as? AdapterEmail)?.update(emails)
-
-			if (online) {
-				root().pullRefresh.isRefreshing = false
-			}
+		}.onFinished {
+			root().listEmails.setLoaded(true)
+			root().pullRefresh.isRefreshing = false
 		}
 	}
 
@@ -41,12 +40,6 @@ class FragmentMails : FragmentBase() {
 				onChangeFragmentListener?.invoke(FragmentMail(it))
 			}
 		})
-
-		viewModelUser.getAllEmails().observe(this) { (emails, online) ->
-			root().listEmails.setEmptyText(getString(R.string.no_emails))
-			root().listEmails.setLoaded(online)
-			(root().listEmails.adapter as? AdapterEmail)?.update(emails)
-		}
 	}
 
 	private fun prepareClickListeners() {
