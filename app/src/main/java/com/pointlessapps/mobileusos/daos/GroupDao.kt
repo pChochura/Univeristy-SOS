@@ -1,6 +1,9 @@
 package com.pointlessapps.mobileusos.daos
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.pointlessapps.mobileusos.models.Course
 
 @Dao
@@ -8,12 +11,6 @@ interface GroupDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(vararg courses: Course)
-
-	@Update
-	suspend fun update(vararg courses: Course)
-
-	@Delete
-	suspend fun delete(vararg courses: Course)
 
 	@Query("SELECT * FROM table_groups")
 	suspend fun getAll(): List<Course>

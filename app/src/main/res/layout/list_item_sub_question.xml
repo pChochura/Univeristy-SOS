@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="10dp"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="?white"
+	android:orientation="vertical"
+	android:padding="15dp">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/subQuestionName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:fontFamily="@font/montserrat"
+		android:textColor="?colorTextPrimary"
+		android:textSize="14sp"
+		tools:text="W jakim stopniu- bardzo dobrym, dobrym, dostatecznym, niedostatecznym- nauczyciel:" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/listSubSubQuestions"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		tools:itemCount="2"
+		tools:listitem="@layout/list_item_sub_sub_question" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

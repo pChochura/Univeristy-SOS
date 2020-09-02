@@ -28,12 +28,4 @@ class RepositoryGrade(application: Application) {
 			}
 		}
 	}
-
-	fun getRecentGrades() = ObserverWrapper<List<Grade>> {
-		postValue(SourceType.ONLINE) {
-			serviceGrade.getRecentGrades().also { list ->
-				insert(*list.toTypedArray())
-			}
-		}
-	}
 }

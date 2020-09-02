@@ -265,6 +265,40 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
+	fun surveysToFillRequest() = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/surveys_to_fill")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles]|group[class_type_id|term_id|course_id|course_name|class_type]"
+			)
+			.build().toString()
+	)
+
+	fun surveyRequest(surveyId: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/survey")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles|photo_urls[200x200]]|group[class_type_id|term_id|course_id|course_name|class_type]|questions"
+			)
+			.appendQueryParameter("survey_id", surveyId)
+			.build().toString()
+	)
+
+	fun fillOutSurveyRequest(surveyId: String, answers: Map<String, String>, comment: String?) =
+		OAuthRequest(
+			Verb.GET,
+			Uri.parse("${selectedUniversity?.serviceUrl}/surveys/fill_out")
+				.buildUpon()
+				.appendQueryParameter("survey_id", surveyId)
+				.appendQueryParameter("answers", gson.toJson(answers))
+				.appendQueryParameter("comment", comment ?: "")
+				.build().toString()
+		)
+
 	fun emailRecipientsRequest(emailId: String) = OAuthRequest(
 		Verb.GET,
 		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/recipients")

@@ -62,6 +62,7 @@ class ActivityLogin : FragmentActivity() {
 					dialog.listUniversities.apply {
 						setEmptyText(getString(R.string.no_universities))
 						setEmptyIcon(R.drawable.ic_no_universities)
+						setLoaded(false)
 					}
 				}.onFinished {
 					dialog.listUniversities.setLoaded(true)

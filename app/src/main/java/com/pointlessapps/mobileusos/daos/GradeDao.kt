@@ -10,12 +10,6 @@ interface GradeDao {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(vararg grades: Grade)
 
-	@Update
-	suspend fun update(vararg grades: Grade)
-
-	@Delete
-	suspend fun delete(vararg grades: Grade)
-
 	@Query("SELECT * FROM table_grades WHERE course_id = :courseId AND term_id = :termId")
 	suspend fun getByCourseIdAndTermId(courseId: String, termId: String): List<Grade>
 

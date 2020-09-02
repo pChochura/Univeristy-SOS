@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -13,14 +14,14 @@ class ObserverWrapper<T>(
 ) {
 
 	private var onOnceCallback: ((Pair<T, SourceType>) -> Unit)? = null
-	private var onFinishedCallback: (() -> Unit)? = null
+	private var onFinishedCallback: ((Throwable?) -> Unit)? = null
 	private var finished = false
 
 	init {
 		block?.invoke(this)
 	}
 
-	fun onFinished(callback: () -> Unit) {
+	fun onFinished(callback: (Throwable?) -> Unit) {
 		onFinishedCallback = callback
 	}
 
@@ -47,7 +48,7 @@ class ObserverWrapper<T>(
 			(runCatching {
 				withTimeout(TimeUnit.SECONDS.toMillis(10)) { valueCallback() }
 			}.getOrElse {
-				finished()
+				finished(it)
 				return@launch
 			} to sourceType).also {
 				if (onOnceCallback !== null) {
@@ -59,9 +60,11 @@ class ObserverWrapper<T>(
 		}
 	}
 
-	private fun finished() {
-		onFinishedCallback?.invoke()
-		finished = true
+	private fun finished(throwable: Throwable? = null) {
+		GlobalScope.launch(Dispatchers.Main) {
+			onFinishedCallback?.invoke(throwable)
+			finished = true
+		}
 	}
 }
 

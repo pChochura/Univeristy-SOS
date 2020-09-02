@@ -13,8 +13,8 @@ data class User(
 	@PrimaryKey
 	@SerializedName("id")
 	var id: String = UUID.randomUUID().toString(),
-	@ColumnInfo(name = "title")
-	@SerializedName("title")
+	@ColumnInfo(name = "titles")
+	@SerializedName("titles")
 	var titles: Title? = null,
 	@ColumnInfo(name = "email")
 	@SerializedName("email")

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="20dp"
+	android:orientation="vertical">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/questionName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat_bold"
+		android:gravity="center"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="18sp"
+		tools:text="Ocena nauczyciela akademickiego" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/listSubQuestions"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		tools:itemCount="1"
+		tools:listitem="@layout/list_item_sub_question" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

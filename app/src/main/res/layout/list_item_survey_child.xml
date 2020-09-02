@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:clickable="true"
+	android:focusable="true"
+	app:cardBackgroundColor="?white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp"
+	app:rippleColor="?colorTextSecondary">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="15dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/surveyLecturer"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:textColor="?colorTextPrimary"
+			android:textSize="14sp"
+			app:fontFamily="@font/montserrat"
+			app:layout_constraintBottom_toTopOf="@id/surveyName"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toLeftOf="@id/surveyDate"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="dr Jan Kowalski" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/surveyName"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:textColor="?colorTextSecondary"
+			android:textSize="14sp"
+			app:fontFamily="@font/montserrat"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toLeftOf="@id/surveyDate"
+			app:layout_constraintTop_toBottomOf="@id/surveyLecturer"
+			tools:text="Bazy danych (Laboratorium)" />
+
+		<com.google.android.material.chip.Chip
+			android:id="@+id/surveyDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:backgroundTint="@color/colorAccent"
+			android:clickable="false"
+			android:fontFamily="@font/montserrat"
+			android:textColor="?white"
+			android:textSize="14sp"
+			app:chipMinTouchTargetSize="32dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="20.09.2020" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

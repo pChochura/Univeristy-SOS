@@ -44,7 +44,7 @@
 	<string name="no_new_articles">Nie ma nowych artykułów</string>
 	<string name="calendar_event_description">Nadchodzące wydarzenia uczelni</string>
 	<string name="create_event_title">Dodaj to wydarzenie do kalendarza</string>
-	<string name="empty_surveys_description">Nie ma więcej ankiet do wypełnienia</string>
+	<string name="no_surveys_to_fill">Nie ma żadnych ankiet do wypełnienia</string>
 	<string name="last_week">Ostatni tydzień</string>
 	<string name="older">Starsze</string>
 	<string name="article">Artykuł</string>
@@ -60,8 +60,8 @@
 	<string name="recipients">Odbiorcy</string>
 	<string name="type_to_search">Wpisz, aby wyszukać</string>
 	<string name="subject">Tytuł</string>
-	<string name="some_topic">Jakiś tytuł</string>
-	<string name="some_content">Jakaś treść</string>
+	<string name="some_topic">Tytuł do omówienia</string>
+	<string name="some_content">Twoja ważna treść maila</string>
 	<string name="recent_grades">Ostatnie oceny</string>
 	<string name="no_recent_grades">Nie ma ostatnich ocen</string>
 	<string name="show_more">Pokaż więcej</string>
@@ -138,4 +138,14 @@
 	<string name="off" translatable="false">wył</string>
 	<string name="on">wł</string>
 	<string name="are_you_sure">Czy na pewno?</string>
+	<string name="to_fill_out">Do wypełnienia</string>
+	<string name="filled_out">Wypełnione</string>
+	<string name="survey">Ankieta</string>
+	<string name="send_survey">Wyślij ankietę</string>
+	<string name="some_comment">Twój ważny komentarz</string>
+	<string name="your_comment">Twój komentarz</string>
+	<string name="complete_all_answers">Uzupełnij wszystkie odpowiedzi</string>
+	<string name="complete_all_answers_description">Musisz odpowiedzieć na wszystkie pytania, aby kontynuować</string>
+	<string name="thank_you">Dziękujemy</string>
+	<string name="thank_you_fill_survey">Dziękujęmy za wypełnienie ankiety</string>
 </resources>

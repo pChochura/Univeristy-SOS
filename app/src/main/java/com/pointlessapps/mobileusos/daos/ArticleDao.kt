@@ -1,6 +1,9 @@
 package com.pointlessapps.mobileusos.daos
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.pointlessapps.mobileusos.models.Article
 
 @Dao
@@ -8,12 +11,6 @@ interface ArticleDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(vararg articles: Article)
-
-	@Update
-	suspend fun update(vararg articles: Article)
-
-	@Delete
-	suspend fun delete(vararg articles: Article)
 
 	@Query("SELECT * FROM table_news ORDER BY publication_date DESC")
 	suspend fun getAll(): List<Article>

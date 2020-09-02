@@ -33,7 +33,7 @@
 	<string name="time_period" translatable="false">%tR - %tR</string>
 	<string name="calendar_event_description">Incoming university event</string>
 	<string name="create_event_title">Add this event to the calendar</string>
-	<string name="empty_surveys_description">There are no more surveys to fill out</string>
+	<string name="no_surveys_to_fill">There are no surveys to fill out</string>
 	<string name="last_week">Last week</string>
 	<string name="older">Older</string>
 	<string name="article">Article</string>
@@ -49,8 +49,8 @@
 	<string name="recipients">Recipients</string>
 	<string name="type_to_search">Type to search</string>
 	<string name="subject">Subject</string>
-	<string name="some_topic">Some topic</string>
-	<string name="some_content">Some content</string>
+	<string name="some_topic">Topic to discuss</string>
+	<string name="some_content">Your very important email</string>
 	<string name="recent_grades">Recent grades</string>
 	<string name="no_recent_grades">There are no recent grades</string>
 	<string name="show_more">Show more</string>
@@ -143,4 +143,16 @@
 	<string name="november">November</string>
 	<string name="december">December</string>
 	<string name="are_you_sure">Are you sure?</string>
+	<string name="date" translatable="false">%1$td.%1$tm.%1$tY</string>
+	<string name="to_fill_out">To fill out</string>
+	<string name="filled_out">Filled out</string>
+	<string name="course_info_general" translatable="false">%s (%s)</string>
+	<string name="survey">Survey</string>
+	<string name="send_survey">Send survey</string>
+	<string name="some_comment">Your very important comment</string>
+	<string name="your_comment">Your comment</string>
+	<string name="complete_all_answers">Complete all the answers</string>
+	<string name="complete_all_answers_description">You have to answer all the questions to continue</string>
+	<string name="thank_you">Thank you</string>
+	<string name="thank_you_fill_survey">Thank you for filling out the survey</string>
 </resources>
