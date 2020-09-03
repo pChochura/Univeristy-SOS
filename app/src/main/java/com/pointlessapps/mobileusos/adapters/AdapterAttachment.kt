@@ -1,21 +1,17 @@
 package com.pointlessapps.mobileusos.adapters
 
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.toMB
 import org.jetbrains.anko.find
-import org.jetbrains.anko.findOptional
 
 class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 	AdapterSimple<Email.Attachment>(mutableListOf()) {
 
 	var onAddClickListener: (() -> Unit)? = null
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
-	private var textTitle: AppCompatTextView? = null
-	private var textSize: AppCompatTextView? = null
 
 	init {
 		setHasStableIds(true)
@@ -27,12 +23,6 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 		} else {
 			R.layout.list_item_email_item_add
 		}
-
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textTitle = root.findOptional(R.id.attachmentName)
-		textSize = root.findOptional(R.id.attachmentSize)
-	}
 
 	override fun onBindViewHolder(holder: DataObjectHolder, position: Int) =
 		onBind(holder.root, position)
@@ -58,17 +48,12 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 				onClickListener?.invoke(list[position])
 			}
 		}
-
-		textTitle?.text = list[position].filename
-		textSize?.text = "%.2f MB".format(list[position].size?.toMB())
-	}
-
-	override fun update(list: List<Email.Attachment>) {
-		val sortedList = list.sorted()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
+		if (position < list.size) {
+			Log.d("LOG!", "${list[position].filename}")
+			root.find<AppCompatTextView>(R.id.attachmentName).text =
+				list[position].filename
+			root.find<AppCompatTextView>(R.id.attachmentSize).text =
+				"%.2f MB".format(list[position].size?.toMB())
 		}
-		super.update(sortedList)
 	}
 }

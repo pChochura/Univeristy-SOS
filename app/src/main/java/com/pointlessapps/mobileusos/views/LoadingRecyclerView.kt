@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -94,8 +95,9 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 		ensureState()
 	}
 
-	fun setEmptyIcon(@DrawableRes icon: Int) {
+	fun setEmptyIcon(@DrawableRes icon: Int, @ColorInt tint: Int? = null) {
 		iconEmpty.setImageResource(icon)
+		tint?.also { iconEmpty.setColorFilter(it) }
 		emptyIcon = icon
 
 		ensureState()

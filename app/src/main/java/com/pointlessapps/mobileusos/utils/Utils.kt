@@ -123,6 +123,10 @@ object Utils {
 		it.getColor(0, Color.MAGENTA)
 	}
 
+	fun String.withoutExtension() = substringBeforeLast(".")
+
+	fun String.extension() = substringAfterLast(".", "")
+
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator
 

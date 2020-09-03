@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.intrusoft.sectionedrecyclerview.Section
 import com.intrusoft.sectionedrecyclerview.SectionRecyclerViewAdapter
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.Survey
+import com.pointlessapps.mobileusos.utils.Utils
 import org.jetbrains.anko.find
 
 class AdapterSurvey(private val context: Context, sections: List<SectionHeader> = listOf()) :
@@ -45,16 +47,27 @@ class AdapterSurvey(private val context: Context, sections: List<SectionHeader> 
 		childPosition: Int,
 		survey: Survey
 	) {
-		itemView.bg.setOnClickListener {
-			onClickListener(survey)
+		if (survey.didIFillOut == false) {
+			itemView.bg.setOnClickListener {
+				onClickListener(survey)
+			}
+		} else {
+			itemView.bg.isClickable = false
+			itemView.bg.isFocusable = false
 		}
 
-		itemView.textLecturer.text = survey.lecturer?.name()
-		itemView.textName.text = context.getString(
-			R.string.course_info_general,
-			survey.group?.courseName?.toString(),
-			survey.group?.classType?.toString()
-		)
+		if (survey.surveyType == Survey.SurveyType.Course) {
+			itemView.textLecturer.text = survey.lecturer?.name()
+			itemView.textName.text = context.getString(
+				R.string.course_info_general,
+				survey.group?.courseName?.toString(),
+				survey.group?.classType?.toString()
+			)
+			itemView.textName.isGone = false
+		} else {
+			itemView.textLecturer.text = Utils.stripHtmlTags(survey.name.toString())
+			itemView.textName.isGone = true
+		}
 		itemView.textDate.text = context.getString(R.string.date).format(survey.endDate)
 	}
 

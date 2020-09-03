@@ -155,4 +155,11 @@
 	<string name="complete_all_answers_description">You have to answer all the questions to continue</string>
 	<string name="thank_you">Thank you</string>
 	<string name="thank_you_fill_survey">Thank you for filling out the survey</string>
+	<string name="oops" translatable="false">Oops</string>
+	<string name="something_went_wrong">Something went wrong. Please try again later. It could be caused by your internet connection</string>
+	<string name="too_large_file">The file is too large. Please try again with a different file</string>
+	<string name="edit_the_attachment">Edit the attachment</string>
+	<string name="attachment_name">Attachment name</string>
+	<string name="save">Save</string>
+	<string name="remove">Remove</string>
 </resources>

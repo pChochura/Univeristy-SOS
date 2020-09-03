@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.services
 
+import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.Utils
@@ -24,7 +25,7 @@ class ServiceUSOSEmail private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(emailRequest(emailId))?.run {
-					gson.fromJson<Email>(body)
+					gson.fromJson<Email>(body.also { Log.d("LOG!", "$it") })
 				}
 			}
 		}
@@ -63,7 +64,9 @@ class ServiceUSOSEmail private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(addEmailAttachmentRequest(id, data, filename))?.run {
-					gson.fromJson<Map<String, String>>(body)["attachment_id"]
+					gson.fromJson<Map<String, String>>(body.also {
+						Log.d("LOG!", "$it")
+					})["attachment_id"]
 				}
 			}
 		}

@@ -33,7 +33,7 @@ class ServiceUSOSSurvey private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(fillOutSurveyRequest(id, answers, comment))?.run {
-					gson.fromJson<Any>(body)
+					gson.fromJson<Map<String, Any>>(body)
 				}
 			}
 		}

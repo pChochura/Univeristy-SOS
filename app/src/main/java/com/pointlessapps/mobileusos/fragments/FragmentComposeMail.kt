@@ -1,12 +1,14 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +18,17 @@ import com.pointlessapps.mobileusos.adapters.AdapterAutocomplete
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
+import com.pointlessapps.mobileusos.utils.Utils.extension
+import com.pointlessapps.mobileusos.utils.Utils.withoutExtension
 import com.pointlessapps.mobileusos.utils.addChip
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
+import kotlinx.android.synthetic.main.dialog_attachment.*
 import kotlinx.android.synthetic.main.dialog_message.*
+import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
+import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
+import kotlinx.android.synthetic.main.dialog_message.messageMain
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
+import java.io.File
 
 class FragmentComposeMail(
 	private val email: Email? = null,
@@ -28,6 +37,7 @@ class FragmentComposeMail(
 
 	companion object {
 		const val PICK_FILE_REQUEST_CODE = 1243
+		const val MAX_SIZE = 2e+6
 	}
 
 	private val viewModelUser by viewModels<ViewModelUser>()
@@ -105,24 +115,44 @@ class FragmentComposeMail(
 				onItemClickListener =
 					AdapterView.OnItemClickListener { _, _, position, _ ->
 						recipients.add(list[position])
-						root().inputRecipients.text.clear()
 						root().listRecipients.addChip(list[position].name()) {
 							recipients.remove(list[position])
 						}
+						root().inputRecipients.text.clear()
 					}
 
 				isLongClickable = false
 			})
 
 			addTextChangedListener {
+				if (isPerformingCompletion) {
+					return@addTextChangedListener
+				}
+
+				(adapter as? AdapterAutocomplete)?.update(
+					listOf(
+						Email.Recipient(
+							it.toString(),
+							null
+						),
+					)
+				)
 				viewModelUser.getUsersByQuery(it.toString())
 					.observe(this@FragmentComposeMail) { (list) ->
-						(adapter as? AdapterAutocomplete)?.update(list.map { user ->
-							Email.Recipient(
-								null,
-								user
+						(adapter as? AdapterAutocomplete)?.update(
+							listOf(
+								Email.Recipient(
+									it.toString(),
+									null
+								),
+								*list.map { user ->
+									Email.Recipient(
+										null,
+										user
+									)
+								}.toTypedArray()
 							)
-						})
+						)
 					}
 			}
 		}
@@ -135,8 +165,23 @@ class FragmentComposeMail(
 	private fun prepareAttachmentsList() {
 		root().listAttachments.apply {
 			adapter = AdapterAttachment(true).apply {
-				onClickListener = {
+				onClickListener = { attachment ->
+					DialogUtil.create(requireContext(), R.layout.dialog_attachment, { dialog ->
+						dialog.attachmentName.setText(attachment.filename?.withoutExtension())
 
+						dialog.buttonPrimary.setOnClickListener {
+							attachment.filename = "%s.%s".format(
+								dialog.attachmentName.text.toString(),
+								attachment.filename?.extension()
+							)
+							notifyDataSetChanged()
+							dialog.dismiss()
+						}
+						dialog.buttonSecondary.setOnClickListener {
+							update(attachments.apply { remove(attachment) })
+							dialog.dismiss()
+						}
+					}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 				}
 				onAddClickListener = {
 					val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -177,28 +222,48 @@ class FragmentComposeMail(
 	}
 
 	private fun saveDraft() {
+		ensureEmailExists { id ->
+			val parts = recipients.partition { it.user !== null }
+			viewModelUser.updateEmailRecipients(
+				id,
+				parts.first.map { it.user!!.id },
+				parts.second.map { it.email!! }
+			).onFinished {
+				if (it != null) {
+					showErrorDialog {
+						dismiss()
+						onForceGoBackListener?.invoke()
+					}
+				}
+			}
+
+			attachments.forEach { attachment ->
+				attachment.data?.also {
+					getFileData(it)?.also { file ->
+						viewModelUser.addEmailAttachment(id, file, attachment.filename!!)
+							.observe(this) { (id) ->
+								attachment.id = id ?: return@observe
+							}
+					}
+				}
+			}
+		}
+	}
+
+	private fun ensureEmailExists(callback: (String) -> Unit) {
 		if (email == null) {
 			viewModelUser.createEmail(
 				root().inputSubject.text.toString(),
 				root().inputContent.text.toString()
-			).observe(this) { (id) ->
+			).onOnceCallback { (id) ->
 				if (id == null) {
-					return@observe
+					return@onOnceCallback
 				}
 
-				val parts = recipients.partition { it.user !== null }
-				viewModelUser.updateEmailRecipients(
-					id,
-					parts.first.map { it.user!!.id },
-					parts.second.map { it.email!! }
-				).observe(this) { }
-
-				attachments.forEach { attachment ->
-//					viewModelUser.addEmailAttachment(id, data, attachment.filename!!).observe(this) { (id) ->
-//						attachment.id = id ?: return@observe
-//					}
-				}
+				callback(id)
 			}
+		} else {
+			callback(email.id)
 		}
 	}
 
@@ -208,26 +273,56 @@ class FragmentComposeMail(
 		}
 	}
 
-	override fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data?.data != null) {
-			attachments.add(
-				Email.Attachment(
-					id = "",
-					filename = getFilename(data.data!!),
-					description = "",
-					url = ""
-				)
-			)
+			getFileInfo(data.data ?: return)?.also {
+				if (it.second.toDouble() > MAX_SIZE) {
+					showErrorDialog(R.string.too_large_file) {
+						dismiss()
+					}
+				} else {
+					attachments.add(
+						Email.Attachment(
+							id = "",
+							filename = it.first,
+							description = "",
+							url = "",
+							size = it.second?.toLong(),
+							data = data.data,
+						)
+					)
+				}
+			}
 
 			(root().listAttachments.adapter as? AdapterAttachment)?.update(attachments)
 		}
 	}
 
-	private fun getFilename(uri: Uri) =
+	private fun getFileInfo(uri: Uri) =
 		requireActivity().contentResolver.query(uri, null, null, null, null)?.run {
 			moveToFirst()
 			val filename = getString(getColumnIndex(OpenableColumns.DISPLAY_NAME))
+			val size = getString(getColumnIndex(OpenableColumns.SIZE))
 			close()
-			return@run filename
+			return@run filename to size
 		}
+
+	private fun getFileData(uri: Uri): ByteArray? {
+		return File(uri.path ?: return null).readBytes()
+	}
+
+	private inline fun showErrorDialog(
+		message: Int = R.string.something_went_wrong,
+		crossinline callback: Dialog.() -> Unit
+	) {
+		DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
+			dialog.messageMain.setText(R.string.oops)
+			dialog.messageSecondary.setText(message)
+			dialog.buttonSecondary.isGone = true
+
+			dialog.buttonPrimary.setText(android.R.string.ok)
+			dialog.buttonPrimary.setOnClickListener { callback(dialog) }
+			dialog.setOnCancelListener { callback(dialog) }
+		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+	}
 }

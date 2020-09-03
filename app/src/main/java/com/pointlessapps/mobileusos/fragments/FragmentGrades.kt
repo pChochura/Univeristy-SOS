@@ -18,7 +18,6 @@ import com.pointlessapps.mobileusos.adapters.AdapterGrade
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
-import com.pointlessapps.mobileusos.utils.SourceType
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -47,10 +46,12 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	private fun prepareGrades(callback: (() -> Unit)? = null) {
-		viewModelUser.getAllGroups().observe(this) { (groups, sourceType1) ->
+		var finished1 = false
+		viewModelUser.getAllGroups().observe(this) { (groups) ->
 			val termIds = groups.map { group -> group.termId }
 
-			viewModelUser.getTermsByIds(termIds).observe(this) { (terms, sourceType2) ->
+			var finished2 = false
+			viewModelUser.getTermsByIds(termIds).observe(this) { (terms) ->
 				viewModelUser.getGradesByTermIds(termIds).observe(this) { (grades) ->
 					(root().listGrades.adapter as? AdapterGrade)
 						?.notifyDataChanged(
@@ -77,13 +78,13 @@ class FragmentGrades : FragmentBase() {
 						setLoaded(false)
 					}
 				}.onFinished {
-					if (sourceType1 === SourceType.ONLINE && sourceType2 === SourceType.ONLINE) {
+					if (finished1 && finished2) {
 						root().listGrades.setLoaded(true)
 						callback?.invoke()
 					}
 				}
-			}
-		}
+			}.onFinished { finished2 = true }
+		}.onFinished { finished1 = true }
 	}
 
 	private fun prepareGradesList() {

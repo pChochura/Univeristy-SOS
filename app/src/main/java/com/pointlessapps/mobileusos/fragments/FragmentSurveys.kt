@@ -24,16 +24,19 @@ class FragmentSurveys : FragmentBase() {
 	override fun refreshed() {
 		viewModelUser.getSurveysToFill().observe(this) { (list) ->
 			root().listSurveys.setEmptyText(getString(R.string.no_surveys_to_fill))
+			root().listSurveys.setEmptyIcon(R.drawable.ic_no_surveys)
 			root().listSurveys.setLoaded(false)
 			(root().listSurveys.adapter as? AdapterSurvey)?.notifyDataChanged(
-				list.groupBy(Survey::didIFillOut).map {
-					AdapterSurvey.SectionHeader(
-						if (it.key == true) getString(R.string.filled_out) else getString(
-							R.string.to_fill_out
-						),
-						it.value
-					)
-				}
+				list.groupBy(Survey::didIFillOut)
+					.toSortedMap { section1, section2 -> if (section1 == true) 1 else if (section2 == true) -1 else 0 }
+					.map {
+						AdapterSurvey.SectionHeader(
+							if (it.key == true) getString(R.string.filled_out) else getString(
+								R.string.to_fill_out
+							),
+							it.value
+						)
+					}
 			)
 		}.onFinished {
 			root().listSurveys.setLoaded(true)

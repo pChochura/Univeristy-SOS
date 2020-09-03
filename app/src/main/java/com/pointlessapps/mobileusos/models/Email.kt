@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.models
 
+import android.net.Uri
 import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -30,10 +31,12 @@ data class Email(
 	data class Attachment(
 		@SerializedName("id")
 		var id: String,
+		@SerializedName("data")
+		var data: Uri? = null,
 		@SerializedName("filename")
 		var filename: String? = null,
 		@SerializedName("size")
-		var size: Int? = null,
+		var size: Long? = null,
 		@SerializedName("description")
 		var description: String,
 		@SerializedName("url")

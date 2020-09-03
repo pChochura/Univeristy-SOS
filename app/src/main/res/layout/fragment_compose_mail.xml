@@ -78,7 +78,10 @@
 						android:background="@android:color/transparent"
 						android:fontFamily="@font/montserrat"
 						android:hint="@string/type_to_search"
+						android:popupBackground="?colorBackground"
 						android:textColor="?colorTextPrimary"
+						android:dropDownAnchor="@id/listRecipients"
+						android:inputType="textAutoComplete|textEmailAddress|textCapWords"
 						android:textColorHint="?colorTextSecondary"
 						android:textSize="14sp"
 						app:layout_flexGrow="1" />

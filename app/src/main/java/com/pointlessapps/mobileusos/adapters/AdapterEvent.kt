@@ -11,30 +11,17 @@ import org.jetbrains.anko.find
 
 class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var textDate: AppCompatTextView
-	private lateinit var textDayOff: Chip
-	private lateinit var imageColor: View
-
 	override fun getLayoutId(viewType: Int) = R.layout.list_item_calendar_event
 
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.eventName)
-		textDate = root.find(R.id.eventDate)
-		textDayOff = root.find(R.id.eventDayOff)
-		imageColor = root.find(R.id.eventColor)
-	}
-
 	override fun onBind(root: View, position: Int) {
-		textName.text = list[position].name?.toString()
-		textDate.text = root.context.getString(
+		root.find<AppCompatTextView>(R.id.eventName).text = list[position].name?.toString()
+		root.find<AppCompatTextView>(R.id.eventDate).text = root.context.getString(
 			R.string.date_period,
 			list[position].startDate,
 			list[position].endDate
 		)
-		textDayOff.isVisible = list[position].isDayOff ?: false
-		imageColor.backgroundTintList =
+		root.find<Chip>(R.id.eventDayOff).isVisible = list[position].isDayOff ?: false
+		root.find<View>(R.id.eventColor).backgroundTintList =
 			ColorStateList.valueOf(list[position].getColor(root.context))
 	}
 }

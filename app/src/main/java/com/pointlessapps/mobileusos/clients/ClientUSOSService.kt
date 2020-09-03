@@ -273,6 +273,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 				"fields",
 				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles]|group[class_type_id|term_id|course_id|course_name|class_type]"
 			)
+			.appendQueryParameter("include_filled_out", "true")
 			.build().toString()
 	)
 

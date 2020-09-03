@@ -36,7 +36,7 @@ fun Calendar.forEachDays(days: Int, function: (Calendar) -> Unit) = repeat(days)
 
 fun String.capitalize() = "${this[0].toUpperCase()}${this.substring(1)}"
 
-fun Int.toMB() = this / (1024f * 1024f) * 10f / 10f
+fun Long.toMB() = this / (1024f * 1024f) * 10f / 10f
 
 fun ViewGroup.addChip(chipText: String, onRemovedListener: (() -> Unit)? = null) =
 	addView(

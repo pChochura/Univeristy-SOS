@@ -148,4 +148,5 @@
 	<string name="complete_all_answers_description">Musisz odpowiedzieć na wszystkie pytania, aby kontynuować</string>
 	<string name="thank_you">Dziękujemy</string>
 	<string name="thank_you_fill_survey">Dziękujęmy za wypełnienie ankiety</string>
+	<string name="something_went_wrong">Coś poszło nie tak. Spróbuj ponownie później. To mogło być spowodowane Twoim połączeniem internetowym</string>
 </resources>

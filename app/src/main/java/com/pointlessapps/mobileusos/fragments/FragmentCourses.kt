@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterCourse
-import com.pointlessapps.mobileusos.utils.SourceType
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.fragment_courses.view.*
 
@@ -27,7 +26,8 @@ class FragmentCourses : FragmentBase() {
 	}
 
 	private fun prepareCourses(callback: (() -> Unit)? = null) {
-		viewModelUser.getAllGroups().observe(this) { (groups, sourceType) ->
+		var finished = false
+		viewModelUser.getAllGroups().observe(this) { (groups) ->
 			val termIds = groups.map { group -> group.termId }
 
 			viewModelUser.getTermsByIds(termIds).observe(this) { (terms) ->
@@ -48,12 +48,12 @@ class FragmentCourses : FragmentBase() {
 					setLoaded(false)
 				}
 			}.onFinished {
-				if (sourceType === SourceType.ONLINE) {
+				if (finished) {
 					root().listCourses.setLoaded(true)
 					callback?.invoke()
 				}
 			}
-		}
+		}.onFinished { finished = true }
 	}
 
 	private fun prepareCoursesList() {

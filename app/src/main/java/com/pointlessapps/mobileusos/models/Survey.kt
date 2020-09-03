@@ -47,6 +47,10 @@ data class Survey(
 	@SerializedName("id")
 	var id: String = ""
 ) {
+	object SurveyType {
+		const val Course = "course"
+		const val General = "general"
+	}
 
 	@Keep
 	class Question(
