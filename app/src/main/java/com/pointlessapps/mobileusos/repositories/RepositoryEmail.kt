@@ -45,11 +45,45 @@ class RepositoryEmail(application: Application) {
 	}
 
 	fun create(subject: String, content: String) =
-		ObserverWrapper<String?> { postValue { serviceEmail.create(subject, content) } }
+		ObserverWrapper<String?> {
+			postValue(SourceType.ONLINE) {
+				serviceEmail.create(
+					subject,
+					content
+				)
+			}
+		}
+
+	fun update(id: String, subject: String, content: String) =
+		ObserverWrapper<Any?> {
+			postValue(SourceType.ONLINE) {
+				serviceEmail.update(
+					id,
+					subject,
+					content
+				)
+			}
+		}
 
 	fun updateRecipients(id: String, userIds: List<String>, emails: List<String>) =
-		ObserverWrapper<Unit> { postValue { serviceEmail.updateRecipients(id, userIds, emails) } }
+		ObserverWrapper<Any?> {
+			postValue(SourceType.ONLINE) {
+				serviceEmail.updateRecipients(
+					id,
+					userIds,
+					emails
+				)
+			}
+		}
 
 	fun addAttachment(id: String, data: ByteArray, filename: String) =
-		ObserverWrapper<String?> { postValue { serviceEmail.addAttachment(id, data, filename) } }
+		ObserverWrapper<String?> {
+			postValue(SourceType.ONLINE) {
+				serviceEmail.addAttachment(
+					id,
+					data,
+					filename
+				)
+			}
+		}
 }

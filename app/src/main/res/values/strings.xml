@@ -152,7 +152,7 @@
 	<string name="some_comment">Your very important comment</string>
 	<string name="your_comment">Your comment</string>
 	<string name="complete_all_answers">Complete all the answers</string>
-	<string name="complete_all_answers_description">You have to answer all the questions to continue</string>
+	<string name="complete_all_answers_description">It is advised to answer all the questions. Press OK to continue anyway</string>
 	<string name="thank_you">Thank you</string>
 	<string name="thank_you_fill_survey">Thank you for filling out the survey</string>
 	<string name="oops" translatable="false">Oops</string>
@@ -164,4 +164,6 @@
 	<string name="remove">Remove</string>
 	<string name="no_recipient">(no recipient)</string>
 	<string name="no_subject">(no subject)</string>
+	<string name="saving_survey">Saving the survey</string>
+	<string name="saving_email">Saving the email</string>
 </resources>

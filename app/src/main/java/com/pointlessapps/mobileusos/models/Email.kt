@@ -31,6 +31,8 @@ data class Email(
 	data class Attachment(
 		@SerializedName("id")
 		var id: String,
+		@SerializedName("newly_added")
+		var newlyAdded: Boolean = false,
 		@SerializedName("data")
 		var data: Uri? = null,
 		@SerializedName("filename")

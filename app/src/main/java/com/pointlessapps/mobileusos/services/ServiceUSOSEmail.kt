@@ -48,6 +48,15 @@ class ServiceUSOSEmail private constructor() {
 			}
 		}
 
+	suspend fun update(id: String, subject: String, content: String) =
+		withContext(Dispatchers.IO) {
+			clientService.run {
+				execute(updateEmailRequest(id, subject, content))?.run {
+					gson.fromJson<Any>(body.also { Log.d("LOG!", "body: $it") })
+				}
+			}
+		}
+
 	suspend fun updateRecipients(
 		id: String,
 		userIds: List<String>,
@@ -64,9 +73,7 @@ class ServiceUSOSEmail private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(addEmailAttachmentRequest(id, data, filename))?.run {
-					gson.fromJson<Map<String, String>>(body.also {
-						Log.d("LOG!", "$it")
-					})["attachment_id"]
+					gson.fromJson<Map<String, String>>(body)["attachment_id"]
 				}
 			}
 		}

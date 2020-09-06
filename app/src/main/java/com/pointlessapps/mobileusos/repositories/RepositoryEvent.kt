@@ -8,7 +8,7 @@ class RepositoryEvent {
 
 	private val serviceEvent = ServiceUSOSEvent.init()
 
-	fun registerFCMToken(token: String) = ObserverWrapper<Unit> {
+	fun registerFCMToken(token: String) = ObserverWrapper<Any?> {
 		postValue(SourceType.ONLINE) { serviceEvent.registerFCMToken(token) }
 	}
 }

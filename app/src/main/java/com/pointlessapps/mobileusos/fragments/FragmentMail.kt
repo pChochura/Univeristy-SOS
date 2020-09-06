@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
@@ -57,6 +58,7 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 		}
 
 		viewModelUser.getEmailRecipients(email.id).observe(this) { (list) ->
+			Log.d("LOG!", "$list")
 			root().emailRecipient.text =
 				list.joinToString { item -> item.name() }.takeIf(String::isNotBlank)
 					?: getString(R.string.no_recipient)

@@ -1,6 +1,7 @@
 package com.pointlessapps.mobileusos.clients
 
 import com.github.scribejava.core.builder.api.DefaultApi10a
+import com.github.scribejava.core.services.PlaintextSignatureService
 
 class ClientUSOS(private val baseUrl: String, private val mScopes: Array<out String>) : DefaultApi10a() {
 
@@ -22,6 +23,8 @@ class ClientUSOS(private val baseUrl: String, private val mScopes: Array<out Str
 	private fun getRequestTokenUrl(): String {
 		return "${getBaseUrl()}/services/oauth/request_token"
 	}
+
+	override fun getSignatureService() = PlaintextSignatureService()
 
 	companion object {
 		fun withScopes(baseUrl: String, vararg scopes: String): ClientUSOS {

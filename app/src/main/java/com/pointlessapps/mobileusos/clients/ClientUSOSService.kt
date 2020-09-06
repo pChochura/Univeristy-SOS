@@ -318,7 +318,18 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter("subject", subject)
 			.appendQueryParameter("content", content)
-			.appendQueryParameter("attachments_lifetime", "365")
+			.appendQueryParameter("attachments_lifetime", "90")
+			.build().toString()
+	)
+
+	fun updateEmailRequest(id: String, subject: String, content: String) = OAuthRequest(
+		Verb.POST,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/update_message")
+			.buildUpon()
+			.appendQueryParameter("message_id", id)
+			.appendQueryParameter("subject", subject)
+			.appendQueryParameter("content", content)
+			.appendQueryParameter("attachments_lifetime", "90")
 			.build().toString()
 	)
 
@@ -343,15 +354,17 @@ class ClientUSOSService private constructor() : USOSApi() {
 	fun addEmailAttachmentRequest(id: String, data: ByteArray, filename: String) =
 		OAuthRequest(
 			Verb.POST,
-			"${selectedUniversity?.serviceUrl}/mailclient/put_attachment"
+			Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/put_attachment")
+				.buildUpon()
+				.appendQueryParameter("message_id", id)
+				.appendQueryParameter("filename", filename)
+				.build().toString()
 		).apply {
-			multipartPayload = MultipartPayload().apply {
-				addFileBodyPart(data, "data")
-				addBodyParameter("message_id", id)
-				addBodyParameter("filename", filename)
+			val boundary = "---test"
+			addHeader("Content-Type", "multipart/form-data; boundary=$boundary")
+			multipartPayload = MultipartPayload(boundary).apply {
+				addFileBodyPart("application/octet-stream", data, "data", filename)
 			}
-			addHeader("Content-Type", "multipart/form-data; boundary=${multipartPayload.boundary}")
-			// TODO: make this work.
 		}
 
 	fun calendarRequest(faculty: String, startDate: Date, endDate: Date) = OAuthRequest(

@@ -13,7 +13,11 @@ import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_message.*
+import kotlinx.android.synthetic.main.dialog_logout.*
+import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
+import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
+import kotlinx.android.synthetic.main.dialog_message.messageMain
+import kotlinx.android.synthetic.main.dialog_message.messageSecondary
 import kotlinx.android.synthetic.main.fragment_survey.view.*
 
 class FragmentSurvey(private var survey: Survey) : FragmentBase() {
@@ -90,40 +94,53 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 				DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
 					dialog.messageMain.setText(R.string.complete_all_answers)
 					dialog.messageSecondary.setText(R.string.complete_all_answers_description)
-					dialog.buttonSecondary.isGone = true
 
 					dialog.buttonPrimary.setText(android.R.string.ok)
 					dialog.buttonPrimary.setOnClickListener { dialog.dismiss() }
+					dialog.buttonSecondary.setText(R.string.cancel)
+					dialog.buttonSecondary.setOnClickListener {
+						dialog.dismiss()
+						sendSurvey()
+					}
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-				return@setOnClickListener
-			}
-
-			val comment = root().inputComment.text?.toString()
-			viewModelUser.fillOutSurvey(survey.id, answers, comment).onFinished {
-				if (it !== null) {
-					showErrorDialog()
-				} else {
-					showOkDialog()
-				}
+			} else {
+				sendSurvey()
 			}
 		}
 	}
 
-	private fun showOkDialog() {
-		DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
-			dialog.messageMain.setText(R.string.thank_you)
-			dialog.messageSecondary.setText(R.string.thank_you_fill_survey)
-			dialog.buttonSecondary.isGone = true
+	private fun sendSurvey() {
+		DialogUtil.create(object : DialogUtil.StatefulDialog() {
+			override fun toggle() {
+				dialog.progressBar.isVisible = false
+				dialog.messageSecondary.isGone = false
+				dialog.buttonPrimary.isGone = false
+			}
+		}, requireContext(), R.layout.dialog_logout, { dialog ->
+			dialog.setCancelable(false)
 
-			dialog.buttonPrimary.setText(android.R.string.ok)
+			dialog.messageMain.setText(R.string.saving_survey)
+			dialog.progressBar.isGone = false
+			dialog.buttonPrimary.isGone = true
+			dialog.buttonSecondary.isGone = true
+			dialog.messageSecondary.isGone = true
+
 			dialog.buttonPrimary.setOnClickListener {
 				dialog.dismiss()
 				onForceGoBackListener?.invoke()
 			}
-			dialog.setOnCancelListener {
-				dialog.dismiss()
-				onForceGoBackListener?.invoke()
+
+			viewModelUser.fillOutSurvey(
+				survey.id, answers,
+				root().inputComment.text?.toString()
+			).onFinished {
+				if (it !== null) {
+					dialog.messageMain.setText(R.string.oops)
+					dialog.messageSecondary.setText(R.string.something_went_wrong)
+				} else {
+					dialog.messageMain.setText(R.string.thank_you)
+					dialog.messageSecondary.setText(R.string.thank_you_fill_survey)
+				}
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 	}

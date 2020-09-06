@@ -145,8 +145,16 @@
 	<string name="some_comment">Twój ważny komentarz</string>
 	<string name="your_comment">Twój komentarz</string>
 	<string name="complete_all_answers">Uzupełnij wszystkie odpowiedzi</string>
-	<string name="complete_all_answers_description">Musisz odpowiedzieć na wszystkie pytania, aby kontynuować</string>
+	<string name="complete_all_answers_description">Zachęcamy do uzupełnienia wszystkich odpowiedzi. Wciśnij OK, żeby kontynuować mimo to</string>
 	<string name="thank_you">Dziękujemy</string>
 	<string name="thank_you_fill_survey">Dziękujęmy za wypełnienie ankiety</string>
 	<string name="something_went_wrong">Coś poszło nie tak. Spróbuj ponownie później. To mogło być spowodowane Twoim połączeniem internetowym</string>
+	<string name="too_large_file">Ten plik jest zbyt duży. Spróbuj ponownie z innym plikiem</string>
+	<string name="edit_the_attachment">Edytuj załącznik</string>
+	<string name="attachment_name">Nazwa załącznika</string>
+	<string name="save">Zapisz</string>
+	<string name="remove">Usuń</string>
+	<string name="no_recipient">(brak odbiorcy)</string>
+	<string name="no_subject">(brak tytułu)</string>
+	<string name="saving_survey">Zapisywanie ankiety</string>
 </resources>

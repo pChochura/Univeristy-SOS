@@ -23,12 +23,15 @@ import com.pointlessapps.mobileusos.utils.Utils.withoutExtension
 import com.pointlessapps.mobileusos.utils.addChip
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_attachment.*
-import kotlinx.android.synthetic.main.dialog_message.*
+import kotlinx.android.synthetic.main.dialog_logout.*
 import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
 import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
 import kotlinx.android.synthetic.main.dialog_message.messageMain
+import kotlinx.android.synthetic.main.dialog_message.messageSecondary
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
+import org.jetbrains.anko.doAsync
 import java.io.File
+import java.util.concurrent.CountDownLatch
 
 class FragmentComposeMail(
 	private val email: Email? = null,
@@ -46,11 +49,11 @@ class FragmentComposeMail(
 	override fun getLayoutId() = R.layout.fragment_compose_mail
 
 	override fun created() {
-		prepareData()
 		prepareClickListeners()
 		prepareRecipientsList()
 		prepareRecipientsEditorListener()
 		prepareAttachmentsList()
+		prepareData()
 
 		onBackPressedListener = {
 			DialogUtil.create(
@@ -64,12 +67,11 @@ class FragmentComposeMail(
 
 					dialog.buttonPrimary.setOnClickListener {
 						dialog.dismiss()
-						forceGoBack()
+						onForceGoBackListener?.invoke()
 					}
 					dialog.buttonSecondary.setOnClickListener {
 						dialog.dismiss()
 						saveDraft()
-						forceGoBack()
 					}
 				},
 				DialogUtil.UNDEFINED_WINDOW_SIZE,
@@ -205,8 +207,9 @@ class FragmentComposeMail(
 			root().inputSubject.setText(it.subject ?: "")
 			root().inputContent.setText(it.content ?: "")
 
-			attachments.addAll(it.attachments ?: listOf())
-			(root().listAttachments.adapter as? AdapterAttachment)?.update(attachments)
+			(root().listAttachments.adapter as? AdapterAttachment)?.update(
+				(it.attachments ?: listOf())
+			)
 
 			viewModelUser.getEmailRecipients(it.id).observe(this) { (recipients) ->
 				this.recipients.apply {
@@ -224,38 +227,89 @@ class FragmentComposeMail(
 
 	private fun saveDraft() {
 		ensureEmailExists { id ->
-			val parts = recipients.partition { it.user !== null }
-			viewModelUser.updateEmailRecipients(
-				id,
-				parts.first.map { it.user!!.id },
-				parts.second.map { it.email!! }
-			).onFinished {
-				if (it != null) {
-					showErrorDialog {
-						dismiss()
-						onForceGoBackListener?.invoke()
+			saveEmail {
+				val loaded =
+					CountDownLatch(2 + attachments.filter(Email.Attachment::newlyAdded).size)
+
+				val parts = recipients.partition { it.user !== null }
+				viewModelUser.updateEmailRecipients(
+					id,
+					parts.first.map { it.user!!.id },
+					parts.second.map { it.email!! }
+				).onFinished {
+					if (it != null) {
+						showErrorDialog {
+							dismiss()
+							onForceGoBackListener?.invoke()
+						}
+					} else {
+						loaded.countDown()
 					}
 				}
-			}
 
-			attachments.forEach { attachment ->
-				attachment.data?.also {
-					getFileData(
-						it,
-						File.createTempFile("attachment_", attachment.id)
-					).also { file ->
-						viewModelUser.addEmailAttachment(
-							id,
-							file.readBytes(),
-							attachment.filename!!
-						)
-							.observe(this) { (id) ->
-								attachment.id = id ?: return@observe
-							}
+				viewModelUser.updateEmail(
+					id,
+					root().inputSubject.text.toString(),
+					root().inputContent.text.toString()
+				).onFinished {
+					if (it != null) {
+						showErrorDialog {
+							dismiss()
+							onForceGoBackListener?.invoke()
+						}
+					} else {
+						loaded.countDown()
 					}
+				}
+
+				attachments.filter(Email.Attachment::newlyAdded).forEach { attachment ->
+					attachment.data?.also {
+						getFileData(
+							it,
+							File.createTempFile("attachment_", attachment.id)
+						).also { file ->
+							viewModelUser.addEmailAttachment(
+								id,
+								file.readBytes(),
+								attachment.filename!!
+							).onOnceCallback { (id) ->
+								attachment.id = id ?: return@onOnceCallback
+							}.onFinished { error ->
+								if (error != null) {
+									showErrorDialog {
+										dismiss()
+										onForceGoBackListener?.invoke()
+									}
+								} else {
+									loaded.countDown()
+								}
+							}
+						}
+					}
+				}
+
+				doAsync {
+					loaded.await()
+					dismiss()
+					onForceRefreshAllFragments?.invoke()
+					onForceGoBackListener?.invoke()
 				}
 			}
 		}
+	}
+
+	private fun saveEmail(callback: Dialog.() -> Unit) {
+		DialogUtil.create(requireContext(), R.layout.dialog_logout, { dialog ->
+			dialog.setCancelable(false)
+
+			dialog.messageMain.setText(R.string.saving_email)
+			dialog.progressBar.isGone = false
+			dialog.buttonPrimary.isGone = true
+			dialog.buttonSecondary.isGone = true
+			dialog.messageSecondary.isGone = true
+
+			callback(dialog)
+		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 	}
 
 	private fun ensureEmailExists(callback: (String) -> Unit) {
@@ -297,6 +351,7 @@ class FragmentComposeMail(
 							url = "",
 							size = it.second?.toLong(),
 							data = data.data,
+							newlyAdded = true
 						)
 					)
 				}

@@ -22,7 +22,6 @@ interface FragmentBaseInterface {
 
 	fun root(): ViewGroup? = null
 
-	fun forceGoBack() = Unit
 	fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = Unit
 
 	var forceRefresh: Boolean

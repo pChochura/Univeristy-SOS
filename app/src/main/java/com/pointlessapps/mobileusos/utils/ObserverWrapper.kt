@@ -16,6 +16,7 @@ class ObserverWrapper<T>(
 	private var onOnceCallback: ((Pair<T, SourceType>) -> Unit)? = null
 	private var onFinishedCallback: ((Throwable?) -> Unit)? = null
 	private var finished = false
+	private var observerSet = false
 
 	init {
 		block?.invoke(this)
@@ -25,13 +26,18 @@ class ObserverWrapper<T>(
 		onFinishedCallback = callback
 	}
 
-	fun observe(owner: LifecycleOwner, observer: (Pair<T, SourceType>) -> Unit) =
-		liveData.observe(owner) {
+	fun observe(
+		owner: LifecycleOwner,
+		observer: (Pair<T, SourceType>) -> Unit
+	): ObserverWrapper<T> {
+		observerSet = true
+		return liveData.observe(owner) {
 			observer(it)
 			if (it.second === SourceType.ONLINE || finished) {
 				finished()
 			}
 		}.run { this@ObserverWrapper }
+	}
 
 	fun onOnceCallback(callback: (Pair<T, SourceType>) -> Unit): ObserverWrapper<T> {
 		this.onOnceCallback = {
@@ -51,10 +57,10 @@ class ObserverWrapper<T>(
 				finished(it)
 				return@launch
 			} to sourceType).also {
-				if (onOnceCallback !== null) {
-					onOnceCallback?.invoke(it)
-				} else {
-					liveData.postValue(it)
+				when {
+					onOnceCallback !== null -> onOnceCallback?.invoke(it)
+					observerSet -> liveData.postValue(it)
+					else -> onFinishedCallback?.invoke(null)
 				}
 			}
 		}

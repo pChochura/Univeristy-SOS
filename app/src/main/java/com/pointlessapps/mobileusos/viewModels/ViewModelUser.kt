@@ -54,6 +54,9 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	fun createEmail(subject: String, content: String) =
 		repositoryEmail.create(subject, content)
 
+	fun updateEmail(id: String, subject: String, content: String) =
+		repositoryEmail.update(id, subject, content)
+
 	fun updateEmailRecipients(id: String, userIds: List<String>, emails: List<String>) =
 		repositoryEmail.updateRecipients(id, userIds, emails)
 

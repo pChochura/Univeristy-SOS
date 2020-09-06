@@ -33,8 +33,6 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 		forceRefresh = force
 	}
 
-	override fun forceGoBack(): Unit = onForceGoBackListener?.invoke() ?: Unit
-
 	abstract override fun created()
 
 	override fun onCreateView(

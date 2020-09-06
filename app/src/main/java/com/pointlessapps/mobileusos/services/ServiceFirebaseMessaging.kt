@@ -24,10 +24,9 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 
 		// TODO: remove it after testing
 		message.data.takeIf(Map<String, String>::isNotEmpty)?.also {
-			prefs.put(
-				"notificationSize_${prefs.getInt("notificationSize", -1) + 1}",
-				Gson().toJson(it)
-			)
+			val size = prefs.getInt("notificationSize", 0)
+			prefs.put("notificationSize", size + 1)
+			prefs.put("notification_$size", Gson().toJson(it))
 		}
 
 		if (!prefs.getNotificationsEnabled()) {
