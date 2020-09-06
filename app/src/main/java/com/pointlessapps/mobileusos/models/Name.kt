@@ -16,4 +16,6 @@ class Name(
 		if (Locale.getDefault() == Locale.forLanguageTag("pl") || en.isNullOrBlank()) pl!! else en!!
 
 	override fun compareTo(other: Name) = compareValuesBy(this, other, { it.toString() })
+
+	fun isEmpty() = pl.isNullOrBlank() && en.isNullOrBlank()
 }

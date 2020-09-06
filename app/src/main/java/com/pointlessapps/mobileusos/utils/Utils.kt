@@ -11,7 +11,6 @@ import android.provider.CalendarContract
 import android.text.Html
 import android.text.Spanned
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.core.content.res.use
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.CourseEvent
@@ -21,10 +20,10 @@ import java.util.*
 object Utils {
 
 	fun monthKey(month: Int, year: Int) =
-		"%20d.%d".format(month, year)
+		"%02d.%d".format(month, year)
 
 	fun dayKey(day: Int, month: Int, year: Int) =
-		"%20d.%20d.%d".format(day, month, year)
+		"%02d.%02d.%d".format(day, month, year)
 
 	fun getScreenSize() =
 		Point(
@@ -116,7 +115,6 @@ object Utils {
 				.replace(Regex(" {2,}"), "")
 		}
 
-	@ColorInt
 	fun Context.themeColor(@AttrRes themeAttrId: Int) = obtainStyledAttributes(
 		intArrayOf(themeAttrId)
 	).use {

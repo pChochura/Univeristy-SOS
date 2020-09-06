@@ -8,8 +8,6 @@ import org.jetbrains.anko.find
 
 class AdapterEmploymentFunction : AdapterSimple<User.EmploymentFunction>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textFunction: AppCompatTextView
 	private lateinit var textFaculty: AppCompatTextView
 
@@ -29,13 +27,5 @@ class AdapterEmploymentFunction : AdapterSimple<User.EmploymentFunction>(mutable
 	override fun onBind(root: View, position: Int) {
 		textFunction.text = list[position].function?.toString()
 		textFaculty.text = list[position].faculty.name?.toString()
-	}
-
-	override fun update(list: List<User.EmploymentFunction>) {
-		wholeList.apply {
-			clear()
-			addAll(list)
-		}
-		super.update(list)
 	}
 }

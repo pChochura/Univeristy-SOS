@@ -32,7 +32,7 @@
 		android:fontFamily="@font/montserrat"
 		android:minWidth="0dp"
 		android:text="@string/empty"
-		android:textColor="?white"
+		android:textColor="@color/white"
 		android:textSize="14sp" />
 
 	<View

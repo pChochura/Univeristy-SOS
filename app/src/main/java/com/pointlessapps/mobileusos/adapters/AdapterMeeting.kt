@@ -17,7 +17,6 @@ class AdapterMeeting(
 	AdapterSimple<CourseEvent>(mutableListOf()) {
 
 	private val dateFormat = SimpleDateFormat("EEE, dd MMMM yyyy", Locale.getDefault())
-	private val wholeList = mutableListOf(*list.toTypedArray())
 
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textDate: AppCompatTextView
@@ -76,12 +75,5 @@ class AdapterMeeting(
 		}
 	}
 
-	override fun update(list: List<CourseEvent>) {
-		val sortedList = list.sorted()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
-		}
-		super.update(sortedList)
-	}
+	override fun update(list: List<CourseEvent>) = super.update(list.sorted())
 }

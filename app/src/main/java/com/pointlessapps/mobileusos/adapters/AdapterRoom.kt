@@ -9,8 +9,6 @@ import org.jetbrains.anko.find
 
 class AdapterRoom : AdapterSimple<BuildingRoom>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textCapacity: Chip
 
@@ -34,14 +32,5 @@ class AdapterRoom : AdapterSimple<BuildingRoom>(mutableListOf()) {
 
 		textName.text = list[position].number
 		textCapacity.text = list[position].capacity.toString()
-	}
-
-	override fun update(list: List<BuildingRoom>) {
-		val sortedList = list.sorted()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
-		}
-		super.update(sortedList)
 	}
 }

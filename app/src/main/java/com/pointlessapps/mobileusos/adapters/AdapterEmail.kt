@@ -12,7 +12,6 @@ import java.util.*
 class AdapterEmail : AdapterSimple<Email>(mutableListOf()) {
 
 	private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-	private val wholeList = mutableListOf(*list.toTypedArray())
 
 	private lateinit var textSubject: AppCompatTextView
 	private lateinit var textStatus: AppCompatTextView
@@ -36,17 +35,11 @@ class AdapterEmail : AdapterSimple<Email>(mutableListOf()) {
 			onClickListener?.invoke(list[position])
 		}
 
-		textSubject.text = list[position].subject
+		textSubject.text = list[position].subject?.takeIf(String::isNotBlank)
+			?: root.context.getString(R.string.no_subject)
 		textDate.text = dateFormat.format(list[position].date ?: return)
 		textStatus.text = list[position].status?.capitalize()
 	}
 
-	override fun update(list: List<Email>) {
-		val sortedList = list.sortedDescending()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
-		}
-		super.update(sortedList)
-	}
+	override fun update(list: List<Email>) = super.update(list.sortedDescending())
 }

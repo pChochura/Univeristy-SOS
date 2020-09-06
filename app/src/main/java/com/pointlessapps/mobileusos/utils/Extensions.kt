@@ -27,7 +27,7 @@ fun WeekView.WeekViewEvent.getMonthKey() =
 	Utils.monthKey(startTime.get(Calendar.MONTH), startTime.get(Calendar.YEAR))
 
 fun Calendar.getDayKey() =
-	Utils.dayKey(get(Calendar.DAY_OF_YEAR), get(Calendar.MONTH), get(Calendar.YEAR))
+	Utils.dayKey(get(Calendar.DAY_OF_MONTH), get(Calendar.MONTH), get(Calendar.YEAR))
 
 fun Calendar.forEachDays(days: Int, function: (Calendar) -> Unit) = repeat(days) {
 	add(Calendar.DAY_OF_YEAR, 1)

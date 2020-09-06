@@ -11,6 +11,10 @@ import org.jetbrains.anko.find
 
 class AdapterEvent : AdapterSimple<CalendarEvent>(mutableListOf()) {
 
+	init {
+		setHasStableIds(true)
+	}
+
 	override fun getLayoutId(viewType: Int) = R.layout.list_item_calendar_event
 
 	override fun onBind(root: View, position: Int) {

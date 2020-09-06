@@ -162,4 +162,6 @@
 	<string name="attachment_name">Attachment name</string>
 	<string name="save">Save</string>
 	<string name="remove">Remove</string>
+	<string name="no_recipient">(no recipient)</string>
+	<string name="no_subject">(no subject)</string>
 </resources>

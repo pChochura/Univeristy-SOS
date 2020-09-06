@@ -57,7 +57,9 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 		}
 
 		viewModelUser.getEmailRecipients(email.id).observe(this) { (list) ->
-			root().emailRecipient.text = list.joinToString { item -> item.name() }
+			root().emailRecipient.text =
+				list.joinToString { item -> item.name() }.takeIf(String::isNotBlank)
+					?: getString(R.string.no_recipient)
 			root().emailDate.text = dateFormat.format(email.date ?: Date())
 
 			if (list.size == 1) {

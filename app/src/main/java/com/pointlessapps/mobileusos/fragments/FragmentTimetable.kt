@@ -1,12 +1,15 @@
 package com.pointlessapps.mobileusos.fragments
 
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.models.Building
+import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.utils.DialogUtil
+import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.pointlessapps.mobileusos.views.WeekView
@@ -54,7 +57,7 @@ class FragmentTimetable : FragmentBase() {
 		}
 		root().weekView.setScrollListener { newFirstVisibleDay, _ ->
 			root().horizontalProgressBar.isRefreshing = true
-			viewModelTimetable.prepareForDate(newFirstVisibleDay) {
+			viewModelTimetable.prepareForDate(newFirstVisibleDay.clone() as Calendar) {
 				root().weekView.refreshDataset()
 				root().horizontalProgressBar.isRefreshing = false
 			}
@@ -84,11 +87,18 @@ class FragmentTimetable : FragmentBase() {
 			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
 			dialog.eventEndTime.text = hourFormat.format(event.endTime?.time ?: return@create)
 			dialog.eventType.text = event.classtypeName.toString()
-			dialog.buttonRoom.text = event.roomNumber
-			dialog.buttonBuilding.text = event.buildingName.toString()
+			event.roomNumber?.takeIf(String::isNotBlank)?.also {
+				dialog.buttonRoom.text = it
+				dialog.buttonRoom.isVisible = true
+			}
+			event.buildingName?.takeUnless(Name::isEmpty)?.also {
+				dialog.buttonBuilding.text = it.toString()
+				dialog.buttonBuilding.isVisible = true
+			}
 			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
 				.observe(this) { (user, _) ->
-					dialog.buttonLecturer.text = user?.name()
+					user?.name()?.takeIf(String::isNotBlank)
+						?.also { dialog.buttonLecturer.text = it }
 				}
 
 			dialog.buttonLecturer.setOnClickListener {
@@ -117,6 +127,10 @@ class FragmentTimetable : FragmentBase() {
 				)
 
 				dialog.dismiss()
+			}
+
+			dialog.buttonAddToCalendar.setOnClickListener {
+				Utils.calendarIntent(requireContext(), event)
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
 	}

@@ -113,6 +113,7 @@
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
 		android:textColor="?colorTextPrimary"
+		android:visibility="gone"
 		app:backgroundTint="?white"
 		app:icon="@drawable/ic_room"
 		app:iconTint="?colorTextPrimary"
@@ -132,8 +133,28 @@
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
 		android:textColor="?colorTextPrimary"
+		android:visibility="gone"
 		app:backgroundTint="?white"
 		app:icon="@drawable/ic_building"
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonAddToCalendar"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/add_to_calendar"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
+		app:icon="@drawable/ic_calendar_add"
 		app:iconTint="?colorTextPrimary"
 		app:rippleColor="?colorTextSecondary" />
 

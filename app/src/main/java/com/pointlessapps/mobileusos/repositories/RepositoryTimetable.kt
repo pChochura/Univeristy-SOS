@@ -22,7 +22,7 @@ class RepositoryTimetable(application: Application) {
 		}
 	}
 
-	fun getForDays(startTime: Calendar, numberOfDays: Int) = ObserverWrapper<List<CourseEvent>> {
+	fun getForDays(startTime: Calendar, numberOfDays: Int) = ObserverWrapper<List<CourseEvent?>> {
 		startTime.apply {
 			set(Calendar.SECOND, 0)
 			set(Calendar.MINUTE, 0)

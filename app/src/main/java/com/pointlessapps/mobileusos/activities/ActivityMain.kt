@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.activities
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -12,6 +13,9 @@ import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
 import com.pointlessapps.mobileusos.managers.FragmentManager
+import com.pointlessapps.mobileusos.utils.Utils.themeColor
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.contentView
 
 class ActivityMain : FragmentActivity() {
 
@@ -24,6 +28,8 @@ class ActivityMain : FragmentActivity() {
 		}
 
 		setContentView(R.layout.activity_main)
+		bg.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
+		contentView?.rootView?.setBackgroundColor(themeColor(R.attr.colorBackground))
 
 		fragmentManager = FragmentManager.of(
 			this,

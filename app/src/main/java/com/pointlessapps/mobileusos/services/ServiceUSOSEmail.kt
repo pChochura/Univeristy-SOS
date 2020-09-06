@@ -25,7 +25,7 @@ class ServiceUSOSEmail private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(emailRequest(emailId))?.run {
-					gson.fromJson<Email>(body.also { Log.d("LOG!", "$it") })
+					gson.fromJson<Email>(body)
 				}
 			}
 		}

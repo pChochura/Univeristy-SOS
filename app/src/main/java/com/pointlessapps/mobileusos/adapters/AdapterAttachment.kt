@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import com.pointlessapps.mobileusos.R
@@ -49,7 +48,6 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 			}
 		}
 		if (position < list.size) {
-			Log.d("LOG!", "${list[position].filename}")
 			root.find<AppCompatTextView>(R.id.attachmentName).text =
 				list[position].filename
 			root.find<AppCompatTextView>(R.id.attachmentSize).text =

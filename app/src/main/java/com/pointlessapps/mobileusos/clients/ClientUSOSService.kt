@@ -350,6 +350,8 @@ class ClientUSOSService private constructor() : USOSApi() {
 				addBodyParameter("message_id", id)
 				addBodyParameter("filename", filename)
 			}
+			addHeader("Content-Type", "multipart/form-data; boundary=${multipartPayload.boundary}")
+			// TODO: make this work.
 		}
 
 	fun calendarRequest(faculty: String, startDate: Date, endDate: Date) = OAuthRequest(

@@ -9,8 +9,6 @@ import org.jetbrains.anko.find
 
 class AdapterPhoneNumber : AdapterSimple<Building.PhoneNumber>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textComment: AppCompatTextView
 
@@ -38,13 +36,5 @@ class AdapterPhoneNumber : AdapterSimple<Building.PhoneNumber>(mutableListOf()) 
 			textComment.text = it.toString()
 			textComment.isVisible = true
 		}
-	}
-
-	override fun update(list: List<Building.PhoneNumber>) {
-		wholeList.apply {
-			clear()
-			addAll(list)
-		}
-		super.update(list)
 	}
 }

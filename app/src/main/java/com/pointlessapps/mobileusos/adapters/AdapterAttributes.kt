@@ -12,8 +12,6 @@ import org.jetbrains.anko.find
 
 class AdapterAttributes : AdapterSimple<BuildingRoom.Attribute>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textValue: Chip
 
@@ -38,13 +36,5 @@ class AdapterAttributes : AdapterSimple<BuildingRoom.Attribute>(mutableListOf())
 		textName.text = list[position].description.toString()
 		textValue.text =
 			list[position].count?.toString() ?: root.context.getString(R.string.available)
-	}
-
-	override fun update(list: List<BuildingRoom.Attribute>) {
-		wholeList.apply {
-			clear()
-			addAll(list)
-		}
-		super.update(list)
 	}
 }

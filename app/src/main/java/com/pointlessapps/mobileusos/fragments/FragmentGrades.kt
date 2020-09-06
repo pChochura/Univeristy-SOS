@@ -144,7 +144,8 @@ class FragmentGrades : FragmentBase() {
 										override fun getBarLabel(barEntry: BarEntry) =
 											"%.0f%%".format(barEntry.y)
 									}
-									color = ContextCompat.getColor(context, R.color.colorAccent)
+									color =
+										ContextCompat.getColor(context, R.color.colorTextPrimary)
 									valueTextColor = context.themeColor(R.attr.colorTextPrimary)
 								}).apply {
 									barWidth = 1.5f
@@ -155,7 +156,15 @@ class FragmentGrades : FragmentBase() {
 										animator,
 										viewPortHandler,
 										2.dp.toFloat()
-									)
+									).apply {
+										highlightedColor =
+											ContextCompat.getColor(context, R.color.colorAccent)
+										highlightedIndex = grade.valueSymbol?.run {
+											(replace(Regex("(\\d),(\\d).*")) {
+												"${it.groups[1]?.value}.${it.groups[2]?.value}"
+											}.toFloat() * 2 - 4).toInt() - 1
+										}
+									}
 								setVisibleXRange(2f, 7f)
 								invalidate()
 							}

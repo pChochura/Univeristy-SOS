@@ -43,7 +43,7 @@
 		android:backgroundTint="@color/colorAccent"
 		android:clickable="false"
 		android:fontFamily="@font/montserrat"
-		android:textColor="?white"
+		android:textColor="@color/white"
 		android:textSize="14sp"
 		app:chipMinTouchTargetSize="32dp"
 		app:layout_constraintRight_toRightOf="parent"

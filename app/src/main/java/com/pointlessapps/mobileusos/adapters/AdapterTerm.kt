@@ -10,8 +10,6 @@ import java.util.*
 
 class AdapterTerm : AdapterSimple<Term>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textId: AppCompatTextView
 	private lateinit var textFinishDate: AppCompatTextView
@@ -40,14 +38,5 @@ class AdapterTerm : AdapterSimple<Term>(mutableListOf()) {
 		textFinishDate.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
 			list[position].endDate ?: return
 		)
-	}
-
-	override fun update(list: List<Term>) {
-		val sortedList = list.sorted()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
-		}
-		super.update(sortedList)
 	}
 }

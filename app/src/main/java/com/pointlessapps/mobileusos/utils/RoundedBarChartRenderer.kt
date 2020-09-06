@@ -15,6 +15,9 @@ class RoundedBarChartRenderer(
 	private val cornerDimens: Float
 ) : BarChartRenderer(chart, animator, vpHandler) {
 
+	var highlightedColor: Int? = null
+	var highlightedIndex: Int? = null
+
 	init {
 		initBuffers()
 	}
@@ -56,8 +59,13 @@ class RoundedBarChartRenderer(
 			if (!mViewPortHandler.isInBoundsRight(buffer.buffer[j]))
 				break
 
+			mRenderPaint.color = dataSet.color
 			if (!isSingleColor) {
 				mRenderPaint.color = dataSet.getColor(j / 4)
+			}
+
+			if (highlightedIndex == j / 4 && highlightedColor != null) {
+				mRenderPaint.color = highlightedColor!!
 			}
 
 			val left = buffer.buffer[j] + (buffer.buffer[j + 2] - buffer.buffer[j]) * 0.3f

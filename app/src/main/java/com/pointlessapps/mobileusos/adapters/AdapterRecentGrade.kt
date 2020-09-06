@@ -12,8 +12,6 @@ import org.jetbrains.anko.find
 
 class AdapterRecentGrade : AdapterSimple<Grade>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var textValue: Chip
 
@@ -40,13 +38,5 @@ class AdapterRecentGrade : AdapterSimple<Grade>(mutableListOf()) {
 
 		textName.text = list[position].courseName?.toString()
 		textValue.text = list[position].valueSymbol
-	}
-
-	override fun update(list: List<Grade>) {
-		wholeList.apply {
-			clear()
-			addAll(list)
-		}
-		super.update(list)
 	}
 }

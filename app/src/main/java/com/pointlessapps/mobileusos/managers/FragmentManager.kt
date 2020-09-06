@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.managers
 import android.content.Intent
 import android.view.Menu
 import androidx.annotation.IdRes
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,6 +11,7 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.exceptions.ExceptionFragmentContainerEmpty
 import com.pointlessapps.mobileusos.fragments.FragmentBase
 import com.pointlessapps.mobileusos.fragments.FragmentBaseInterface
+import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.contentView
 
@@ -61,6 +63,12 @@ class FragmentManager private constructor(
 				true
 			}
 		}
+
+		TedKeyboardObserver(activity)
+			.listen { isShow ->
+				fragments.forEach { it.onKeyboardStateChangedListener?.invoke(isShow) }
+				bottomNavigation?.isGone = isShow
+			}
 	}
 
 	private fun prepareFragment(fragment: FragmentBaseInterface) {

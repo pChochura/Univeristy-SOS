@@ -11,8 +11,6 @@ import org.jetbrains.anko.find
 
 class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 
-	private val wholeList = mutableListOf(*list.toTypedArray())
-
 	private lateinit var textName: AppCompatTextView
 	private lateinit var imageProfile: CircleImageView
 
@@ -46,12 +44,5 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 		}
 	}
 
-	override fun update(list: List<User>) {
-		val sortedList = list.sorted()
-		wholeList.apply {
-			clear()
-			addAll(sortedList)
-		}
-		super.update(sortedList)
-	}
+	override fun update(list: List<User>) = super.update(list.sorted())
 }

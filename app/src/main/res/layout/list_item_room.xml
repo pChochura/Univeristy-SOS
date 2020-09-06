@@ -58,7 +58,7 @@
 			android:focusable="false"
 			android:fontFamily="@font/montserrat"
 			android:stateListAnimator="@null"
-			android:textColor="?white"
+			android:textColor="@color/white"
 			android:textSize="14sp"
 			app:chipMinTouchTargetSize="32dp"
 			app:layout_constraintBottom_toBottomOf="parent"

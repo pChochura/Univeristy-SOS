@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivitySplash
 import com.pointlessapps.mobileusos.helpers.*
@@ -20,6 +21,15 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 	override fun onMessageReceived(message: RemoteMessage) {
 		Preferences.init(applicationContext)
 		val prefs = Preferences.get()
+
+		// TODO: remove it after testing
+		message.data.takeIf(Map<String, String>::isNotEmpty)?.also {
+			prefs.put(
+				"notificationSize_${prefs.getInt("notificationSize", -1) + 1}",
+				Gson().toJson(it)
+			)
+		}
+
 		if (!prefs.getNotificationsEnabled()) {
 			return
 		}

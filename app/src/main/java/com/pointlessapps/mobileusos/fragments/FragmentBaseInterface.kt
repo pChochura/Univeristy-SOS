@@ -33,4 +33,5 @@ interface FragmentBaseInterface {
 	var onForceRefreshAllFragments: (() -> Unit)?
 	var onBackPressedListener: (() -> Boolean)?
 	var onForceGoBackListener: (() -> Unit)?
+	var onKeyboardStateChangedListener: ((Boolean) -> Unit)?
 }

@@ -106,7 +106,7 @@ class FragmentProfile : FragmentBase() {
 		}
 
 		viewModelTimetable.getIncoming().observe(this) { (events) ->
-			(root().listMeetings.adapter as? AdapterMeeting)?.update(events)
+			(root().listMeetings.adapter as? AdapterMeeting)?.update(events.filterNotNull())
 
 			root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 		}.onFinished { loaded.countDown() }

@@ -206,6 +206,7 @@ class FragmentComposeMail(
 			root().inputContent.setText(it.content ?: "")
 
 			attachments.addAll(it.attachments ?: listOf())
+			(root().listAttachments.adapter as? AdapterAttachment)?.update(attachments)
 
 			viewModelUser.getEmailRecipients(it.id).observe(this) { (recipients) ->
 				this.recipients.apply {
@@ -239,8 +240,15 @@ class FragmentComposeMail(
 
 			attachments.forEach { attachment ->
 				attachment.data?.also {
-					getFileData(it)?.also { file ->
-						viewModelUser.addEmailAttachment(id, file, attachment.filename!!)
+					getFileData(
+						it,
+						File.createTempFile("attachment_", attachment.id)
+					).also { file ->
+						viewModelUser.addEmailAttachment(
+							id,
+							file.readBytes(),
+							attachment.filename!!
+						)
 							.observe(this) { (id) ->
 								attachment.id = id ?: return@observe
 							}
@@ -307,9 +315,14 @@ class FragmentComposeMail(
 			return@run filename to size
 		}
 
-	private fun getFileData(uri: Uri): ByteArray? {
-		return File(uri.path ?: return null).readBytes()
-	}
+	private fun getFileData(uri: Uri, file: File) =
+		file.apply {
+			requireActivity().contentResolver.openInputStream(uri)?.also {
+				file.outputStream().use { fileOut ->
+					it.copyTo(fileOut)
+				}
+			}
+		}
 
 	private inline fun showErrorDialog(
 		message: Int = R.string.something_went_wrong,

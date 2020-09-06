@@ -2,8 +2,6 @@ package com.pointlessapps.mobileusos.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getTimetableVisibleDays
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
 import com.pointlessapps.mobileusos.utils.Utils
@@ -16,7 +14,6 @@ import kotlin.collections.set
 
 class ViewModelTimetable(application: Application) : AndroidViewModel(application) {
 
-	private val prefs by lazy { Preferences.get() }
 	private val repositoryTimetable = RepositoryTimetable(application)
 
 	private val weekViewEvents = mutableMapOf<String, MutableSet<WeekView.WeekViewEvent>>()
@@ -26,28 +23,36 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	fun clearCache() = cache.clear()
 
 	fun prepareForDate(date: Calendar, callback: (() -> Unit)? = null) {
-		val days = prefs.getTimetableVisibleDays()
+		val days = 7 // Always download for the next 7 days
+		var downloading = false
 		date.add(Calendar.DAY_OF_YEAR, -days / 2)
-		(date.clone() as Calendar).forEachDays(days + days / 2) { day ->
+		(date.clone() as Calendar).forEachDays(days) { day ->
 			if (!cache.contains(day.getDayKey())) {
-				(day.clone() as Calendar).forEachDays(7) { day2 ->
+				downloading = true
+				(day.clone() as Calendar).forEachDays(days) { day2 ->
 					cache.add(day2.getDayKey())
 				}
 
-				repositoryTimetable.getForDays(date, 7).onOnceCallback { value ->
-					courseEvents.addAll(value.first)
-					value.first.map(CourseEvent::toWeekViewEvent)
-						.groupBy(WeekView.WeekViewEvent::getMonthKey).forEach {
-							if (weekViewEvents.containsKey(it.key)) {
-								weekViewEvents[it.key]?.addAll(it.value)
-							} else {
-								weekViewEvents[it.key] = it.value.toMutableSet()
+				repositoryTimetable.getForDays(date, days).onOnceCallback { value ->
+					value.first.filterNotNull().also { list ->
+						courseEvents.addAll(list)
+						list.map(CourseEvent::toWeekViewEvent)
+							.groupBy(WeekView.WeekViewEvent::getMonthKey).forEach {
+								if (weekViewEvents.containsKey(it.key)) {
+									weekViewEvents[it.key]?.addAll(it.value)
+								} else {
+									weekViewEvents[it.key] = it.value.toMutableSet()
+								}
 							}
-						}
+					}
 				}.onFinished { callback?.invoke() }
 
 				return@forEachDays
 			}
+		}
+
+		if (!downloading) {
+			callback?.invoke()
 		}
 	}
 

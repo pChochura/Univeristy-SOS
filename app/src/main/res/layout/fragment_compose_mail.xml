@@ -171,6 +171,6 @@
 		app:borderWidth="0dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
-		app:tint="?white" />
+		app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

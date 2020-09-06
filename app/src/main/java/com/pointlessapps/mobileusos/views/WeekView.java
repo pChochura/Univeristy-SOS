@@ -33,6 +33,8 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import com.pointlessapps.mobileusos.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -514,10 +516,8 @@ public class WeekView extends View {
 		invalidate();
 	}
 
-	public void scrollToDate(Calendar date) {
-		Calendar temp = (Calendar) firstVisibleDay.clone();
-		temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
-		long dayDiff = TimeUnit.MILLISECONDS.toDays(temp.getTimeInMillis() - date.getTimeInMillis());
+	public void scrollToDate(@NotNull Calendar date) {
+		long dayDiff = Math.round((firstVisibleDay.getTimeInMillis() - date.getTimeInMillis()) / (float) TimeUnit.DAYS.toMillis(1));
 		scroller.startScroll((int) offsetX, (int) offsetY, (int) (dayDiff * dayWidth), 0, scrollDuration);
 		invalidate();
 	}
@@ -836,15 +836,13 @@ public class WeekView extends View {
 			return;
 		}
 
-		Calendar temp = (Calendar) firstVisibleDay.clone();
-		temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
-		if (WeekViewUtil.isSameDay(temp, today)) {
+		if (WeekViewUtil.isSameDay(firstVisibleDay, today)) {
 			return;
 		}
 
 		float x = headerWidth + goToTodayRadius * 2f;
 		float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
-		float flipped = temp.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
+		float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
 
 		if (flipped == -1) {
 			x = getRight() - goToTodayRadius * 2f;
@@ -910,12 +908,10 @@ public class WeekView extends View {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// If the tap was on go to today button scroll there
 			if (goToTodayVisible) {
-				Calendar temp = (Calendar) firstVisibleDay.clone();
-				temp.add(Calendar.DAY_OF_MONTH, (int) Math.floor(numberOfVisibleDays / 2f));
-				if (!WeekViewUtil.isSameDay(temp, today)) {
+				if (!WeekViewUtil.isSameDay(firstVisibleDay, today)) {
 					float x = headerWidth + goToTodayRadius * 2f;
 					float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
-					float flipped = temp.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
+					float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
 					float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius;
 					float maxX = minX + goToTodayRadius * 2f;
 					float minY = y - goToTodayRadius;
