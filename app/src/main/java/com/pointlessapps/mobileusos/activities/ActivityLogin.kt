@@ -29,6 +29,7 @@ class ActivityLogin : ComponentActivity() {
 
 		if (HelperClientUSOS.isLoggedIn()) {
 			startActivity(Intent(this, ActivityMain::class.java))
+			overridePendingTransition(0, 0)
 			finish()
 		}
 

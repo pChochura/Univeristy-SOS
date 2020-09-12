@@ -23,11 +23,13 @@
 			android:windowSoftInputMode="adjustPan">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
-				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
+				<category android:name="android.intent.category.DEFAULT" />
 
 				<data android:scheme="usosauth" />
 			</intent-filter>
@@ -37,7 +39,7 @@
 			android:name=".activities.ActivityMain"
 			android:configChanges="uiMode"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme" />
+			android:theme="@style/SplashTheme" />
 
 		<service
 			android:name=".services.ServiceFirebaseMessaging"

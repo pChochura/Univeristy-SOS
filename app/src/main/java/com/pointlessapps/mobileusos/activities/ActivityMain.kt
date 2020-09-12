@@ -23,9 +23,9 @@ class ActivityMain : FragmentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		if (Preferences.get().getSystemDarkMode()) {
-			setTheme(R.style.AppTheme_Dark)
-		}
+		setTheme(
+			if (Preferences.get().getSystemDarkMode()) R.style.AppTheme_Dark else R.style.AppTheme
+		)
 
 		setContentView(R.layout.activity_main)
 		bg.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
