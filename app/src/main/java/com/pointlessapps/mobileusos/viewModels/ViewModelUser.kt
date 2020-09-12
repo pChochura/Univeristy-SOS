@@ -51,15 +51,27 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getEmailRecipients(emailId: String) = repositoryEmail.getRecipientsById(emailId)
 
+	fun deleteEmail(id: String) =
+		repositoryEmail.delete(id)
+
 	fun createEmail(subject: String, content: String) =
 		repositoryEmail.create(subject, content)
 
 	fun updateEmail(id: String, subject: String, content: String) =
 		repositoryEmail.update(id, subject, content)
 
+	fun sendEmail(id: String) =
+		repositoryEmail.send(id)
+
 	fun updateEmailRecipients(id: String, userIds: List<String>, emails: List<String>) =
 		repositoryEmail.updateRecipients(id, userIds, emails)
 
+	fun refreshEmailRecipients(id: String) =
+		repositoryEmail.refreshRecipients(id)
+
 	fun addEmailAttachment(id: String, data: ByteArray, filename: String) =
 		repositoryEmail.addAttachment(id, data, filename)
+
+	fun deleteEmailAttachment(id: String) =
+		repositoryEmail.deleteAttachment(id)
 }

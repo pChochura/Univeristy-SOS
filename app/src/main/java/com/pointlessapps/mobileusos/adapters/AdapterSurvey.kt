@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.intrusoft.sectionedrecyclerview.Section
@@ -51,9 +52,11 @@ class AdapterSurvey(private val context: Context, sections: List<SectionHeader> 
 			itemView.bg.setOnClickListener {
 				onClickListener(survey)
 			}
+			itemView.textDate.isVisible = true
 		} else {
 			itemView.bg.isClickable = false
 			itemView.bg.isFocusable = false
+			itemView.textDate.isVisible = false
 		}
 
 		if (survey.surveyType == Survey.SurveyType.Course) {

@@ -68,12 +68,13 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 
 	private fun ensureState() {
 		if (adapter?.itemCount == 0) {
-			recyclerView.visibility = View.INVISIBLE
+			recyclerView.isVisible = false
 			emptyText.isNullOrEmpty().also {
 				progressBar.isVisible = it
 				horizontalProgressBar.isRefreshing = !loaded
 				textEmpty.isVisible = !it
 				iconEmpty.isVisible = emptyIcon !== null && !it
+				containerEmpty.isVisible = !it
 			}
 		} else {
 			recyclerView.isVisible = true
@@ -81,6 +82,7 @@ class LoadingRecyclerView(context: Context, attrs: AttributeSet?, defStyleAttr: 
 			textEmpty.isGone = true
 			iconEmpty.isGone = true
 			progressBar.isGone = true
+			containerEmpty.isGone = true
 		}
 	}
 

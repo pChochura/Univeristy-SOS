@@ -4,15 +4,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttachment
 import com.pointlessapps.mobileusos.models.Email
+import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.fragment_mail.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +60,6 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 		}
 
 		viewModelUser.getEmailRecipients(email.id).observe(this) { (list) ->
-			Log.d("LOG!", "$list")
 			root().emailRecipient.text =
 				list.joinToString { item -> item.name() }.takeIf(String::isNotBlank)
 					?: getString(R.string.no_recipient)
@@ -86,5 +87,25 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 		root().buttonEdit.setOnClickListener {
 			onChangeFragmentListener?.invoke(FragmentComposeMail(email))
 		}
+
+		root().buttonDelete.setOnClickListener {
+			deleteEmail()
+		}
+	}
+
+	private fun deleteEmail() {
+		DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
+			dialog.messageMain.setText(R.string.are_you_sure)
+			dialog.messageSecondary.setText(R.string.delete_email_description)
+
+			dialog.buttonPrimary.setText(R.string.confirm)
+			dialog.buttonPrimary.setOnClickListener {
+				dialog.dismiss()
+				onForceGoBackListener?.invoke()
+				viewModelUser.deleteEmail(email.id)
+			}
+			dialog.buttonSecondary.setText(R.string.cancel)
+			dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 	}
 }

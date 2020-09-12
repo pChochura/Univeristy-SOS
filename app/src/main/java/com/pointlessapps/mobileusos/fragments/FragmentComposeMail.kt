@@ -23,12 +23,15 @@ import com.pointlessapps.mobileusos.utils.Utils.withoutExtension
 import com.pointlessapps.mobileusos.utils.addChip
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_attachment.*
-import kotlinx.android.synthetic.main.dialog_logout.*
+import kotlinx.android.synthetic.main.dialog_loading.*
 import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
 import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
 import kotlinx.android.synthetic.main.dialog_message.messageMain
 import kotlinx.android.synthetic.main.dialog_message.messageSecondary
 import kotlinx.android.synthetic.main.fragment_compose_mail.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.io.File
 import java.util.concurrent.CountDownLatch
@@ -180,6 +183,10 @@ class FragmentComposeMail(
 							dialog.dismiss()
 						}
 						dialog.buttonSecondary.setOnClickListener {
+							if (!attachment.newlyAdded) {
+								viewModelUser.deleteEmailAttachment(attachment.id)
+							}
+
 							update(attachments.apply { remove(attachment) })
 							dialog.dismiss()
 						}
@@ -225,7 +232,7 @@ class FragmentComposeMail(
 		}
 	}
 
-	private fun saveDraft() {
+	private fun saveDraft(callback: (Dialog.() -> Unit)? = null) {
 		ensureEmailExists { id ->
 			saveEmail {
 				val loaded =
@@ -290,16 +297,20 @@ class FragmentComposeMail(
 
 				doAsync {
 					loaded.await()
-					dismiss()
-					onForceRefreshAllFragments?.invoke()
-					onForceGoBackListener?.invoke()
+					if (callback == null) {
+						dismiss()
+						onForceRefreshAllFragments?.invoke()
+						onForceGoBackListener?.invoke()
+					}
+
+					callback?.invoke(this@saveEmail)
 				}
 			}
 		}
 	}
 
 	private fun saveEmail(callback: Dialog.() -> Unit) {
-		DialogUtil.create(requireContext(), R.layout.dialog_logout, { dialog ->
+		DialogUtil.create(requireContext(), R.layout.dialog_loading, { dialog ->
 			dialog.setCancelable(false)
 
 			dialog.messageMain.setText(R.string.saving_email)
@@ -313,25 +324,46 @@ class FragmentComposeMail(
 	}
 
 	private fun ensureEmailExists(callback: (String) -> Unit) {
-		if (email == null) {
-			viewModelUser.createEmail(
-				root().inputSubject.text.toString(),
-				root().inputContent.text.toString()
-			).onOnceCallback { (id) ->
-				if (id == null) {
-					return@onOnceCallback
-				}
-
-				callback(id)
-			}
-		} else {
+		if (email != null) {
 			callback(email.id)
+			return
+		}
+
+		viewModelUser.createEmail(
+			root().inputSubject.text.toString(),
+			root().inputContent.text.toString()
+		).onOnceCallback { (id) ->
+			GlobalScope.launch(Dispatchers.Main) { id?.also(callback) }
 		}
 	}
 
 	private fun prepareClickListeners() {
 		root().buttonSend.setOnClickListener {
-			// TODO: send email
+			saveDraft {
+				GlobalScope.launch(Dispatchers.Main) {
+					messageMain.setText(R.string.sending_email)
+					email?.also { email ->
+						if (recipients.size <= 0 || email.content.isNullOrEmpty() || email.subject.isNullOrEmpty()) {
+							messageMain.setText(R.string.oops)
+							messageSecondary.setText(R.string.sending_email_error_description)
+							progressBar.isGone = true
+							messageSecondary.isGone = false
+							buttonPrimary.isGone = false
+							buttonPrimary.setOnClickListener { dismiss() }
+
+							return@launch
+						}
+
+						viewModelUser.refreshEmailRecipients(email.id).onFinished {
+							viewModelUser.sendEmail(email.id).onFinished {
+								dismiss()
+								onForceRefreshAllFragments?.invoke()
+								onForceGoBackListener?.invoke()
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

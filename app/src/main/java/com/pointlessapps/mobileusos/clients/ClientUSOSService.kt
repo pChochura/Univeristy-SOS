@@ -312,8 +312,16 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
+	fun deleteEmailRequest(id: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/delete_messages")
+			.buildUpon()
+			.appendQueryParameter("message_ids", id)
+			.build().toString()
+	)
+
 	fun createEmailRequest(subject: String, content: String) = OAuthRequest(
-		Verb.POST,
+		Verb.GET,
 		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/create_message")
 			.buildUpon()
 			.appendQueryParameter("subject", subject)
@@ -323,7 +331,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 	)
 
 	fun updateEmailRequest(id: String, subject: String, content: String) = OAuthRequest(
-		Verb.POST,
+		Verb.GET,
 		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/update_message")
 			.buildUpon()
 			.appendQueryParameter("message_id", id)
@@ -333,9 +341,18 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
+	fun sendEmailRequest(id: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/send_message")
+			.buildUpon()
+			.appendQueryParameter("message_id", id)
+			.appendQueryParameter("lang", Locale.getDefault().toLanguageTag())
+			.build().toString()
+	)
+
 	fun updateEmailRecipientsRequest(id: String, userIds: List<String>, emails: List<String>) =
 		OAuthRequest(
-			Verb.POST,
+			Verb.GET,
 			Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/update_recipients_group")
 				.buildUpon()
 				.appendQueryParameter("message_id", id)
@@ -351,6 +368,15 @@ class ClientUSOSService private constructor() : USOSApi() {
 				.build().toString()
 		)
 
+	fun refreshEmailRecipientsRequest(id: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/refresh_recipients")
+			.buildUpon()
+			.appendQueryParameter("message_id", id)
+			.appendQueryParameter("email_source", "primary_preferred")
+			.build().toString()
+	)
+
 	fun addEmailAttachmentRequest(id: String, data: ByteArray, filename: String) =
 		OAuthRequest(
 			Verb.POST,
@@ -360,12 +386,20 @@ class ClientUSOSService private constructor() : USOSApi() {
 				.appendQueryParameter("filename", filename)
 				.build().toString()
 		).apply {
-			val boundary = "---test"
+			val boundary = "---attachment"
 			addHeader("Content-Type", "multipart/form-data; boundary=$boundary")
 			multipartPayload = MultipartPayload(boundary).apply {
 				addFileBodyPart("application/octet-stream", data, "data", filename)
 			}
 		}
+
+	fun deleteEmailAttachmentRequest(id: String) = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/mailclient/delete_attachments")
+			.buildUpon()
+			.appendQueryParameter("attachment_ids", id)
+			.build().toString()
+	)
 
 	fun calendarRequest(faculty: String, startDate: Date, endDate: Date) = OAuthRequest(
 		Verb.GET,

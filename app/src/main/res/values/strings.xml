@@ -153,7 +153,7 @@
 	<string name="your_comment">Your comment</string>
 	<string name="complete_all_answers">Complete all the answers</string>
 	<string name="complete_all_answers_description">It is advised to answer all the questions. Press OK to continue anyway</string>
-	<string name="thank_you">Thank you</string>
+	<string name="all_done">All done</string>
 	<string name="thank_you_fill_survey">Thank you for filling out the survey</string>
 	<string name="oops" translatable="false">Oops</string>
 	<string name="something_went_wrong">Something went wrong. Please try again later. It could be caused by your internet connection</string>
@@ -166,4 +166,7 @@
 	<string name="no_subject">(no subject)</string>
 	<string name="saving_survey">Saving the survey</string>
 	<string name="saving_email">Saving the email</string>
+	<string name="delete_email_description">Do you want to remove this email? You won\'t be able to recover it</string>
+	<string name="sending_email">Sending the email</string>
+	<string name="sending_email_error_description">There\'s been a problem. Make sure the email has non empty subject, list of recipients and content</string>
 </resources>

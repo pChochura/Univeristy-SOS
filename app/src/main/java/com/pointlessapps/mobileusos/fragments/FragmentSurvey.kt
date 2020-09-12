@@ -13,7 +13,7 @@ import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_logout.*
+import kotlinx.android.synthetic.main.dialog_loading.*
 import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
 import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
 import kotlinx.android.synthetic.main.dialog_message.messageMain
@@ -96,12 +96,12 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 					dialog.messageSecondary.setText(R.string.complete_all_answers_description)
 
 					dialog.buttonPrimary.setText(android.R.string.ok)
-					dialog.buttonPrimary.setOnClickListener { dialog.dismiss() }
-					dialog.buttonSecondary.setText(R.string.cancel)
-					dialog.buttonSecondary.setOnClickListener {
+					dialog.buttonPrimary.setOnClickListener {
 						dialog.dismiss()
 						sendSurvey()
 					}
+					dialog.buttonSecondary.setText(R.string.cancel)
+					dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 			} else {
 				sendSurvey()
@@ -116,7 +116,7 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 				dialog.messageSecondary.isGone = false
 				dialog.buttonPrimary.isGone = false
 			}
-		}, requireContext(), R.layout.dialog_logout, { dialog ->
+		}, requireContext(), R.layout.dialog_loading, { dialog ->
 			dialog.setCancelable(false)
 
 			dialog.messageMain.setText(R.string.saving_survey)
@@ -134,11 +134,12 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 				survey.id, answers,
 				root().inputComment.text?.toString()
 			).onFinished {
+				toggle()
 				if (it !== null) {
 					dialog.messageMain.setText(R.string.oops)
 					dialog.messageSecondary.setText(R.string.something_went_wrong)
 				} else {
-					dialog.messageMain.setText(R.string.thank_you)
+					dialog.messageMain.setText(R.string.all_done)
 					dialog.messageSecondary.setText(R.string.thank_you_fill_survey)
 				}
 			}

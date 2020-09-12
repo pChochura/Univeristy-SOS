@@ -1,11 +1,14 @@
 package com.pointlessapps.mobileusos.views
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isGone
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import kotlinx.android.synthetic.main.settings_item.view.*
 
 class SettingsItem(
@@ -43,26 +46,34 @@ class SettingsItem(
 		val title = a.getString(R.styleable.SettingsItem_title)
 		val description = a.getString(R.styleable.SettingsItem_description)
 		val hasBubble = a.getBoolean(R.styleable.SettingsItem_hasBubble, true)
+		val hasSeparator = a.getBoolean(R.styleable.SettingsItem_hasSeparator, true)
+		val isEnabled = a.getBoolean(R.styleable.SettingsItem_enabled, true)
 		a.recycle()
 
 		root.itemTitle.text = title
 		root.itemDescription.text = description
-		root.itemAction.isGone = !hasBubble
-
-		isClickable = true
-		isFocusable = true
+		root.itemAction.isVisible = hasBubble
+		root.itemSeparator.isVisible = hasSeparator
 
 		setAction()
 		setSwitchAction()
-		setEnabled()
+
+		enabled = { isEnabled }
+		setEnabled(isEnabled)
 	}
 
-	private fun setEnabled() {
-		enabled().also {
-			root.bg.isClickable = it
-			root.bg.isFocusable = it
-			root.bg.alpha = if (it) 1f else 0.3f
-		}
+	private fun setEnabled(value: Boolean? = null) {
+		val v = value ?: true && enabled()
+		root.bg.isClickable = v
+		root.bg.isFocusable = v
+		root.bg.alpha = if (v) 1f else 0.3f
+		root.bg.rippleColor =
+			ColorStateList.valueOf(
+				if (v) context.themeColor(R.attr.colorTextSecondary) else ContextCompat.getColor(
+					context,
+					android.R.color.transparent
+				)
+			)
 	}
 
 	private fun setAction() {
@@ -85,8 +96,13 @@ class SettingsItem(
 		setSwitchAction()
 	}
 
-	fun onTapped(callback: (SettingsItem) -> Unit) = root.bg.setOnClickListener {
-		callback(this)
-		refresh()
+	fun onTapped(callback: (SettingsItem) -> Unit) {
+		root.bg.setOnClickListener {
+			if (enabled()) {
+				callback(this)
+			}
+
+			refresh()
+		}
 	}
 }

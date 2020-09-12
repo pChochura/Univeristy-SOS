@@ -15,7 +15,7 @@ import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import kotlinx.android.synthetic.main.dialog_list_picker.*
-import kotlinx.android.synthetic.main.dialog_logout.*
+import kotlinx.android.synthetic.main.dialog_loading.*
 import kotlinx.android.synthetic.main.dialog_time_picker.*
 import kotlinx.android.synthetic.main.dialog_time_picker.buttonPrimary
 import kotlinx.android.synthetic.main.dialog_time_picker.buttonSecondary
@@ -50,7 +50,9 @@ class FragmentSettings : FragmentBase() {
 					dialog.periodPicker.apply {
 						setLabelFormatter { "%02.0f:00".format(it) }
 						setValues(currentMin, currentMax)
-						addOnChangeListener { _, _, _ ->
+						addOnChangeListener { slider, _, _ ->
+							slider.values.minOrNull()?.also { currentMin = it }
+							slider.values.maxOrNull()?.also { currentMax = it }
 						}
 					}
 					dialog.buttonSecondary
@@ -60,6 +62,7 @@ class FragmentSettings : FragmentBase() {
 						prefs.putTimetableEndHour(currentMax.toInt())
 
 						item.refresh()
+						dialog.dismiss()
 					}
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 			}
@@ -217,7 +220,10 @@ class FragmentSettings : FragmentBase() {
 						dialog.buttonSecondary.isGone = true
 					}
 				},
-				requireContext(), R.layout.dialog_logout, { dialog ->
+				requireContext(), R.layout.dialog_loading, { dialog ->
+					dialog.messageMain.setText(R.string.are_you_sure)
+					dialog.messageSecondary.setText(R.string.logout_description)
+					dialog.buttonPrimary.setText(R.string.logout)
 					dialog.buttonPrimary.setOnClickListener {
 						toggle()
 						doAsync {

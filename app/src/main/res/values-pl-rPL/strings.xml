@@ -135,7 +135,7 @@
 	<string name="no_grades">Nie ma żadnych ocen</string>
 	<string name="event_download_error">Coś poszło nie tak podczas pobierania tego wydarzenia</string>
 	<string name="surveys">Ankiety</string>
-	<string name="off" translatable="false">wył</string>
+	<string name="off">wył</string>
 	<string name="on">wł</string>
 	<string name="are_you_sure">Czy na pewno?</string>
 	<string name="to_fill_out">Do wypełnienia</string>
@@ -146,7 +146,7 @@
 	<string name="your_comment">Twój komentarz</string>
 	<string name="complete_all_answers">Uzupełnij wszystkie odpowiedzi</string>
 	<string name="complete_all_answers_description">Zachęcamy do uzupełnienia wszystkich odpowiedzi. Wciśnij OK, żeby kontynuować mimo to</string>
-	<string name="thank_you">Dziękujemy</string>
+	<string name="all_done">Wszystko gotowe</string>
 	<string name="thank_you_fill_survey">Dziękujęmy za wypełnienie ankiety</string>
 	<string name="something_went_wrong">Coś poszło nie tak. Spróbuj ponownie później. To mogło być spowodowane Twoim połączeniem internetowym</string>
 	<string name="too_large_file">Ten plik jest zbyt duży. Spróbuj ponownie z innym plikiem</string>
@@ -157,4 +157,8 @@
 	<string name="no_recipient">(brak odbiorcy)</string>
 	<string name="no_subject">(brak tytułu)</string>
 	<string name="saving_survey">Zapisywanie ankiety</string>
+	<string name="saving_email">Zapisywanie maila</string>
+	<string name="delete_email_description">Czy na pewno chcesz usunąć tego maila? Nie będzie możliwości odzyskania go później</string>
+	<string name="sending_email">Wysyłanie maila</string>
+	<string name="sending_email_error_description">Wystąpił problem. Upewnij się, że email składa się z nie pustych: tytułu, listy odbiorców oraz treści</string>
 </resources>

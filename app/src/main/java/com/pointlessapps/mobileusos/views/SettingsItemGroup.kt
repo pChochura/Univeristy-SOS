@@ -28,8 +28,10 @@ class SettingsItemGroup(
 	}
 
 	override fun onViewAdded(child: View?) {
-		root?.itemsContainer?.addView(child?.apply {
-			(parent as ViewGroup).removeView(this)
-		})
+		root?.itemsContainer?.also {
+			it.addView(child?.apply {
+				(parent as ViewGroup).removeView(this)
+			})
+		}
 	}
 }

@@ -60,7 +60,7 @@ class ObserverWrapper<T>(
 				when {
 					onOnceCallback !== null -> onOnceCallback?.invoke(it)
 					observerSet -> liveData.postValue(it)
-					else -> onFinishedCallback?.invoke(null)
+					else -> finished(null)
 				}
 			}
 		}
