@@ -20,8 +20,8 @@ android {
 		applicationId "com.pointlessapps.mobileusos"
 		minSdkVersion 22
 		targetSdkVersion 30
-		versionName "0.5.0"
-		versionCode 500
+		versionName "1.0.0"
+		versionCode 1000
 		signingConfig signingConfigs.release
 
 		javaCompileOptions {

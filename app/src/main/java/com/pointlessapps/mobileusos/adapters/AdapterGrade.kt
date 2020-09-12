@@ -43,9 +43,7 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 			}?.toDoubleOrNull() ?: 2.0
 		} / grades.count())
 
-		if (grades.count() == 0) {
-			(itemView.textAverage.parent as View).isGone = true
-		}
+		(itemView.textAverage.parent as View).isGone = grades.count() == 0
 	}
 
 	override fun onCreateChildViewHolder(itemView: ViewGroup, viewType: Int) =

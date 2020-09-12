@@ -12,7 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
-import com.pointlessapps.mobileusos.activities.ActivitySplash
+import com.pointlessapps.mobileusos.activities.ActivityLogin
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.repositories.RepositoryEvent
 
@@ -53,7 +53,7 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 	}
 
 	private fun sendNotification(messageBody: String) {
-		val intent = Intent(this, ActivitySplash::class.java)
+		val intent = Intent(this, ActivityLogin::class.java)
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 		val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 

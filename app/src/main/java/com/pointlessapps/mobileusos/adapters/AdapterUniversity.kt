@@ -10,28 +10,19 @@ class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 
 	private val wholeList = mutableListOf(*list.toTypedArray())
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var textLocation: AppCompatTextView
-
 	init {
 		setHasStableIds(true)
 	}
 
 	override fun getLayoutId(viewType: Int) = R.layout.list_item_university
 
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.universityName)
-		textLocation = root.find(R.id.universityLocation)
-	}
-
 	override fun onBind(root: View, position: Int) {
 		root.find<View>(R.id.bg).setOnClickListener {
 			onClickListener?.invoke(list[position])
 		}
 
-		textName.text = list[position].name
-		textLocation.text = list[position].location
+		root.find<AppCompatTextView>(R.id.universityName).text = list[position].name
+		root.find<AppCompatTextView>(R.id.universityLocation).text = list[position].location
 	}
 
 	override fun update(list: List<University>) {

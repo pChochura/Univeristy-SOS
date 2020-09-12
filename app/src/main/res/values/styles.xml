@@ -9,6 +9,7 @@
 		<item name="colorTextPrimary">@color/colorTextPrimary</item>
 		<item name="colorTextSecondary">@color/colorTextSecondary</item>
 		<item name="colorBackground">@color/colorBackground</item>
+		<item name="android:background">@null</item>
 		<item name="white">@color/white</item>
 
 		<item name="weekViewPastBackgroundColor">#dddddd</item>
@@ -27,6 +28,7 @@
 		<item name="colorTextPrimary">@color/white</item>
 		<item name="colorTextSecondary">@color/colorTextSecondary</item>
 		<item name="colorBackground">#313131</item>
+		<item name="android:background">@null</item>
 		<item name="white">#252525</item>
 
 		<item name="weekViewPastBackgroundColor">#121212</item>
@@ -35,6 +37,12 @@
 		<item name="weekViewHeaderBackgroundColor">#252525</item>
 		<item name="weekViewEventTextColor">@color/colorTextPrimary</item>
 		<item name="weekViewDividerLineColor">@color/colorTextSecondary</item>
+	</style>
+
+	<style name="SplashTheme" parent="AppTheme">
+		<item name="android:background">@drawable/background_splash</item>
+		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowTranslucentNavigation">false</item>
 	</style>
 
 	<style name="BottomNavigationTextActive" parent="Widget.MaterialComponents.BottomNavigationView">

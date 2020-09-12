@@ -2,14 +2,14 @@ package com.pointlessapps.mobileusos.activities
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.fragment.app.FragmentActivity
+import com.google.firebase.FirebaseApp
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
 import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.managers.SearchManager
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.dp
@@ -17,16 +17,22 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.dialog_pick_university.*
 
-class ActivityLogin : FragmentActivity() {
+class ActivityLogin : ComponentActivity() {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		if (Preferences.get().getSystemDarkMode()) {
-			setTheme(R.style.AppTheme_Dark)
+
+		FirebaseApp.initializeApp(applicationContext)
+		Preferences.init(applicationContext)
+
+		if (HelperClientUSOS.isLoggedIn()) {
+			startActivity(Intent(this, ActivityMain::class.java))
+			finish()
 		}
 
+		setTheme(R.style.AppTheme)
 		setContentView(R.layout.activity_login)
 
 		prepareClickListeners()

@@ -20,9 +20,15 @@ class RepositoryEmail(application: Application) {
 		}
 	}
 
-	private fun insert(vararg email: Email) {
+	private fun insertOnly(vararg email: Email) {
 		GlobalScope.launch {
 			emailDao.insertOnly(*email)
+		}
+	}
+
+	private fun insert(vararg email: Email) {
+		GlobalScope.launch {
+			emailDao.insert(*email)
 		}
 	}
 
@@ -30,7 +36,7 @@ class RepositoryEmail(application: Application) {
 		postValue { emailDao.getAll().sorted() }
 		postValue(SourceType.ONLINE) {
 			serviceEmail.getAll().sorted().also {
-				insert(*it.toTypedArray())
+				insertOnly(*it.toTypedArray())
 			}
 		}
 	}
