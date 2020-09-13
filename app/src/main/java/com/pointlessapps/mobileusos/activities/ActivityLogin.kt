@@ -85,7 +85,12 @@ class ActivityLogin : ComponentActivity() {
 	override fun onNewIntent(intent: Intent?) {
 		super.onNewIntent(intent)
 		HelperClientUSOS.handleLoginResult(this, intent) {
-			startActivity(Intent(this, ActivityMain::class.java))
+			startActivity(
+				Intent(
+					this,
+					ActivityMain::class.java
+				).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+			)
 			finish()
 		}
 	}

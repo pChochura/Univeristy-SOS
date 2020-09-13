@@ -39,7 +39,7 @@ object HelperClientUSOS {
 					)
 				}.build().intent.apply {
 					data = Uri.parse(getAuthorizationUrl(this@HelperClientUSOS.requestToken))
-					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+					addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				}, LOGIN_TABS_REQUEST_CODE)
 			}
 		}
