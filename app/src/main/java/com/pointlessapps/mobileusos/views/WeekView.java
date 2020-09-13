@@ -224,15 +224,6 @@ public class WeekView extends View {
 			}
 		};
 
-		post(() -> {
-			computeMaxOffset();
-			computeNumberOfVisibleDays(numberOfVisibleDays);
-			computeScale();
-			scrollToToday();
-			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
-			updateFirstVisibleDay();
-		});
-
 		today = Calendar.getInstance();
 		scroller = new OverScroller(context, new LinearOutSlowInInterpolator());
 
@@ -300,6 +291,15 @@ public class WeekView extends View {
 				Color.argb(0, 0, 0, 0),
 				Shader.TileMode.CLAMP
 		);
+
+		post(() -> {
+			computeMaxOffset();
+			computeNumberOfVisibleDays(numberOfVisibleDays);
+			computeScale();
+			scrollToToday();
+			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
+			updateFirstVisibleDay();
+		});
 	}
 
 	private void computeMaxOffset() {

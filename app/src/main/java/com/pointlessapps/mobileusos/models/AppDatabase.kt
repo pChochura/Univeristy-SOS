@@ -25,8 +25,9 @@ import com.pointlessapps.mobileusos.utils.Utils
 		Exam::class,
 		CalendarEvent::class,
 		Survey::class,
+		User.Faculty::class,
 	],
-	version = 1
+	version = 2
 )
 @TypeConverters(
 	ConvertersCommon::class,
@@ -58,12 +59,13 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun buildingDao(): BuildingDao
 	abstract fun calendarDao(): CalendarDao
 	abstract fun surveyDao(): SurveyDao
+	abstract fun facultyDao(): FacultyDao
 
 	companion object : Utils.SingletonHolder<AppDatabase, Context>({
 		Room.databaseBuilder(
 			it!!,
 			AppDatabase::class.java,
 			"USOSdb"
-		).build()
+		).fallbackToDestructiveMigration().build()
 	})
 }

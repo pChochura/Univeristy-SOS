@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.google.firebase.FirebaseApp
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.LocaleHelper
@@ -26,6 +27,8 @@ class ActivityMain : FragmentActivity() {
 		setTheme(
 			if (Preferences.get().getSystemDarkMode()) R.style.AppTheme_Dark else R.style.AppTheme
 		)
+		FirebaseApp.initializeApp(applicationContext)
+		Preferences.init(applicationContext)
 
 		setContentView(R.layout.activity_main)
 		bg.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)

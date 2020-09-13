@@ -422,4 +422,12 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.appendQueryParameter("fcm_registration_token", token)
 			.build().toString()
 	)
+
+	fun primaryFacultyRequest() = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/apisrv/installation")
+			.buildUpon()
+			.appendQueryParameter("fields", "institution")
+			.build().toString()
+	)
 }

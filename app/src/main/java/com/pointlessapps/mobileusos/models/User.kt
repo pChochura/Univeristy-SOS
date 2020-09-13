@@ -82,14 +82,13 @@ data class User(
 	)
 
 	@Keep
+	@Entity(tableName = "table_faculties")
 	class Faculty(
+		@PrimaryKey
 		@SerializedName("id")
 		var id: String,
+		@ColumnInfo(name = "name")
 		@SerializedName("name")
 		var name: Name?
-	) {
-		companion object {
-			const val BASE_FACULTY_ID = "0000000"
-		}
-	}
+	)
 }

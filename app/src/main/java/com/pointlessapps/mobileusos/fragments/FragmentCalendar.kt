@@ -18,12 +18,14 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEvent
 import com.pointlessapps.mobileusos.models.CalendarEvent
-import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.find
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -38,6 +40,7 @@ class FragmentCalendar : FragmentBase() {
 
 	private var selectedDay = LocalDate.now()
 	private var startDate = MutableLiveData(Calendar.getInstance().time)
+	lateinit var baseFacultyId: String
 
 	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar
@@ -48,19 +51,21 @@ class FragmentCalendar : FragmentBase() {
 		prepareEventsList()
 
 		startDate.observe(this) { date ->
-			viewModelCommon.getCalendarByFaculties(listOf(User.Faculty.BASE_FACULTY_ID), date)
-				.observe(this) { (list) ->
-					allEvents.addAll(list.filter { event ->
-						allEvents.find { it.id == event.id } == null
-					})
-					updateEventList()
-					root().calendar.notifyCalendarChanged()
+			ensureBaseFacultyId { id ->
+				viewModelCommon.getCalendarByFaculties(listOf(id), date)
+					.observe(this) { (list) ->
+						allEvents.addAll(list.filter { event ->
+							allEvents.find { it.id == event.id } == null
+						})
+						updateEventList()
+						root().calendar.notifyCalendarChanged()
 
-					root().pullRefresh.isRefreshing = false
-					root().horizontalProgressBar.isRefreshing = true
-				}.onFinished {
-					root().horizontalProgressBar.isRefreshing = false
-				}
+						root().pullRefresh.isRefreshing = false
+						root().horizontalProgressBar.isRefreshing = true
+					}.onFinished {
+						root().horizontalProgressBar.isRefreshing = false
+					}
+			}
 		}
 
 		root().pullRefresh.setOnRefreshListener { refreshed() }
@@ -69,6 +74,25 @@ class FragmentCalendar : FragmentBase() {
 	override fun refreshed() {
 		root().horizontalProgressBar.isRefreshing = true
 		startDate.value = startDate.value
+	}
+
+	private fun ensureBaseFacultyId(callback: (String) -> Unit) {
+		if (::baseFacultyId.isInitialized) {
+			callback(baseFacultyId)
+
+			return
+		}
+
+		viewModelCommon.getPrimaryFaculty().onOnceCallback { (faculty) ->
+			if (faculty != null) {
+				baseFacultyId = faculty.id
+				GlobalScope.launch(Dispatchers.Main) {
+					callback(faculty.id)
+				}
+
+				return@onOnceCallback
+			}
+		}
 	}
 
 	private fun prepareEventsList() {
