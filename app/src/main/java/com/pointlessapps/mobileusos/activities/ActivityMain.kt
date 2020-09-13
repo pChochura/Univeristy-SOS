@@ -44,6 +44,10 @@ class ActivityMain : FragmentActivity() {
 		).apply {
 			showIn(R.id.containerFragment)
 			selectAt(Preferences.get().getSystemDefaultTab())
+
+			intent.getStringExtra("destinationFragmentName")?.also {
+				(Class.forName(it)?.newInstance() as? FragmentBase)?.also(::setFragment)
+			}
 		}
 	}
 

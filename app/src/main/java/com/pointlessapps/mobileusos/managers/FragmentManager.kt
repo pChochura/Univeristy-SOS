@@ -106,7 +106,7 @@ class FragmentManager private constructor(
 		startingPosition = if (startingPosition == -1) position else startingPosition
 	}
 
-	private fun setFragment(fragment: FragmentBaseInterface, addToHistory: Boolean = true) {
+	fun setFragment(fragment: FragmentBaseInterface, addToHistory: Boolean = true) {
 		if (containerId === null) {
 			throw ExceptionFragmentContainerEmpty("Fragment container cannot be null.")
 		}

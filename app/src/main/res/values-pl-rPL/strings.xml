@@ -161,4 +161,12 @@
 	<string name="delete_email_description">Czy na pewno chcesz usunąć tego maila? Nie będzie możliwości odzyskania go później</string>
 	<string name="sending_email">Wysyłanie maila</string>
 	<string name="sending_email_error_description">Wystąpił problem. Upewnij się, że email składa się z nie pustych: tytułu, listy odbiorców oraz treści</string>
+	<string name="grade_notification_channel">Powiadomienia o ocenach</string>
+	<string name="survey_notification_channel">Powiadomienia o ankietach</string>
+	<string name="article_notification_channel">Powiadomienia o artykułach</string>
+	<string name="usos_notification_title">Powiadomienie USOS</string>
+	<string name="you_have_new_grade">Masz nową ocenę!</string>
+	<string name="grade_has_been_updated">Twoją ocena została edytowana!</string>
+	<string name="survey_has_appeared">Pojawiła się nowa ankieta!</string>
+	<string name="article_has_appeared">Pojawił się nowy artykuł!</string>
 </resources>

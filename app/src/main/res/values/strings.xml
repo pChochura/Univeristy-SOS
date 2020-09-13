@@ -169,4 +169,15 @@
 	<string name="delete_email_description">Do you want to remove this email? You won\'t be able to recover it</string>
 	<string name="sending_email">Sending the email</string>
 	<string name="sending_email_error_description">There\'s been a problem. Make sure the email has non empty subject, list of recipients and content</string>
+	<string name="grade_notification_channel">Grades notifications</string>
+	<string name="grade_notification_channel_id" translatable="false">grades_notifications</string>
+	<string name="survey_notification_channel">Surveys notifications</string>
+	<string name="survey_notification_channel_id" translatable="false">surveys_notifications</string>
+	<string name="article_notification_channel">Articles notifications</string>
+	<string name="article_notification_channel_id" translatable="false">articles_notifications</string>
+	<string name="usos_notification_title">USOS notification</string>
+	<string name="you_have_new_grade">You have a new grade!</string>
+	<string name="grade_has_been_updated">Your grade has been updated!</string>
+	<string name="survey_has_appeared">A new survey has appeared!</string>
+	<string name="article_has_appeared">A new article has appeared</string>
 </resources>
