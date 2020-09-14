@@ -102,7 +102,7 @@ class FragmentTimetable : FragmentBase() {
 				}
 
 			dialog.buttonLecturer.setOnClickListener {
-				onChangeFragmentListener?.invoke(
+				onChangeFragment?.invoke(
 					FragmentUser(
 						event.lecturerIds?.firstOrNull() ?: return@setOnClickListener
 					)
@@ -112,13 +112,13 @@ class FragmentTimetable : FragmentBase() {
 			}
 
 			dialog.buttonRoom.setOnClickListener {
-				onChangeFragmentListener?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
+				onChangeFragment?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
 
 				dialog.dismiss()
 			}
 
 			dialog.buttonBuilding.setOnClickListener {
-				onChangeFragmentListener?.invoke(
+				onChangeFragment?.invoke(
 					FragmentBuilding(
 						Building(
 							id = event.buildingId ?: return@setOnClickListener

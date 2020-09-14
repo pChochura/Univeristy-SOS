@@ -296,9 +296,9 @@ public class WeekView extends View {
 			computeMaxOffset();
 			computeNumberOfVisibleDays(numberOfVisibleDays);
 			computeScale();
-			scrollToToday();
-			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
 			updateFirstVisibleDay();
+			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
+			scrollToToday();
 		});
 	}
 

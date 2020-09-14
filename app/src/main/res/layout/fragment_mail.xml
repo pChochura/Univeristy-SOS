@@ -57,128 +57,144 @@
 
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
-		<androidx.core.widget.NestedScrollView
+		<com.pointlessapps.mobileusos.views.RefreshProgressBar
+			android:id="@+id/horizontalProgressBar"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="3dp"
+			app:color1="@color/colorAccent"
+			app:color2="@color/colorAccentLight"
+			app:color3="@color/colorAccentDark"
+			app:color4="?white" />
 
-			<androidx.appcompat.widget.LinearLayoutCompat
+		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+			android:id="@+id/pullRefresh"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<androidx.core.widget.NestedScrollView
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:clipChildren="false"
-				android:clipToPadding="false"
-				android:orientation="vertical"
-				android:paddingLeft="20dp"
-				android:paddingTop="20dp"
-				android:paddingRight="20dp"
-				android:paddingBottom="100dp">
-
-				<androidx.appcompat.widget.AppCompatTextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:fontFamily="@font/montserrat"
-					android:text="@string/recipient"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp" />
+				android:layout_height="match_parent">
 
 				<androidx.appcompat.widget.LinearLayoutCompat
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:background="@drawable/background_rounded"
-					android:backgroundTint="?white"
-					android:gravity="center_vertical"
-					android:padding="10dp">
+					android:clipChildren="false"
+					android:clipToPadding="false"
+					android:orientation="vertical"
+					android:paddingLeft="20dp"
+					android:paddingTop="20dp"
+					android:paddingRight="20dp"
+					android:paddingBottom="100dp">
 
-					<androidx.appcompat.widget.AppCompatImageView
-						android:id="@+id/emailRecipientImg"
-						android:layout_width="48dp"
-						android:layout_height="48dp"
-						android:background="@drawable/ic_circle"
-						android:backgroundTint="?colorBackground"
-						android:padding="12dp"
-						android:src="@drawable/ic_profile"
-						android:tint="?colorTextPrimary"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toTopOf="parent" />
-
-					<androidx.appcompat.widget.LinearLayoutCompat
+					<androidx.appcompat.widget.AppCompatTextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="10dp"
-						android:layout_marginRight="10dp"
-						android:orientation="vertical">
+						android:fontFamily="@font/montserrat"
+						android:text="@string/recipient"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp" />
 
-						<androidx.appcompat.widget.AppCompatTextView
-							android:id="@+id/emailRecipient"
+					<androidx.appcompat.widget.LinearLayoutCompat
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:background="@drawable/background_rounded"
+						android:backgroundTint="?white"
+						android:gravity="center_vertical"
+						android:padding="10dp">
+
+						<androidx.appcompat.widget.AppCompatImageView
+							android:id="@+id/emailRecipientImg"
+							android:layout_width="48dp"
+							android:layout_height="48dp"
+							android:background="@drawable/ic_circle"
+							android:backgroundTint="?colorBackground"
+							android:padding="12dp"
+							android:src="@drawable/ic_profile"
+							android:tint="?colorTextPrimary"
+							app:layout_constraintBottom_toBottomOf="parent"
+							app:layout_constraintLeft_toLeftOf="parent"
+							app:layout_constraintTop_toTopOf="parent" />
+
+						<androidx.appcompat.widget.LinearLayoutCompat
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:fontFamily="@font/montserrat"
-							android:textColor="?colorTextPrimary"
-							android:textSize="18sp"
-							tools:text="Jan Kowalski" />
+							android:layout_marginLeft="10dp"
+							android:layout_marginRight="10dp"
+							android:orientation="vertical">
 
-						<androidx.appcompat.widget.AppCompatTextView
-							android:id="@+id/emailDate"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:fontFamily="@font/montserrat"
-							android:textColor="?colorTextSecondary"
-							android:textSize="14sp"
-							tools:text="20.06.2020" />
+							<androidx.appcompat.widget.AppCompatTextView
+								android:id="@+id/emailRecipient"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:fontFamily="@font/montserrat"
+								android:textColor="?colorTextPrimary"
+								android:textSize="18sp"
+								tools:text="Jan Kowalski" />
+
+							<androidx.appcompat.widget.AppCompatTextView
+								android:id="@+id/emailDate"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:fontFamily="@font/montserrat"
+								android:textColor="?colorTextSecondary"
+								android:textSize="14sp"
+								tools:text="20.06.2020" />
+
+						</androidx.appcompat.widget.LinearLayoutCompat>
 
 					</androidx.appcompat.widget.LinearLayoutCompat>
 
+					<androidx.appcompat.widget.AppCompatTextView
+						android:id="@+id/emailSubject"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:fontFamily="@font/montserrat_bold"
+						android:textColor="?colorTextPrimary"
+						android:textSize="18sp"
+						tools:text="Some subject" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:id="@+id/emailContent"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:fontFamily="@font/montserrat"
+						android:minHeight="300dp"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp"
+						tools:text="some long content" />
+
+					<View
+						android:id="@+id/divider"
+						android:layout_width="match_parent"
+						android:layout_height="1px"
+						android:layout_marginTop="10dp"
+						android:background="?colorTextSecondary" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:id="@+id/labelAttachments"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/attachments"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp" />
+
+					<com.pointlessapps.mobileusos.views.LoadingRecyclerView
+						android:id="@+id/listAttachments"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						tools:itemCount="1"
+						tools:listitem="@layout/list_item_email_attachment" />
+
 				</androidx.appcompat.widget.LinearLayoutCompat>
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/emailSubject"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					android:fontFamily="@font/montserrat_bold"
-					android:textColor="?colorTextPrimary"
-					android:textSize="18sp"
-					tools:text="Some subject" />
+			</androidx.core.widget.NestedScrollView>
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/emailContent"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					android:fontFamily="@font/montserrat"
-					android:minHeight="300dp"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp"
-					tools:text="some long content" />
-
-				<View
-					android:id="@+id/divider"
-					android:layout_width="match_parent"
-					android:layout_height="1px"
-					android:layout_marginTop="10dp"
-					android:background="?colorTextSecondary" />
-
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/labelAttachments"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					android:fontFamily="@font/montserrat"
-					android:text="@string/attachments"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp" />
-
-				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
-					android:id="@+id/listAttachments"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					tools:itemCount="1"
-					tools:listitem="@layout/list_item_email_attachment" />
-
-			</androidx.appcompat.widget.LinearLayoutCompat>
-
-		</androidx.core.widget.NestedScrollView>
+		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 

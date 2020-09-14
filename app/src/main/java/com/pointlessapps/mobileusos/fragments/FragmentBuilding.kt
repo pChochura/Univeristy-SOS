@@ -78,7 +78,7 @@ class FragmentBuilding(private var building: Building) : FragmentBase() {
 		root().listRooms.apply {
 			setAdapter(AdapterRoom().apply {
 				onClickListener = {
-					onChangeFragmentListener?.invoke(FragmentRoom(it.number, it.id))
+					onChangeFragment?.invoke(FragmentRoom(it.number, it.id))
 				}
 			})
 

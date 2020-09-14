@@ -67,7 +67,7 @@ class FragmentNews : FragmentBase() {
 	private fun prepareNewsList() {
 		root().listNews.setAdapter(AdapterNews(requireContext()).apply {
 			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentArticle(it))
+				onChangeFragment?.invoke(FragmentArticle(it))
 			}
 		})
 	}

@@ -37,14 +37,14 @@ class FragmentMails : FragmentBase() {
 	private fun prepareEmailsList() {
 		root().listEmails.setAdapter(AdapterEmail().apply {
 			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentMail(it))
+				onChangeFragment?.invoke(FragmentMail(it))
 			}
 		})
 	}
 
 	private fun prepareClickListeners() {
 		root().buttonAdd.setOnClickListener {
-			onChangeFragmentListener?.invoke(FragmentComposeMail())
+			onChangeFragment?.invoke(FragmentComposeMail())
 		}
 	}
 }

@@ -169,4 +169,6 @@
 	<string name="grade_has_been_updated">Twoją ocena została edytowana!</string>
 	<string name="survey_has_appeared">Pojawiła się nowa ankieta!</string>
 	<string name="article_has_appeared">Pojawił się nowy artykuł!</string>
+	<string name="send_analytics">Wysyłaj dane analityczne</string>
+	<string name="send_analytics_description">Zezwól na wysyłanie danych dotyczących błędów w aplikacji oraz crashy</string>
 </resources>

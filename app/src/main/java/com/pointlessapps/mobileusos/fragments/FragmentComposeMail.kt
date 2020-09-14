@@ -70,7 +70,7 @@ class FragmentComposeMail(
 
 					dialog.buttonPrimary.setOnClickListener {
 						dialog.dismiss()
-						onForceGoBackListener?.invoke()
+						onForceGoBack?.invoke()
 					}
 					dialog.buttonSecondary.setOnClickListener {
 						dialog.dismiss()
@@ -119,11 +119,13 @@ class FragmentComposeMail(
 			setAdapter(AdapterAutocomplete(requireContext()).apply {
 				onItemClickListener =
 					AdapterView.OnItemClickListener { _, _, position, _ ->
-						recipients.add(list[position])
-						root().listRecipients.addChip(list[position].name()) {
-							recipients.remove(list[position])
+						list[position].also {
+							recipients.add(it)
+							root().listRecipients.addChip(it.name()) {
+								recipients.remove(it)
+							}
+							root().inputRecipients.text.clear()
 						}
-						root().inputRecipients.text.clear()
 					}
 
 				isLongClickable = false
@@ -245,12 +247,12 @@ class FragmentComposeMail(
 					parts.second.map { it.email!! }
 				).onFinished {
 					if (it != null) {
-						showErrorDialog {
-							dismiss()
-							onForceGoBackListener?.invoke()
-						}
+						dismiss()
+						showErrorDialog { dismiss() }
 					} else {
-						loaded.countDown()
+						viewModelUser.refreshEmailRecipients(id).onFinished {
+							loaded.countDown()
+						}
 					}
 				}
 
@@ -260,10 +262,8 @@ class FragmentComposeMail(
 					root().inputContent.text.toString()
 				).onFinished {
 					if (it != null) {
-						showErrorDialog {
-							dismiss()
-							onForceGoBackListener?.invoke()
-						}
+						dismiss()
+						showErrorDialog { dismiss() }
 					} else {
 						loaded.countDown()
 					}
@@ -283,10 +283,8 @@ class FragmentComposeMail(
 								attachment.id = id ?: return@onOnceCallback
 							}.onFinished { error ->
 								if (error != null) {
-									showErrorDialog {
-										dismiss()
-										onForceGoBackListener?.invoke()
-									}
+									dismiss()
+									showErrorDialog { dismiss() }
 								} else {
 									loaded.countDown()
 								}
@@ -297,13 +295,15 @@ class FragmentComposeMail(
 
 				doAsync {
 					loaded.await()
-					if (callback == null) {
-						dismiss()
-						onForceRefreshAllFragments?.invoke()
-						onForceGoBackListener?.invoke()
-					}
+					GlobalScope.launch(Dispatchers.Main) {
+						if (callback == null) {
+							dismiss()
+							onForceRefreshAllFragments?.invoke()
+							onForceGoBack?.invoke()
+						}
 
-					callback?.invoke(this@saveEmail)
+						callback?.invoke(this@saveEmail)
+					}
 				}
 			}
 		}
@@ -358,7 +358,7 @@ class FragmentComposeMail(
 							viewModelUser.sendEmail(email.id).onFinished {
 								dismiss()
 								onForceRefreshAllFragments?.invoke()
-								onForceGoBackListener?.invoke()
+								onForceGoBack?.invoke()
 							}
 						}
 					}

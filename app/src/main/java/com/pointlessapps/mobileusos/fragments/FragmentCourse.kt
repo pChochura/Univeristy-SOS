@@ -117,7 +117,7 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 	private fun prepareInstructorsList() {
 		root().listInstructors.setAdapter(AdapterUser().apply {
 			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentUser(it.id))
+				onChangeFragment?.invoke(FragmentUser(it.id))
 			}
 		})
 	}
@@ -127,7 +127,7 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 			onAddToCalendarClickListener = { Utils.calendarIntent(requireContext(), it) }
 
 			onRoomClickListener = {
-				onChangeFragmentListener?.invoke(FragmentRoom(it.roomNumber, it.roomId ?: ""))
+				onChangeFragment?.invoke(FragmentRoom(it.roomNumber, it.roomId ?: ""))
 			}
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))

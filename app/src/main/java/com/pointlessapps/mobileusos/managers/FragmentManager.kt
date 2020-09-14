@@ -72,7 +72,7 @@ class FragmentManager private constructor(
 	}
 
 	private fun prepareFragment(fragment: FragmentBaseInterface) {
-		fragment.onChangeFragmentListener = {
+		fragment.onChangeFragment = {
 			setFragment(it.apply { prepareFragment(this) })
 		}
 		fragment.onForceRecreate = {
@@ -89,7 +89,7 @@ class FragmentManager private constructor(
 			(fragment as FragmentBase).forceRefresh()
 			history.forEach { (it as FragmentBase).forceRefresh() }
 		}
-		fragment.onForceGoBackListener = { popHistory(true) }
+		fragment.onForceGoBack = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation
 	}
 

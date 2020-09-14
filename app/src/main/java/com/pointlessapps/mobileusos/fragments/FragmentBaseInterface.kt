@@ -27,10 +27,10 @@ interface FragmentBaseInterface {
 	var forceRefresh: Boolean
 
 	var bottomNavigationView: BottomNavigationView?
-	var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)?
+	var onChangeFragment: ((FragmentBaseInterface) -> Unit)?
 	var onForceRecreate: (() -> Unit)?
 	var onForceRefreshAllFragments: (() -> Unit)?
 	var onBackPressedListener: (() -> Boolean)?
-	var onForceGoBackListener: (() -> Unit)?
+	var onForceGoBack: (() -> Unit)?
 	var onKeyboardStateChangedListener: ((Boolean) -> Unit)?
 }

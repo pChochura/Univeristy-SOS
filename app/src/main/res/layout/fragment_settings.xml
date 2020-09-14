@@ -152,7 +152,14 @@
 					app:title="@string/default_language" />
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
-					android:id="@+id/itemLoogut"
+					android:id="@+id/itemSendAnalytics"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/send_analytics_description"
+					app:title="@string/send_analytics" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemLogout"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/logout_description"

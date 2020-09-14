@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
 import com.pointlessapps.mobileusos.adapters.AdapterSimple
@@ -209,7 +210,16 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemLoogut.onTapped {
+		root().itemSendAnalytics.apply {
+			valueSwitch = { prefs.getSendAnalytics() }
+			onTapped {
+				prefs.putSendAnalytics(!prefs.getSendAnalytics())
+				FirebaseCrashlytics.getInstance()
+					.setCrashlyticsCollectionEnabled(prefs.getSendAnalytics())
+			}
+		}
+
+		root().itemLogout.onTapped {
 			DialogUtil.create(
 				object : DialogUtil.StatefulDialog() {
 					override fun toggle() {

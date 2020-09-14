@@ -180,4 +180,6 @@
 	<string name="grade_has_been_updated">Your grade has been updated!</string>
 	<string name="survey_has_appeared">A new survey has appeared!</string>
 	<string name="article_has_appeared">A new article has appeared</string>
+	<string name="send_analytics">Send analytics</string>
+	<string name="send_analytics_description">Allow to send analytic data about unsuccessful requests and crashes</string>
 </resources>

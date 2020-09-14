@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.services
 
-import android.util.Log
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.Utils
@@ -70,7 +69,7 @@ class ServiceUSOSEmail private constructor() {
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(sendEmailRequest(id))?.run {
-					gson.fromJson<Any>(body.also { Log.d("LOG!", "body: $it") })
+					gson.fromJson<Any>(body)
 				}
 			}
 		}

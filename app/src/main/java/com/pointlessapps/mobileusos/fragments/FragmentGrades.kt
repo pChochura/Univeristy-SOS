@@ -114,7 +114,7 @@ class FragmentGrades : FragmentBase() {
 					grade.modificationAuthor?.also { dialog.buttonGradeAuthor.text = it.name() }
 
 					dialog.buttonGradeAuthor.setOnClickListener {
-						fragment.onChangeFragmentListener?.invoke(
+						fragment.onChangeFragment?.invoke(
 							FragmentUser(
 								grade.modificationAuthor?.id ?: return@setOnClickListener
 							)

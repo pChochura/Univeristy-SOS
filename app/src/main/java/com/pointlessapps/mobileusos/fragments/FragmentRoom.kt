@@ -51,7 +51,7 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 				root().buttonBuilding.text = buildingName
 
 				root().buttonBuilding.setOnClickListener {
-					onChangeFragmentListener?.invoke(
+					onChangeFragment?.invoke(
 						FragmentBuilding(
 							room.building ?: return@setOnClickListener
 						)

@@ -58,8 +58,8 @@ class RepositoryEmail(application: Application) {
 
 	fun delete(id: String) =
 		ObserverWrapper<Any?> {
-			postValue { deleteById(id) }
 			postValue(SourceType.ONLINE) {
+				deleteById(id)
 				serviceEmail.delete(id)
 			}
 		}

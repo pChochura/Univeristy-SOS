@@ -47,7 +47,7 @@ class FragmentSurveys : FragmentBase() {
 	private fun prepareSurveysList() {
 		root().listSurveys.setAdapter(AdapterSurvey(requireContext()).apply {
 			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentSurvey(it))
+				onChangeFragment?.invoke(FragmentSurvey(it))
 			}
 		})
 	}

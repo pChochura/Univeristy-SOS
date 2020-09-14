@@ -31,18 +31,19 @@ class ObserverWrapper<T>(
 		observer: (Pair<T, SourceType>) -> Unit
 	): ObserverWrapper<T> {
 		observerSet = true
-		return liveData.observe(owner) {
+		liveData.observe(owner) {
 			observer(it)
-			if (it.second === SourceType.ONLINE || finished) {
+			if (it.second === SourceType.ONLINE && !finished) {
 				finished()
 			}
-		}.run { this@ObserverWrapper }
+		}
+		return this@ObserverWrapper
 	}
 
 	fun onOnceCallback(callback: (Pair<T, SourceType>) -> Unit): ObserverWrapper<T> {
 		this.onOnceCallback = {
 			callback(it)
-			if (it.second === SourceType.ONLINE || finished) {
+			if (it.second === SourceType.ONLINE && !finished) {
 				finished()
 			}
 		}
@@ -60,7 +61,7 @@ class ObserverWrapper<T>(
 				when {
 					onOnceCallback !== null -> onOnceCallback?.invoke(it)
 					observerSet -> liveData.postValue(it)
-					else -> finished(null)
+					!finished -> finished(null)
 				}
 			}
 		}

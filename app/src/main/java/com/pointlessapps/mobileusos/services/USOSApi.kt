@@ -4,6 +4,7 @@ import com.github.scribejava.core.model.OAuth1AccessToken
 import com.github.scribejava.core.model.OAuthRequest
 import com.github.scribejava.core.model.Response
 import com.github.scribejava.core.oauth.OAuth10aService
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -46,7 +47,13 @@ open class USOSApi {
 		} else {
 			service?.run {
 				signRequest(accessToken, request)
-				execute(request)
+				return execute(request)?.apply {
+					if (!isSuccessful) {
+						FirebaseCrashlytics.getInstance()
+							.log("Unsuccessful request from ${request.completeUrl}, [$code]: $body")
+						throw Error("Something went wrong")
+					}
+				}
 			}
 		}
 }

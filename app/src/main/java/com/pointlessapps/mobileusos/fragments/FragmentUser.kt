@@ -46,7 +46,7 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 
 	private fun prepareClickListeners() {
 		root().buttonEmail.setOnClickListener {
-			onChangeFragmentListener?.invoke(
+			onChangeFragment?.invoke(
 				FragmentComposeMail(
 					recipients = mutableListOf(
 						Email.Recipient(
@@ -59,7 +59,7 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 		}
 
 		root().buttonRoom.setOnClickListener {
-			onChangeFragmentListener?.invoke(
+			onChangeFragment?.invoke(
 				FragmentRoom(
 					user?.room?.number,
 					user?.room?.id ?: return@setOnClickListener

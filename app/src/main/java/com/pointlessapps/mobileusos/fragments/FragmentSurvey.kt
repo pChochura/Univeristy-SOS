@@ -127,7 +127,7 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 
 			dialog.buttonPrimary.setOnClickListener {
 				dialog.dismiss()
-				onForceGoBackListener?.invoke()
+				onForceGoBack?.invoke()
 			}
 
 			viewModelUser.fillOutSurvey(
@@ -155,11 +155,11 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 			dialog.buttonPrimary.setText(android.R.string.ok)
 			dialog.buttonPrimary.setOnClickListener {
 				dialog.dismiss()
-				onForceGoBackListener?.invoke()
+				onForceGoBack?.invoke()
 			}
 			dialog.setOnCancelListener {
 				dialog.dismiss()
-				onForceGoBackListener?.invoke()
+				onForceGoBack?.invoke()
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 	}

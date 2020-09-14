@@ -16,8 +16,13 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.fragment_mail.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class FragmentMail(private var email: Email) : FragmentBase() {
 
@@ -27,13 +32,19 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 	override fun getLayoutId() = R.layout.fragment_mail
 
 	override fun created() {
-		prepareData()
 		prepareAttachmentsList()
 		prepareClickListeners()
+		refreshed()
+
+		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
-	private fun prepareData() {
+	override fun refreshed() {
 		root().emailSubject.text = email.subject
+
+		val loaded = CountDownLatch(2)
+		root().horizontalProgressBar.isRefreshing = true
+		root().pullRefresh.isRefreshing = true
 
 		viewModelUser.getEmailById(email.id).observe(this) { (email) ->
 			if (email != null) {
@@ -57,7 +68,7 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 			if (email?.status == "draft") {
 				root().buttonEdit.visibility = View.VISIBLE
 			}
-		}
+		}.onFinished { loaded.countDown() }
 
 		viewModelUser.getEmailRecipients(email.id).observe(this) { (list) ->
 			root().emailRecipient.text =
@@ -72,6 +83,15 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 
 				root().emailRecipientImg.setColorFilter(Color.TRANSPARENT)
 			}
+		}.onFinished { loaded.countDown() }
+
+		doAsync {
+			loaded.await()
+
+			GlobalScope.launch(Dispatchers.Main) {
+				root().pullRefresh.isRefreshing = false
+				root().horizontalProgressBar.isRefreshing = false
+			}
 		}
 	}
 
@@ -85,7 +105,7 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 
 	private fun prepareClickListeners() {
 		root().buttonEdit.setOnClickListener {
-			onChangeFragmentListener?.invoke(FragmentComposeMail(email))
+			onChangeFragment?.invoke(FragmentComposeMail(email))
 		}
 
 		root().buttonDelete.setOnClickListener {
@@ -100,9 +120,10 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 
 			dialog.buttonPrimary.setText(R.string.confirm)
 			dialog.buttonPrimary.setOnClickListener {
-				dialog.dismiss()
-				onForceGoBackListener?.invoke()
-				viewModelUser.deleteEmail(email.id)
+				viewModelUser.deleteEmail(email.id).onFinished {
+					dialog.dismiss()
+					onForceGoBack?.invoke()
+				}
 			}
 			dialog.buttonSecondary.setText(R.string.cancel)
 			dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }

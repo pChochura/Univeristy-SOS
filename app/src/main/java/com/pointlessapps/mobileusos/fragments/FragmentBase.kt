@@ -20,11 +20,11 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 	override fun root() = rootView!!
 
 	override var bottomNavigationView: BottomNavigationView? = null
-	override var onChangeFragmentListener: ((FragmentBaseInterface) -> Unit)? = null
+	override var onForceGoBack: (() -> Unit)? = null
 	override var onForceRecreate: (() -> Unit)? = null
+	override var onChangeFragment: ((FragmentBaseInterface) -> Unit)? = null
 	override var onForceRefreshAllFragments: (() -> Unit)? = null
 	override var onBackPressedListener: (() -> Boolean)? = null
-	override var onForceGoBackListener: (() -> Unit)? = null
 	override var onKeyboardStateChangedListener: ((Boolean) -> Unit)? = null
 
 	override var forceRefresh = false

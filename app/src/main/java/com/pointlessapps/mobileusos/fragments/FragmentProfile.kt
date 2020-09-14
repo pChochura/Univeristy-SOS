@@ -47,10 +47,10 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonGrades.setOnClickListener { onChangeFragmentListener?.invoke(FragmentGrades()) }
-		root().buttonCourses.setOnClickListener { onChangeFragmentListener?.invoke(FragmentCourses()) }
-		root().buttonSurveys.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSurveys()) }
-		root().buttonSettings.setOnClickListener { onChangeFragmentListener?.invoke(FragmentSettings()) }
+		root().buttonGrades.setOnClickListener { onChangeFragment?.invoke(FragmentGrades()) }
+		root().buttonCourses.setOnClickListener { onChangeFragment?.invoke(FragmentCourses()) }
+		root().buttonSurveys.setOnClickListener { onChangeFragment?.invoke(FragmentSurveys()) }
+		root().buttonSettings.setOnClickListener { onChangeFragment?.invoke(FragmentSettings()) }
 	}
 
 	private fun prepareGradesList() {
@@ -131,7 +131,7 @@ class FragmentProfile : FragmentBase() {
 				}
 				onRoomClickListener = {
 					it.roomId?.apply {
-						onChangeFragmentListener?.invoke(FragmentRoom(it.roomNumber, this))
+						onChangeFragment?.invoke(FragmentRoom(it.roomNumber, this))
 					}
 				}
 			})

@@ -32,6 +32,7 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_SYSTEM_DARK_MODE = "systemDarkMode"
 		const val KEY_SYSTEM_DEFAULT_TAB = "systemDefaultTab"
 		const val KEY_SYSTEM_DEFAULT_LANGUAGE = "systemDefaultLanguage"
+		const val KEY_SYSTEM_SEND_ANALYTICS = "systemSendAnalytics"
 
 		fun get(): AppPreferences {
 			if (instance == null) {
@@ -138,3 +139,10 @@ fun AppPreferences.getSystemDefaultLanguage() =
 
 fun AppPreferences.putSystemDefaultLanguage(value: String) =
 	put(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, value)
+
+
+fun AppPreferences.getSendAnalytics() =
+	getBoolean(Preferences.KEY_SYSTEM_SEND_ANALYTICS, true)
+
+fun AppPreferences.putSendAnalytics(value: Boolean) =
+	put(Preferences.KEY_SYSTEM_SEND_ANALYTICS, value)

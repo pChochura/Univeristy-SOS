@@ -59,7 +59,7 @@ class FragmentCourses : FragmentBase() {
 	private fun prepareCoursesList() {
 		root().listCourses.setAdapter(AdapterCourse(requireContext()).apply {
 			onClickListener = {
-				onChangeFragmentListener?.invoke(FragmentCourse(it))
+				onChangeFragment?.invoke(FragmentCourse(it))
 			}
 		})
 	}
