@@ -1,5 +1,7 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,11 +10,14 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterMeeting
 import com.pointlessapps.mobileusos.adapters.AdapterRecentGrade
 import com.pointlessapps.mobileusos.adapters.AdapterTerm
+import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.utils.Utils
+import com.pointlessapps.mobileusos.utils.getJson
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.list_item_shortcut.view.*
 import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
 import org.jetbrains.anko.doAsync
 import java.util.*
@@ -32,6 +37,7 @@ class FragmentProfile : FragmentBase() {
 		prepareTermsList()
 		prepareGradesList()
 		prepareMeetingsList()
+		prepareShortcutsList()
 		prepareClickListeners()
 		refreshed()
 
@@ -130,9 +136,7 @@ class FragmentProfile : FragmentBase() {
 					Utils.calendarIntent(requireContext(), it)
 				}
 				onRoomClickListener = {
-					it.roomId?.apply {
-						onChangeFragment?.invoke(FragmentRoom(it.roomNumber, this))
-					}
+					it.roomId?.apply { onChangeFragment?.invoke(FragmentRoom(this)) }
 				}
 			})
 		}
@@ -140,6 +144,37 @@ class FragmentProfile : FragmentBase() {
 
 	private fun prepareTermsList() {
 		root().listTerms.setAdapter(AdapterTerm())
+	}
+
+	private fun prepareShortcutsList() {
+		Preferences.get().getJson<List<Map<String, String>>>("profileShortcuts").also { list ->
+			list.forEach { shortcut ->
+				val className = shortcut["profileShortcuts_class"]
+				val data = shortcut["profileShortcuts_data"]
+				if (className != null && data != null) {
+					val inflater = LayoutInflater.from(requireContext())
+					(Class.forName(className).kotlin.constructors.firstOrNull()
+						?.call(data) as? FragmentPinnable)
+						?.also { fragment ->
+							val view = inflater.inflate(
+								R.layout.list_item_shortcut,
+								root().listShortcuts,
+								false
+							) as ViewGroup
+							root().listShortcuts.addView(view, 0)
+							fragment.getShortcut(this) { (icon, text) ->
+								view.shortcutIcon.setImageResource(icon)
+								view.shortcutText.text = text
+							}
+							view.setOnClickListener {
+								onChangeFragment?.invoke(
+									fragment as? FragmentBaseInterface ?: return@setOnClickListener
+								)
+							}
+						}
+				}
+			}
+		}
 	}
 
 	private fun postTerms(termIds: List<String>, callback: (() -> Unit)? = null) {

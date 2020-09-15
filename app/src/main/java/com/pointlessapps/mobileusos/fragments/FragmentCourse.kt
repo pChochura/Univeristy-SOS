@@ -127,7 +127,7 @@ class FragmentCourse(private var course: Course) : FragmentBase() {
 			onAddToCalendarClickListener = { Utils.calendarIntent(requireContext(), it) }
 
 			onRoomClickListener = {
-				onChangeFragment?.invoke(FragmentRoom(it.roomNumber, it.roomId ?: ""))
+				it.roomId?.also { roomId -> onChangeFragment?.invoke(FragmentRoom(roomId)) }
 			}
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))

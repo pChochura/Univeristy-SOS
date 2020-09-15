@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.helpers.*
-import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.Utils
@@ -112,7 +111,7 @@ class FragmentTimetable : FragmentBase() {
 			}
 
 			dialog.buttonRoom.setOnClickListener {
-				onChangeFragment?.invoke(FragmentRoom(event.roomNumber, event.roomId ?: ""))
+				onChangeFragment?.invoke(FragmentRoom(event.roomId ?: return@setOnClickListener))
 
 				dialog.dismiss()
 			}
@@ -120,9 +119,7 @@ class FragmentTimetable : FragmentBase() {
 			dialog.buttonBuilding.setOnClickListener {
 				onChangeFragment?.invoke(
 					FragmentBuilding(
-						Building(
-							id = event.buildingId ?: return@setOnClickListener
-						)
+						event.buildingId ?: return@setOnClickListener
 					)
 				)
 

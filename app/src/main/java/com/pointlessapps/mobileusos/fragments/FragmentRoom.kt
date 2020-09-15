@@ -1,6 +1,7 @@
 package com.pointlessapps.mobileusos.fragments
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttributes
@@ -13,20 +14,36 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_room.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class FragmentRoom(private val roomName: String?, private val roomId: String) : FragmentBase() {
+class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 
 	override fun getLayoutId() = R.layout.fragment_room
 
-	override fun created() {
-		roomName?.also { root().roomName.text = it }
+	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+		callback(R.drawable.ic_room to fragment.getString(R.string.loading))
+		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getRoomById(roomId)
+			.onOnceCallback { (room) ->
+				if (room !== null) {
+					GlobalScope.launch(Dispatchers.Main) {
+						callback(R.drawable.ic_room to room.number.toString())
+					}
 
+					return@onOnceCallback
+				}
+			}
+	}
+
+	override fun created() {
 		refreshed()
 		prepareMeetingsList()
 		prepareAttributesList()
+		prepareClickListeners()
 
 		root().pullRefresh.setOnRefreshListener { refreshed() }
 	}
@@ -53,7 +70,7 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 				root().buttonBuilding.setOnClickListener {
 					onChangeFragment?.invoke(
 						FragmentBuilding(
-							room.building ?: return@setOnClickListener
+							room.building?.id ?: return@setOnClickListener
 						)
 					)
 				}
@@ -82,6 +99,22 @@ class FragmentRoom(private val roomName: String?, private val roomId: String) : 
 				)
 			)
 		}.onFinished { callback?.invoke() }
+
+		if (isPinned(javaClass.name, roomId)) {
+			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+		}
+	}
+
+	private fun prepareClickListeners() {
+		root().buttonPin.setOnClickListener {
+			root().buttonPin.setIconResource(
+				if (togglePin(javaClass.name, roomId))
+					R.drawable.ic_unpin
+				else R.drawable.ic_pin
+			)
+
+			onForceRefreshAllFragments?.invoke()
+		}
 	}
 
 	private fun prepareAttributesList() {

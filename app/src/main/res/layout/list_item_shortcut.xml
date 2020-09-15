@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="132dp"
+	android:layout_height="132dp"
+	android:layout_marginEnd="20dp"
+	android:clickable="true"
+	android:focusable="true"
+	app:cardBackgroundColor="?white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp"
+	app:rippleColor="?colorTextSecondary">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_gravity="end|top"
+			android:layout_margin="5dp"
+			android:src="@drawable/ic_unpin"
+			app:tint="@color/colorAccent" />
+
+		<androidx.appcompat.widget.LinearLayoutCompat
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:orientation="vertical">
+
+			<androidx.appcompat.widget.AppCompatImageView
+				android:id="@+id/shortcutIcon"
+				android:layout_width="64dp"
+				android:layout_height="64dp"
+				android:src="@drawable/ic_grades"
+				app:tint="?colorTextPrimary" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/shortcutText"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/montserrat"
+				android:maxEms="25"
+				android:maxLength="25"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:text="@string/grades"
+				android:textAlignment="center"
+				android:textColor="?colorTextPrimary"
+				android:textSize="14sp" />
+
+		</androidx.appcompat.widget.LinearLayoutCompat>
+
+	</FrameLayout>
+
+</com.google.android.material.card.MaterialCardView>

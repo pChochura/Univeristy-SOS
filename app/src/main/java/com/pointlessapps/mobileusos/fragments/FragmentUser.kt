@@ -5,6 +5,7 @@ import android.transition.TransitionManager
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEmploymentFunction
@@ -16,13 +17,30 @@ import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class FragmentUser(private val userId: String) : FragmentBase() {
+class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private var user: User? = null
 
 	override fun getLayoutId() = R.layout.fragment_user
+
+	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+		callback(R.drawable.ic_profile to fragment.getString(R.string.loading))
+		ViewModelProvider(fragment).get(ViewModelUser::class.java).getUserById(userId)
+			.onOnceCallback { (user) ->
+				if (user !== null) {
+					GlobalScope.launch(Dispatchers.Main) {
+						callback(R.drawable.ic_profile to user.name(false))
+					}
+
+					return@onOnceCallback
+				}
+			}
+	}
 
 	override fun created() {
 		refreshed()
@@ -60,11 +78,18 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 
 		root().buttonRoom.setOnClickListener {
 			onChangeFragment?.invoke(
-				FragmentRoom(
-					user?.room?.number,
-					user?.room?.id ?: return@setOnClickListener
-				)
+				FragmentRoom(user?.room?.id ?: return@setOnClickListener)
 			)
+		}
+
+		root().buttonPin.setOnClickListener {
+			root().buttonPin.setIconResource(
+				if (togglePin(javaClass.name, userId))
+					R.drawable.ic_unpin
+				else R.drawable.ic_pin
+			)
+
+			onForceRefreshAllFragments?.invoke()
 		}
 	}
 
@@ -81,11 +106,7 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 			root().listEmploymentFunctions.setEmptyText(getString(R.string.no_employment_functions))
 
 			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
-				user.phoneNumbers?.map { number ->
-					Building.PhoneNumber(
-						number
-					)
-				} ?: listOf()
+				user.phoneNumbers?.map(Building::PhoneNumber) ?: listOf()
 			)
 			root().listPhoneNumbers.setEmptyText(getString(R.string.no_phone_numbers))
 
@@ -101,6 +122,10 @@ class FragmentUser(private val userId: String) : FragmentBase() {
 
 			hideEmptyElements()
 		}.onFinished { callback?.invoke() }
+
+		if (isPinned(javaClass.name, userId)) {
+			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+		}
 	}
 
 	private fun hideEmptyElements() {

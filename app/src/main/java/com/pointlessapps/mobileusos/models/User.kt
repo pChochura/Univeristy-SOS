@@ -54,8 +54,12 @@ data class User(
 	override fun compareTo(other: User) =
 		compareValuesBy(this, other, { it.lastName })
 
-	fun name(): String {
+	fun name(withTitles: Boolean = true): String {
 		var name = "$firstName $lastName"
+		if (!withTitles) {
+			return name
+		}
+
 		titles?.before?.also {
 			name = "$it $name"
 		}

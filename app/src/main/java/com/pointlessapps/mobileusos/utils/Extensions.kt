@@ -17,7 +17,7 @@ fun AppPreferences.putJson(key: String, obj: Any) = put(key, Gson().toJson(obj))
 val Int.dp: Int
 	get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-inline fun <reified T> AppPreferences.getJson(key: String): T? =
+inline fun <reified T> AppPreferences.getJson(key: String): T =
 	Gson().fromJson(getString(key, ""), T::class.java)
 
 inline fun <reified T> Gson.fromJson(json: String): T =
