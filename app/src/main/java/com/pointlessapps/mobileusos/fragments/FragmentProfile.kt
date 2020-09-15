@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +12,8 @@ import com.pointlessapps.mobileusos.adapters.AdapterMeeting
 import com.pointlessapps.mobileusos.adapters.AdapterRecentGrade
 import com.pointlessapps.mobileusos.adapters.AdapterTerm
 import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getProfileShortcuts
 import com.pointlessapps.mobileusos.utils.Utils
-import com.pointlessapps.mobileusos.utils.getJson
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
 import org.jetbrains.anko.doAsync
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import kotlin.reflect.full.primaryConstructor
 
 class FragmentProfile : FragmentBase() {
 
@@ -45,6 +47,8 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	override fun refreshed() {
+		prepareShortcutsList()
+
 		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
@@ -147,13 +151,17 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	private fun prepareShortcutsList() {
-		Preferences.get().getJson<List<Map<String, String>>>("profileShortcuts").also { list ->
+		for (i in 0 until (root().listShortcuts.size - 3)) {
+			root().listShortcuts.removeViewAt(i)
+		}
+
+		Preferences.get().getProfileShortcuts().also { list ->
 			list.forEach { shortcut ->
-				val className = shortcut["profileShortcuts_class"]
-				val data = shortcut["profileShortcuts_data"]
+				val className = shortcut[Preferences.KEY_PROFILE_SHORTCUTS_CLASS]
+				val data = shortcut[Preferences.KEY_PROFILE_SHORTCUTS_DATA]
 				if (className != null && data != null) {
 					val inflater = LayoutInflater.from(requireContext())
-					(Class.forName(className).kotlin.constructors.firstOrNull()
+					(Class.forName(className).kotlin.primaryConstructor
 						?.call(data) as? FragmentPinnable)
 						?.also { fragment ->
 							val view = inflater.inflate(

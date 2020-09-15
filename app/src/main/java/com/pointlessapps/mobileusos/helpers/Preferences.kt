@@ -34,6 +34,10 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_SYSTEM_DEFAULT_LANGUAGE = "systemDefaultLanguage"
 		const val KEY_SYSTEM_SEND_ANALYTICS = "systemSendAnalytics"
 
+		const val KEY_PROFILE_SHORTCUTS = "profileShortcuts"
+		const val KEY_PROFILE_SHORTCUTS_CLASS = "profileShortcutsClass"
+		const val KEY_PROFILE_SHORTCUTS_DATA = "profileShortcutsData"
+
 		fun get(): AppPreferences {
 			if (instance == null) {
 				throw ExceptionNotInitialized("You have to call init() first!")
@@ -146,3 +150,10 @@ fun AppPreferences.getSendAnalytics() =
 
 fun AppPreferences.putSendAnalytics(value: Boolean) =
 	put(Preferences.KEY_SYSTEM_SEND_ANALYTICS, value)
+
+
+fun AppPreferences.getProfileShortcuts() =
+	getJson<List<Map<String, String>>>(Preferences.KEY_PROFILE_SHORTCUTS, "[]")
+
+fun AppPreferences.putProfileShortcuts(shortcuts: List<Map<String, String>>) =
+	putJson(Preferences.KEY_PROFILE_SHORTCUTS, shortcuts)

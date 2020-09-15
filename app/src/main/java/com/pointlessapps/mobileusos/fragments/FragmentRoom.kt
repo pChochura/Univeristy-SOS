@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnable {
+class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
@@ -27,7 +27,7 @@ class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnabl
 
 	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_room to fragment.getString(R.string.loading))
-		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getRoomById(roomId)
+		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getRoomById(id)
 			.onOnceCallback { (room) ->
 				if (room !== null) {
 					GlobalScope.launch(Dispatchers.Main) {
@@ -57,7 +57,7 @@ class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		viewModelCommon.getRoomById(roomId).observe(this) { (room) ->
+		viewModelCommon.getRoomById(id).observe(this) { (room) ->
 			if (room === null) {
 				return@observe
 			}
@@ -100,7 +100,7 @@ class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnabl
 			)
 		}.onFinished { callback?.invoke() }
 
-		if (isPinned(javaClass.name, roomId)) {
+		if (isPinned(javaClass.name, id)) {
 			root().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 	}
@@ -108,7 +108,7 @@ class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnabl
 	private fun prepareClickListeners() {
 		root().buttonPin.setOnClickListener {
 			root().buttonPin.setIconResource(
-				if (togglePin(javaClass.name, roomId))
+				if (togglePin(javaClass.name, id))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
 			)
@@ -131,7 +131,7 @@ class FragmentRoom(private val roomId: String) : FragmentBase(), FragmentPinnabl
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 
-		viewModelTimetable.getByRoomId(roomId).observe(this) { (list) ->
+		viewModelTimetable.getByRoomId(id).observe(this) { (list) ->
 			(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
 		}
 	}

@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnable {
+class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private var user: User? = null
@@ -30,7 +30,7 @@ class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnabl
 
 	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_profile to fragment.getString(R.string.loading))
-		ViewModelProvider(fragment).get(ViewModelUser::class.java).getUserById(userId)
+		ViewModelProvider(fragment).get(ViewModelUser::class.java).getUserById(id)
 			.onOnceCallback { (user) ->
 				if (user !== null) {
 					GlobalScope.launch(Dispatchers.Main) {
@@ -84,7 +84,7 @@ class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnabl
 
 		root().buttonPin.setOnClickListener {
 			root().buttonPin.setIconResource(
-				if (togglePin(javaClass.name, userId))
+				if (togglePin(javaClass.name, id))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
 			)
@@ -94,7 +94,7 @@ class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		viewModelUser.getUserById(userId).observe(this) { (user) ->
+		viewModelUser.getUserById(id).observe(this) { (user) ->
 			if (user == null) {
 				return@observe
 			}
@@ -123,7 +123,7 @@ class FragmentUser(private val userId: String) : FragmentBase(), FragmentPinnabl
 			hideEmptyElements()
 		}.onFinished { callback?.invoke() }
 
-		if (isPinned(javaClass.name, userId)) {
+		if (isPinned(javaClass.name, id)) {
 			root().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 	}
