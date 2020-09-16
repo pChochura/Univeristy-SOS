@@ -61,14 +61,14 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	override fun refreshed() {
+		if (isPinned(javaClass.name, "${courseUnitId}#${groupNumber}")) {
+			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+		}
+
 		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
 			root().horizontalProgressBar.isRefreshing = false
-
-			if (isPinned(javaClass.name, "${courseUnitId}#${groupNumber}")) {
-				root().buttonPin.setIconResource(R.drawable.ic_unpin)
-			}
 		}
 	}
 

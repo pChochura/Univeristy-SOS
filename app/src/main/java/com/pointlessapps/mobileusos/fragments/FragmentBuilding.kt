@@ -44,6 +44,10 @@ class FragmentBuilding(private var id: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	override fun refreshed() {
+		if (isPinned(javaClass.name, id)) {
+			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+		}
+
 		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().horizontalProgressBar.isRefreshing = false
@@ -64,10 +68,6 @@ class FragmentBuilding(private var id: String) : FragmentBase(), FragmentPinnabl
 				building.allPhoneNumbers ?: return@observe
 			)
 		}.onFinished { callback?.invoke() }
-
-		if (isPinned(javaClass.name, id)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
-		}
 	}
 
 	private fun prepareClickListeners() {

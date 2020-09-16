@@ -151,7 +151,7 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	private fun prepareShortcutsList() {
-		for (i in 0 until (root().listShortcuts.size - 3)) {
+		for (i in (root().listShortcuts.size - 4) downTo 0) {
 			root().listShortcuts.removeViewAt(i)
 		}
 

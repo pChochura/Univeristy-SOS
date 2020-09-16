@@ -49,6 +49,10 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	override fun refreshed() {
+		if (isPinned(javaClass.name, id)) {
+			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+		}
+
 		root().horizontalProgressBar.isRefreshing = true
 		prepareData {
 			root().pullRefresh.isRefreshing = false
@@ -99,10 +103,6 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 				)
 			)
 		}.onFinished { callback?.invoke() }
-
-		if (isPinned(javaClass.name, id)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
-		}
 	}
 
 	private fun prepareClickListeners() {
