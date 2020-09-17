@@ -415,11 +415,22 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
-	fun registerFCMTokenRequest(token: String) = OAuthRequest(
+	fun subscribeEventRequest(eventType: String) = OAuthRequest(
 		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}/events/register_fcm_token")
+		Uri.parse("${selectedUniversity?.serviceUrl}/events/subscribe_event")
 			.buildUpon()
-			.appendQueryParameter("fcm_registration_token", token)
+			.appendQueryParameter("event_type", eventType)
+			.appendQueryParameter(
+				"callback_url",
+				"https://us-central1-usoschedule-221315.cloudfunctions.net/postNotification"
+			)
+			.build().toString()
+	)
+
+	fun subscriptionsRequest() = OAuthRequest(
+		Verb.GET,
+		Uri.parse("${selectedUniversity?.serviceUrl}/events/subscriptions")
+			.buildUpon()
 			.build().toString()
 	)
 

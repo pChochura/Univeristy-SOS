@@ -11,7 +11,6 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityMain
 import com.pointlessapps.mobileusos.fragments.FragmentGrades
@@ -20,19 +19,12 @@ import com.pointlessapps.mobileusos.fragments.FragmentProfile
 import com.pointlessapps.mobileusos.fragments.FragmentSurveys
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.repositories.RepositoryEvent
+import com.pointlessapps.mobileusos.repositories.RepositoryUser
 
 class ServiceFirebaseMessaging : FirebaseMessagingService() {
 
 	override fun onMessageReceived(message: RemoteMessage) {
-		Preferences.init(applicationContext)
-		val prefs = Preferences.get()
-
-		// TODO: remove it after testing
-		message.data.takeIf(Map<String, String>::isNotEmpty)?.also {
-			val size = prefs.getInt("notificationSize", 0)
-			prefs.put("notificationSize", size + 1)
-			prefs.put("notification_$size", Gson().toJson(it))
-		}
+		val prefs = Preferences.init(applicationContext).get()
 
 		if (!prefs.getNotificationsEnabled()) {
 			return
@@ -40,7 +32,10 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 
 		if (message.data.isNotEmpty()) {
 			when {
-				message.data["event_type"] == "grades/grade" && prefs.getNotificationsGrades() -> when (message.data["operation"]) {
+				message.data["eventType"] in listOf(
+					"grades/grade",
+					"crstests/user_grade"
+				) && prefs.getNotificationsGrades() -> when (message.data["operation"]) {
 					"create" -> {
 						sendNotification(
 							getString(R.string.you_have_new_grade),
@@ -58,13 +53,13 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 						)
 					}
 				}
-				message.data["event_type"] == "surveys/surveys" && prefs.getNotificationsSurveys() -> sendNotification(
+				message.data["eventType"] == "surveys/surveys" && prefs.getNotificationsSurveys() -> sendNotification(
 					getString(R.string.survey_has_appeared),
 					FragmentSurveys::class.java.name,
 					R.string.survey_notification_channel,
 					R.string.survey_notification_channel_id
 				)
-				message.data["event_type"] == "news/articles" && prefs.getNotificationsNews() -> sendNotification(
+				message.data["eventType"] == "news/articles" && prefs.getNotificationsNews() -> sendNotification(
 					getString(R.string.article_has_appeared),
 					FragmentNews::class.java.name,
 					R.string.article_notification_channel,
@@ -80,7 +75,13 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 			return
 		}
 
-		RepositoryEvent().registerFCMToken(token)
+		RepositoryUser(application).getById(null).onOnceCallback { (user) ->
+			if (user != null) {
+				RepositoryEvent().registerFCMToken(user.id, token)
+
+				return@onOnceCallback
+			}
+		}
 	}
 
 	private fun sendNotification(

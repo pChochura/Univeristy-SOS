@@ -90,7 +90,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/enable_notifications_description"
-					app:enabled="false"
 					app:isSwitch="true"
 					app:title="@string/enable_notifications" />
 
@@ -99,7 +98,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/grades_notifications_description"
-					app:enabled="false"
 					app:isSwitch="true"
 					app:title="@string/grades_notifications" />
 
@@ -108,7 +106,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/news_notifications_description"
-					app:enabled="false"
 					app:isSwitch="true"
 					app:title="@string/news_notifications" />
 
@@ -117,7 +114,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/surveys_notifications_description"
-					app:enabled="false"
 					app:hasSeparator="false"
 					app:isSwitch="true"
 					app:title="@string/surveys_notifications" />

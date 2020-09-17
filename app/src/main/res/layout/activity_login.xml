@@ -32,6 +32,7 @@
 		android:fontFamily="@font/montserrat_bold"
 		android:letterSpacing="0.05"
 		android:text="@string/login_title"
+		android:textAlignment="center"
 		android:textColor="?colorTextPrimary"
 		android:textSize="24sp"
 		app:layout_constraintLeft_toLeftOf="parent"

@@ -10,11 +10,20 @@ class ServiceUSOSEvent private constructor() {
 
 	private val clientService = ClientUSOSService.init()
 
-	suspend fun registerFCMToken(token: String) =
+	suspend fun subscribeEvent(eventType: String) =
 		withContext(Dispatchers.IO) {
 			clientService.run {
-				execute(registerFCMTokenRequest(token))?.run {
+				execute(subscribeEventRequest(eventType))?.run {
 					gson.fromJson<Any>(body)
+				}
+			}
+		}
+
+	suspend fun getAllSubscriptions() =
+		withContext(Dispatchers.IO) {
+			clientService.run {
+				execute(subscriptionsRequest())?.run {
+					gson.fromJson<List<Map<String, String>>>(body)
 				}
 			}
 		}

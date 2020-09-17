@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
+import com.google.firebase.iid.FirebaseInstanceId
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.LocaleHelper
@@ -14,6 +15,8 @@ import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
 import com.pointlessapps.mobileusos.managers.FragmentManager
+import com.pointlessapps.mobileusos.repositories.RepositoryEvent
+import com.pointlessapps.mobileusos.repositories.RepositoryUser
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.contentView
@@ -48,6 +51,23 @@ class ActivityMain : FragmentActivity() {
 			intent.getStringExtra("destinationFragmentName")?.also {
 				(Class.forName(it)?.newInstance() as? FragmentBase)?.also(::setFragment)
 			}
+		}
+
+		ensureNotificationSubscription()
+	}
+
+	private fun ensureNotificationSubscription() {
+		RepositoryEvent().apply {
+			RepositoryUser(application).getById(null).onOnceCallback { (user) ->
+				if (user != null) {
+					FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+						registerFCMToken(user.id, it.token)
+					}
+
+					return@onOnceCallback
+				}
+			}
+			ensureEventSubscription()
 		}
 	}
 

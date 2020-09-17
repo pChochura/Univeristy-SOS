@@ -56,7 +56,7 @@ class Preferences private constructor(context: Context?) {
 	}
 }
 
-fun AppPreferences.getAccessToken() = getJson<OAuth1AccessToken>(Preferences.KEY_ACCESS_TOKEN)
+fun AppPreferences.getAccessToken() = getJson<OAuth1AccessToken?>(Preferences.KEY_ACCESS_TOKEN)
 
 fun AppPreferences.putAccessToken(accessToken: OAuth1AccessToken) =
 	putJson(Preferences.KEY_ACCESS_TOKEN, accessToken)
@@ -105,28 +105,28 @@ fun AppPreferences.putTimetableAddEvent(value: Boolean) =
 
 
 fun AppPreferences.getNotificationsEnabled() =
-	getBoolean(Preferences.KEY_NOTIFICATIONS_ENABLED, false)
+	getBoolean(Preferences.KEY_NOTIFICATIONS_ENABLED, true)
 
 fun AppPreferences.putNotificationsEnabled(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_ENABLED, value)
 
 
 fun AppPreferences.getNotificationsGrades() =
-	getBoolean(Preferences.KEY_NOTIFICATIONS_GRADES, false)
+	getBoolean(Preferences.KEY_NOTIFICATIONS_GRADES, true)
 
 fun AppPreferences.putNotificationsGrades(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_GRADES, value)
 
 
 fun AppPreferences.getNotificationsNews() =
-	getBoolean(Preferences.KEY_NOTIFICATIONS_NEWS, false)
+	getBoolean(Preferences.KEY_NOTIFICATIONS_NEWS, true)
 
 fun AppPreferences.putNotificationsNews(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_NEWS, value)
 
 
 fun AppPreferences.getNotificationsSurveys() =
-	getBoolean(Preferences.KEY_NOTIFICATIONS_SURVEYS, false)
+	getBoolean(Preferences.KEY_NOTIFICATIONS_SURVEYS, true)
 
 fun AppPreferences.putNotificationsSurveys(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_SURVEYS, value)
