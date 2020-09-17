@@ -13,6 +13,14 @@ class Preferences private constructor(context: Context?) {
 
 	private val prefs = AppPreferences(context)
 
+	fun get(): AppPreferences {
+		if (instance == null) {
+			throw ExceptionNotInitialized("You have to call init() first!")
+		}
+
+		return instance!!.prefs
+	}
+
 	companion object : Utils.SingletonHolder<Preferences, Context>(::Preferences) {
 
 		const val KEY_ACCESS_TOKEN = "accessToken"

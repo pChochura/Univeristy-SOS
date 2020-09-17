@@ -5,15 +5,14 @@ import android.content.res.Configuration
 import java.util.*
 
 object LocaleHelper {
-	fun withLocale(context: Context): Context {
-		val locale = Locale.forLanguageTag(
-			Preferences.get().getSystemDefaultLanguage()?.toLowerCase(Locale.getDefault())
-				?: return context
-		)
-
-		Locale.setDefault(locale)
-		return context.createConfigurationContext(Configuration(context.resources.configuration.apply {
-			setLocale(locale)
+	fun withLocale(context: Context): Context =
+		context.createConfigurationContext(Configuration(context.resources.configuration.apply {
+			setLocale(
+				Locale.forLanguageTag(
+					Preferences.init(context).get().getSystemDefaultLanguage()
+						?.toLowerCase(Locale.getDefault())
+						?: return context
+				).also { Locale.setDefault(it) }
+			)
 		}))
-	}
 }
