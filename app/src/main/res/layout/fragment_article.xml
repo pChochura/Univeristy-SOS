@@ -46,6 +46,7 @@
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/montserrat_bold"
 				android:textColor="?colorTextPrimary"
+				android:textIsSelectable="true"
 				android:textSize="18sp"
 				tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
 
@@ -101,26 +102,29 @@
 					app:layout_constraintTop_toTopOf="parent"
 					tools:text="20.06.2020" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/articleContent"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:fontFamily="@font/montserrat"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp"
-					tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
-
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/articleAuthor"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:fontFamily="@font/montserrat_bold"
-					android:gravity="end"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp"
-					tools:text="Jan Kowalski" />
-
 			</com.google.android.material.chip.ChipGroup>
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/articleContent"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:fontFamily="@font/montserrat"
+				android:textColor="?colorTextPrimary"
+				android:textIsSelectable="true"
+				android:textSize="14sp"
+				tools:text="Wnioski o przyznanie zapomogi - rok akademicki 2019/2020" />
+
+			<androidx.appcompat.widget.AppCompatTextView
+				android:id="@+id/articleAuthor"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:fontFamily="@font/montserrat_bold"
+				android:gravity="end"
+				android:textColor="?colorTextPrimary"
+				android:textSize="14sp"
+				tools:text="Jan Kowalski" />
 
 		</androidx.appcompat.widget.LinearLayoutCompat>
 
