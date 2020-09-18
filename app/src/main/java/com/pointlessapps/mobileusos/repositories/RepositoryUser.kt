@@ -2,7 +2,6 @@ package com.pointlessapps.mobileusos.repositories
 
 import android.app.Application
 import com.pointlessapps.mobileusos.models.AppDatabase
-import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.services.ServiceUSOSUser
 import com.pointlessapps.mobileusos.utils.ObserverWrapper
@@ -45,9 +44,5 @@ class RepositoryUser(application: Application) {
 
 	fun getByQuery(query: String) = ObserverWrapper<List<User>> {
 		postValue(SourceType.ONLINE) { serviceUser.getByQuery(query) }
-	}
-
-	fun getCoursesByIds(ids: List<String>) = ObserverWrapper<List<Course>> {
-		postValue(SourceType.ONLINE) { serviceUser.getCoursesByIds(ids) }
 	}
 }

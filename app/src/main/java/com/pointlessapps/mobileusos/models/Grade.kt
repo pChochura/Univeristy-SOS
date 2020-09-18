@@ -41,7 +41,10 @@ data class Grade(
 	var courseId: String = "",
 	@ColumnInfo(name = "term_id")
 	@SerializedName("term_id")
-	var termId: String = ""
+	var termId: String = "",
+	@ColumnInfo(name = "course_edition")
+	@SerializedName("course_edition")
+	var courseEdition: Course? = null
 ) : Comparable<Grade> {
 
 	override fun compareTo(other: Grade) = compareValuesBy(other, this, { it.courseId })

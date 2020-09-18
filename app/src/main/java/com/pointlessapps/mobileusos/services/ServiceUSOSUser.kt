@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.services
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.pointlessapps.mobileusos.clients.ClientUSOSService
-import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.fromJson
@@ -37,15 +36,6 @@ class ServiceUSOSUser private constructor() {
 			clientService.run {
 				execute(usersRequest(query))?.run {
 					gson.fromJson<ResponseUserByQuery>(body).items?.flatMap { it.values }
-				}
-			}!!
-		}
-
-	suspend fun getCoursesByIds(ids: List<String>) =
-		withContext(Dispatchers.IO) {
-			clientService.run {
-				execute(userCoursesRequest(ids))?.run {
-					gson.fromJson<Map<String, Course>>(body).values.toList()
 				}
 			}!!
 		}

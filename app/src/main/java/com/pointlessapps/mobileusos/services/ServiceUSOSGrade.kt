@@ -42,6 +42,15 @@ class ServiceUSOSGrade private constructor() {
 			}!!
 		}
 
+	suspend fun getByExam(examId: String, examSessionNumber: Int) =
+		withContext(Dispatchers.IO) {
+			clientService.run {
+				execute(userGradeByExamRequest(examId, examSessionNumber))?.run {
+					gson.fromJson<Grade>(body)
+				}
+			}
+		}
+
 	@Keep
 	private class ResponseCourseGradesList {
 		@SerializedName("course_grades")

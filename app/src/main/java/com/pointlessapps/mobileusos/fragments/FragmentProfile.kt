@@ -21,8 +21,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.list_item_shortcut.view.*
 import kotlinx.android.synthetic.main.partial_profile_shortcuts.view.*
 import org.jetbrains.anko.doAsync
-import java.util.*
-import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Phaser
 import kotlin.reflect.full.primaryConstructor
 
 class FragmentProfile : FragmentBase() {
@@ -81,54 +80,47 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
-		val loaded = CountDownLatch(4)
+		val loaded = Phaser()
 
-		val dateToCheck = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -7) }.time
-
-		currentTerm.observe(this) { term ->
-			if (term == null) {
-				return@observe
+		viewModelUser.getRecentGrades().observe(this) { (grades) ->
+			root().listRecentGrades.setEmptyText(getString(R.string.no_recent_grades))
+			(root().listRecentGrades.adapter as? AdapterRecentGrade)?.apply {
+				update(grades.sortedBy { grade ->
+					grade.dateModified
+				})
 			}
 
-			viewModelUser.getGradesByTermIds(listOf(term)).observe(this) { (grades) ->
-				root().listRecentGrades.setEmptyText(getString(R.string.no_recent_grades))
-
-				var gradesList =
-					grades.toList().firstOrNull()?.second?.values?.toList() ?: return@observe
-				gradesList =
-					gradesList.filter { (it?.dateModified?.compareTo(dateToCheck) ?: 1) > 0 }
-						.filterNotNull()
-
-				viewModelUser.getCoursesByIds(gradesList.map { grade -> grade.courseId })
-					.observe(this) { (list) ->
-						val courses = list.associateBy { course -> course.courseId }
-						gradesList.forEach { grade ->
-							grade.courseName = courses[grade.courseId]?.courseName
-						}
-
-						(root().listRecentGrades.adapter as? AdapterRecentGrade)?.apply {
-							update(gradesList.sortedBy { grade ->
-								grade.dateModified
-							})
-						}
-					}.onFinished { loaded.countDown() }
+			grades.forEach {
+				if (!it.examId.isNullOrEmpty() && it.examSessionNumber != 0) {
+					loaded.register()
+					viewModelUser.getGradeByExam(it.examId!!, it.examSessionNumber)
+						.observe(this) { (grade) ->
+							if (it.courseName?.isEmpty() != false) {
+								it.courseName = grade?.courseName
+								root().listRecentGrades.adapter?.notifyDataSetChanged()
+							}
+						}.onFinished { loaded.arriveAndDeregister() }
+				}
 			}
 		}
 
+		loaded.register()
 		viewModelTimetable.getIncoming().observe(this) { (events) ->
 			(root().listMeetings.adapter as? AdapterMeeting)?.update(events.filterNotNull())
 
 			root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
-		}.onFinished { loaded.countDown() }
+		}.onFinished { loaded.arriveAndDeregister() }
 
+		loaded.register()
 		viewModelUser.getAllGroups().observe(this) { (terms) ->
 			postTerms(terms.map { group -> group.termId })
-		}.onFinished { loaded.countDown() }
+		}.onFinished { loaded.arriveAndDeregister() }
 
-		prepareProfileData { loaded.countDown() }
+		loaded.register()
+		prepareProfileData { loaded.arriveAndDeregister() }
 
 		doAsync {
-			loaded.await()
+			loaded.arriveAndAwaitAdvance()
 			callback?.invoke()
 		}
 	}

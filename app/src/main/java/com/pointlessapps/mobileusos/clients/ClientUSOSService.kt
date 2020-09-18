@@ -4,7 +4,6 @@ import android.net.Uri
 import com.github.scribejava.core.httpclient.multipart.MultipartPayload
 import com.github.scribejava.core.model.OAuthRequest
 import com.github.scribejava.core.model.Verb
-import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.services.USOSApi
 import com.pointlessapps.mobileusos.utils.Utils
 import java.util.*
@@ -69,23 +68,6 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
-	fun userCoursesRequest() = OAuthRequest(
-		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/courses/user").buildUpon()
-			.appendQueryParameter("fields", "course_editions[course_id|user_groups[course_fac_id]]")
-			.appendQueryParameter("active_terms", "true")
-			.build().toString()
-	)
-
-	fun userCoursesRequest(ids: List<String>) = OAuthRequest(
-		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/courses/courses").buildUpon()
-			.appendQueryParameter(
-				"fields",
-				"id|name|fac_id"
-			)
-			.appendQueryParameter("course_ids", ids.joinToString("|"))
-			.build().toString()
-	)
-
 	fun termsRequest(termIds: List<String>) = OAuthRequest(
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/terms/terms").buildUpon()
 			.appendQueryParameter(
@@ -105,17 +87,6 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.build().toString()
 	)
 
-	fun userGradesRequest(course: Course) = OAuthRequest(
-		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/grades/course_edition").buildUpon()
-			.appendQueryParameter(
-				"fields",
-				"value_symbol|value_description|date_modified|counts_into_average|comment"
-			)
-			.appendQueryParameter("course_id", course.courseId)
-			.appendQueryParameter("term_id", course.termId)
-			.build().toString()
-	)
-
 	fun userGradesRequest(termIds: List<String>) = OAuthRequest(
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/grades/terms2").buildUpon()
 			.appendQueryParameter(
@@ -130,9 +101,20 @@ class ClientUSOSService private constructor() : USOSApi() {
 		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/grades/latest").buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"value_symbol|value_description|date_modified|counts_into_average|comment|exam_id|exam_session_number"
+				"value_symbol|value_description|date_modified|counts_into_average|comment|exam_id|exam_session_number|modification_author"
 			)
-			.appendQueryParameter("days", "100")
+			.appendQueryParameter("days", "7")
+			.build().toString()
+	)
+
+	fun userGradeByExamRequest(examId: String, examSessionNumber: Int) = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/grades/grade").buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"value_symbol|value_description|date_modified|counts_into_average|comment|exam_id|exam_session_number|modification_author|course_edition[course_name]"
+			)
+			.appendQueryParameter("exam_id", examId)
+			.appendQueryParameter("exam_session_number", examSessionNumber.toString())
 			.build().toString()
 	)
 

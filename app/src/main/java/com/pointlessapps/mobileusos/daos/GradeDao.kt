@@ -16,6 +16,9 @@ interface GradeDao {
 	@Query("SELECT * FROM table_grades WHERE term_id = :termId")
 	suspend fun getByTermId(termId: String): List<Grade>
 
+	@Query("SELECT * FROM table_grades WHERE exam_id = :examId AND exam_session_number = :examSessionNumber")
+	suspend fun getByExam(examId: String, examSessionNumber: Int): Grade?
+
 	@Transaction
 	suspend fun getByGroups(courses: List<Course>): List<Grade> {
 		val list = mutableListOf<Grade>()

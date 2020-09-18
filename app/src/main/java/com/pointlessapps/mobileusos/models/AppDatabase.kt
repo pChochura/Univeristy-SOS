@@ -27,7 +27,7 @@ import com.pointlessapps.mobileusos.utils.Utils
 		Survey::class,
 		User.Faculty::class,
 	],
-	version = 2
+	version = 3
 )
 @TypeConverters(
 	ConvertersCommon::class,

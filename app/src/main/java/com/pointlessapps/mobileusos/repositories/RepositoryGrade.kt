@@ -28,4 +28,18 @@ class RepositoryGrade(application: Application) {
 			}
 		}
 	}
+
+	fun getRecentGrades() = ObserverWrapper<List<Grade>> {
+		postValue(SourceType.ONLINE) { serviceGrade.getRecentGrades() }
+	}
+
+	fun getByExam(examId: String, examSessionNumber: Int) = ObserverWrapper<Grade?> {
+		postValue { gradeDao.getByExam(examId, examSessionNumber) }
+		postValue(SourceType.ONLINE) {
+			serviceGrade.getByExam(examId, examSessionNumber)?.apply {
+				courseName = courseEdition?.courseName
+				insert(this)
+			}
+		}
+	}
 }

@@ -20,8 +20,6 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getUsersByQuery(query: String) = repositoryUser.getByQuery(query)
 
-	fun getCoursesByIds(ids: List<String>) = repositoryUser.getCoursesByIds(ids)
-
 	fun getAllGroups() = repositoryGroup.getAll()
 
 	fun getGroupByIdAndGroupNumber(courseUnitId: String, groupNumber: Int) =
@@ -31,6 +29,11 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 		repositoryTerm.getByIds(termIds.distinct().takeIf { it.isNotEmpty() } ?: listOf())
 
 	fun getGradesByTermIds(termIds: List<String>) = repositoryGrade.getByTermIds(termIds)
+
+	fun getRecentGrades() = repositoryGrade.getRecentGrades()
+
+	fun getGradeByExam(examId: String, examSessionNumber: Int) =
+		repositoryGrade.getByExam(examId, examSessionNumber)
 
 	fun getExamReportById(examId: String) = repositoryExamReport.getById(examId)
 
