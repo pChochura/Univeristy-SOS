@@ -54,6 +54,30 @@ data class User(
 	override fun compareTo(other: User) =
 		compareValuesBy(this, other, { it.lastName })
 
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (javaClass != other?.javaClass) return false
+
+		other as User
+
+		if (id != other.id) return false
+		if (titles != other.titles) return false
+		if (email != other.email) return false
+		if (firstName != other.firstName) return false
+		if (lastName != other.lastName) return false
+
+		return true
+	}
+
+	override fun hashCode(): Int {
+		var result = id.hashCode()
+		result = 31 * result + (titles?.hashCode() ?: 0)
+		result = 31 * result + (email?.hashCode() ?: 0)
+		result = 31 * result + (firstName?.hashCode() ?: 0)
+		result = 31 * result + (lastName?.hashCode() ?: 0)
+		return result
+	}
+
 	fun name(withTitles: Boolean = true): String {
 		var name = "$firstName $lastName"
 		if (!withTitles) {
@@ -75,7 +99,25 @@ data class User(
 		var before: String?,
 		@SerializedName("after")
 		var after: String?
-	)
+	) {
+		override fun equals(other: Any?): Boolean {
+			if (this === other) return true
+			if (javaClass != other?.javaClass) return false
+
+			other as Title
+
+			if (before != other.before) return false
+			if (after != other.after) return false
+
+			return true
+		}
+
+		override fun hashCode(): Int {
+			var result = before?.hashCode() ?: 0
+			result = 31 * result + (after?.hashCode() ?: 0)
+			return result
+		}
+	}
 
 	@Keep
 	class EmploymentFunction(

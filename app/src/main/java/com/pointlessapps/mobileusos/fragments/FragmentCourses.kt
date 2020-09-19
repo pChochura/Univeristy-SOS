@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterCourse
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.fragment_courses.view.*
 
@@ -28,17 +29,21 @@ class FragmentCourses : FragmentBase() {
 	private fun prepareCourses(callback: (() -> Unit)? = null) {
 		var finished = false
 		viewModelUser.getAllGroups().observe(this) { (groups) ->
-			val termIds = groups.map { group -> group.termId }
+			val termIds = groups.sorted().map { group -> group.termId }
 
 			viewModelUser.getTermsByIds(termIds).observe(this) { (terms) ->
 				val values = groups.groupBy { it.termId }
-					.mapValues { it.value.groupBy { group -> group.courseId } }
+					.mapValues {
+						it.value.groupBy { group -> group.courseId }
+							.mapValues { values -> values.value.sortedBy(Course::classTypeId) }
+					}
 
 				(root().listCourses.adapter as? AdapterCourse)?.notifyDataChanged(
-					terms.map {
+					terms.map { term ->
 						AdapterCourse.SectionHeader(
-							it,
-							values[it.id]?.values?.toList()!!
+							term,
+							values[term.id]?.values?.toList()
+								?.sortedBy { it.firstOrNull()?.courseId }!!
 						)
 					}
 				)

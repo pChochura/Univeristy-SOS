@@ -11,6 +11,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 	private val repositoryGroup = RepositoryGroup(application)
 	private val repositoryGrade = RepositoryGrade(application)
 	private val repositoryExamReport = RepositoryExamReport(application)
+	private val repositoryTest = RepositoryTest(application)
 	private val repositorySurvey = RepositorySurvey(application)
 	private val repositoryEmail = RepositoryEmail(application)
 
@@ -36,6 +37,12 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 		repositoryGrade.getByExam(examId, examSessionNumber)
 
 	fun getExamReportById(examId: String) = repositoryExamReport.getById(examId)
+
+	fun getAllTests() = repositoryTest.getAll()
+
+	fun getTestResultsByNodeIds(ids: List<String>) = repositoryTest.getResultsByNodeIds(ids)
+
+	fun getTestNodesByIds(ids: List<String>) = repositoryTest.getNodesByIds(ids)
 
 	fun getSurveysToFill() = repositorySurvey.getToFill()
 

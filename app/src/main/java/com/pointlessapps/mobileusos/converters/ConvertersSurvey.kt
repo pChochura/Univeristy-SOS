@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.utils.fromJson
 
@@ -14,8 +15,8 @@ class ConvertersSurvey {
 	fun fromQuestions(obj: List<Survey.Question>?): String = Gson().toJson(obj)
 
 	@TypeConverter
-	fun toAnswers(json: String): List<Survey.Question.Answer>? = Gson().fromJson(json)
+	fun toCourse(json: String): Course? = Gson().fromJson(json)
 
 	@TypeConverter
-	fun fromAnswers(obj: List<Survey.Question.Answer>?): String = Gson().toJson(obj)
+	fun fromCourse(obj: Course?): String = Gson().toJson(obj)
 }

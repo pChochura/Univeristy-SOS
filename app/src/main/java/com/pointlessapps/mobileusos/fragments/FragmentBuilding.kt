@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class FragmentBuilding(private var id: String) : FragmentBase(), FragmentPinnable {
+class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 

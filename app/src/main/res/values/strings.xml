@@ -182,4 +182,17 @@
 	<string name="article_has_appeared">A new article has appeared</string>
 	<string name="send_analytics">Send analytics</string>
 	<string name="send_analytics_description">Allow to send analytic data about unsuccessful requests and crashes</string>
+	<string name="guide">Guide</string>
+	<string name="tests">Tests</string>
+	<string name="all_participants">All participants</string>
+	<string name="groups_one">Group %s</string>
+	<string name="groups_other">Groups: %s</string>
+	<plurals name="groups">
+		<item quantity="one">@string/groups_one</item>
+		<item quantity="other">@string/groups_other</item>
+	</plurals>
+	<string name="there_been_a_problem">There\'s been a problem</string>
+	<string name="scopes_missing_description">In order to use this function you have to logout and login again. We will ask you for another permission.</string>
+	<string name="test">Test</string>
+	<string name="test_parts">Test parts</string>
 </resources>

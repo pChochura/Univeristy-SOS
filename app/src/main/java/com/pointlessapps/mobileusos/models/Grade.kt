@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.models
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
@@ -50,4 +51,35 @@ data class Grade(
 	override fun compareTo(other: Grade) = compareValuesBy(other, this, { it.courseId })
 
 	override fun toString() = "$valueSymbol"
+
+	@Keep
+	class GradeType(
+		@ColumnInfo(name = "values")
+		@SerializedName("values")
+		var values: List<Value>? = null,
+		@ColumnInfo(name = "name")
+		@SerializedName("name")
+		var name: Name? = null,
+		@PrimaryKey
+		@ColumnInfo(name = "id")
+		@SerializedName("id")
+		var id: String = "",
+	) {
+		@Keep
+		class Value(
+			@ColumnInfo(name = "name")
+			@SerializedName("name")
+			var name: Name? = null,
+			@ColumnInfo(name = "decimal_value")
+			@SerializedName("decimal_value")
+			var decimalValue: Int? = null,
+			@ColumnInfo(name = "symbol")
+			@SerializedName("symbol")
+			var symbol: String? = null,
+			@PrimaryKey(autoGenerate = true)
+			@ColumnInfo(name = "id")
+			@SerializedName("id")
+			var id: Int = 0,
+		)
+	}
 }

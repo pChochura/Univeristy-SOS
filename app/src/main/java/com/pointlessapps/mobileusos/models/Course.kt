@@ -54,5 +54,5 @@ data class Course(
 ) : Comparable<Course> {
 
 	override fun compareTo(other: Course) =
-		compareValuesBy(this, other, { it.courseId }, { it.courseName })
+		compareValuesBy(this, other, { it.courseId }, { it.courseUnitId }, { it.classTypeId })
 }

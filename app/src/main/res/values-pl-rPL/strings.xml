@@ -171,4 +171,13 @@
 	<string name="article_has_appeared">Pojawił się nowy artykuł!</string>
 	<string name="send_analytics">Wysyłaj dane analityczne</string>
 	<string name="send_analytics_description">Zezwól na wysyłanie danych dotyczących błędów w aplikacji oraz crashy</string>
+	<string name="guide">Przewodnik</string>
+	<string name="tests">Sprawdziany</string>
+	<string name="all_participants">Wszyscy</string>
+	<string name="groups_one">Grupa %s</string>
+	<string name="groups_other">Grupy: %s</string>
+	<string name="there_been_a_problem">Wystąpił problem</string>
+	<string name="scopes_missing_description">Żeby użyć tej funkcjonalności należy najpierw się wylogować i zalogować ponownie. Wymagane jest nowe pozwolenie.</string>
+	<string name="test">Sprawdzian</string>
+	<string name="test_parts">Części sprawdzianu</string>
 </resources>

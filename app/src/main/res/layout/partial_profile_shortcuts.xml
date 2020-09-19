@@ -100,6 +100,43 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/buttonTests"
+				android:layout_width="132dp"
+				android:layout_height="132dp"
+				android:layout_marginEnd="20dp"
+				android:clickable="true"
+				android:focusable="true"
+				app:cardBackgroundColor="?white"
+				app:cardCornerRadius="5dp"
+				app:cardElevation="0dp"
+				app:rippleColor="?colorTextSecondary">
+
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:orientation="vertical">
+
+					<androidx.appcompat.widget.AppCompatImageView
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						android:src="@drawable/ic_test"
+						app:tint="?colorTextPrimary" />
+
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/tests"
+						android:textAlignment="center"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp" />
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
+
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/buttonSurveys"
 				android:layout_width="132dp"
 				android:layout_height="132dp"

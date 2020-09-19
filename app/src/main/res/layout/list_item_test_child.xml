@@ -3,12 +3,16 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="10dp"
+	android:clickable="true"
+	android:focusable="true"
 	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
-	app:cardElevation="0dp">
+	app:cardElevation="0dp"
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -19,37 +23,27 @@
 			android:id="@+id/courseName"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginEnd="10dp"
 			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
-			android:layout_marginEnd="20dp"
 			app:fontFamily="@font/montserrat"
+			app:layout_constraintBottom_toTopOf="@id/groups"
 			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toLeftOf="@id/courseGroup"
 			app:layout_constraintTop_toTopOf="parent"
-			tools:text="Bazy danych" />
+			tools:text="Grafika komputerowa" />
 
 		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/courseGroup"
-			android:layout_width="wrap_content"
+			android:id="@+id/groups"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textColor="?colorTextPrimary"
+			android:layout_marginEnd="10dp"
+			android:textColor="?colorTextSecondary"
 			android:textSize="14sp"
 			app:fontFamily="@font/montserrat"
-			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			tools:text="Group 1" />
-
-		<com.google.android.material.chip.ChipGroup
-			android:id="@+id/courseClassTypes"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="15dp"
-			app:chipSpacingHorizontal="10dp"
-			app:chipSpacingVertical="10dp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/courseName" />
+			app:layout_constraintTop_toBottomOf="@id/courseName"
+			tools:text="Groups: 1, 2, 3" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

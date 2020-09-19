@@ -77,7 +77,8 @@ object HelperClientUSOS {
 					"grades",
 					"offline_access",
 					"mailclient",
-					"surveys_filling"
+					"surveys_filling",
+					"crstests"
 				)
 			)
 }

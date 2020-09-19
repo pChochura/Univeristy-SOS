@@ -44,5 +44,13 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 		}
 	}
 
-	override fun update(list: List<User>) = super.update(list.sorted())
+	override fun update(list: List<User>) {
+		list.forEach {
+			val found = this.list.find { user -> it.id == user.id }
+			if (found == null || found.titles != it.titles) {
+				super.update(list.sorted())
+				return@forEach
+			}
+		}
+	}
 }

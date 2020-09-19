@@ -36,7 +36,8 @@ class AdapterRecentGrade : AdapterSimple<Grade>(mutableListOf()) {
 			onClickListener?.invoke(list[position])
 		}
 
-		textName.text = list[position].courseName?.toString()
+		textName.text =
+			list[position].courseName?.toString() ?: root.context.getString(R.string.loading)
 		textValue.text = list[position].valueSymbol
 	}
 }

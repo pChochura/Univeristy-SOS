@@ -27,11 +27,13 @@ class RepositoryEvent {
 
 	fun ensureEventSubscription() {
 		GlobalScope.launch {
-			val subs = serviceEvent.getAllSubscriptions()
-			val newSubs =
-				availableSubscriptions.minus(subs?.map { it.getOrDefault("event_type", "") }
-					?: listOf())
-			newSubs.forEach { subscribeEvent(it) }
+			kotlin.runCatching {
+				val subs = serviceEvent.getAllSubscriptions()
+				val newSubs =
+					availableSubscriptions.minus(subs?.map { it.getOrDefault("event_type", "") }
+						?: listOf())
+				newSubs.forEach { subscribeEvent(it) }
+			}
 		}
 	}
 }

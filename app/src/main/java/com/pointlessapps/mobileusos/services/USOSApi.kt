@@ -8,6 +8,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pointlessapps.mobileusos.exceptions.ExceptionHttpUnsuccessful
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getAccessToken
@@ -51,7 +52,7 @@ open class USOSApi {
 					if (!isSuccessful) {
 						FirebaseCrashlytics.getInstance()
 							.log("Unsuccessful request from ${request.completeUrl}, [$code]: $body")
-						throw Error("Something went wrong")
+						throw ExceptionHttpUnsuccessful(body, code)
 					}
 				}
 			}

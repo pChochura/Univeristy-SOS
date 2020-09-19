@@ -48,9 +48,16 @@ class AdapterCourse(private val context: Context, sections: List<SectionHeader> 
 		childPosition: Int,
 		courses: List<Course>
 	) {
-		courses.firstOrNull()?.also {
-			itemView.textName.text = it.courseName.toString()
-			itemView.textGroup.text = context.getString(R.string.group_number, it.groupNumber)
+		itemView.textName.text = courses.firstOrNull()?.courseName.toString()
+		itemView.textGroup.text =
+			context.resources.getQuantityString(
+				R.plurals.groups,
+				courses.size,
+				courses.joinToString { it.groupNumber.toString() }
+			)
+		courses.distinctBy { it.groupNumber }.singleOrNull()?.also {
+			itemView.textGroup.text =
+				context.resources.getQuantityString(R.plurals.groups, 1, it.groupNumber.toString())
 		}
 
 		itemView.groupClassTypes.removeAllViews()

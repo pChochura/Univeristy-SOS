@@ -22,12 +22,12 @@ import com.pointlessapps.mobileusos.utils.Utils
 		BuildingRoom::class,
 		Building::class,
 		Email::class,
-		Exam::class,
+		Test::class,
 		CalendarEvent::class,
 		Survey::class,
 		User.Faculty::class,
 	],
-	version = 3
+	version = 8
 )
 @TypeConverters(
 	ConvertersCommon::class,
@@ -39,7 +39,7 @@ import com.pointlessapps.mobileusos.utils.Utils
 	ConvertersNews::class,
 	ConvertersRoom::class,
 	ConvertersEmail::class,
-	ConvertersExam::class,
+	ConvertersTest::class,
 	ConvertersBuilding::class,
 	ConvertersSurvey::class,
 )
@@ -55,7 +55,7 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun articleDao(): ArticleDao
 	abstract fun roomDao(): RoomDao
 	abstract fun emailDao(): EmailDao
-	abstract fun examDao(): ExamDao
+	abstract fun testDao(): TestDao
 	abstract fun buildingDao(): BuildingDao
 	abstract fun calendarDao(): CalendarDao
 	abstract fun surveyDao(): SurveyDao

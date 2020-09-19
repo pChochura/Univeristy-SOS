@@ -35,4 +35,7 @@ interface GradeDao {
 				grade.courseId
 			}
 		}.toMap()
+
+	@Query("SELECT * FROM table_grades WHERE date_modified > DATE('now', '-7 day')")
+	suspend fun getRecent(): List<Grade>
 }

@@ -53,7 +53,10 @@ class ActivityMain : FragmentActivity() {
 			}
 		}
 
-		ensureNotificationSubscription()
+		try {
+			ensureNotificationSubscription()
+		} catch (e: Exception) {
+		}
 	}
 
 	private fun ensureNotificationSubscription() {

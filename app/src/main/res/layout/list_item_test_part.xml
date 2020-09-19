@@ -3,12 +3,16 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="10dp"
+	android:clickable="true"
+	android:focusable="true"
 	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
-	app:cardElevation="0dp">
+	app:cardElevation="0dp"
+	app:rippleColor="?colorTextSecondary">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -16,40 +20,33 @@
 		android:padding="15dp">
 
 		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/courseName"
+			android:id="@+id/testPartName"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:textColor="?colorTextPrimary"
 			android:textSize="14sp"
-			android:layout_marginEnd="20dp"
+			android:layout_marginEnd="10dp"
 			app:fontFamily="@font/montserrat"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toLeftOf="@id/courseGroup"
+			app:layout_constraintRight_toLeftOf="@id/testPartValue"
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Bazy danych" />
 
-		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/courseGroup"
+		<com.google.android.material.chip.Chip
+			android:id="@+id/testPartValue"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textColor="?colorTextPrimary"
+			android:backgroundTint="@color/colorAccent"
+			android:clickable="false"
+			android:fontFamily="@font/montserrat"
+			android:textColor="@color/white"
 			android:textSize="14sp"
-			app:fontFamily="@font/montserrat"
+			app:chipMinTouchTargetSize="32dp"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintRight_toRightOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
-			tools:text="Group 1" />
-
-		<com.google.android.material.chip.ChipGroup
-			android:id="@+id/courseClassTypes"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="15dp"
-			app:chipSpacingHorizontal="10dp"
-			app:chipSpacingVertical="10dp"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/courseName" />
+			tools:text="4.0 (db)" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -23,7 +23,7 @@ class RepositoryGroup(application: Application) {
 	fun getAll() = ObserverWrapper<List<Course>> {
 		postValue { groupDao.getAll().sorted() }
 		postValue(SourceType.ONLINE) {
-			serviceGroup.getAll().also {
+			serviceGroup.getAll().sorted().also {
 				insert(*it.toTypedArray())
 			}
 		}

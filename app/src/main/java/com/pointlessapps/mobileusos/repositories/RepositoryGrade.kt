@@ -30,7 +30,12 @@ class RepositoryGrade(application: Application) {
 	}
 
 	fun getRecentGrades() = ObserverWrapper<List<Grade>> {
-		postValue(SourceType.ONLINE) { serviceGrade.getRecentGrades() }
+		postValue { gradeDao.getRecent() }
+		postValue(SourceType.ONLINE) {
+			serviceGrade.getRecentGrades().also {
+				insert(*it.toTypedArray())
+			}
+		}
 	}
 
 	fun getByExam(examId: String, examSessionNumber: Int) = ObserverWrapper<Grade?> {
