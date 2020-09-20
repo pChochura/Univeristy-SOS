@@ -2,24 +2,15 @@ package com.pointlessapps.mobileusos.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
 import com.pointlessapps.mobileusos.R
-import com.pointlessapps.mobileusos.adapters.AdapterUniversity
-import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
+import com.pointlessapps.mobileusos.fragments.FragmentBase
+import com.pointlessapps.mobileusos.fragments.FragmentLogin
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.managers.SearchManager
-import com.pointlessapps.mobileusos.utils.DialogUtil
-import com.pointlessapps.mobileusos.utils.dp
-import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.dialog_pick_university.*
 
-class ActivityLogin : ComponentActivity() {
-
-	private val viewModelCommon by viewModels<ViewModelCommon>()
+class ActivityLogin : FragmentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -36,55 +27,21 @@ class ActivityLogin : ComponentActivity() {
 		setTheme(R.style.AppTheme)
 		setContentView(R.layout.activity_login)
 
-		prepareClickListeners()
-	}
-
-	private fun prepareClickListeners() {
-		buttonLogin.setOnClickListener {
-			DialogUtil.create(this, R.layout.dialog_pick_university, { dialog ->
-				if (applicationContext == null) {
-					return@create
+		supportFragmentManager.beginTransaction().also {
+			it.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+			it.add(R.id.containerFragment, FragmentLogin().apply {
+				onChangeFragment = { fragment ->
+					supportFragmentManager.beginTransaction()
+						.replace(R.id.containerFragment, fragment as FragmentBase).commit()
 				}
-
-				dialog.listUniversities.apply {
-					setAdapter(AdapterUniversity().apply {
-						onClickListener = { university ->
-							if (university.consumerKey == null || university.consumerSecret == null) {
-								throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
-							}
-
-							HelperClientUSOS.handleLogin(this@ActivityLogin, university)
-
-							dialog.dismiss()
-						}
-					})
-				}
-
-				viewModelCommon.getAllUniversities().observe(this) {
-					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
-						update(it.first)
-						showMatching(dialog.inputSearchUniversities.text.toString())
-					}
-
-					dialog.listUniversities.apply {
-						setEmptyText(getString(R.string.no_universities))
-						setEmptyIcon(R.drawable.ic_no_universities)
-						setLoaded(false)
-					}
-				}.onFinished {
-					dialog.listUniversities.setLoaded(true)
-				}
-
-				SearchManager.of(dialog.inputSearchUniversities).setOnChangeTextListener {
-					(dialog.listUniversities.adapter as? AdapterUniversity)?.showMatching(it)
-				}
-			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
+			})
+			it.commit()
 		}
 	}
 
 	override fun onNewIntent(intent: Intent?) {
 		super.onNewIntent(intent)
-		HelperClientUSOS.handleLoginResult(this, intent) {
+		HelperClientUSOS.handleLoginResult(this, intent?.data) {
 			startActivity(
 				Intent(
 					this,
@@ -93,5 +50,15 @@ class ActivityLogin : ComponentActivity() {
 			)
 			finish()
 		}
+	}
+
+	override fun onBackPressed() {
+		supportFragmentManager.beginTransaction()
+			.replace(R.id.containerFragment, FragmentLogin().apply {
+				onChangeFragment = { fragment ->
+					supportFragmentManager.beginTransaction()
+						.replace(R.id.containerFragment, fragment as FragmentBase).commit()
+				}
+			}).commit()
 	}
 }

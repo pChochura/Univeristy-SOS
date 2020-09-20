@@ -16,19 +16,30 @@ import org.jetbrains.anko.doAsync
 
 object HelperClientUSOS {
 
+	const val CALLBACK_URL_HOST = "usosauth"
+	var university: University? = null
+
 	private const val LOGIN_TABS_REQUEST_CODE = 123
-	private const val CALLBACK_URL_HOST = "usosauth"
-	private var university: University? = null
 	private var requestToken: OAuth1RequestToken? = null
 	private var service: OAuth10aService? = null
 
-	fun handleLogin(activity: Activity, university: University) {
+	fun handleLogin(
+		activity: Activity,
+		university: University,
+		authUrlCallback: ((String) -> Unit)? = null
+	) {
 		doAsync {
 			service =
 				getService(university.url, university.consumerKey!!, university.consumerSecret!!)
 			service?.apply {
 				this@HelperClientUSOS.university = university
 				this@HelperClientUSOS.requestToken = requestToken
+
+				authUrlCallback?.also {
+					it(getAuthorizationUrl(this@HelperClientUSOS.requestToken))
+
+					return@apply
+				}
 
 				activity.startActivityForResult(CustomTabsIntent.Builder().apply {
 					setToolbarColor(
@@ -38,6 +49,7 @@ object HelperClientUSOS {
 						)
 					)
 				}.build().intent.apply {
+					setPackage(CustomTabsHelper.getPackageNameToUse(activity))
 					data = Uri.parse(getAuthorizationUrl(this@HelperClientUSOS.requestToken))
 					addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				}, LOGIN_TABS_REQUEST_CODE)
@@ -45,19 +57,17 @@ object HelperClientUSOS {
 		}
 	}
 
-	fun handleLoginResult(activity: Activity, intent: Intent?, successCallback: () -> Unit) {
+	fun handleLoginResult(activity: Activity, data: Uri?, successCallback: () -> Unit) {
 		activity.finishActivity(LOGIN_TABS_REQUEST_CODE)
-		intent?.data?.also {
-			if (it.scheme == CALLBACK_URL_HOST) {
-				doAsync {
-					val verifier = it.getQueryParameter("oauth_verifier")
-					val accessToken: OAuth1AccessToken =
-						service?.getAccessToken(requestToken, verifier)
-							?: throw NullPointerException("oauthService cannot be null.")
-					Preferences.get().putAccessToken(accessToken)
-					Preferences.get().putSelectedUniversity(this@HelperClientUSOS.university!!)
-					successCallback.invoke()
-				}
+		if (data?.scheme == CALLBACK_URL_HOST) {
+			doAsync {
+				val verifier = data.getQueryParameter("oauth_verifier")
+				val accessToken: OAuth1AccessToken =
+					service?.getAccessToken(requestToken, verifier)
+						?: throw NullPointerException("oauthService cannot be null.")
+				Preferences.get().putAccessToken(accessToken)
+				Preferences.get().putSelectedUniversity(this@HelperClientUSOS.university!!)
+				successCallback.invoke()
 			}
 		}
 	}

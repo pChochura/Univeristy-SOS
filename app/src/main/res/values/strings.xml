@@ -195,4 +195,7 @@
 	<string name="scopes_missing_description">In order to use this function you have to logout and login again. We will ask you for another permission.</string>
 	<string name="test">Test</string>
 	<string name="test_parts">Test parts</string>
+	<string name="ignore">Ignore</string>
+	<string name="use_default">Use default</string>
+	<string name="default_browser_description">If you prefer to use a default browser instead of dedicated one, click there.</string>
 </resources>
