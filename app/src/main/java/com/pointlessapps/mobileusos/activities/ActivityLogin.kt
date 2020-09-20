@@ -12,6 +12,9 @@ import com.pointlessapps.mobileusos.helpers.Preferences
 
 class ActivityLogin : FragmentActivity() {
 
+	private val loginFragment = FragmentLogin()
+	private var currentFragment: FragmentBase? = loginFragment
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
@@ -27,15 +30,10 @@ class ActivityLogin : FragmentActivity() {
 		setTheme(R.style.AppTheme)
 		setContentView(R.layout.activity_login)
 
-		supportFragmentManager.beginTransaction().also {
-			it.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-			it.add(R.id.containerFragment, FragmentLogin().apply {
-				onChangeFragment = { fragment ->
-					supportFragmentManager.beginTransaction()
-						.replace(R.id.containerFragment, fragment as FragmentBase).commit()
-				}
-			})
-			it.commit()
+		supportFragmentManager.beginTransaction().apply {
+			setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+			add(R.id.containerFragment, prepareFragment(loginFragment))
+			commit()
 		}
 	}
 
@@ -53,12 +51,22 @@ class ActivityLogin : FragmentActivity() {
 	}
 
 	override fun onBackPressed() {
+		if (currentFragment == loginFragment) {
+			finish()
+
+			return
+		}
+
+		currentFragment = loginFragment
 		supportFragmentManager.beginTransaction()
-			.replace(R.id.containerFragment, FragmentLogin().apply {
-				onChangeFragment = { fragment ->
-					supportFragmentManager.beginTransaction()
-						.replace(R.id.containerFragment, fragment as FragmentBase).commit()
-				}
-			}).commit()
+			.replace(R.id.containerFragment, prepareFragment(loginFragment)).commit()
+	}
+
+	private fun prepareFragment(fragment: FragmentBase) = fragment.apply {
+		onChangeFragment = { fragment ->
+			currentFragment = fragment as FragmentBase
+			supportFragmentManager.beginTransaction()
+				.replace(R.id.containerFragment, fragment).commit()
+		}
 	}
 }
