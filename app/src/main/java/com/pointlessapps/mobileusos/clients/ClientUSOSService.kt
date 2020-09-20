@@ -457,4 +457,15 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.appendQueryParameter("fields", "institution")
 			.build().toString()
 	)
+
+	fun guideRequest() = OAuthRequest(
+		Verb.GET, Uri.parse("${selectedUniversity?.serviceUrl}/guide/guide")
+			.buildUpon()
+			.appendQueryParameter(
+				"fields",
+				"id|title|pages[id|title|entries[id|title|content|image_urls[720x405]]]"
+			)
+			.appendQueryParameter("lang", Locale.getDefault().toLanguageTag())
+			.build().toString()
+	)
 }

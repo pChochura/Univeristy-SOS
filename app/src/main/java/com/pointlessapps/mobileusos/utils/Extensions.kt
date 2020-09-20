@@ -1,6 +1,7 @@
 package com.pointlessapps.mobileusos.utils
 
 import android.content.res.Resources
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.size
@@ -49,3 +50,6 @@ fun ViewGroup.addChip(chipText: String, onRemovedListener: (() -> Unit)? = null)
 			}
 		}, size - 1
 	)
+
+fun String.isEmailProtocol() =
+	Patterns.EMAIL_ADDRESS.matcher(this.substringAfter("mailto:")).matches()

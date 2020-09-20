@@ -13,6 +13,7 @@ class ViewModelCommon(application: Application) : AndroidViewModel(application) 
 	private val repositoryBuilding = RepositoryBuilding(application)
 	private val repositoryCalendar = RepositoryCalendar(application)
 	private val repositoryApi = RepositoryApi(application)
+	private val repositoryGuide = RepositoryGuide(application)
 
 	fun getAllUniversities() = repositoryUniversity.getAll()
 
@@ -31,4 +32,6 @@ class ViewModelCommon(application: Application) : AndroidViewModel(application) 
 		}.time)
 
 	fun getPrimaryFaculty() = repositoryApi.getPrimaryFaculty()
+
+	fun getWholeGuide() = repositoryGuide.getWhole()
 }

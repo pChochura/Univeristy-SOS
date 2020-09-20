@@ -60,6 +60,7 @@ class FragmentProfile : FragmentBase() {
 		root().buttonCourses.setOnClickListener { onChangeFragment?.invoke(FragmentCourses()) }
 		root().buttonTests.setOnClickListener { onChangeFragment?.invoke(FragmentTests()) }
 		root().buttonSurveys.setOnClickListener { onChangeFragment?.invoke(FragmentSurveys()) }
+		root().buttonGuide.setOnClickListener { onChangeFragment?.invoke(FragmentGuide()) }
 		root().buttonSettings.setOnClickListener { onChangeFragment?.invoke(FragmentSettings()) }
 	}
 
@@ -144,7 +145,7 @@ class FragmentProfile : FragmentBase() {
 	}
 
 	private fun prepareShortcutsList() {
-		for (i in (root().listShortcuts.size - 5) downTo 0) {
+		for (i in (root().listShortcuts.size - 6) downTo 0) {
 			root().listShortcuts.removeViewAt(i)
 		}
 

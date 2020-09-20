@@ -26,8 +26,9 @@ import com.pointlessapps.mobileusos.utils.Utils
 		CalendarEvent::class,
 		Survey::class,
 		User.Faculty::class,
+		Chapter::class,
 	],
-	version = 8
+	version = 9
 )
 @TypeConverters(
 	ConvertersCommon::class,
@@ -42,6 +43,7 @@ import com.pointlessapps.mobileusos.utils.Utils
 	ConvertersTest::class,
 	ConvertersBuilding::class,
 	ConvertersSurvey::class,
+	ConvertersChapters::class,
 )
 abstract class AppDatabase : RoomDatabase() {
 
@@ -60,6 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun calendarDao(): CalendarDao
 	abstract fun surveyDao(): SurveyDao
 	abstract fun facultyDao(): FacultyDao
+	abstract fun chapterDao(): ChapterDao
 
 	companion object : Utils.SingletonHolder<AppDatabase, Context>({
 		Room.databaseBuilder(
