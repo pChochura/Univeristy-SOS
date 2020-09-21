@@ -10,15 +10,19 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.fragments.*
-import com.pointlessapps.mobileusos.helpers.LocaleHelper
-import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
-import com.pointlessapps.mobileusos.helpers.getSystemDefaultTab
+import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.managers.FragmentManager
+import com.pointlessapps.mobileusos.models.Article
+import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.repositories.RepositoryEvent
 import com.pointlessapps.mobileusos.repositories.RepositoryUser
+import com.pointlessapps.mobileusos.services.ServiceUSOSArticle
+import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.contentView
 
 class ActivityMain : FragmentActivity() {
@@ -53,16 +57,15 @@ class ActivityMain : FragmentActivity() {
 			}
 		}
 
-		try {
-			ensureNotificationSubscription()
-		} catch (e: Exception) {
-		}
+		runCatching { ensureNotificationSubscription() }
 	}
 
 	private fun ensureNotificationSubscription() {
 		RepositoryEvent().apply {
 			RepositoryUser(application).getById(null).onOnceCallback { (user) ->
 				if (user != null) {
+					ensureNotificationsSubscription(user.id)
+
 					FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
 						registerFCMToken(user.id, it.token)
 					}
@@ -71,6 +74,23 @@ class ActivityMain : FragmentActivity() {
 				}
 			}
 			ensureEventSubscription()
+		}
+	}
+
+	private fun RepositoryEvent.ensureNotificationsSubscription(userId: String) {
+		GlobalScope.launch(Dispatchers.IO) {
+			val surveys = ServiceUSOSSurvey.init().getToFill()
+			val articles = ServiceUSOSArticle.init().getAll()
+			Preferences.get().also {
+				subscribeNotifications(
+					userId,
+					it.getAccessToken()?.token ?: return@also,
+					it.getAccessToken()?.tokenSecret ?: return@also,
+					it.getSelectedUniversity().serviceUrl ?: return@also,
+					surveys.map(Survey::id),
+					articles.map(Article::id),
+				)
+			}
 		}
 	}
 

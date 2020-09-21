@@ -21,13 +21,33 @@ class RepositoryEvent {
 		}
 	}
 
+	fun subscribeNotifications(
+		userId: String,
+		accessToken: String,
+		accessTokenSecret: String,
+		universityServiceUrl: String,
+		surveysIds: List<String>,
+		articlesIds: List<String>
+	) = ObserverWrapper<Any?> {
+		postValue(SourceType.ONLINE) {
+			serviceFirebaseDatabase.subscribeNotifications(
+				userId,
+				accessToken,
+				accessTokenSecret,
+				universityServiceUrl,
+				surveysIds,
+				articlesIds
+			)
+		}
+	}
+
 	private fun subscribeEvent(eventType: String) = ObserverWrapper<Any?> {
 		postValue(SourceType.ONLINE) { serviceEvent.subscribeEvent(eventType) }
 	}
 
 	fun ensureEventSubscription() {
 		GlobalScope.launch {
-			kotlin.runCatching {
+			runCatching {
 				val subs = serviceEvent.getAllSubscriptions()
 				val newSubs =
 					availableSubscriptions.minus(subs?.map { it.getOrDefault("event_type", "") }

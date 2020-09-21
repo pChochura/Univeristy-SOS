@@ -1,6 +1,7 @@
 package com.pointlessapps.mobileusos.services
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.pointlessapps.mobileusos.models.University
 import com.pointlessapps.mobileusos.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +20,31 @@ class ServiceFirebaseDatabase private constructor() {
 				.toObjects(University::class.java)
 		}
 
-	suspend fun registerFcmToken(userId: String, fcmToken: String): Unit =
-		withContext(Dispatchers.Main) {
-			fcmTokensCollection.document(userId).set(mapOf("token" to fcmToken))
-		}
+	suspend fun registerFcmToken(userId: String, fcmToken: String) = withContext(Dispatchers.IO) {
+		fcmTokensCollection.document(userId).set(mapOf("token" to fcmToken), SetOptions.merge())
+	}
+
+	suspend fun subscribeNotifications(
+		userId: String,
+		accessToken: String,
+		accessTokenSecret: String,
+		universityServiceUrl: String,
+		surveysIds: List<String>,
+		articlesIds: List<String>
+	) = withContext(Dispatchers.IO) {
+		fcmTokensCollection.document(userId)
+			.set(
+				mapOf(
+					"accessToken" to mapOf(
+						"token" to accessToken,
+						"secret" to accessTokenSecret,
+					),
+					"serviceUrl" to universityServiceUrl,
+					"surveysIds" to surveysIds,
+					"articlesIds" to articlesIds,
+				), SetOptions.merge()
+			)
+	}
 
 	companion object : Utils.SingletonHolder<ServiceFirebaseDatabase, Unit>({
 		ServiceFirebaseDatabase()

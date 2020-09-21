@@ -7,16 +7,14 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityMain
-import com.pointlessapps.mobileusos.fragments.FragmentGrades
-import com.pointlessapps.mobileusos.fragments.FragmentNews
-import com.pointlessapps.mobileusos.fragments.FragmentProfile
-import com.pointlessapps.mobileusos.fragments.FragmentSurveys
+import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.repositories.RepositoryEvent
 import com.pointlessapps.mobileusos.repositories.RepositoryUser
@@ -39,7 +37,9 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 					"create" -> {
 						sendNotification(
 							getString(R.string.you_have_new_grade),
-							FragmentProfile::class.java.name,
+							if (message.data["eventType"] == "crstests/user_grade")
+								FragmentTest::class.java.name
+							else FragmentProfile::class.java.name,
 							R.string.grade_notification_channel,
 							R.string.grade_notification_channel_id
 						)
@@ -47,7 +47,9 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 					"update" -> {
 						sendNotification(
 							getString(R.string.grade_has_been_updated),
-							FragmentGrades::class.java.name,
+							if (message.data["eventType"] == "crstests/user_grade")
+								FragmentTest::class.java.name
+							else FragmentGrades::class.java.name,
 							R.string.default_notification_channel,
 							R.string.grade_notification_channel_id
 						)
@@ -98,7 +100,7 @@ class ServiceFirebaseMessaging : FirebaseMessagingService() {
 
 		val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 		val notificationBuilder = NotificationCompat.Builder(this, getString(channelId))
-			.setSmallIcon(R.mipmap.ic_launcher)
+			.setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(getString(R.string.usos_notification_title))
 			.setContentText(messageBody)
 			.setAutoCancel(true)
