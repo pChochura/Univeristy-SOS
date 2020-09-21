@@ -72,9 +72,8 @@ class FragmentManager private constructor(
 	}
 
 	private fun prepareFragment(fragment: FragmentBaseInterface) {
-		fragment.onChangeFragment = {
-			setFragment(it.apply { prepareFragment(this) })
-		}
+		fragment.onChangeFragment = { setFragment(it.apply { prepareFragment(this) }) }
+		fragment.onReplaceFragment = { setFragment(it.apply { prepareFragment(this) }, false) }
 		fragment.onForceRecreate = {
 			activity.startActivity(
 				Intent(

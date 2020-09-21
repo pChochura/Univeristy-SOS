@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.content.Intent
 import android.net.Uri
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
@@ -14,9 +15,14 @@ import kotlinx.android.synthetic.main.fragment_page.view.*
 
 class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable {
 
-	constructor(page: Chapter.Page) : this(Gson().toJson(page))
+	constructor(page: Chapter.Page, nextPageName: String?) : this(Gson().toJson(page)) {
+		this.nextPageName = nextPageName
+	}
 
 	private val page = Gson().fromJson<Chapter.Page>(json)
+	private var nextPageName: String? = null
+
+	var onNextPageClickListener: (() -> Unit)? = null
 
 	override fun getLayoutId() = R.layout.fragment_page
 
@@ -26,6 +32,12 @@ class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable 
 
 	override fun created() {
 		prepareEntriesList()
+
+		nextPageName?.also {
+			root().buttonNext.isVisible = true
+			root().nextPageName.text = it
+		}
+		root().buttonNext.setOnClickListener { onNextPageClickListener?.invoke() }
 
 		root().pageName.text = page.title.toString()
 

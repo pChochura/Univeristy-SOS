@@ -198,4 +198,5 @@
 	<string name="ignore">Ignore</string>
 	<string name="use_default">Use default</string>
 	<string name="default_browser_description">If you prefer to use a default browser instead of dedicated one, click there.</string>
+	<string name="next">Next</string>
 </resources>

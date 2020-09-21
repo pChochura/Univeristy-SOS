@@ -183,4 +183,5 @@
 	<string name="ignore">Ignoruj</string>
 	<string name="use_default">Użyj domyślnej</string>
 	<string name="default_browser_description">Jeśli wolisz użyć domyślnej przeglądarki zamiast dedykowanej, wciśnij poniżej.</string>
+	<string name="next">Dalej</string>
 </resources>

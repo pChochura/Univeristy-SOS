@@ -18,7 +18,7 @@ class AdapterChapter(private val context: Context, sections: List<SectionHeader>
 		sections
 	) {
 
-	lateinit var onClickListener: (Chapter.Page) -> Unit
+	lateinit var onClickListener: (Chapter.Page, Int, Int) -> Unit
 
 	override fun onCreateSectionViewHolder(itemView: ViewGroup, viewType: Int) =
 		SectionViewHolder(
@@ -45,7 +45,7 @@ class AdapterChapter(private val context: Context, sections: List<SectionHeader>
 		page: Chapter.Page
 	) {
 		itemView.bg.setOnClickListener {
-			onClickListener.invoke(page)
+			onClickListener.invoke(page, sectionPosition, childPosition)
 		}
 
 		itemView.textName.text = page.title.toString()

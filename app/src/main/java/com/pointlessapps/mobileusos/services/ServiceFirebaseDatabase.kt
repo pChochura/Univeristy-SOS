@@ -15,7 +15,8 @@ class ServiceFirebaseDatabase private constructor() {
 
 	suspend fun getAllUniversities(): List<University> =
 		withContext(Dispatchers.IO) {
-			universityCollection.get().await().toObjects(University::class.java)
+			universityCollection.whereEqualTo("available", true).get().await()
+				.toObjects(University::class.java)
 		}
 
 	suspend fun registerFcmToken(userId: String, fcmToken: String): Unit =

@@ -23,6 +23,7 @@ abstract class FragmentBase : Fragment(), FragmentBaseInterface {
 	override var onForceGoBack: (() -> Unit)? = null
 	override var onForceRecreate: (() -> Unit)? = null
 	override var onChangeFragment: ((FragmentBaseInterface) -> Unit)? = null
+	override var onReplaceFragment: ((FragmentBaseInterface) -> Unit)? = null
 	override var onForceRefreshAllFragments: (() -> Unit)? = null
 	override var onBackPressedListener: (() -> Boolean)? = null
 	override var onKeyboardStateChangedListener: ((Boolean) -> Unit)? = null
