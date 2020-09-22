@@ -31,36 +31,38 @@ exports.postNotification = functions.https.onRequest(async (req, res) => {
   }
 
   const eventType = req.body.event_type;
+  const jobs = [];
 
-  await Promise.all(
-    req.body.entry.map(async (entry) => {
-      if (!entry.operation) {
-        return;
-      }
+  req.body.entry.forEach((entry) => {
+    if (!entry.operation) {
+      return;
+    }
 
-      const operation = entry.operation;
-      let tokensSnapshot = admin.firestore().collection('fcmTokens');
+    const operation = entry.operation;
+    let tokensSnapshot = admin.firestore().collection('fcmTokens');
 
-      if (
-        entry.related_user_ids &&
-        (entry.related_user_ids.length > 1 || entry.related_user_ids[0] !== '*')
-      ) {
-        tokensSnapshot = tokensSnapshot.where(
-          firestore.FieldPath.documentId(),
-          'in',
-          entry.related_user_ids
-        );
-      }
-
-      const tokens = (await tokensSnapshot.get()).docs.map((doc) =>
-        doc.get('token')
+    if (
+      entry.related_user_ids &&
+      (entry.related_user_ids.length > 1 || entry.related_user_ids[0] !== '*')
+    ) {
+      tokensSnapshot = tokensSnapshot.where(
+        firestore.FieldPath.documentId(),
+        'in',
+        entry.related_user_ids
       );
+    }
 
-      return admin.messaging().sendToDevice(tokens, {
-        data: { eventType, operation },
-      });
-    })
-  );
+    jobs.push(
+      tokensSnapshot.get().then(async (it) => {
+        const tokens = it.docs.map((doc) => doc.get('token'));
+        return await admin.messaging().sendToDevice(tokens, {
+          data: { eventType, operation },
+        });
+      })
+    );
+  });
+
+  await Promise.all(jobs);
 
   res.sendStatus(200);
 });
@@ -77,7 +79,7 @@ const getArrayDiff = (arr1, arr2) => {
 };
 
 exports.checkNotifications = functions.pubsub
-  .schedule('every 30 minutes from 6:00 to 22:00')
+  .schedule('every 31 minutes from 6:13 to 22:43')
   .onRun(async () => {
     const users = (await admin.firestore().collection('fcmTokens').get()).docs
       .filter((doc) => doc.get('accessToken') && doc.get('serviceUrl'))
@@ -90,17 +92,29 @@ exports.checkNotifications = functions.pubsub
         token: doc.get('token'),
       }));
 
+    const universities = [];
+    const articlesNotifications = [];
+    const surveysNotifications = [];
+
     users.forEach(async (user) => {
-      const university = (
-        await admin
-          .firestore()
-          .collection('universities')
-          .where('serviceUrl', '==', user.serviceUrl)
-          .get()
-      ).docs.map((doc) => ({
-        key: doc.get('consumerKey'),
-        secret: doc.get('consumerSecret'),
-      }))[0];
+      let university = universities.find(
+        (u) => u.serviceUrl === user.serviceUrl
+      );
+      if (university === null) {
+        university = (
+          await admin
+            .firestore()
+            .collection('universities')
+            .where('serviceUrl', '==', user.serviceUrl)
+            .get()
+        ).docs.map((doc) => ({
+          key: doc.get('consumerKey'),
+          secret: doc.get('consumerSecret'),
+          serviceUrl: user.serviceUrl,
+        }))[0];
+
+        universities.push(university);
+      }
 
       const oauth = new OAuth(
         '',
@@ -146,9 +160,7 @@ exports.checkNotifications = functions.pubsub
             { merge: true }
           );
 
-        admin.messaging().sendToDevice(user.token, {
-          data: { eventType: 'news/articles' },
-        });
+        articlesNotifications.push(user.token);
       }
 
       if (getArrayDiff(user.surveysIds, surveys).length > 0) {
@@ -161,9 +173,14 @@ exports.checkNotifications = functions.pubsub
             { merge: true }
           );
 
-        admin.messaging().sendToDevice(user.token, {
-          data: { eventType: 'surveys/surveys' },
-        });
+        surveysNotifications.push(user.token);
       }
+    });
+
+    admin.messaging().sendToDevice(articlesNotifications, {
+      data: { eventType: 'news/articles' },
+    });
+    admin.messaging().sendToDevice(surveysNotifications, {
+      data: { eventType: 'news/articles' },
     });
   });

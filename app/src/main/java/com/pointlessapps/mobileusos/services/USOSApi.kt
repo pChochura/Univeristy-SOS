@@ -50,8 +50,17 @@ open class USOSApi {
 				signRequest(accessToken, request)
 				return execute(request)?.apply {
 					if (!isSuccessful) {
-						FirebaseCrashlytics.getInstance()
-							.log("Unsuccessful request from ${request.completeUrl}, [$code]: $body")
+						FirebaseCrashlytics.getInstance().also {
+							it.setCustomKey("url", request.completeUrl)
+							it.setCustomKey("code", code)
+							it.setCustomKey("body", body)
+							it.recordException(
+								ExceptionHttpUnsuccessful(
+									"Unsuccessful request",
+									code
+								)
+							)
+						}
 						throw ExceptionHttpUnsuccessful(body, code)
 					}
 				}
