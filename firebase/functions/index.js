@@ -116,71 +116,77 @@ exports.checkNotifications = functions.pubsub
         universities.push(university);
       }
 
-      const oauth = new OAuth(
-        '',
-        '',
-        university.key,
-        university.secret,
-        '1.0',
-        null,
-        'HMAC-SHA1'
-      );
+      if (university != null) {
+        const oauth = new OAuth(
+          '',
+          '',
+          university.key,
+          university.secret,
+          '1.0',
+          null,
+          'HMAC-SHA1'
+        );
 
-      const articles = (
-        await (
-          await fetch(
-            oauth.signUrl(
-              `${user.serviceUrl}/news/search?num=20`,
-              user.accessToken.token,
-              user.accessToken.secret
+        const articles = (
+          await (
+            await fetch(
+              oauth.signUrl(
+                `${user.serviceUrl}/news/search?num=20`,
+                user.accessToken.token,
+                user.accessToken.secret
+              )
             )
-          )
-        ).json()
-      ).items.map((article) => article.article.id);
+          ).json()
+        ).items.map((article) => article.article.id);
 
-      const surveys = (
-        await (
-          await fetch(
-            oauth.signUrl(
-              `${user.serviceUrl}/surveys/surveys_to_fill`,
-              user.accessToken.token,
-              user.accessToken.secret
+        const surveys = (
+          await (
+            await fetch(
+              oauth.signUrl(
+                `${user.serviceUrl}/surveys/surveys_to_fill`,
+                user.accessToken.token,
+                user.accessToken.secret
+              )
             )
-          )
-        ).json()
-      ).map((survey) => survey.id);
+          ).json()
+        ).map((survey) => survey.id);
 
-      if (getArrayDiff(user.articlesIds, articles).length > 0) {
-        await admin
-          .firestore()
-          .collection('fcmTokens')
-          .doc(user.id)
-          .set(
-            { articlesIds: [...articles, ...user.articlesIds] },
-            { merge: true }
-          );
+        if (getArrayDiff(user.articlesIds, articles).length > 0) {
+          await admin
+            .firestore()
+            .collection('fcmTokens')
+            .doc(user.id)
+            .set(
+              { articlesIds: [...articles, ...user.articlesIds] },
+              { merge: true }
+            );
 
-        articlesNotifications.push(user.token);
+          articlesNotifications.push(user.token);
+        }
+
+        if (getArrayDiff(user.surveysIds, surveys).length > 0) {
+          await admin
+            .firestore()
+            .collection('fcmTokens')
+            .doc(user.id)
+            .set(
+              { surveysIds: [...surveys, ...user.surveysIds] },
+              { merge: true }
+            );
+
+          surveysNotifications.push(user.token);
+        }
       }
-
-      if (getArrayDiff(user.surveysIds, surveys).length > 0) {
-        await admin
-          .firestore()
-          .collection('fcmTokens')
-          .doc(user.id)
-          .set(
-            { surveysIds: [...surveys, ...user.surveysIds] },
-            { merge: true }
-          );
-
-        surveysNotifications.push(user.token);
-      }
     });
 
-    admin.messaging().sendToDevice(articlesNotifications, {
-      data: { eventType: 'news/articles' },
-    });
-    admin.messaging().sendToDevice(surveysNotifications, {
-      data: { eventType: 'news/articles' },
-    });
+    if (articlesNotifications.length > 0) {
+      admin.messaging().sendToDevice(articlesNotifications, {
+        data: { eventType: 'news/articles' },
+      });
+    }
+    if (surveysNotifications.length > 0) {
+      admin.messaging().sendToDevice(surveysNotifications, {
+        data: { eventType: 'news/articles' },
+      });
+    }
   });

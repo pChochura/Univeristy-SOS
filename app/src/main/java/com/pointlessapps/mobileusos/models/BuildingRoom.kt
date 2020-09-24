@@ -21,7 +21,7 @@ data class BuildingRoom(
 	var id: String = ""
 ) : Comparable<BuildingRoom> {
 
-	override fun compareTo(other: BuildingRoom) = compareValuesBy(this, other, { number })
+	override fun compareTo(other: BuildingRoom) = compareValuesBy(this, other, { it.number })
 
 	@Keep
 	data class Attribute(

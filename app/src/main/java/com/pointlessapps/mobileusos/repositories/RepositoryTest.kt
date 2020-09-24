@@ -12,11 +12,18 @@ import kotlinx.coroutines.launch
 class RepositoryTest(application: Application) {
 
 	private val testDao = AppDatabase.init(application).testDao()
+	private val testNodeDao = AppDatabase.init(application).testNodeDao()
 	private val serviceTest = ServiceUSOSTest.init()
 
-	private fun insert(vararg tests: Test) {
+	private fun insertTests(vararg tests: Test) {
 		GlobalScope.launch {
 			testDao.insert(*tests)
+		}
+	}
+
+	private fun insertNodes(vararg nodes: Test.Node) {
+		GlobalScope.launch {
+			testNodeDao.insert(*nodes)
 		}
 	}
 
@@ -24,24 +31,17 @@ class RepositoryTest(application: Application) {
 		postValue { testDao.getAll() }
 		postValue(SourceType.ONLINE) {
 			serviceTest.getAll().also {
-				insert(*it.toTypedArray())
+				insertTests(*it.toTypedArray())
 			}
 		}
 	}
 
-	fun getResultsByNodeIds(ids: List<String>) = ObserverWrapper<List<Test.Node.ResultObject>> {
-		postValue(SourceType.ONLINE) {
-			listOf(
-				*serviceTest.getGradesByNodeIds(ids).toTypedArray(),
-				*serviceTest.getPointsByNodeIds(ids).toTypedArray()
-			)
-		}
-	}
-
 	fun getNodesByIds(ids: List<String>) = ObserverWrapper<List<Test.Node>> {
-		postValue(SourceType.ONLINE) {
+		postValue { testNodeDao.getByIds(ids) }
+		postValue(SourceType.ONLINE, 30) {
 			mutableListOf<Test.Node>().apply {
 				ids.forEach { id -> serviceTest.getNodeById(id)?.also { add(it) } }
+				insertNodes(*this.toTypedArray())
 			}
 		}
 	}

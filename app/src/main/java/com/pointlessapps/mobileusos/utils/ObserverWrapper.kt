@@ -50,10 +50,14 @@ class ObserverWrapper<T>(
 		return this
 	}
 
-	fun postValue(sourceType: SourceType = SourceType.OFFLINE, valueCallback: suspend () -> T) {
+	fun postValue(
+		sourceType: SourceType = SourceType.OFFLINE,
+		timeout: Long = 10,
+		valueCallback: suspend () -> T
+	) {
 		GlobalScope.launch {
 			(runCatching {
-				withTimeout(TimeUnit.SECONDS.toMillis(10)) { valueCallback() }
+				withTimeout(TimeUnit.SECONDS.toMillis(timeout)) { valueCallback() }
 			}.getOrElse {
 				finished(it)
 				return@launch

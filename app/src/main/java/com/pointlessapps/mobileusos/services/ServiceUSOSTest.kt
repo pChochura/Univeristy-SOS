@@ -20,24 +20,6 @@ class ServiceUSOSTest private constructor() {
 			}!!
 		}
 
-	suspend fun getGradesByNodeIds(ids: List<String>) =
-		withContext(Dispatchers.IO) {
-			clientService.run {
-				execute(testGradesByNodeIdsRequest(ids))?.run {
-					gson.fromJson<List<Test.Node.ResultObject>>(body)
-				}
-			}!!
-		}
-
-	suspend fun getPointsByNodeIds(ids: List<String>) =
-		withContext(Dispatchers.IO) {
-			clientService.run {
-				execute(testPointsByNodeIdsRequest(ids))?.run {
-					gson.fromJson<List<Test.Node.ResultObject>>(body)
-				}
-			}!!
-		}
-
 	suspend fun getNodeById(id: String) =
 		withContext(Dispatchers.IO) {
 			clientService.run {

@@ -3,13 +3,14 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/bg"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:paddingTop="10dp"
 	android:paddingBottom="10dp">
 
 	<androidx.appcompat.widget.AppCompatTextView
-		android:id="@+id/termName"
+		android:id="@+id/nodeName"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="10dp"
@@ -18,12 +19,13 @@
 		android:textSize="14sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toLeftOf="@id/containerAvg"
-		tools:text="Semestr zimowy 2019/20" />
+		app:layout_constraintRight_toLeftOf="@id/containerPoints"
+		tools:text="Wprowadzenie do budowy obiektów cz. 1" />
 
 	<androidx.appcompat.widget.LinearLayoutCompat
-		android:id="@+id/containerAvg"
+		android:id="@+id/containerPoints"
 		android:layout_width="wrap_content"
+		android:visibility="gone"
 		android:layout_height="match_parent"
 		android:gravity="bottom"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -36,18 +38,18 @@
 			android:layout_marginLeft="10dp"
 			android:layout_marginRight="10dp"
 			android:fontFamily="@font/montserrat"
-			android:text="@string/avg"
+			android:text="@string/points"
 			android:textColor="?colorTextSecondary"
 			android:textSize="12sp" />
 
 		<androidx.appcompat.widget.AppCompatTextView
-			android:id="@+id/termAverage"
+			android:id="@+id/nodePoints"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:textColor="?colorTextPrimary"
 			android:textSize="18sp"
-			tools:text="4.00" />
+			tools:text="3 / 6" />
 
 	</androidx.appcompat.widget.LinearLayoutCompat>
 

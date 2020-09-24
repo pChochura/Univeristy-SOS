@@ -35,6 +35,19 @@
 		android:textColor="@color/white"
 		android:textSize="14sp" />
 
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/gradeDescription"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp"
+		android:fontFamily="@font/montserrat"
+		android:gravity="center"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="14sp"
+		android:visibility="gone"
+		app:layout_constraintHorizontal_chainStyle="packed" />
+
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"

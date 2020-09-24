@@ -52,7 +52,7 @@ class Chapter(
 			val id: String = ""
 		) : Comparable<Entry> {
 			override fun compareTo(other: Entry) =
-				compareValuesBy(this, other, { title.toString() })
+				compareValuesBy(this, other, { it.title.toString() })
 		}
 	}
 }

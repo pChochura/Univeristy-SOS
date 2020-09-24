@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">Mobile USOS</string>
+	<string name="app_name">University SOS</string>
 	<string name="timetable">Timetable</string>
 	<string name="settings">Settings</string>
 	<string name="profile">Profile</string>
@@ -199,4 +199,6 @@
 	<string name="use_default">Use default</string>
 	<string name="default_browser_description">If you prefer to use a default browser instead of dedicated one, click there.</string>
 	<string name="next">Next</string>
+	<string name="points">points:</string>
+	<string name="other">Other</string>
 </resources>

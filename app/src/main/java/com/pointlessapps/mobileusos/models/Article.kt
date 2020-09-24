@@ -53,5 +53,8 @@ data class Article(
 		@ColumnInfo(name = "category_name")
 		@SerializedName("name")
 		var name: Name?
-	)
+	) : Comparable<Category> {
+		override fun compareTo(other: Category) =
+			compareValuesBy(this, other, { it.name.toString() })
+	}
 }

@@ -25,7 +25,8 @@ data class Email(
 	var id: String = ""
 ) : Comparable<Email> {
 
-	override fun compareTo(other: Email) = compareValuesBy(this, other, { date?.time }, { subject })
+	override fun compareTo(other: Email) =
+		compareValuesBy(this, other, { it.date?.time }, { it.subject })
 
 	@Keep
 	data class Attachment(
@@ -45,7 +46,7 @@ data class Email(
 		var url: String
 	) : Comparable<Attachment> {
 		override fun compareTo(other: Attachment) =
-			compareValuesBy(this, other, { filename }, { size })
+			compareValuesBy(this, other, { it.filename }, { it.size })
 	}
 
 	@Keep

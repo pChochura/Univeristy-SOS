@@ -61,40 +61,38 @@ data class Test(
 	)
 
 	@Keep
+	@Entity(tableName = "table_test_nodes")
 	class Node(
 		@ColumnInfo(name = "students_points")
 		@SerializedName("students_points")
-		val studentsPoints: StudentPoint? = null,
+		var studentsPoints: StudentPoint? = null,
 		@ColumnInfo(name = "task_node_details")
 		@SerializedName("task_node_details")
-		val taskNodeDetails: FolderDetails? = null,
+		var taskNodeDetails: FolderDetails? = null,
 		@ColumnInfo(name = "folder_node_details")
 		@SerializedName("folder_node_details")
-		val folderNodeDetails: FolderDetails? = null,
+		var folderNodeDetails: FolderDetails? = null,
 		@ColumnInfo(name = "grade_node_details")
 		@SerializedName("grade_node_details")
-		val gradeNodeDetails: GradeDetails? = null,
-		@ColumnInfo(name = "result_object")
-		@SerializedName("result_object")
-		var resultObject: ResultObject? = null,
+		var gradeNodeDetails: GradeDetails? = null,
+		@ColumnInfo(name = "stats")
+		@SerializedName("stats")
+		var stats: List<Map<String, String>>? = null,
 		@ColumnInfo(name = "subnodes")
 		@SerializedName("subnodes")
-		val subNodes: List<Node>? = null,
+		var subNodes: MutableList<Node>? = null,
 		@ColumnInfo(name = "type")
 		@SerializedName("type")
 		val type: String = ROOT,
-		@ColumnInfo(name = "visible_for_students")
-		@SerializedName("visible_for_students")
-		val visibleForStudents: Boolean = true,
 		@ColumnInfo(name = "description")
 		@SerializedName("description")
-		val description: Name? = null,
+		var description: Name? = null,
 		@ColumnInfo(name = "name")
 		@SerializedName("name")
-		val name: Name? = null,
+		var name: Name? = null,
 		@ColumnInfo(name = "order")
 		@SerializedName("order")
-		val order: Int = 0,
+		var order: Int = 0,
 		@PrimaryKey
 		@ColumnInfo(name = "id")
 		@SerializedName("id")
@@ -109,14 +107,20 @@ data class Test(
 
 		override fun compareTo(other: Node) = compareValuesBy(this, other, { it.order })
 
+		fun set(node: Node) {
+			studentsPoints = node.studentsPoints
+			taskNodeDetails = node.taskNodeDetails
+			folderNodeDetails = node.folderNodeDetails
+			gradeNodeDetails = node.gradeNodeDetails
+			stats = node.stats
+			subNodes = node.subNodes
+			description = node.description
+			name = node.name
+			order = node.order
+		}
+
 		@Keep
 		class FolderDetails(
-			@ColumnInfo(name = "all_students_points")
-			@SerializedName("all_students_points")
-			val allStudentsPoints: List<StudentPoint>? = null,
-			@ColumnInfo(name = "students_points")
-			@SerializedName("students_points")
-			val studentsPoints: List<StudentPoint>? = null,
 			@ColumnInfo(name = "points_max")
 			@SerializedName("points_max")
 			val pointsMax: Int = 0,
@@ -131,41 +135,12 @@ data class Test(
 
 		@Keep
 		class GradeDetails(
-			@ColumnInfo(name = "all_students_grades")
-			@SerializedName("all_students_grades")
-			val allStudentsGrades: List<StudentGrade>? = null,
 			@ColumnInfo(name = "students_grade")
 			@SerializedName("students_grade")
 			val studentsGrade: StudentGrade? = null,
 			@ColumnInfo(name = "grade_type")
 			@SerializedName("grade_type")
 			val gradeType: Grade.GradeType? = null,
-			@PrimaryKey(autoGenerate = true)
-			@ColumnInfo(name = "id")
-			@SerializedName("id")
-			val id: Int = 0
-		)
-
-		@Keep
-		class ResultObject(
-			@ColumnInfo(name = "grader_id")
-			@SerializedName("grader_id")
-			val grader_id: String? = null,
-			@ColumnInfo(name = "grade")
-			@SerializedName("grade")
-			val grade: Grade.GradeType.Value? = null,
-			@ColumnInfo(name = "points")
-			@SerializedName("points")
-			val points: Int = 0,
-			@ColumnInfo(name = "last_changed")
-			@SerializedName("last_changed")
-			val lastChanged: Date? = null,
-			@ColumnInfo(name = "public_comment")
-			@SerializedName("public_comment")
-			val publicComment: String? = null,
-			@ColumnInfo(name = "node_id")
-			@SerializedName("node_id")
-			val nodeId: String? = null,
 			@PrimaryKey(autoGenerate = true)
 			@ColumnInfo(name = "id")
 			@SerializedName("id")
@@ -201,6 +176,9 @@ data class Test(
 		@ColumnInfo(name = "grader")
 		@SerializedName("grader")
 		val grader: User? = null,
+		@ColumnInfo(name = "comment")
+		@SerializedName("comment")
+		val comment: String? = null,
 		@ColumnInfo(name = "automatic_grade_value")
 		@SerializedName("automatic_grade_value")
 		val automaticGradeValue: Grade.GradeType.Value? = null,

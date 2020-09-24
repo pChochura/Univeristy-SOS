@@ -175,7 +175,20 @@ class FragmentGrades : FragmentBase() {
 			)
 		}
 
-		private fun prepareChart(context: Context, dialog: Dialog) {
+		fun prepareChart(
+			context: Context,
+			dialog: Dialog,
+			numberFormat: String = "%.0f%%",
+			values: List<String> = listOf(
+				"2.0",
+				"2.5",
+				"3.0",
+				"3.5",
+				"4.0",
+				"4.5",
+				"5.0"
+			)
+		) {
 			dialog.gradeChart.apply {
 				legend.isEnabled = false
 				description.isEnabled = false
@@ -192,7 +205,7 @@ class FragmentGrades : FragmentBase() {
 					position = XAxis.XAxisPosition.BOTTOM
 					valueFormatter = object : IndexAxisValueFormatter() {
 						override fun getFormattedValue(value: Float) =
-							listOf("2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0")[value.toInt()]
+							values[value.toInt()]
 					}
 				}
 				axisRight.apply {
@@ -203,7 +216,7 @@ class FragmentGrades : FragmentBase() {
 					axisMinimum = 0f
 					valueFormatter = object : ValueFormatter() {
 						override fun getAxisLabel(value: Float, axis: AxisBase?) =
-							"%.0f%%".format(value)
+							numberFormat.format(value)
 					}
 				}
 				axisLeft.apply {
@@ -213,7 +226,7 @@ class FragmentGrades : FragmentBase() {
 					axisMinimum = 0f
 					valueFormatter = object : ValueFormatter() {
 						override fun getAxisLabel(value: Float, axis: AxisBase?) =
-							"%f%%".format(value)
+							numberFormat.format(value)
 					}
 					setDrawLabels(false)
 				}

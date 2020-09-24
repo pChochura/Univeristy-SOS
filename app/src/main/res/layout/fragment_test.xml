@@ -8,7 +8,7 @@
 	android:background="?colorBackground"
 	android:orientation="vertical">
 
-	<androidx.appcompat.widget.LinearLayoutCompat
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="?white"
@@ -24,9 +24,42 @@
 			android:fontFamily="@font/montserrat_bold"
 			android:text="@string/test"
 			android:textColor="?colorTextPrimary"
-			android:textSize="18sp" />
+			android:textSize="18sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
-	</androidx.appcompat.widget.LinearLayoutCompat>
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonPin"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="end"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="5dp"
+			android:paddingTop="2dp"
+			android:paddingRight="5dp"
+			android:paddingBottom="2dp"
+			app:icon="@drawable/ic_pin"
+			app:iconPadding="0dp"
+			app:iconTint="@color/colorAccent"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<com.pointlessapps.mobileusos.views.RefreshProgressBar
+		android:id="@+id/horizontalProgressBar"
+		android:layout_width="match_parent"
+		android:layout_height="3dp"
+		app:color1="@color/colorAccent"
+		app:color2="@color/colorAccentLight"
+		app:color3="@color/colorAccentDark"
+		app:color4="?white" />
 
 	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 		android:id="@+id/pullRefresh"
@@ -102,15 +135,6 @@
 					android:textColor="?colorTextPrimary"
 					android:textSize="14sp"
 					android:visibility="gone" />
-
-				<androidx.appcompat.widget.AppCompatTextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="20dp"
-					android:fontFamily="@font/montserrat"
-					android:text="@string/test_parts"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp" />
 
 				<com.pointlessapps.mobileusos.views.LoadingRecyclerView
 					android:id="@+id/listTestParts"

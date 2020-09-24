@@ -40,8 +40,6 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getAllTests() = repositoryTest.getAll()
 
-	fun getTestResultsByNodeIds(ids: List<String>) = repositoryTest.getResultsByNodeIds(ids)
-
 	fun getTestNodesByIds(ids: List<String>) = repositoryTest.getNodesByIds(ids)
 
 	fun getSurveysToFill() = repositorySurvey.getToFill()

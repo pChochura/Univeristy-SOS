@@ -144,31 +144,9 @@ class ClientUSOSService private constructor() : USOSApi() {
 		Uri.parse("${selectedUniversity?.serviceUrl}/crstests/node2").buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|name|description|visible_for_students|type|subnodes|students_points|task_node_details|folder_node_details|grade_node_details[students_grade]"
+				"id|name|order|description|type|subnodes|students_points|stats|task_node_details|folder_node_details|grade_node_details[students_grade[grade_value|automatic_grade_value|comment|last_changed|grader]]"
 			)
 			.appendQueryParameter("node_id", id)
-			.build().toString()
-	)
-
-	fun testGradesByNodeIdsRequest(ids: List<String>) = OAuthRequest(
-		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}/crstests/user_grades").buildUpon()
-			.appendQueryParameter(
-				"fields",
-				"node_id|grade|grader_id|last_changed|public_comment"
-			)
-			.appendQueryParameter("node_ids", ids.joinToString("|"))
-			.build().toString()
-	)
-
-	fun testPointsByNodeIdsRequest(ids: List<String>) = OAuthRequest(
-		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}/crstests/user_points").buildUpon()
-			.appendQueryParameter(
-				"fields",
-				"node_id|points|grader_id|last_changed|public_comment"
-			)
-			.appendQueryParameter("node_ids", ids.joinToString("|"))
 			.build().toString()
 	)
 

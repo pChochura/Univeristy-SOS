@@ -75,7 +75,7 @@ class FragmentNews : FragmentBase() {
 	private fun prepareCategoriesList(callback: (() -> Unit)? = null) {
 		viewModelCommon.getAllNewsCategories().observe(this) { (list) ->
 			root().listCategories.removeAllViews()
-			list.forEach { category ->
+			list.sorted().forEach { category ->
 				root().listCategories.apply {
 					addView(
 						(LayoutInflater.from(requireContext())

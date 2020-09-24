@@ -57,7 +57,7 @@ class ActivityMain : FragmentActivity() {
 			}
 		}
 
-		runCatching { ensureNotificationSubscription() }
+		ensureNotificationSubscription()
 	}
 
 	private fun ensureNotificationSubscription() {
@@ -79,17 +79,19 @@ class ActivityMain : FragmentActivity() {
 
 	private fun RepositoryEvent.ensureNotificationsSubscription(userId: String) {
 		GlobalScope.launch(Dispatchers.IO) {
-			val surveys = ServiceUSOSSurvey.init().getToFill()
-			val articles = ServiceUSOSArticle.init().getAll()
-			Preferences.get().also {
-				subscribeNotifications(
-					userId,
-					it.getAccessToken()?.token ?: return@also,
-					it.getAccessToken()?.tokenSecret ?: return@also,
-					it.getSelectedUniversity().serviceUrl ?: return@also,
-					surveys.map(Survey::id),
-					articles.map(Article::id),
-				)
+			runCatching {
+				val surveys = ServiceUSOSSurvey.init().getToFill()
+				val articles = ServiceUSOSArticle.init().getAll()
+				Preferences.get().also {
+					subscribeNotifications(
+						userId,
+						it.getAccessToken()?.token ?: return@also,
+						it.getAccessToken()?.tokenSecret ?: return@also,
+						it.getSelectedUniversity().serviceUrl ?: return@also,
+						surveys.map(Survey::id),
+						articles.map(Article::id),
+					)
+				}
 			}
 		}
 	}

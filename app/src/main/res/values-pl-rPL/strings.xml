@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Mobilny USOS</string>
+	<string name="app_name">Uniwersytecki SOS</string>
 	<string name="january">Styczeń</string>
 	<string name="february">Luty</string>
 	<string name="march">Marzec</string>
@@ -184,4 +184,6 @@
 	<string name="use_default">Użyj domyślnej</string>
 	<string name="default_browser_description">Jeśli wolisz użyć domyślnej przeglądarki zamiast dedykowanej, wciśnij poniżej.</string>
 	<string name="next">Dalej</string>
+	<string name="points">punkty:</string>
+	<string name="other">Pozostałe</string>
 </resources>
