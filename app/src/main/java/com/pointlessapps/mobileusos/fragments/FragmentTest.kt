@@ -18,8 +18,11 @@ import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterTestPart
 import com.pointlessapps.mobileusos.models.Test
-import com.pointlessapps.mobileusos.utils.*
+import com.pointlessapps.mobileusos.utils.DialogUtil
+import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
+import com.pointlessapps.mobileusos.utils.dp
+import com.pointlessapps.mobileusos.utils.fromJson
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_show_grade.*
 import kotlinx.android.synthetic.main.fragment_test.view.*
@@ -84,9 +87,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 					).sortedBy { it.getSectionHeader()?.order ?: 100 }
 				)
 
-				if (sourceType == SourceType.ONLINE) {
-					prepareSubNodes(nodes) { loaded.countDown() }
-				}
+				prepareSubNodes(nodes) { loaded.countDown() }
 			}
 
 		doAsync {
@@ -169,12 +170,22 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 		DialogUtil.create(requireContext(), R.layout.dialog_show_grade, { dialog ->
 			dialog.gradeName.text = node.name.toString()
 
-			var grade = node.gradeNodeDetails?.studentsGrade?.gradeValue?.symbol
-			if (grade == null) grade =
-				node.gradeNodeDetails?.studentsGrade?.automaticGradeValue?.symbol
-			if (grade == null) grade =
-				node.gradeNodeDetails?.gradeType?.values?.firstOrNull()?.symbol
-			dialog.gradeValue.text = grade ?: getString(R.string.empty)
+			var grade = getString(R.string.empty)
+			when (node.type) {
+				Test.Node.GRADE -> node.gradeNodeDetails?.apply {
+					studentsGrade?.gradeValue?.symbol?.also { grade = it }
+					studentsGrade?.automaticGradeValue?.symbol?.also { grade = it }
+					gradeType?.values?.firstOrNull()?.symbol?.also { grade = it }
+				}
+				Test.Node.TASK -> node.studentsPoints?.apply {
+					grade = max(automaticPoints, points).toString()
+					node.taskNodeDetails?.pointsMax?.also {
+						grade = "%d / %d".format(max(automaticPoints, points), it)
+					}
+				}
+			}
+
+			dialog.gradeValue.text = grade
 
 			if (node.description?.isEmpty() == false) {
 				dialog.gradeDescription.isVisible = true
@@ -189,7 +200,8 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 
 			dialog.buttonGradeAuthor.apply {
 				text = node.gradeNodeDetails?.studentsGrade?.grader?.name()
-					?: getString(R.string.empty)
+					?: node.studentsPoints?.grader?.name()
+							?: getString(R.string.empty)
 				setOnClickListener {
 					dialog.dismiss()
 					onChangeFragment?.invoke(
@@ -204,7 +216,10 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 			dialog.buttonGradeDate.text = SimpleDateFormat(
 				"yyyy-MM-dd H:mm",
 				Locale.getDefault()
-			).format(node.gradeNodeDetails?.studentsGrade?.lastChanged ?: Date())
+			).format(
+				node.gradeNodeDetails?.studentsGrade?.lastChanged
+					?: node.studentsPoints?.lastChanged ?: Date()
+			)
 
 			val minGrade = if (node.type == Test.Node.GRADE) 4f else 0f
 			val values = node.stats?.map { stats ->

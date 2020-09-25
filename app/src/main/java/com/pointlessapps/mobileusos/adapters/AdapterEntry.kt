@@ -27,7 +27,13 @@ class AdapterEntry : AdapterSimple<Chapter.Page.Entry>(mutableListOf()) {
 		root.find<View>(R.id.entryImage).isVisible =
 			list[position].imageUrls?.get("720x405")?.also {
 				Picasso.get().load(it).into(root.find<AppCompatImageView>(R.id.entryImage).apply {
-					setOnClickListener { _ -> onImageClickListener?.invoke(it) }
+					setOnClickListener {
+						onImageClickListener?.invoke(
+							list[position].imageUrls?.get(
+								"1440x810"
+							) ?: return@setOnClickListener
+						)
+					}
 				})
 			} != null
 		root.find<AppCompatTextView>(R.id.entryName).text = list[position].title.toString()

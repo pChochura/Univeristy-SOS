@@ -37,7 +37,14 @@ class RepositoryTest(application: Application) {
 	}
 
 	fun getNodesByIds(ids: List<String>) = ObserverWrapper<List<Test.Node>> {
-		postValue { testNodeDao.getByIds(ids) }
+		postValue {
+			testNodeDao.getByIds(ids).apply {
+				forEach {
+					it.subNodes = testNodeDao.getByIds(it.subNodes?.map(Test.Node::id) ?: listOf())
+						.toMutableList()
+				}
+			}
+		}
 		postValue(SourceType.ONLINE, 30) {
 			mutableListOf<Test.Node>().apply {
 				ids.forEach { id -> serviceTest.getNodeById(id)?.also { add(it) } }

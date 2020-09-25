@@ -441,7 +441,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|title|pages[id|title|entries[id|title|content|image_urls[720x405]]]"
+				"id|title|pages[id|title|entries[id|title|content|image_urls[720x405|1440x810]]]"
 			)
 			.appendQueryParameter("lang", Locale.getDefault().toLanguageTag())
 			.build().toString()

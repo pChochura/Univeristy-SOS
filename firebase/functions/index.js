@@ -116,7 +116,7 @@ exports.checkNotifications = functions.pubsub
         universities.push(university);
       }
 
-      if (university != null) {
+      if (university !== null) {
         const oauth = new OAuth(
           '',
           '',
