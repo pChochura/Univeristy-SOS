@@ -130,31 +130,40 @@
 					tools:itemCount="3"
 					tools:listitem="@layout/list_item_room_attribute" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="20dp"
-					android:fontFamily="@font/montserrat"
-					android:text="@string/building_location"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp" />
-
-				<androidx.constraintlayout.widget.ConstraintLayout
+				<androidx.appcompat.widget.LinearLayoutCompat
+					android:id="@+id/containerBuildingLocation"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp">
+					android:layout_marginTop="20dp"
+					android:orientation="vertical"
+					android:visibility="gone">
 
-					<androidx.appcompat.widget.AppCompatImageView
-						android:id="@+id/buildingMap"
+					<androidx.appcompat.widget.AppCompatTextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/montserrat"
+						android:text="@string/building_location"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp" />
+
+					<androidx.constraintlayout.widget.ConstraintLayout
 						android:layout_width="match_parent"
-						android:layout_height="0dp"
-						android:adjustViewBounds="true"
-						android:scaleType="fitXY"
-						app:layout_constraintBottom_toBottomOf="parent"
-						app:layout_constraintDimensionRatio="2:1"
-						app:layout_constraintTop_toTopOf="parent" />
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp">
 
-				</androidx.constraintlayout.widget.ConstraintLayout>
+						<androidx.appcompat.widget.AppCompatImageView
+							android:id="@+id/buildingMap"
+							android:layout_width="match_parent"
+							android:layout_height="0dp"
+							android:adjustViewBounds="true"
+							android:scaleType="fitXY"
+							app:layout_constraintBottom_toBottomOf="parent"
+							app:layout_constraintDimensionRatio="2:1"
+							app:layout_constraintTop_toTopOf="parent" />
+
+					</androidx.constraintlayout.widget.ConstraintLayout>
+
+				</androidx.appcompat.widget.LinearLayoutCompat>
 
 				<androidx.appcompat.widget.AppCompatTextView
 					android:layout_width="wrap_content"

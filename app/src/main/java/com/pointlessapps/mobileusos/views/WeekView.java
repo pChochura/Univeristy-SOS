@@ -79,6 +79,7 @@ public class WeekView extends View {
 	private float hourHeight = startHourHeight;
 	private float dayWidth = startDayWidth;
 	private float goToTodayRadius = WeekViewUtil.dpToPx(getContext(), 24);
+	private float dp5 = WeekViewUtil.dpToPx(getContext(), 5);
 
 	private final int scrollDuration = 300;
 	private final int snappingThreshold = 2;
@@ -163,7 +164,6 @@ public class WeekView extends View {
 
 	private void init(Context context, AttributeSet attrs) {
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WeekView, 0, 0);
-		float dp5 = WeekViewUtil.dpToPx(getContext(), 5);
 
 		eventTextPadding = new Padding();
 		headerPadding = new Padding();
@@ -507,6 +507,7 @@ public class WeekView extends View {
 
 	public void refreshDataset() {
 		refreshDatasetPending = true;
+		invalidate();
 	}
 
 	public void scrollToHour(@IntRange(from = 0, to = 24) int hour) {
@@ -775,8 +776,15 @@ public class WeekView extends View {
 				float bottom = endRealY + offsetY + headerHeight + headerPadding.top;
 
 				eventRect.rectF = new RectF(left, top, right, bottom);
+
 				eventPaint.setColor(eventRect.event.getColor() == 0 ? defaultEventColor : eventRect.event.getColor());
 				canvas.drawRoundRect(eventRect.rectF, eventCornerRadius, eventCornerRadius, eventPaint);
+
+				if (eventRect.event.hasOutline()) {
+					eventPaint.setColor(getContext().getResources().getColor(R.color.colorAccent));
+					canvas.drawRoundRect(left, top, right, top + dp5 * 0.5f, eventCornerRadius, eventCornerRadius, eventPaint);
+				}
+
 				drawEventTitle(eventRect.event, eventRect.rectF, canvas, eventRect.rectF.top, eventRect.rectF.left);
 			}
 		}
@@ -1105,6 +1113,7 @@ public class WeekView extends View {
 		private Calendar mEndTime;
 		private String mName;
 		private int mColor;
+		private boolean hasOutline;
 
 		public WeekViewEvent() {
 		}
@@ -1190,6 +1199,14 @@ public class WeekView extends View {
 
 		public void setColor(int color) {
 			this.mColor = color;
+		}
+
+		public boolean hasOutline() {
+			return hasOutline;
+		}
+
+		public void setHasOutline(boolean hasOutline) {
+			this.hasOutline = hasOutline;
 		}
 
 		public long getId() {

@@ -78,7 +78,9 @@ class FragmentMail(private var email: Email) : FragmentBase() {
 
 			if (list.size == 1) {
 				Picasso.get()
-					.load(list.firstOrNull()?.user?.photoUrls?.values?.first() ?: return@observe)
+					.load(
+						list.firstOrNull()?.user?.photoUrls?.values?.firstOrNull() ?: return@observe
+					)
 					.into(root().emailRecipientImg)
 
 				root().emailRecipientImg.setColorFilter(Color.TRANSPARENT)

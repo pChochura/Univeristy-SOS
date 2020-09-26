@@ -268,13 +268,22 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 					).apply {
 						highlightedColor =
 							ContextCompat.getColor(context, R.color.colorAccent)
-						highlightedIndex = grade?.run {
+						highlightedIndex = grade.run {
 							((replace(Regex("(\\d)[.,](\\d).*")) {
 								"${it.groups[1]?.value}.${it.groups[2]?.value}"
 							}.toFloatOrNull() ?: 2f) * 2 - minGrade).toInt() - 1
 						}
 					}
-				setVisibleXRange(2f, 7f)
+				when (node.type) {
+					Test.Node.GRADE -> setVisibleXRange(2f, 7f)
+					Test.Node.TASK -> setVisibleXRange(
+						0f,
+						(node.taskNodeDetails?.pointsMax ?: max(
+							node.studentsPoints?.automaticPoints ?: 1,
+							node.studentsPoints?.points ?: 1
+						)).toFloat()
+					)
+				}
 				invalidate()
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)

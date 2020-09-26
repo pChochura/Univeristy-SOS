@@ -56,11 +56,12 @@ class FragmentSettings : FragmentBase() {
 							slider.values.maxOrNull()?.also { currentMax = it }
 						}
 					}
-					dialog.buttonSecondary
-						.setOnClickListener { dialog.dismiss() }
+					dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
 					dialog.buttonPrimary.setOnClickListener {
 						prefs.putTimetableStartHour(currentMin.toInt())
 						prefs.putTimetableEndHour(currentMax.toInt())
+
+						onForceRefreshAllFragments?.invoke()
 
 						item.refresh()
 						dialog.dismiss()
@@ -73,8 +74,7 @@ class FragmentSettings : FragmentBase() {
 			value = { prefs.getTimetableVisibleDays().toString() }
 			onTapped { item ->
 				DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
-					dialog.title.text =
-						getString(R.string.number_of_visible_days_title)
+					dialog.title.setText(R.string.number_of_visible_days_title)
 					dialog.listItems.apply {
 						adapter = object :
 							AdapterSimple<String>((3..7).map(Int::toString).toMutableList()) {
@@ -88,9 +88,9 @@ class FragmentSettings : FragmentBase() {
 												?: prefs.getTimetableVisibleDays()
 										)
 										onForceRefreshAllFragments?.invoke()
-										dialog.dismiss()
 
 										item.refresh()
+										dialog.dismiss()
 									}
 								}
 							}
@@ -105,6 +105,14 @@ class FragmentSettings : FragmentBase() {
 		root().itemSnapToFullDay.apply {
 			valueSwitch = { prefs.getTimetableSnapToFullDay() }
 			onTapped { prefs.putTimetableSnapToFullDay(!prefs.getTimetableSnapToFullDay()) }
+		}
+
+		root().itemOutlineRemote.apply {
+			valueSwitch = { prefs.getTimetableOutlineRemote() }
+			onTapped {
+				prefs.putTimetableOutlineRemote(!prefs.getTimetableOutlineRemote())
+				onForceRefreshAllFragments?.invoke()
+			}
 		}
 
 		root().itemAddEvent.apply {
@@ -164,8 +172,7 @@ class FragmentSettings : FragmentBase() {
 			}
 			onTapped {
 				DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
-					dialog.title.text =
-						getString(R.string.default_tab_title)
+					dialog.title.setText(R.string.default_tab_title)
 					dialog.listItems.apply {
 						adapter = object :
 							AdapterSimple<String>(

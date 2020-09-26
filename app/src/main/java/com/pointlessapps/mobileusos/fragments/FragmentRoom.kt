@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -80,7 +81,8 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 				}
 			}
 
-			room.building?.staticMapUrls?.values?.first()?.also { map ->
+			room.building?.staticMapUrls?.values?.firstOrNull()?.also { map ->
+				root().containerBuildingLocation.isVisible = true
 				Picasso.get().load(map).into(root().buildingMap)
 				root().buildingMap.setOnClickListener {
 					Utils.mapsIntent(

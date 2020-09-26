@@ -94,11 +94,21 @@ class FragmentTimetable : FragmentBase() {
 				dialog.buttonBuilding.text = it.toString()
 				dialog.buttonBuilding.isVisible = true
 			}
+			event.groupNumber?.toIntOrNull()?.also {
+				dialog.buttonGroup.isVisible = true
+				dialog.buttonGroup.text = getString(R.string.group_number, it)
+			}
 			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
-				.observe(this) { (user, _) ->
+				.observe(this) { (user) ->
 					user?.name()?.takeIf(String::isNotBlank)
 						?.also { dialog.buttonLecturer.text = it }
 				}
+
+			dialog.buttonGroup.setOnClickListener {
+				onChangeFragment?.invoke(FragmentCourse("${event.unitId}#${event.groupNumber}"))
+
+				dialog.dismiss()
+			}
 
 			dialog.buttonLecturer.setOnClickListener {
 				onChangeFragment?.invoke(

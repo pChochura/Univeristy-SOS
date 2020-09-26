@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.adapters
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.models.BuildingRoom
@@ -31,6 +32,9 @@ class AdapterRoom : AdapterSimple<BuildingRoom>(mutableListOf()) {
 		}
 
 		textName.text = list[position].number
-		textCapacity.text = list[position].capacity.toString()
+		list[position].capacity?.toString()?.also {
+			textCapacity.isVisible = true
+			textCapacity.text = it
+		}
 	}
 }

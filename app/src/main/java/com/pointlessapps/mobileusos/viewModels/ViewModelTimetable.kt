@@ -25,7 +25,6 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	fun prepareForDate(date: Calendar, callback: (() -> Unit)? = null) {
 		val days = 7 // Always download for the next 7 days
 		var downloading = false
-		date.add(Calendar.DAY_OF_YEAR, -days / 2)
 		(date.clone() as Calendar).forEachDays(days) { day ->
 			if (!cache.contains(day.getDayKey())) {
 				downloading = true

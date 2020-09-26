@@ -186,4 +186,6 @@
 	<string name="next">Dalej</string>
 	<string name="points">punkty:</string>
 	<string name="other">Pozostałe</string>
+	<string name="outline_remote_classes">Oznacz zajęcia zdalne</string>
+	<string name="outline_remote_classes_description">Dodaj oznaczenie pomagające odróżnić zajęcia zdalne</string>
 </resources>

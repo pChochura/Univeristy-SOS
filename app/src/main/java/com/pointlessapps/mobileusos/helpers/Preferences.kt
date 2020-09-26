@@ -31,6 +31,7 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_TIMETABLE_VISIBLE_DAYS = "timetableVisibleDays"
 		const val KEY_TIMETABLE_SNAP_TO_FULL_DAY = "timetableSnapToFullDay"
 		const val KEY_TIMETABLE_ADD_EVENT = "timetableAddEvent"
+		const val KEY_TIMETABLE_OUTLINE_REMOTE = "timetableOutlineRemote"
 
 		const val KEY_NOTIFICATIONS_ENABLED = "notificationsEnabled"
 		const val KEY_NOTIFICATIONS_GRADES = "notificationsGrades"
@@ -102,6 +103,12 @@ fun AppPreferences.getTimetableAddEvent() =
 
 fun AppPreferences.putTimetableAddEvent(value: Boolean) =
 	put(Preferences.KEY_TIMETABLE_ADD_EVENT, value)
+
+fun AppPreferences.getTimetableOutlineRemote() =
+	getBoolean(Preferences.KEY_TIMETABLE_OUTLINE_REMOTE, false)
+
+fun AppPreferences.putTimetableOutlineRemote(value: Boolean) =
+	put(Preferences.KEY_TIMETABLE_OUTLINE_REMOTE, value)
 
 
 fun AppPreferences.getNotificationsEnabled() =

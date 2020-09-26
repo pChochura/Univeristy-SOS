@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pointlessapps.mobileusos.R
@@ -85,7 +86,8 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 	private fun prepareDataStatic(building: Building) {
 		root().buildingName.text = building.name?.toString()
 		root().campusName.text = building.campusName?.toString()
-		building.staticMapUrls?.values?.first()?.also { map ->
+		building.staticMapUrls?.values?.firstOrNull()?.also { map ->
+			root().containerBuildingLocation.isVisible = true
 			Picasso.get().load(map).into(root().buildingMap)
 			root().buildingMap.setOnClickListener {
 				Utils.mapsIntent(

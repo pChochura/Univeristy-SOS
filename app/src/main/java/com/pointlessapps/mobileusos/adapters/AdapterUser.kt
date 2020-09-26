@@ -11,9 +11,6 @@ import org.jetbrains.anko.find
 
 class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var imageProfile: CircleImageView
-
 	init {
 		setHasStableIds(true)
 	}
@@ -23,8 +20,6 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 
 	override fun onCreate(root: View) {
 		super.onCreate(root)
-		textName = root.find(R.id.userName)
-		imageProfile = root.find(R.id.userProfileImg)
 
 		if (onClickListener == null) {
 			root.find<View>(R.id.bg).isClickable = false
@@ -37,10 +32,10 @@ class AdapterUser : AdapterSimple<User>(mutableListOf()) {
 			onClickListener?.invoke(list[position])
 		}
 
-		textName.text = list[position].name()
+		root.find<AppCompatTextView>(R.id.userName).text = list[position].name()
 
 		list[position].photoUrls?.values?.firstOrNull()?.also {
-			Picasso.get().load(it).into(imageProfile)
+			Picasso.get().load(it).into(root.find<CircleImageView>(R.id.userProfileImg))
 		}
 	}
 

@@ -60,6 +60,7 @@
 			android:stateListAnimator="@null"
 			android:textColor="@color/white"
 			android:textSize="14sp"
+			android:visibility="gone"
 			app:chipMinTouchTargetSize="32dp"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintRight_toRightOf="parent"

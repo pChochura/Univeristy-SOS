@@ -201,4 +201,6 @@
 	<string name="next">Next</string>
 	<string name="points">points:</string>
 	<string name="other">Other</string>
+	<string name="outline_remote_classes">Outline remote classes</string>
+	<string name="outline_remote_classes_description">Mark remote classes with an outline</string>
 </resources>

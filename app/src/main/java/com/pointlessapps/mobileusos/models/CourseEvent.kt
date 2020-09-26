@@ -4,6 +4,8 @@ import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getTimetableOutlineRemote
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.views.WeekView
 import java.util.*
@@ -69,6 +71,11 @@ data class CourseEvent(
 			time = endTime!!
 		}).apply {
 		color = Utils.getColorByClassType(classtypeId ?: return@apply)
+		setHasOutline(
+			Preferences.get().getTimetableOutlineRemote() && buildingId?.toLowerCase(
+				Locale.getDefault()
+			) == "zdalny"
+		)
 	}
 
 	override fun compareTo(other: CourseEvent) = startTime.compareTo(other.startTime)

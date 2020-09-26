@@ -69,6 +69,15 @@
 					app:title="@string/snap_to_a_full_day" />
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemOutlineRemote"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:description="@string/outline_remote_classes_description"
+					app:hasSeparator="true"
+					app:isSwitch="true"
+					app:title="@string/outline_remote_classes" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
 					android:id="@+id/itemAddEvent"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
