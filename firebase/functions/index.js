@@ -4,6 +4,7 @@ const serviceAccount = require('./config.json');
 const { firestore } = require('firebase-admin');
 const { OAuth } = require('oauth');
 const fetch = require('node-fetch');
+const { info } = require('firebase-functions/lib/logger');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -96,88 +97,90 @@ exports.checkNotifications = functions.pubsub
     const articlesNotifications = [];
     const surveysNotifications = [];
 
-    users.forEach(async (user) => {
-      let university = universities.find(
-        (u) => u.serviceUrl === user.serviceUrl
-      );
-      if (university === null) {
-        university = (
-          await admin
-            .firestore()
-            .collection('universities')
-            .where('serviceUrl', '==', user.serviceUrl)
-            .get()
-        ).docs.map((doc) => ({
-          key: doc.get('consumerKey'),
-          secret: doc.get('consumerSecret'),
-          serviceUrl: user.serviceUrl,
-        }))[0];
-
-        universities.push(university);
-      }
-
-      if (university !== null) {
-        const oauth = new OAuth(
-          '',
-          '',
-          university.key,
-          university.secret,
-          '1.0',
-          null,
-          'HMAC-SHA1'
+    await Promise.all(
+      users.map(async (user) => {
+        let university = universities.find(
+          (u) => u.serviceUrl === user.serviceUrl
         );
+        if (!university) {
+          university = (
+            await admin
+              .firestore()
+              .collection('universities')
+              .where('serviceUrl', '==', user.serviceUrl)
+              .get()
+          ).docs.map((doc) => ({
+            key: doc.get('consumerKey'),
+            secret: doc.get('consumerSecret'),
+            serviceUrl: user.serviceUrl,
+          }))[0];
 
-        const articles = (
-          await (
-            await fetch(
-              oauth.signUrl(
-                `${user.serviceUrl}/news/search?num=20`,
-                user.accessToken.token,
-                user.accessToken.secret
-              )
-            )
-          ).json()
-        ).items.map((article) => article.article.id);
-
-        const surveys = (
-          await (
-            await fetch(
-              oauth.signUrl(
-                `${user.serviceUrl}/surveys/surveys_to_fill`,
-                user.accessToken.token,
-                user.accessToken.secret
-              )
-            )
-          ).json()
-        ).map((survey) => survey.id);
-
-        if (getArrayDiff(user.articlesIds, articles).length > 0) {
-          await admin
-            .firestore()
-            .collection('fcmTokens')
-            .doc(user.id)
-            .set(
-              { articlesIds: [...articles, ...user.articlesIds] },
-              { merge: true }
-            );
-
-          articlesNotifications.push(user.token);
+          universities.push(university);
         }
 
-        if (getArrayDiff(user.surveysIds, surveys).length > 0) {
-          await admin
-            .firestore()
-            .collection('fcmTokens')
-            .doc(user.id)
-            .set(
-              { surveysIds: [...surveys, ...user.surveysIds] },
-              { merge: true }
-            );
+        if (university && university.key && university.secret) {
+          const oauth = new OAuth(
+            '',
+            '',
+            university.key,
+            university.secret,
+            '1.0',
+            null,
+            'HMAC-SHA1'
+          );
 
-          surveysNotifications.push(user.token);
+          const articles = (
+            await (
+              await fetch(
+                oauth.signUrl(
+                  `${user.serviceUrl}/news/search?num=20`,
+                  user.accessToken.token,
+                  user.accessToken.secret
+                )
+              )
+            ).json()
+          ).items.map((article) => article.article.id);
+
+          const surveys = (
+            await (
+              await fetch(
+                oauth.signUrl(
+                  `${user.serviceUrl}/surveys/surveys_to_fill`,
+                  user.accessToken.token,
+                  user.accessToken.secret
+                )
+              )
+            ).json()
+          ).map((survey) => survey.id);
+
+          if (getArrayDiff(user.articlesIds, articles).length > 0) {
+            await admin
+              .firestore()
+              .collection('fcmTokens')
+              .doc(user.id)
+              .set(
+                { articlesIds: [...articles, ...user.articlesIds] },
+                { merge: true }
+              );
+
+            articlesNotifications.push(user.token);
+          }
+
+          if (getArrayDiff(user.surveysIds, surveys).length > 0) {
+            await admin
+              .firestore()
+              .collection('fcmTokens')
+              .doc(user.id)
+              .set(
+                { surveysIds: [...surveys, ...user.surveysIds] },
+                { merge: true }
+              );
+
+            surveysNotifications.push(user.token);
+          }
         }
-      }
-    });
+      })
+    );
 
     if (articlesNotifications.length > 0) {
       admin.messaging().sendToDevice(articlesNotifications, {
@@ -186,7 +189,7 @@ exports.checkNotifications = functions.pubsub
     }
     if (surveysNotifications.length > 0) {
       admin.messaging().sendToDevice(surveysNotifications, {
-        data: { eventType: 'news/articles' },
+        data: { eventType: 'surveys/surveys' },
       });
     }
   });
