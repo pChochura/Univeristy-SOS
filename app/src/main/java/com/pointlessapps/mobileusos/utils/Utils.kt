@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -10,10 +11,18 @@ import android.os.Build
 import android.provider.CalendarContract
 import android.text.Html
 import android.text.Spanned
+import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.core.content.res.use
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.activities.ActivityLogin
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
+import kotlinx.android.synthetic.main.dialog_loading.*
+import org.jetbrains.anko.doAsync
 import java.util.*
 
 
@@ -119,6 +128,54 @@ object Utils {
 		intArrayOf(themeAttrId)
 	).use {
 		it.getColor(0, Color.MAGENTA)
+	}
+
+	fun askForRelogin(
+		activity: Activity,
+		description: Int,
+		onDismissListener: (() -> Unit)? = null
+	) {
+		DialogUtil.create(
+			object : DialogUtil.StatefulDialog() {
+				override fun toggle() {
+					dialog.progressBar.isVisible = true
+					dialog.messageMain.setText(R.string.loading)
+					dialog.messageSecondary.isGone = true
+					dialog.buttonPrimary.isGone = true
+					dialog.buttonSecondary.isGone = true
+				}
+			},
+			activity, R.layout.dialog_loading, { dialog ->
+				dialog.messageMain.setText(R.string.there_been_a_problem)
+				dialog.messageSecondary.setText(description)
+				dialog.buttonPrimary.setText(R.string.logout)
+				dialog.buttonPrimary.setOnClickListener {
+					toggle()
+					doAsync {
+						Preferences.get().clear()
+						AppDatabase.init(activity).clearAllTables()
+						dialog.dismiss()
+						activity.apply {
+							startActivity(
+								Intent(
+									activity,
+									ActivityLogin::class.java
+								)
+							)
+							finish()
+						}
+					}
+				}
+				if (onDismissListener == null) {
+					dialog.buttonSecondary.isGone = true
+				}
+
+				dialog.buttonSecondary.setOnClickListener {
+					dialog.dismiss()
+					onDismissListener?.invoke()
+				}
+			}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
+		)
 	}
 
 	fun String.withoutExtension() = substringBeforeLast(".")

@@ -188,4 +188,5 @@
 	<string name="other">Pozostałe</string>
 	<string name="outline_remote_classes">Oznacz zajęcia zdalne</string>
 	<string name="outline_remote_classes_description">Dodaj oznaczenie pomagające odróżnić zajęcia zdalne</string>
+	<string name="relogin_description">Napotkaliśmy pewne problem z tą sesją. Aby kontynuować musisz się wylogować i zalogować ponownie</string>
 </resources>

@@ -203,4 +203,5 @@
 	<string name="other">Other</string>
 	<string name="outline_remote_classes">Outline remote classes</string>
 	<string name="outline_remote_classes_description">Mark remote classes with an outline</string>
+	<string name="relogin_description">We encountered some problems with your session. To continue you have to log out and log in again</string>
 </resources>

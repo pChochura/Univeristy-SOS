@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.exceptions.ExceptionHttpUnsuccessful
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.managers.FragmentManager
@@ -18,6 +19,7 @@ import com.pointlessapps.mobileusos.repositories.RepositoryEvent
 import com.pointlessapps.mobileusos.repositories.RepositoryUser
 import com.pointlessapps.mobileusos.services.ServiceUSOSArticle
 import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
+import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +73,10 @@ class ActivityMain : FragmentActivity() {
 					}
 
 					return@onOnceCallback
+				}
+			}.onFinished {
+				if (it is ExceptionHttpUnsuccessful && it.code == 401) {
+					Utils.askForRelogin(this@ActivityMain, R.string.relogin_description)
 				}
 			}
 			ensureEventSubscription()
