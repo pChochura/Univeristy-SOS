@@ -130,12 +130,8 @@ class FragmentProfile : FragmentBase() {
 	private fun prepareMeetingsList() {
 		root().listMeetings.apply {
 			setAdapter(AdapterMeeting(true).apply {
-				onAddToCalendarClickListener = {
-					Utils.calendarIntent(requireContext(), it)
-				}
-				onRoomClickListener = {
-					it.roomId?.apply { onChangeFragment?.invoke(FragmentRoom(this)) }
-				}
+				onClickListener =
+					{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
 			})
 		}
 	}

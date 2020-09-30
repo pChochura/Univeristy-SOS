@@ -168,11 +168,8 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 
 	private fun prepareMeetingsList() {
 		root().listMeetings.setAdapter(AdapterMeeting().apply {
-			onAddToCalendarClickListener = { Utils.calendarIntent(requireContext(), it) }
-
-			onRoomClickListener = {
-				it.roomId?.also { roomId -> onChangeFragment?.invoke(FragmentRoom(roomId)) }
-			}
+			onClickListener =
+				{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 	}

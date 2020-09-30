@@ -13,16 +13,22 @@ import android.text.Html
 import android.text.Spanned
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
+import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
+import com.pointlessapps.mobileusos.models.Name
+import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_loading.*
+import kotlinx.android.synthetic.main.dialog_show_event.*
 import org.jetbrains.anko.doAsync
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -176,6 +182,72 @@ object Utils {
 				}
 			}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
 		)
+	}
+
+	fun showCourseInfo(
+		context: Context,
+		event: CourseEvent,
+		viewModelUser: ViewModelUser,
+		onChangeFragment: ((FragmentBaseInterface) -> Unit)?
+	) {
+		DialogUtil.create(context, R.layout.dialog_show_event, { dialog ->
+			val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+			dialog.eventName.text = event.courseName.toString()
+			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
+			dialog.eventEndTime.text = hourFormat.format(event.endTime?.time ?: return@create)
+			dialog.eventType.text = event.classtypeName.toString()
+			event.roomNumber?.takeIf(String::isNotBlank)?.also {
+				dialog.buttonRoom.text = it
+				dialog.buttonRoom.isVisible = true
+			}
+			event.buildingName?.takeUnless(Name::isEmpty)?.also {
+				dialog.buttonBuilding.text = it.toString()
+				dialog.buttonBuilding.isVisible = true
+			}
+			event.groupNumber?.toIntOrNull()?.also {
+				dialog.buttonGroup.isVisible = true
+				dialog.buttonGroup.text = context.resources.getString(R.string.group_number, it)
+			}
+			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
+				.onOnceCallback { (user) ->
+					user?.name()?.takeIf(String::isNotBlank)
+						?.also { dialog.buttonLecturer.text = it }
+				}
+
+			dialog.buttonGroup.setOnClickListener {
+				onChangeFragment?.invoke(FragmentCourse("${event.unitId}#${event.groupNumber}"))
+
+				dialog.dismiss()
+			}
+
+			dialog.buttonLecturer.setOnClickListener {
+				onChangeFragment?.invoke(
+					FragmentUser(
+						event.lecturerIds?.firstOrNull() ?: return@setOnClickListener
+					)
+				)
+
+				dialog.dismiss()
+			}
+
+			dialog.buttonRoom.setOnClickListener {
+				onChangeFragment?.invoke(FragmentRoom(event.roomId ?: return@setOnClickListener))
+
+				dialog.dismiss()
+			}
+
+			dialog.buttonBuilding.setOnClickListener {
+				onChangeFragment?.invoke(
+					FragmentBuilding(
+						event.buildingId ?: return@setOnClickListener
+					)
+				)
+
+				dialog.dismiss()
+			}
+
+			dialog.buttonAddToCalendar.setOnClickListener { calendarIntent(context, event) }
+		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
 	}
 
 	fun String.withoutExtension() = substringBeforeLast(".")

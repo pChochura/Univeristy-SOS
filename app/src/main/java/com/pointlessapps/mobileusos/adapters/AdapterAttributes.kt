@@ -12,9 +12,6 @@ import org.jetbrains.anko.find
 
 class AdapterAttributes : AdapterSimple<BuildingRoom.Attribute>(mutableListOf()) {
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var textValue: Chip
-
 	init {
 		setHasStableIds(true)
 	}
@@ -22,19 +19,14 @@ class AdapterAttributes : AdapterSimple<BuildingRoom.Attribute>(mutableListOf())
 	override fun getLayoutId(viewType: Int) = R.layout.list_item_room_attribute
 	override fun isCollapsible() = true
 
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.attributeName)
-		textValue = root.find(R.id.attributeValue)
-	}
-
 	override fun onBind(root: View, position: Int) {
 		root.find<ViewGroup>(R.id.bg).updateLayoutParams<ViewGroup.MarginLayoutParams> {
 			topMargin = if (position != 0) 10.dp else 0
 		}
 
-		textName.text = list[position].description.toString()
-		textValue.text =
+		root.find<AppCompatTextView>(R.id.attributeName).text =
+			list[position].description.toString()
+		root.find<Chip>(R.id.attributeValue).text =
 			list[position].count?.toString() ?: root.context.getString(R.string.available)
 	}
 }

@@ -13,14 +13,18 @@ import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
+import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_room.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import java.util.concurrent.CountDownLatch
 
 class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 
+	private val viewModelUser by viewModels<ViewModelUser>()
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 
@@ -62,6 +66,8 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {
+		val loaded = CountDownLatch(2)
+
 		viewModelCommon.getRoomById(id).observe(this) { (room) ->
 			if (room === null) {
 				return@observe
@@ -104,7 +110,16 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 					*(room.attributes ?: listOf()).toTypedArray()
 				)
 			)
-		}.onFinished { callback?.invoke() }
+		}.onFinished { loaded.countDown() }
+
+		viewModelTimetable.getByRoomId(id).observe(this) { (list) ->
+			(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
+		}.onFinished { loaded.countDown() }
+
+		doAsync {
+			loaded.await()
+			callback?.invoke()
+		}
 	}
 
 	private fun prepareClickListeners() {
@@ -129,12 +144,9 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private fun prepareMeetingsList() {
 		root().listMeetings.setAdapter(AdapterMeeting(true).apply {
-			onAddToCalendarClickListener = { Utils.calendarIntent(requireContext(), it) }
+			onClickListener =
+				{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
 		})
 		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
-
-		viewModelTimetable.getByRoomId(id).observe(this) { (list) ->
-			(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
-		}
 	}
 }

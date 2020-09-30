@@ -169,7 +169,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"start_time|end_time|name|course_name|building_name|room_number|room_id|classtype_id"
+				"start_time|end_time|name|course_name|building_name|room_number|room_id|classtype_id|classtype_name|lecturer_ids|group_number"
 			)
 			.appendQueryParameter("unit_id", unitId)
 			.appendQueryParameter("group_number", groupNumber.toString())
@@ -182,7 +182,7 @@ class ClientUSOSService private constructor() : USOSApi() {
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"start_time|end_time|name|course_name|building_name|room_number|room_id|classtype_name|group_number"
+				"start_time|end_time|name|course_name|building_name|room_number|room_id|classtype_name|group_number|lecturer_ids"
 			)
 			.appendQueryParameter("room_id", roomId)
 			.build().toString()

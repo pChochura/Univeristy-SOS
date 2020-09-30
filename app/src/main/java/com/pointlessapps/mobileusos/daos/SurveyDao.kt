@@ -12,7 +12,7 @@ interface SurveyDao {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(vararg survey: Survey)
 
-	@Query("SELECT * FROM table_surveys ORDER BY start_date")
+	@Query("SELECT * FROM table_surveys ORDER BY start_date DESC")
 	suspend fun getToFill(): List<Survey>
 
 	@Query("SELECT * FROM table_surveys WHERE id = :id")

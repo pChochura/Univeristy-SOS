@@ -42,7 +42,6 @@
 	<string name="capacity">Capacity</string>
 	<string name="building_location">Building location</string>
 	<string name="available">Available</string>
-	<string name="meeting_name">%s, %s, group %s</string>
 	<string name="email_content">Email content</string>
 	<string name="recipient">Recipient</string>
 	<string name="attachments">Attachments</string>

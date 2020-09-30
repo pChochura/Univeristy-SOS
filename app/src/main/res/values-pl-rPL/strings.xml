@@ -53,7 +53,6 @@
 	<string name="capacity">Pojemność</string>
 	<string name="building_location">Lokalizacja budynku</string>
 	<string name="available">Dostępne</string>
-	<string name="meeting_name">%s, %s, grupa %s</string>
 	<string name="email_content">Zawartość maila</string>
 	<string name="recipient">Odbiorca</string>
 	<string name="attachments">Załączniki</string>
