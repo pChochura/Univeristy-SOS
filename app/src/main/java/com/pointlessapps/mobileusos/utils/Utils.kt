@@ -27,6 +27,9 @@ import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_loading.*
 import kotlinx.android.synthetic.main.dialog_show_event.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
@@ -210,8 +213,10 @@ object Utils {
 			}
 			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
 				.onOnceCallback { (user) ->
-					user?.name()?.takeIf(String::isNotBlank)
-						?.also { dialog.buttonLecturer.text = it }
+					GlobalScope.launch(Dispatchers.Main) {
+						user?.name()?.takeIf(String::isNotBlank)
+							?.also { dialog.buttonLecturer.text = it }
+					}
 				}
 
 			dialog.buttonGroup.setOnClickListener {

@@ -32,8 +32,10 @@ class FragmentLogin : FragmentBase() {
 								throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
 							}
 
-							HelperClientUSOS.handleLogin(requireActivity(), university) {
-								onChangeFragment?.invoke(FragmentBrowser(it))
+							activity?.apply {
+								HelperClientUSOS.handleLogin(this, university) {
+									onChangeFragment?.invoke(FragmentBrowser(it))
+								}
 							}
 
 							dialog.dismiss()

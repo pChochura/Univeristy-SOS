@@ -62,7 +62,7 @@ class FragmentTimetable : FragmentBase() {
 	}
 
 	private fun showEventInfo(weekViewEvent: WeekView.WeekViewEvent) {
-		val event = viewModelTimetable.courseEvents.find { it.compositeId() == weekViewEvent.id }
+		val event = viewModelTimetable.courseEvents.find { it?.compositeId() == weekViewEvent.id }
 
 		if (event == null) {
 			Snackbar.make(

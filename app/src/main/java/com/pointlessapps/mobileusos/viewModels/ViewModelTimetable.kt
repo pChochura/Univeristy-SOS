@@ -18,7 +18,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 
 	private val weekViewEvents = mutableMapOf<String, MutableSet<WeekView.WeekViewEvent>>()
 	private val cache = mutableSetOf<String>()
-	val courseEvents = mutableListOf<CourseEvent>()
+	val courseEvents = mutableListOf<CourseEvent?>()
 
 	fun clearCache() = cache.clear()
 
