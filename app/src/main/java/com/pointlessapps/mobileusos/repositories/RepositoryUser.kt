@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.services.ServiceUSOSUser
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryUser(application: Application) {
+class RepositoryUser(context: Context) {
 
-	private val userDao = AppDatabase.init(application).userDao()
+	private val userDao = AppDatabase.init(context).userDao()
 	private val serviceUser = ServiceUSOSUser.init()
 
 	private fun insert(vararg users: User) {

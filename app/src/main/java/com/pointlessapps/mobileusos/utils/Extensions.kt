@@ -53,3 +53,7 @@ fun ViewGroup.addChip(chipText: String, onRemovedListener: (() -> Unit)? = null)
 
 fun String.isEmailProtocol() =
 	Patterns.EMAIL_ADDRESS.matcher(this.substringAfter("mailto:")).matches()
+
+fun String.withoutExtension() = substringBeforeLast(".")
+
+fun String.extension() = substringAfterLast(".", "")

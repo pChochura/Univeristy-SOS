@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.services.ServiceUSOSEmail
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryEmail(application: Application) {
+class RepositoryEmail(context: Context) {
 
-	private val emailDao = AppDatabase.init(application).emailDao()
+	private val emailDao = AppDatabase.init(context).emailDao()
 	private val serviceEmail = ServiceUSOSEmail.init()
 
 	private fun deleteById(id: String) {

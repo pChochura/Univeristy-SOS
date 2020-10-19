@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositorySurvey(application: Application) {
+class RepositorySurvey(context: Context) {
 
-	private val surveyDao = AppDatabase.init(application).surveyDao()
+	private val surveyDao = AppDatabase.init(context).surveyDao()
 	private val serviceSurvey = ServiceUSOSSurvey.init()
 
 	private fun insert(vararg surveys: Survey) {

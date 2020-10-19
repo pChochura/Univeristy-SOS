@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CalendarEvent
 import com.pointlessapps.mobileusos.services.ServiceUSOSCalendar
@@ -10,9 +10,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class RepositoryCalendar(application: Application) {
+class RepositoryCalendar(context: Context) {
 
-	private val calendarDao = AppDatabase.init(application).calendarDao()
+	private val calendarDao = AppDatabase.init(context).calendarDao()
 	private val serviceCalendar = ServiceUSOSCalendar.init()
 
 	private fun insert(vararg calendar: CalendarEvent) {

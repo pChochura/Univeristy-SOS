@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -13,6 +14,7 @@ import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.fromJson
 import kotlinx.android.synthetic.main.fragment_page.view.*
 
+@Keep
 class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable {
 
 	constructor(page: Chapter.Page, nextPageName: String?) : this(Gson().toJson(page)) {

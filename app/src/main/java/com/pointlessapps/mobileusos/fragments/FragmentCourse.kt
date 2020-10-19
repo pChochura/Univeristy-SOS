@@ -2,6 +2,10 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,9 +23,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
+import org.jsoup.Jsoup
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
+@Keep
 class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 
 	constructor(course: Course) : this("${course.courseUnitId}#${course.groupNumber}")
@@ -88,7 +94,7 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 		}
 	}
 
-	private fun setCollapsible(button: MaterialButton, view: AppCompatTextView) {
+	private fun setCollapsible(button: MaterialButton, view: View) {
 		button.setOnClickListener {
 			view.isVisible.also {
 				view.isVisible = !it
@@ -112,11 +118,50 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 				course.classType.toString().capitalize(Locale.getDefault()),
 				course.groupNumber
 			)
-		root().courseDescription.text = Utils.stripHtmlTags(course.courseDescription.toString())
-		root().courseAssessmentCriteria.text =
-			Utils.stripHtmlTags(course.courseAssessmentCriteria.toString())
-		root().courseLearningOutcomes.text =
-			Utils.stripHtmlTags(course.courseLearningOutcomes.toString())
+		root().courseDescription.text =
+			course.courseDescription.toString().replace("&nbsp;", " ")
+
+		val layoutInflater = LayoutInflater.from(requireContext())
+		Jsoup.parse(course.courseAssessmentCriteria.toString()).also { html ->
+			root().courseAssessmentCriteria.removeAllViews()
+			html.select("table").firstOrNull()?.also { table ->
+				table.select("tr").forEach {
+					val row =
+						layoutInflater.inflate(R.layout.table_item_row, null, false) as ViewGroup
+					it.select("td").map {
+						row.addView(
+							(layoutInflater.inflate(
+								R.layout.table_item_cell,
+								row,
+								false
+							) as AppCompatTextView).apply {
+								text = it.ownText().capitalize(Locale.getDefault())
+							})
+					}
+					root().courseAssessmentCriteria.addView(row)
+				}
+			}
+		}
+		Jsoup.parse(course.courseLearningOutcomes.toString()).also { html ->
+			root().courseLearningOutcomes.removeAllViews()
+			html.select("table").firstOrNull()?.also { table ->
+				table.select("tr").forEach {
+					val row =
+						layoutInflater.inflate(R.layout.table_item_row, null, false) as ViewGroup
+					it.select("td").map {
+						row.addView(
+							(layoutInflater.inflate(
+								R.layout.table_item_cell,
+								row,
+								false
+							) as AppCompatTextView).apply {
+								text = it.ownText().capitalize(Locale.getDefault())
+							})
+					}
+					root().courseLearningOutcomes.addView(row)
+				}
+			}
+		}
 	}
 
 	private fun prepareData(callback: (() -> Unit)? = null) {

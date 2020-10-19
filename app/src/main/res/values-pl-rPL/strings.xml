@@ -188,4 +188,8 @@
 	<string name="outline_remote_classes">Oznacz zajęcia zdalne</string>
 	<string name="outline_remote_classes_description">Dodaj oznaczenie pomagające odróżnić zajęcia zdalne</string>
 	<string name="relogin_description">Napotkaliśmy pewne problem z tą sesją. Aby kontynuować musisz się wylogować i zalogować ponownie</string>
+	<string name="add_a_note">Dodaj notatkę</string>
+	<string name="edit_the_note">Edytuj notatkę</string>
+	<string name="event_note">Notatka wydarzenia</string>
+	<string name="note_content">Zawartość notatki</string>
 </resources>

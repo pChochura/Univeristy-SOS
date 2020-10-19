@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.CountDownLatch
 
+@Keep
 class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelUser by viewModels<ViewModelUser>()

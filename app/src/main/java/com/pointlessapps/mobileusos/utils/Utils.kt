@@ -24,8 +24,13 @@ import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.models.Name
+import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_loading.*
+import kotlinx.android.synthetic.main.dialog_loading.buttonPrimary
+import kotlinx.android.synthetic.main.dialog_loading.buttonSecondary
+import kotlinx.android.synthetic.main.dialog_loading.messageMain
+import kotlinx.android.synthetic.main.dialog_memo.*
 import kotlinx.android.synthetic.main.dialog_show_event.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -189,16 +194,25 @@ object Utils {
 
 	fun showCourseInfo(
 		context: Context,
-		event: CourseEvent,
+		event: CourseEvent?,
 		viewModelUser: ViewModelUser,
 		onChangeFragment: ((FragmentBaseInterface) -> Unit)?
 	) {
+		if (event == null) {
+			return
+		}
+
 		DialogUtil.create(context, R.layout.dialog_show_event, { dialog ->
 			val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 			dialog.eventName.text = event.courseName.toString()
 			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
 			dialog.eventEndTime.text = hourFormat.format(event.endTime?.time ?: return@create)
 			dialog.eventType.text = event.classtypeName.toString()
+			dialog.eventMemo.text = event.memo?.takeUnless(String::isNullOrEmpty)?.also {
+				dialog.eventMemo.isVisible = true
+				dialog.buttonAddNote.setText(R.string.edit_the_note)
+				dialog.buttonAddNote.setIconResource(R.drawable.ic_edit)
+			}.toString()
 			event.roomNumber?.takeIf(String::isNotBlank)?.also {
 				dialog.buttonRoom.text = it
 				dialog.buttonRoom.isVisible = true
@@ -252,12 +266,25 @@ object Utils {
 			}
 
 			dialog.buttonAddToCalendar.setOnClickListener { calendarIntent(context, event) }
+			dialog.buttonAddNote.setOnClickListener {
+				showEventMemoEdit(context, event)
+				dialog.dismiss()
+			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
 	}
 
-	fun String.withoutExtension() = substringBeforeLast(".")
+	private fun showEventMemoEdit(context: Context, event: CourseEvent) {
+		DialogUtil.create(context, R.layout.dialog_memo, { dialog ->
+			dialog.memoContent.setText(event.memo ?: "")
 
-	fun String.extension() = substringAfterLast(".", "")
+			dialog.buttonPrimary.setOnClickListener {
+				event.memo = dialog.memoContent.text.toString()
+				RepositoryTimetable(context).insert(event)
+				dialog.dismiss()
+			}
+			dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+	}
 
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {
 		private var creator: ((A?) -> T)? = creator

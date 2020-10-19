@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Chapter
 import com.pointlessapps.mobileusos.services.ServiceUSOSGuide
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryGuide(application: Application) {
+class RepositoryGuide(context: Context) {
 
-	private val chapterDao = AppDatabase.init(application).chapterDao()
+	private val chapterDao = AppDatabase.init(context).chapterDao()
 	private val serviceGuide = ServiceUSOSGuide.init()
 
 	private fun insert(vararg chapters: Chapter) {

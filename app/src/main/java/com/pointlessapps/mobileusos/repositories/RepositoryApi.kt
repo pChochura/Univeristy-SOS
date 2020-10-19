@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.services.ServiceUSOSApi
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryApi(application: Application) {
+class RepositoryApi(context: Context) {
 
-	private val facultyDao = AppDatabase.init(application).facultyDao()
+	private val facultyDao = AppDatabase.init(context).facultyDao()
 	private val serviceApi = ServiceUSOSApi.init()
 
 	private fun insert(vararg faculty: User.Faculty) {

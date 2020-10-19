@@ -175,18 +175,24 @@
 					app:iconGravity="end"
 					app:iconTint="?colorTextPrimary" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/courseLearningOutcomes"
+				<HorizontalScrollView
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					android:background="@drawable/background_rounded"
-					android:backgroundTint="?white"
-					android:fontFamily="@font/montserrat"
-					android:padding="10dp"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp"
-					android:visibility="gone" />
+					android:layout_height="wrap_content">
+
+					<TableLayout
+						android:id="@+id/courseLearningOutcomes"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:background="@drawable/background_rounded"
+						android:backgroundTint="?white"
+						android:fontFamily="@font/montserrat"
+						android:stretchColumns="*"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp"
+						android:visibility="gone" />
+
+				</HorizontalScrollView>
 
 				<com.google.android.material.button.MaterialButton
 					android:id="@+id/buttonAssessmentCriteria"
@@ -210,18 +216,24 @@
 					app:iconGravity="end"
 					app:iconTint="?colorTextPrimary" />
 
-				<androidx.appcompat.widget.AppCompatTextView
-					android:id="@+id/courseAssessmentCriteria"
+				<HorizontalScrollView
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
-					android:background="@drawable/background_rounded"
-					android:backgroundTint="?white"
-					android:fontFamily="@font/montserrat"
-					android:padding="10dp"
-					android:textColor="?colorTextPrimary"
-					android:textSize="14sp"
-					android:visibility="gone" />
+					android:layout_height="wrap_content">
+
+					<TableLayout
+						android:id="@+id/courseAssessmentCriteria"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:background="@drawable/background_rounded"
+						android:backgroundTint="?white"
+						android:fontFamily="@font/montserrat"
+						android:stretchColumns="*"
+						android:textColor="?colorTextPrimary"
+						android:textSize="14sp"
+						android:visibility="gone" />
+
+				</HorizontalScrollView>
 
 				<androidx.appcompat.widget.AppCompatTextView
 					android:layout_width="wrap_content"

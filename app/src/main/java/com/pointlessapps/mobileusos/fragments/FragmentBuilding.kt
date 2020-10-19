@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+@Keep
 class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()

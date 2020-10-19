@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.services.ServiceUSOSGrade
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryGrade(application: Application) {
+class RepositoryGrade(context: Context) {
 
-	private val gradeDao = AppDatabase.init(application).gradeDao()
+	private val gradeDao = AppDatabase.init(context).gradeDao()
 	private val serviceGrade = ServiceUSOSGrade.init()
 
 	private fun insert(vararg grades: Grade?) {

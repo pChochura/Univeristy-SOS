@@ -13,6 +13,9 @@ import java.util.*
 @Entity(tableName = "table_course_events", primaryKeys = ["course_id", "unit_id", "start_time"])
 @Keep
 data class CourseEvent(
+	@ColumnInfo(name = "memo")
+	@SerializedName("memo")
+	var memo: String? = null,
 	@ColumnInfo(name = "course_id")
 	@SerializedName("course_id")
 	var courseId: String = "",

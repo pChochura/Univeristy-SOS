@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.ExamReport
 import com.pointlessapps.mobileusos.services.ServiceUSOSExamReport
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryExamReport(application: Application) {
+class RepositoryExamReport(context: Context) {
 
-	private val examReportDao = AppDatabase.init(application).examReportDao()
+	private val examReportDao = AppDatabase.init(context).examReportDao()
 	private val serviceExamReport = ServiceUSOSExamReport.init()
 
 	private fun insert(vararg examReports: ExamReport) {

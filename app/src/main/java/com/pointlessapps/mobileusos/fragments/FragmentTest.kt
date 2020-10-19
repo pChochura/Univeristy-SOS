@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.fragments
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.ViewGroup
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
+@Keep
 class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable {
 
 	constructor(test: Test) : this(Gson().toJson(test))
@@ -71,7 +73,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 
 		val loaded = CountDownLatch(1)
 		viewModelUser.getTestNodesByIds(test.root?.subNodes?.map(Test.Node::id) ?: listOf())
-			.observe(this) { (nodes, sourceType) ->
+			.observe(this) { (nodes) ->
 				root().horizontalProgressBar.isRefreshing = true
 
 				val partition = nodes.partition { it.type != Test.Node.GRADE }

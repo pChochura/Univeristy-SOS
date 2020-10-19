@@ -40,7 +40,7 @@ class FragmentCalendar : FragmentBase() {
 
 	private var selectedDay = LocalDate.now()
 	private var startDate = MutableLiveData(Calendar.getInstance().time)
-	lateinit var baseFacultyId: String
+	private lateinit var baseFacultyId: String
 
 	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar

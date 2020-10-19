@@ -80,6 +80,18 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/eventMemo"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="10dp"
+		android:fontFamily="@font/montserrat"
+		android:gravity="center"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="12sp"
+		android:visibility="gone" />
+
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonGroup"
 		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
@@ -155,6 +167,25 @@
 		android:visibility="gone"
 		app:backgroundTint="?white"
 		app:icon="@drawable/ic_building"
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonAddNote"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/add_a_note"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
+		app:icon="@drawable/ic_add_note"
 		app:iconTint="?colorTextPrimary"
 		app:rippleColor="?colorTextSecondary" />
 

@@ -16,11 +16,7 @@ import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttachment
 import com.pointlessapps.mobileusos.adapters.AdapterAutocomplete
 import com.pointlessapps.mobileusos.models.Email
-import com.pointlessapps.mobileusos.utils.DialogUtil
-import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
-import com.pointlessapps.mobileusos.utils.Utils.extension
-import com.pointlessapps.mobileusos.utils.Utils.withoutExtension
-import com.pointlessapps.mobileusos.utils.addChip
+import com.pointlessapps.mobileusos.utils.*
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.android.synthetic.main.dialog_attachment.*
 import kotlinx.android.synthetic.main.dialog_loading.*

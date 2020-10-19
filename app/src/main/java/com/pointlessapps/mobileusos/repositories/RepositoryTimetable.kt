@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.services.ServiceUSOSTimetable
@@ -11,23 +11,18 @@ import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RepositoryTimetable(application: Application) {
+class RepositoryTimetable(context: Context) {
 
-	private val timetableDao = AppDatabase.init(application).timetableDao()
+	private val timetableDao = AppDatabase.init(context).timetableDao()
 	private val serviceTimetable = ServiceUSOSTimetable.init()
 
-	private fun insert(vararg courseEvents: CourseEvent) {
+	fun insert(vararg courseEvents: CourseEvent) {
 		GlobalScope.launch {
 			timetableDao.insert(*courseEvents)
 		}
 	}
 
 	fun getForDays(startTime: Calendar, numberOfDays: Int) = ObserverWrapper<List<CourseEvent?>> {
-		startTime.apply {
-			set(Calendar.SECOND, 0)
-			set(Calendar.MINUTE, 0)
-			set(Calendar.HOUR_OF_DAY, 1)
-		}
 		postValue {
 			timetableDao.getForDays(
 				startTime.timeInMillis,

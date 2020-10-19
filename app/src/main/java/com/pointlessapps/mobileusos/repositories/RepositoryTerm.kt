@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Term
 import com.pointlessapps.mobileusos.services.ServiceUSOSTerm
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryTerm(application: Application) {
+class RepositoryTerm(context: Context) {
 
-	private val termDao = AppDatabase.init(application).termDao()
+	private val termDao = AppDatabase.init(context).termDao()
 	private val serviceTerm = ServiceUSOSTerm.init()
 
 	private fun insert(vararg terms: Term) {

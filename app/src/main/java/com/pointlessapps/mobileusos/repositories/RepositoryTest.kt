@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Test
 import com.pointlessapps.mobileusos.services.ServiceUSOSTest
@@ -9,10 +9,10 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryTest(application: Application) {
+class RepositoryTest(context: Context) {
 
-	private val testDao = AppDatabase.init(application).testDao()
-	private val testNodeDao = AppDatabase.init(application).testNodeDao()
+	private val testDao = AppDatabase.init(context).testDao()
+	private val testNodeDao = AppDatabase.init(context).testNodeDao()
 	private val serviceTest = ServiceUSOSTest.init()
 
 	private fun insertTests(vararg tests: Test) {

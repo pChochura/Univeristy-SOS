@@ -32,7 +32,11 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 					cache.add(day2.getDayKey())
 				}
 
-				repositoryTimetable.getForDays(date, days).onOnceCallback { value ->
+				repositoryTimetable.getForDays(date.apply {
+					set(Calendar.SECOND, 0)
+					set(Calendar.MINUTE, 0)
+					set(Calendar.HOUR_OF_DAY, 1)
+				}, days).onOnceCallback { value ->
 					value.first.filterNotNull().also { list ->
 						courseEvents.addAll(list)
 						list.map(CourseEvent::toWeekViewEvent)

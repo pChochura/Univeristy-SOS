@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Article
 import com.pointlessapps.mobileusos.models.Name
@@ -10,9 +10,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryArticle(application: Application) {
+class RepositoryArticle(context: Context) {
 
-	private val articleDao = AppDatabase.init(application).articleDao()
+	private val articleDao = AppDatabase.init(context).articleDao()
 	private val serviceArticle = ServiceUSOSArticle.init()
 
 	private fun insert(vararg articles: Article) {

@@ -1,6 +1,6 @@
 package com.pointlessapps.mobileusos.repositories
 
-import android.app.Application
+import android.content.Context
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.services.ServiceUSOSGroup
@@ -9,9 +9,9 @@ import com.pointlessapps.mobileusos.utils.SourceType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class RepositoryGroup(application: Application) {
+class RepositoryGroup(context: Context) {
 
-	private val groupDao = AppDatabase.init(application).groupDao()
+	private val groupDao = AppDatabase.init(context).groupDao()
 	private val serviceGroup = ServiceUSOSGroup.init()
 
 	private fun insert(vararg courses: Course) {
