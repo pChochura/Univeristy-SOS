@@ -1,71 +1,53 @@
 package com.pointlessapps.mobileusos.adapters
 
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemQuestionAnswerBinding
+import com.pointlessapps.mobileusos.databinding.ListItemQuestionBinding
+import com.pointlessapps.mobileusos.databinding.ListItemSubQuestionBinding
+import com.pointlessapps.mobileusos.databinding.ListItemSubSubQuestionBinding
 import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
-import org.jetbrains.anko.find
 
-class AdapterQuestion : AdapterSimple<Survey.Question>(mutableListOf()) {
+class AdapterQuestion : AdapterCore<Survey.Question, ListItemQuestionBinding>(
+	mutableListOf(),
+	ListItemQuestionBinding::class.java
+) {
 
 	lateinit var onCheckedListener: (String, String) -> Unit
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var listSubQuestions: RecyclerView
-
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_question
-
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.questionName)
-		listSubQuestions = root.find(R.id.listSubQuestions)
-	}
-
-	override fun onBind(root: View, position: Int) {
-		textName.text = Utils.stripHtmlTags(list[position].displayTextHtml.toString())
-		listSubQuestions.apply {
+	override fun onBind(binding: ListItemQuestionBinding, position: Int) {
+		binding.questionName.text = Utils.stripHtmlTags(list[position].displayTextHtml.toString())
+		binding.listSubQuestions.apply {
 			adapter = AdapterSubQuestion(list[position].subQuestions ?: listOf()).apply {
 				onCheckedListener = this@AdapterQuestion.onCheckedListener
 			}
 			layoutManager =
-				UnscrollableLinearLayoutManager(root.context, RecyclerView.VERTICAL, false)
+				UnscrollableLinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
 		}
 	}
 }
 
 class AdapterSubQuestion(subQuestions: List<Survey.Question>) :
-	AdapterSimple<Survey.Question>(subQuestions.toMutableList()) {
+	AdapterCore<Survey.Question, ListItemSubQuestionBinding>(
+		subQuestions.toMutableList(),
+		ListItemSubQuestionBinding::class.java
+	) {
 
 	lateinit var onCheckedListener: (String, String) -> Unit
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var listSubSubQuestions: RecyclerView
-
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_sub_question
-
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.subQuestionName)
-		listSubSubQuestions = root.find(R.id.listSubSubQuestions)
-	}
-
-	override fun onBind(root: View, position: Int) {
+	override fun onBind(binding: ListItemSubQuestionBinding, position: Int) {
 		if (list[position].subQuestions.isNullOrEmpty()) {
-			textName.isGone = true
+			binding.subQuestionName.isGone = true
 		}
-		textName.text = "%s. %s".format(
+		binding.subQuestionName.text = "%s. %s".format(
 			list[position].number,
 			Utils.stripHtmlTags(list[position].displayTextHtml.toString())
 		)
 
-		listSubSubQuestions.apply {
+		binding.listSubSubQuestions.apply {
 			adapter = AdapterSubSubQuestion(
 				list[position].subQuestions?.takeIf { it.isNotEmpty() }?.toMutableList()
 					?: mutableListOf(list[position])
@@ -73,44 +55,40 @@ class AdapterSubQuestion(subQuestions: List<Survey.Question>) :
 				onCheckedListener = this@AdapterSubQuestion.onCheckedListener
 			}
 			layoutManager =
-				UnscrollableLinearLayoutManager(root.context, RecyclerView.VERTICAL, false)
+				UnscrollableLinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
 		}
 	}
 }
 
 class AdapterSubSubQuestion(subSubQuestions: List<Survey.Question>) :
-	AdapterSimple<Survey.Question>(subSubQuestions.toMutableList()) {
+	AdapterCore<Survey.Question, ListItemSubSubQuestionBinding>(
+		subSubQuestions.toMutableList(),
+		ListItemSubSubQuestionBinding::class.java
+	) {
 
 	lateinit var onCheckedListener: (String, String) -> Unit
 
-	private lateinit var textName: AppCompatTextView
-	private lateinit var answersGroup: RadioGroup
-
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_sub_sub_question
-
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.subSubQuestionName)
-		answersGroup = root.find(R.id.answersGroup)
-	}
-
-	override fun onBind(root: View, position: Int) {
-		textName.text = "%s. %s".format(
+	override fun onBind(binding: ListItemSubSubQuestionBinding, position: Int) {
+		binding.subSubQuestionName.text = "%s. %s".format(
 			list[position].number,
 			Utils.stripHtmlTags(list[position].displayTextHtml.toString())
 		)
 
-		answersGroup.apply {
-			LayoutInflater.from(root.context).also {
+		binding.answersGroup.apply {
+			LayoutInflater.from(context).also {
 				list[position].possibleAnswers?.forEach { answer ->
-					addView(it.inflate(R.layout.list_item_question_answer, null, false)
-						.apply {
-							(this as RadioButton).text =
-								Utils.stripHtmlTags(answer.displayTextHtml.toString())
+					addView(
+						ListItemQuestionAnswerBinding.inflate(
+							it,
+							null,
+							false
+						).root.apply {
+							text = Utils.stripHtmlTags(answer.displayTextHtml.toString())
 							setOnCheckedChangeListener { _, _ ->
 								onCheckedListener(list[position].id, answer.id)
 							}
-						})
+						}
+					)
 				}
 			}
 		}

@@ -31,6 +31,7 @@
         <attr name="goToTodayArrowColor" format="color" />
         <attr name="goToTodayBgColor" format="color" />
     </declare-styleable>
+
     <declare-styleable name="LoadingRecyclerView">
         <attr name="android:orientation" format="enum">
             <enum name="horizontal" value="0" />
@@ -38,15 +39,18 @@
         </attr>
         <attr name="android:padding" format="dimension" />
     </declare-styleable>
+
     <declare-styleable name="RefreshProgressBar">
         <attr name="color1" format="color" />
         <attr name="color2" format="color" />
         <attr name="color3" format="color" />
         <attr name="color4" format="color" />
     </declare-styleable>
+
     <declare-styleable name="SettingsItemGroup">
         <attr name="header" format="string" />
     </declare-styleable>
+
     <declare-styleable name="SettingsItem">
         <attr name="title" format="string" />
         <attr name="description" format="string" />

@@ -5,14 +5,12 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.isGone
-import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityMain
+import com.pointlessapps.mobileusos.databinding.FragmentBrowserBinding
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
-import kotlinx.android.synthetic.main.fragment_browser.view.*
 
-class FragmentBrowser(private val url: String) : FragmentBase() {
-
-	override fun getLayoutId() = R.layout.fragment_browser
+class FragmentBrowser(private val url: String) :
+	FragmentCoreImpl<FragmentBrowserBinding>(FragmentBrowserBinding::class.java) {
 
 	override fun created() {
 		prepareWebView()
@@ -20,18 +18,18 @@ class FragmentBrowser(private val url: String) : FragmentBase() {
 	}
 
 	private fun prepareWebView() {
-		root().webView.also {
+		binding().webView.also {
 			it.webViewClient = object : WebViewClient() {
 				override fun shouldOverrideUrlLoading(
 					view: WebView,
 					request: WebResourceRequest
 				): Boolean {
-					root().progressBar.isGone = false
+					binding().progressBar.isGone = false
 
 					if (request.url.scheme == HelperClientUSOS.CALLBACK_URL_HOST) {
-						root().iconWelcome.isGone = false
-						root().progressBar.isGone = true
-						root().containerNotification.isGone = true
+						binding().iconWelcome.isGone = false
+						binding().progressBar.isGone = true
+						binding().containerNotification.isGone = true
 						HelperClientUSOS.handleLoginResult(requireActivity(), request.url) {
 							startActivity(
 								Intent(
@@ -50,7 +48,7 @@ class FragmentBrowser(private val url: String) : FragmentBase() {
 				}
 
 				override fun onPageFinished(view: WebView, url: String) {
-					root().progressBar.isGone = true
+					binding().progressBar.isGone = true
 					super.onPageFinished(view, url)
 				}
 			}
@@ -59,8 +57,8 @@ class FragmentBrowser(private val url: String) : FragmentBase() {
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonPrimary.setOnClickListener { root().containerNotification.isGone = true }
-		root().buttonSecondary.setOnClickListener {
+		binding().buttonPrimary.setOnClickListener { binding().containerNotification.isGone = true }
+		binding().buttonSecondary.setOnClickListener {
 			HelperClientUSOS.handleLogin(
 				requireActivity(),
 				HelperClientUSOS.university ?: return@setOnClickListener

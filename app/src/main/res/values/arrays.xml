@@ -4,6 +4,7 @@
 		<item>6</item>
 		<item>20</item>
 	</string-array>
+
 	<string-array name="month_names">
 		<item>@string/january</item>
 		<item>@string/february</item>

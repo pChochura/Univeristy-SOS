@@ -1,40 +1,24 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
-import com.google.android.material.chip.Chip
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemRoomBinding
 import com.pointlessapps.mobileusos.models.BuildingRoom
-import org.jetbrains.anko.find
 
-class AdapterRoom : AdapterSimple<BuildingRoom>(mutableListOf()) {
-
-	private lateinit var textName: AppCompatTextView
-	private lateinit var textCapacity: Chip
-
+class AdapterRoom : AdapterCore<BuildingRoom, ListItemRoomBinding>(
+	mutableListOf(),
+	ListItemRoomBinding::class.java
+) {
 	init {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_room
 	override fun isCollapsible() = true
 
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.roomName)
-		textCapacity = root.find(R.id.roomCapacity)
-	}
-
-	override fun onBind(root: View, position: Int) {
-		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener?.invoke(list[position])
-		}
-
-		textName.text = list[position].number
+	override fun onBind(binding: ListItemRoomBinding, position: Int) {
+		binding.roomName.text = list[position].number
 		list[position].capacity?.toString()?.also {
-			textCapacity.isVisible = true
-			textCapacity.text = it
+			binding.roomCapacity.isVisible = true
+			binding.roomCapacity.text = it
 		}
 	}
 }

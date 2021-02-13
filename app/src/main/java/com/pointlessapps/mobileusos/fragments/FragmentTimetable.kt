@@ -3,20 +3,20 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.FragmentTimetableBinding
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.pointlessapps.mobileusos.views.WeekView
-import kotlinx.android.synthetic.main.fragment_timetable.view.*
 import java.util.*
 
-class FragmentTimetable : FragmentBase() {
+class FragmentTimetable :
+	FragmentCoreImpl<FragmentTimetableBinding>(FragmentTimetableBinding::class.java) {
 
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 	private val viewModelUser by viewModels<ViewModelUser>()
 
-	override fun getLayoutId() = R.layout.fragment_timetable
 	override fun getNavigationIcon() = R.drawable.ic_timetable
 	override fun getNavigationName() = R.string.timetable
 
@@ -26,39 +26,39 @@ class FragmentTimetable : FragmentBase() {
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		prepareWeekView()
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonRefresh.setOnClickListener {
-			root().horizontalProgressBar.isRefreshing = true
+		binding().buttonRefresh.setOnClickListener {
+			binding().horizontalProgressBar.isRefreshing = true
 			viewModelTimetable.clearCache()
-			viewModelTimetable.prepareForDate(root().weekView.firstVisibleDay) {
-				root().weekView.refreshDataset()
-				root().horizontalProgressBar.isRefreshing = false
+			viewModelTimetable.prepareForDate(binding().weekView.firstVisibleDay) {
+				binding().weekView.refreshDataset()
+				binding().horizontalProgressBar.isRefreshing = false
 			}
 		}
 	}
 
 	private fun prepareWeekView() {
 		Preferences.get().apply {
-			root().weekView.setStartHour(getTimetableStartHour())
-			root().weekView.setEndHour(getTimetableEndHour())
-			root().weekView.setVisibleDays(getTimetableVisibleDays())
-			root().weekView.setSnappingEnabled(getTimetableSnapToFullDay())
+			binding().weekView.setStartHour(getTimetableStartHour())
+			binding().weekView.setEndHour(getTimetableEndHour())
+			binding().weekView.setVisibleDays(getTimetableVisibleDays())
+			binding().weekView.setSnappingEnabled(getTimetableSnapToFullDay())
 		}
-		root().weekView.setScrollListener { newFirstVisibleDay, _ ->
-			root().horizontalProgressBar.isRefreshing = true
+		binding().weekView.setScrollListener { newFirstVisibleDay, _ ->
+			binding().horizontalProgressBar.isRefreshing = true
 			viewModelTimetable.prepareForDate(newFirstVisibleDay.clone() as Calendar) {
-				root().weekView.refreshDataset()
-				root().horizontalProgressBar.isRefreshing = false
+				binding().weekView.refreshDataset()
+				binding().horizontalProgressBar.isRefreshing = false
 			}
 		}
-		root().weekView.setMonthChangeListener { newYear, newMonth ->
+		binding().weekView.setMonthChangeListener { newYear, newMonth ->
 			return@setMonthChangeListener viewModelTimetable.getEventsByMonthYear(newMonth, newYear)
 		}
-		root().weekView.setEventClickListener { event, _ -> showEventInfo(event) }
+		binding().weekView.setEventClickListener { event, _ -> showEventInfo(event) }
 	}
 
 	private fun showEventInfo(weekViewEvent: WeekView.WeekViewEvent) {

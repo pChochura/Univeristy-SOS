@@ -2,15 +2,14 @@ package com.pointlessapps.mobileusos.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.intrusoft.sectionedrecyclerview.Section
 import com.intrusoft.sectionedrecyclerview.SectionRecyclerViewAdapter
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemTestChildBinding
+import com.pointlessapps.mobileusos.databinding.ListItemTestHeaderBinding
 import com.pointlessapps.mobileusos.models.Test
-import org.jetbrains.anko.find
 
 class AdapterTest(private val context: Context, sections: List<SectionHeader> = listOf()) :
 	SectionRecyclerViewAdapter<AdapterTest.SectionHeader, Test, AdapterTest.SectionViewHolder, AdapterTest.ChildViewHolder>(
@@ -22,7 +21,11 @@ class AdapterTest(private val context: Context, sections: List<SectionHeader> = 
 
 	override fun onCreateSectionViewHolder(itemView: ViewGroup, viewType: Int) =
 		SectionViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_test_header, itemView, false)
+			ListItemTestHeaderBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindSectionViewHolder(
@@ -30,12 +33,16 @@ class AdapterTest(private val context: Context, sections: List<SectionHeader> = 
 		sectionPosition: Int,
 		section: SectionHeader
 	) {
-		itemView.textHeader.text = section.getSectionHeader()
+		itemView.binding.testHeader.text = section.getSectionHeader()
 	}
 
 	override fun onCreateChildViewHolder(itemView: ViewGroup, viewType: Int) =
 		ChildViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_test_child, itemView, false)
+			ListItemTestChildBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindChildViewHolder(
@@ -44,15 +51,15 @@ class AdapterTest(private val context: Context, sections: List<SectionHeader> = 
 		childPosition: Int,
 		test: Test
 	) {
-		itemView.bg.setOnClickListener {
+		itemView.binding.root.setOnClickListener {
 			onClickListener.invoke(test)
 		}
 
-		itemView.textName.text = test.courseEdition.course?.name.toString()
+		itemView.binding.courseName.text = test.courseEdition.course?.name.toString()
 		if (!test.isLimitedToGroups || test.classGroups == null) {
-			itemView.textGroups.text = context.getString(R.string.all_participants)
+			itemView.binding.groups.text = context.getString(R.string.all_participants)
 		} else {
-			itemView.textGroups.text = context.getString(
+			itemView.binding.groups.text = context.getString(
 				R.string.groups_other,
 				test.classGroups!!.joinToString { it.number.toString() })
 		}
@@ -64,13 +71,9 @@ class AdapterTest(private val context: Context, sections: List<SectionHeader> = 
 		fun getSectionHeader() = header
 	}
 
-	class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val textHeader = itemView.find<AppCompatTextView>(R.id.testHeader)
-	}
+	class SectionViewHolder(val binding: ListItemTestHeaderBinding) :
+		RecyclerView.ViewHolder(binding.root)
 
-	class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val bg = itemView.find<View>(R.id.bg)
-		val textName = itemView.find<AppCompatTextView>(R.id.courseName)
-		val textGroups = itemView.find<AppCompatTextView>(R.id.groups)
-	}
+	class ChildViewHolder(val binding: ListItemTestChildBinding) :
+		RecyclerView.ViewHolder(binding.root)
 }

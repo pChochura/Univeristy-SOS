@@ -18,6 +18,8 @@ import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterTestPart
+import com.pointlessapps.mobileusos.databinding.DialogShowGradeBinding
+import com.pointlessapps.mobileusos.databinding.FragmentTestBinding
 import com.pointlessapps.mobileusos.models.Test
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
@@ -25,8 +27,6 @@ import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.utils.fromJson
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.dialog_show_grade.*
-import kotlinx.android.synthetic.main.fragment_test.view.*
 import org.jetbrains.anko.doAsync
 import java.lang.Integer.max
 import java.text.SimpleDateFormat
@@ -34,16 +34,15 @@ import java.util.*
 import java.util.concurrent.CountDownLatch
 
 @Keep
-class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable {
+class FragmentTest(private val json: String) :
+	FragmentCoreImpl<FragmentTestBinding>(FragmentTestBinding::class.java), FragmentPinnable {
 
 	constructor(test: Test) : this(Gson().toJson(test))
 
 	private val test = Gson().fromJson<Test>(json)
 	private val viewModelUser by viewModels<ViewModelUser>()
 
-	override fun getLayoutId() = R.layout.fragment_test
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_test to test.courseEdition.course?.name.toString())
 	}
 
@@ -52,20 +51,20 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 		prepareTestPartsList()
 		refreshed()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
-		root().testName.text = test.courseEdition.course?.name.toString()
-		root().testDescription.text = test.root?.description.toString()
+		binding().testName.text = test.courseEdition.course?.name.toString()
+		binding().testDescription.text = test.root?.description.toString()
 		if (test.root?.description?.isEmpty() == true) {
-			root().testDescription.isGone = true
-			root().buttonDescription.isGone = true
+			binding().testDescription.isGone = true
+			binding().buttonDescription.isGone = true
 		}
 		if (!test.isLimitedToGroups || test.classGroups == null) {
-			root().testParticipants.setText(R.string.all_participants)
+			binding().testParticipants.setText(R.string.all_participants)
 		} else {
-			root().testParticipants.text =
+			binding().testParticipants.text =
 				getString(
 					R.string.groups_other,
 					test.classGroups?.joinToString { it.number.toString() })
@@ -74,10 +73,10 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 		val loaded = CountDownLatch(1)
 		viewModelUser.getTestNodesByIds(test.root?.subNodes?.map(Test.Node::id) ?: listOf())
 			.observe(this) { (nodes) ->
-				root().horizontalProgressBar.isRefreshing = true
+				binding().horizontalProgressBar.isRefreshing = true
 
 				val partition = nodes.partition { it.type != Test.Node.GRADE }
-				(root().listTestParts.adapter as? AdapterTestPart)?.notifyDataChanged(
+				(binding().listTestParts.adapter as? AdapterTestPart)?.notifyDataChanged(
 					listOf(
 						*partition.first.map {
 							AdapterTestPart.SectionHeader(
@@ -94,12 +93,12 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 
 		doAsync {
 			loaded.await()
-			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 
 		if (isPinned(javaClass.name, json)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 	}
 
@@ -114,7 +113,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 			}
 		}.onFinished {
 			val partition = nodes.partition { it.type != Test.Node.GRADE }
-			(root().listTestParts.adapter as? AdapterTestPart)?.notifyDataChanged(
+			(binding().listTestParts.adapter as? AdapterTestPart)?.notifyDataChanged(
 				listOf(
 					*partition.first.map {
 						AdapterTestPart.SectionHeader(
@@ -131,10 +130,10 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 	}
 
 	private fun prepareClickListeners() {
-		setCollapsible(root().buttonDescription, root().testDescription)
+		setCollapsible(binding().buttonDescription, binding().testDescription)
 
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, json))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -149,7 +148,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 			listOf(),
 			listOf()
 		)
-		root().listTestParts.setAdapter(AdapterTestPart(
+		binding().listTestParts.setAdapter(AdapterTestPart(
 			requireContext(), listOf(
 				*partition.first.map {
 					AdapterTestPart.SectionHeader(
@@ -169,7 +168,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 	}
 
 	private fun showGradeDialog(node: Test.Node) {
-		DialogUtil.create(requireContext(), R.layout.dialog_show_grade, { dialog ->
+		DialogUtil.create(requireContext(), DialogShowGradeBinding::class.java, { dialog ->
 			dialog.gradeName.text = node.name.toString()
 
 			var grade = getString(R.string.empty)
@@ -205,7 +204,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 					?: node.studentsPoints?.grader?.name()
 							?: getString(R.string.empty)
 				setOnClickListener {
-					dialog.dismiss()
+					dismiss()
 					onChangeFragment?.invoke(
 						FragmentUser(
 							node.gradeNodeDetails?.studentsGrade?.grader?.id
@@ -302,7 +301,7 @@ class FragmentTest(private val json: String) : FragmentBase(), FragmentPinnable 
 						R.drawable.ic_arrow_up
 					}
 				)
-				TransitionManager.beginDelayedTransition(root(), AutoTransition())
+				TransitionManager.beginDelayedTransition(binding().root, AutoTransition())
 			}
 		}
 	}

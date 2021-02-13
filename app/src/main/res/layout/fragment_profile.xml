@@ -97,7 +97,9 @@
 				android:orientation="vertical"
 				android:padding="20dp">
 
-				<include layout="@layout/partial_profile_shortcuts" />
+				<include
+					android:id="@+id/containerShortcuts"
+					layout="@layout/partial_profile_shortcuts" />
 
 				<androidx.appcompat.widget.AppCompatTextView
 					android:layout_width="wrap_content"

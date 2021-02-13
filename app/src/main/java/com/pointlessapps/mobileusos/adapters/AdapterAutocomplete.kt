@@ -8,24 +8,27 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import androidx.appcompat.widget.AppCompatTextView
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemAutocompleteBinding
 import com.pointlessapps.mobileusos.models.Email
 import org.jetbrains.anko.find
 
 class AdapterAutocomplete(
 	context: Context,
 	val list: MutableList<Email.Recipient> = mutableListOf()
-) :
-	ArrayAdapter<Email.Recipient>(context, R.layout.list_item_autocomplete, list) {
+) : ArrayAdapter<Email.Recipient>(context, R.layout.list_item_autocomplete, list) {
 
 	private val wholeList = mutableListOf(*list.toTypedArray())
 
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-		val viewGroup = convertView ?: LayoutInflater.from(context)
-			.inflate(R.layout.list_item_autocomplete, null)
+		val viewGroup = convertView ?: ListItemAutocompleteBinding.inflate(
+			LayoutInflater.from(context),
+			parent,
+			false
+		).root
 
-		viewGroup.find<AppCompatTextView>(R.id.text).text = getItem(position)?.name()
-
-		return viewGroup!!
+		return viewGroup.apply {
+			find<AppCompatTextView>(R.id.text).text = getItem(position)?.name()
+		}
 	}
 
 	fun update(list: List<Email.Recipient>) {
@@ -39,6 +42,7 @@ class AdapterAutocomplete(
 		notifyDataSetChanged()
 	}
 
+	@Suppress("UNCHECKED_CAST")
 	override fun getFilter(): Filter {
 		return object : Filter() {
 			override fun performFiltering(query: CharSequence?) = FilterResults().apply {

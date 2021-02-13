@@ -13,6 +13,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="@font/montserrat"
+		android:tag="ignorePostponeAdding"
 		android:textColor="?colorTextPrimary"
 		android:textSize="14sp"
 		tools:text="Header" />
@@ -24,6 +25,7 @@
 		android:layout_marginTop="10dp"
 		android:background="@drawable/background_rounded"
 		android:backgroundTint="?white"
-		android:orientation="vertical" />
+		android:orientation="vertical"
+		android:tag="ignorePostponeAdding" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

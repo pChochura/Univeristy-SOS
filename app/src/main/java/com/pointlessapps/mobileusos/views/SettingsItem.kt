@@ -3,13 +3,13 @@ package com.pointlessapps.mobileusos.views
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.SettingsItemBinding
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
-import kotlinx.android.synthetic.main.settings_item.view.*
 
 class SettingsItem(
 	context: Context,
@@ -17,11 +17,8 @@ class SettingsItem(
 ) : ConstraintLayout(context, attrs) {
 	constructor(context: Context) : this(context, null)
 
-	private val root: View = View.inflate(
-		context,
-		R.layout.settings_item,
-		this
-	)
+	private val binding: SettingsItemBinding =
+		SettingsItemBinding.inflate(LayoutInflater.from(context), this, true)
 
 	var enabled: (() -> Boolean) = { true }
 		set(value) {
@@ -50,10 +47,10 @@ class SettingsItem(
 		val isEnabled = a.getBoolean(R.styleable.SettingsItem_enabled, true)
 		a.recycle()
 
-		root.itemTitle.text = title
-		root.itemDescription.text = description
-		root.itemAction.isVisible = hasBubble
-		root.itemSeparator.isVisible = hasSeparator
+		binding.itemTitle.text = title
+		binding.itemDescription.text = description
+		binding.itemAction.isVisible = hasBubble
+		binding.itemSeparator.isVisible = hasSeparator
 
 		setAction()
 		setSwitchAction()
@@ -64,10 +61,10 @@ class SettingsItem(
 
 	private fun setEnabled(value: Boolean? = null) {
 		val v = value ?: true && enabled()
-		root.bg.isClickable = v
-		root.bg.isFocusable = v
-		root.bg.alpha = if (v) 1f else 0.3f
-		root.bg.rippleColor =
+		binding.bg.isClickable = v
+		binding.bg.isFocusable = v
+		binding.bg.alpha = if (v) 1f else 0.3f
+		binding.bg.rippleColor =
 			ColorStateList.valueOf(
 				if (v) context.themeColor(R.attr.colorTextSecondary) else ContextCompat.getColor(
 					context,
@@ -77,16 +74,16 @@ class SettingsItem(
 	}
 
 	private fun setAction() {
-		root.itemAction.text = value()
+		binding.itemAction.text = value()
 	}
 
 	private fun setSwitchAction() {
 		if (valueSwitch?.invoke() ?: return) {
-			root.itemAction.setText(R.string.on)
-			root.itemAction.setChipBackgroundColorResource(R.color.colorAccent)
+			binding.itemAction.setText(R.string.on)
+			binding.itemAction.setChipBackgroundColorResource(R.color.colorAccent)
 		} else {
-			root.itemAction.setText(R.string.off)
-			root.itemAction.setChipBackgroundColorResource(R.color.colorTextSecondary)
+			binding.itemAction.setText(R.string.off)
+			binding.itemAction.setChipBackgroundColorResource(R.color.colorTextSecondary)
 		}
 	}
 
@@ -97,7 +94,7 @@ class SettingsItem(
 	}
 
 	fun onTapped(callback: (SettingsItem) -> Unit) {
-		root.bg.setOnClickListener {
+		binding.bg.setOnClickListener {
 			if (enabled()) {
 				callback(this)
 			}

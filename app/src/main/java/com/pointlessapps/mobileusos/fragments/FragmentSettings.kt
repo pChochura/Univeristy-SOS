@@ -1,34 +1,25 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.content.Intent
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
-import com.pointlessapps.mobileusos.adapters.AdapterSimple
+import com.pointlessapps.mobileusos.adapters.AdapterCore
+import com.pointlessapps.mobileusos.databinding.*
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.utils.DialogUtil
-import kotlinx.android.synthetic.main.dialog_list_picker.*
-import kotlinx.android.synthetic.main.dialog_loading.*
-import kotlinx.android.synthetic.main.dialog_time_picker.*
-import kotlinx.android.synthetic.main.dialog_time_picker.buttonPrimary
-import kotlinx.android.synthetic.main.dialog_time_picker.buttonSecondary
-import kotlinx.android.synthetic.main.dialog_time_picker.title
-import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.jetbrains.anko.doAsync
 
-class FragmentSettings : FragmentBase() {
+class FragmentSettings :
+	FragmentCoreImpl<FragmentSettingsBinding>(FragmentSettingsBinding::class.java) {
 
 	private val prefs = Preferences.get()
-
-	override fun getLayoutId() = R.layout.fragment_settings
 
 	override fun created() {
 		prepareTimetableSettings()
@@ -37,7 +28,7 @@ class FragmentSettings : FragmentBase() {
 	}
 
 	private fun prepareTimetableSettings() {
-		root().itemVisiblePeriod.apply {
+		binding().itemVisiblePeriod.apply {
 			value = {
 				"%02d:00 - %02d:00".format(
 					prefs.getTimetableStartHour(),
@@ -45,7 +36,7 @@ class FragmentSettings : FragmentBase() {
 				)
 			}
 			onTapped { item ->
-				DialogUtil.create(requireContext(), R.layout.dialog_time_picker, { dialog ->
+				DialogUtil.create(requireContext(), DialogTimePickerBinding::class.java, { dialog ->
 					var currentMin = prefs.getTimetableStartHour().toFloat()
 					var currentMax = prefs.getTimetableEndHour().toFloat()
 					dialog.periodPicker.apply {
@@ -56,7 +47,7 @@ class FragmentSettings : FragmentBase() {
 							slider.values.maxOrNull()?.also { currentMax = it }
 						}
 					}
-					dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+					dialog.buttonSecondary.setOnClickListener { dismiss() }
 					dialog.buttonPrimary.setOnClickListener {
 						prefs.putTimetableStartHour(currentMin.toInt())
 						prefs.putTimetableEndHour(currentMax.toInt())
@@ -64,23 +55,25 @@ class FragmentSettings : FragmentBase() {
 						onForceRefreshAllFragments?.invoke()
 
 						item.refresh()
-						dialog.dismiss()
+						dismiss()
 					}
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 			}
 		}
 
-		root().itemVisibleDays.apply {
+		binding().itemVisibleDays.apply {
 			value = { prefs.getTimetableVisibleDays().toString() }
 			onTapped { item ->
-				DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
+				DialogUtil.create(requireContext(), DialogListPickerBinding::class.java, { dialog ->
 					dialog.title.setText(R.string.number_of_visible_days_title)
 					dialog.listItems.apply {
 						adapter = object :
-							AdapterSimple<String>((3..7).map(Int::toString).toMutableList()) {
-							override fun getLayoutId(viewType: Int) = R.layout.list_item_simple
-							override fun onBind(root: View, position: Int) {
-								(root as? MaterialButton)?.apply {
+							AdapterCore<String, ListItemSimpleBinding>(
+								(3..7).map(Int::toString).toMutableList(),
+								ListItemSimpleBinding::class.java
+							) {
+							override fun onBind(binding: ListItemSimpleBinding, position: Int) {
+								binding.root.apply {
 									text = list[position]
 									setOnClickListener {
 										prefs.putTimetableVisibleDays(
@@ -90,7 +83,7 @@ class FragmentSettings : FragmentBase() {
 										onForceRefreshAllFragments?.invoke()
 
 										item.refresh()
-										dialog.dismiss()
+										dismiss()
 									}
 								}
 							}
@@ -102,12 +95,12 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemSnapToFullDay.apply {
+		binding().itemSnapToFullDay.apply {
 			valueSwitch = { prefs.getTimetableSnapToFullDay() }
 			onTapped { prefs.putTimetableSnapToFullDay(!prefs.getTimetableSnapToFullDay()) }
 		}
 
-		root().itemOutlineRemote.apply {
+		binding().itemOutlineRemote.apply {
 			valueSwitch = { prefs.getTimetableOutlineRemote() }
 			onTapped {
 				prefs.putTimetableOutlineRemote(!prefs.getTimetableOutlineRemote())
@@ -115,36 +108,36 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemAddEvent.apply {
+		binding().itemAddEvent.apply {
 			valueSwitch = { prefs.getTimetableAddEvent() }
 			onTapped { prefs.putTimetableAddEvent(!prefs.getTimetableAddEvent()) }
 		}
 	}
 
 	private fun prepareNotificationsSettings() {
-		root().itemEnableNotifications.apply {
+		binding().itemEnableNotifications.apply {
 			valueSwitch = { prefs.getNotificationsEnabled() }
 			onTapped {
 				prefs.putNotificationsEnabled(!prefs.getNotificationsEnabled())
-				root().itemGradesNotifications.refresh()
-				root().itemNewsNotifications.refresh()
-				root().itemSurveysNotifications.refresh()
+				binding().itemGradesNotifications.refresh()
+				binding().itemNewsNotifications.refresh()
+				binding().itemSurveysNotifications.refresh()
 			}
 		}
 
-		root().itemGradesNotifications.apply {
+		binding().itemGradesNotifications.apply {
 			enabled = { prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsGrades() }
 			onTapped { prefs.putNotificationsGrades(!prefs.getNotificationsGrades()) }
 		}
 
-		root().itemNewsNotifications.apply {
+		binding().itemNewsNotifications.apply {
 			enabled = { prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsNews() }
 			onTapped { prefs.putNotificationsNews(!prefs.getNotificationsNews()) }
 		}
 
-		root().itemSurveysNotifications.apply {
+		binding().itemSurveysNotifications.apply {
 			enabled = { prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsSurveys() }
 			onTapped { prefs.putNotificationsSurveys(!prefs.getNotificationsSurveys()) }
@@ -152,7 +145,7 @@ class FragmentSettings : FragmentBase() {
 	}
 
 	private fun prepareSystemNotifications() {
-		root().itemDarkMode.apply {
+		binding().itemDarkMode.apply {
 			valueSwitch = { prefs.getSystemDarkMode() }
 			onTapped {
 				prefs.putSystemDarkMode(!prefs.getSystemDarkMode())
@@ -160,7 +153,7 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemDefaultTab.apply {
+		binding().itemDefaultTab.apply {
 			value = {
 				listOf(
 					getString(R.string.timetable),
@@ -171,26 +164,26 @@ class FragmentSettings : FragmentBase() {
 				)[prefs.getSystemDefaultTab()]
 			}
 			onTapped {
-				DialogUtil.create(requireContext(), R.layout.dialog_list_picker, { dialog ->
+				DialogUtil.create(requireContext(), DialogListPickerBinding::class.java, { dialog ->
 					dialog.title.setText(R.string.default_tab_title)
 					dialog.listItems.apply {
 						adapter = object :
-							AdapterSimple<String>(
+							AdapterCore<String, ListItemSimpleBinding>(
 								mutableListOf(
 									getString(R.string.timetable),
 									getString(R.string.calendar),
 									getString(R.string.mail),
 									getString(R.string.news),
 									getString(R.string.profile)
-								)
+								),
+								ListItemSimpleBinding::class.java
 							) {
-							override fun getLayoutId(viewType: Int) = R.layout.list_item_simple
-							override fun onBind(root: View, position: Int) {
-								(root as? MaterialButton)?.apply {
+							override fun onBind(binding: ListItemSimpleBinding, position: Int) {
+								binding.root.apply {
 									text = list[position]
 									setOnClickListener {
 										prefs.putSystemDefaultTab(position)
-										dialog.dismiss()
+										dismiss()
 										refresh()
 									}
 								}
@@ -203,7 +196,7 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemDefaultLanguage.apply {
+		binding().itemDefaultLanguage.apply {
 			value = { prefs.getSystemDefaultLanguage() ?: getString(R.string.pl) }
 			onTapped {
 				when (prefs.getSystemDefaultLanguage()) {
@@ -217,7 +210,7 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemSendAnalytics.apply {
+		binding().itemSendAnalytics.apply {
 			valueSwitch = { prefs.getSendAnalytics() }
 			onTapped {
 				prefs.putSendAnalytics(!prefs.getSendAnalytics())
@@ -226,18 +219,18 @@ class FragmentSettings : FragmentBase() {
 			}
 		}
 
-		root().itemLogout.onTapped {
+		binding().itemLogout.onTapped {
 			DialogUtil.create(
-				object : DialogUtil.StatefulDialog() {
+				object : DialogUtil.StatefulDialog<DialogLoadingBinding>() {
 					override fun toggle() {
-						dialog.progressBar.isVisible = true
-						dialog.messageMain.setText(R.string.loading)
-						dialog.messageSecondary.isGone = true
-						dialog.buttonPrimary.isGone = true
-						dialog.buttonSecondary.isGone = true
+						binding.progressBar.isVisible = true
+						binding.messageMain.setText(R.string.loading)
+						binding.messageSecondary.isGone = true
+						binding.buttonPrimary.isGone = true
+						binding.buttonSecondary.isGone = true
 					}
 				},
-				requireContext(), R.layout.dialog_loading, { dialog ->
+				requireContext(), DialogLoadingBinding::class.java, { dialog ->
 					dialog.messageMain.setText(R.string.are_you_sure)
 					dialog.messageSecondary.setText(R.string.logout_description)
 					dialog.buttonPrimary.setText(R.string.logout)
@@ -246,7 +239,7 @@ class FragmentSettings : FragmentBase() {
 						doAsync {
 							Preferences.get().clear()
 							AppDatabase.init(requireContext()).clearAllTables()
-							dialog.dismiss()
+							this@create.dialog.dismiss()
 							requireActivity().apply {
 								startActivity(
 									Intent(
@@ -258,7 +251,7 @@ class FragmentSettings : FragmentBase() {
 							}
 						}
 					}
-					dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+					dialog.buttonSecondary.setOnClickListener { this.dialog.dismiss() }
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
 			)
 		}

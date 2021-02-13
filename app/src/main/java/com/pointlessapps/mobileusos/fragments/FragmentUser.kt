@@ -10,25 +10,24 @@ import com.google.android.material.button.MaterialButton
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEmploymentFunction
 import com.pointlessapps.mobileusos.adapters.AdapterPhoneNumber
+import com.pointlessapps.mobileusos.databinding.FragmentUserBinding
 import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.models.User
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
+class FragmentUser(private val id: String) :
+	FragmentCoreImpl<FragmentUserBinding>(FragmentUserBinding::class.java), FragmentPinnable {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private var user: User? = null
 
-	override fun getLayoutId() = R.layout.fragment_user
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_profile to fragment.getString(R.string.loading))
 		ViewModelProvider(fragment).get(ViewModelUser::class.java).getUserById(id)
 			.onOnceCallback { (user) ->
@@ -48,26 +47,26 @@ class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 		prepareEmploymentFunctionsList()
 		prepareClickListeners()
 
-		setCollapsible(root().buttonOfficeHours, root().userOfficeHours)
-		setCollapsible(root().buttonInterests, root().userInterests)
+		setCollapsible(binding().buttonOfficeHours, binding().userOfficeHours)
+		setCollapsible(binding().buttonInterests, binding().userInterests)
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		if (isPinned(javaClass.name, id)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		prepareData {
-			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonEmail.setOnClickListener {
+		binding().buttonEmail.setOnClickListener {
 			onChangeFragment?.invoke(
 				FragmentComposeMail(
 					recipients = mutableListOf(
@@ -80,14 +79,14 @@ class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 			)
 		}
 
-		root().buttonRoom.setOnClickListener {
+		binding().buttonRoom.setOnClickListener {
 			onChangeFragment?.invoke(
 				FragmentRoom(user?.room?.id ?: return@setOnClickListener)
 			)
 		}
 
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, id))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -104,25 +103,25 @@ class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 			}
 			this.user = user
 
-			(root().listEmploymentFunctions.adapter as? AdapterEmploymentFunction)?.update(
+			(binding().listEmploymentFunctions.adapter as? AdapterEmploymentFunction)?.update(
 				user.employmentFunctions ?: listOf()
 			)
-			root().listEmploymentFunctions.setEmptyText(getString(R.string.no_employment_functions))
+			binding().listEmploymentFunctions.setEmptyText(getString(R.string.no_employment_functions))
 
-			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
+			(binding().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
 				user.phoneNumbers?.map(Building::PhoneNumber) ?: listOf()
 			)
-			root().listPhoneNumbers.setEmptyText(getString(R.string.no_phone_numbers))
+			binding().listPhoneNumbers.setEmptyText(getString(R.string.no_phone_numbers))
 
-			root().userEmail.text = user.email
-			root().userOfficeHours.text = user.officeHours?.toString()
-			root().userInterests.text = user.interests?.toString()
-			root().userRoom.text = user.room?.number
-			root().userBuilding.text = user.room?.building?.name?.toString()
-			root().userName.text = user.name()
+			binding().userEmail.text = user.email
+			binding().userOfficeHours.text = user.officeHours?.toString()
+			binding().userInterests.text = user.interests?.toString()
+			binding().userRoom.text = user.room?.number
+			binding().userBuilding.text = user.room?.building?.name?.toString()
+			binding().userName.text = user.name()
 
 			Picasso.get().load(user.photoUrls?.values?.firstOrNull() ?: return@observe)
-				.into(root().userProfileImg)
+				.into(binding().userProfileImg)
 
 			hideEmptyElements()
 		}.onFinished { callback?.invoke() }
@@ -130,16 +129,16 @@ class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 
 	private fun hideEmptyElements() {
 		if (user?.room?.number.isNullOrEmpty()) {
-			root().buttonRoom.isVisible = false
-			root().labelRoom.isVisible = false
+			binding().buttonRoom.isVisible = false
+			binding().labelRoom.isVisible = false
 		}
 
 		if (user?.officeHours?.toString().isNullOrBlank()) {
-			root().buttonOfficeHours.isVisible = false
+			binding().buttonOfficeHours.isVisible = false
 		}
 
 		if (user?.interests?.toString().isNullOrBlank()) {
-			root().buttonInterests.isVisible = false
+			binding().buttonInterests.isVisible = false
 		}
 	}
 
@@ -154,19 +153,19 @@ class FragmentUser(private val id: String) : FragmentBase(), FragmentPinnable {
 						R.drawable.ic_arrow_up
 					}
 				)
-				TransitionManager.beginDelayedTransition(root(), AutoTransition())
+				TransitionManager.beginDelayedTransition(binding().root, AutoTransition())
 			}
 		}
 	}
 
 	private fun prepareEmploymentFunctionsList() {
-		root().listEmploymentFunctions.apply {
+		binding().listEmploymentFunctions.apply {
 			setAdapter(AdapterEmploymentFunction())
 		}
 	}
 
 	private fun preparePhoneNumbersList() {
-		root().listPhoneNumbers.apply {
+		binding().listPhoneNumbers.apply {
 			setAdapter(AdapterPhoneNumber().apply {
 				onClickListener = {
 					Utils.phoneIntent(requireContext(), it.number)

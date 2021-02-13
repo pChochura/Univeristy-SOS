@@ -4,16 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.intrusoft.sectionedrecyclerview.Section
 import com.intrusoft.sectionedrecyclerview.SectionRecyclerViewAdapter
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemGradeChildBinding
+import com.pointlessapps.mobileusos.databinding.ListItemGradeHeaderBinding
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.models.Term
-import org.jetbrains.anko.find
 
 class AdapterGrade(private val context: Context, sections: List<SectionHeader> = listOf()) :
 	SectionRecyclerViewAdapter<AdapterGrade.SectionHeader, Grade, AdapterGrade.SectionViewHolder, AdapterGrade.ChildViewHolder>(
@@ -25,7 +23,11 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 
 	override fun onCreateSectionViewHolder(itemView: ViewGroup, viewType: Int) =
 		SectionViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_grade_header, itemView, false)
+			ListItemGradeHeaderBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindSectionViewHolder(
@@ -33,22 +35,26 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 		sectionPosition: Int,
 		section: SectionHeader
 	) {
-		itemView.textName.text =
+		itemView.binding.termName.text =
 			(section.getSectionHeader().name ?: section.getSectionHeader().id).toString()
 
 		val grades = section.childItems.filter { it.countsIntoAverage == "T" }
-		itemView.textAverage.text = "%.2f".format(grades.sumByDouble { grade ->
+		itemView.binding.termAverage.text = "%.2f".format(grades.sumByDouble { grade ->
 			grade.valueSymbol?.replace(Regex("(\\d),(\\d).*")) {
 				"${it.groups[1]?.value}.${it.groups[2]?.value}"
 			}?.toDoubleOrNull() ?: 2.0
 		} / grades.count())
 
-		(itemView.textAverage.parent as View).isGone = grades.count() == 0
+		(itemView.binding.termAverage.parent as View).isGone = grades.count() == 0
 	}
 
 	override fun onCreateChildViewHolder(itemView: ViewGroup, viewType: Int) =
 		ChildViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_grade_child, itemView, false)
+			ListItemGradeChildBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindChildViewHolder(
@@ -57,14 +63,14 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 		childPosition: Int,
 		grade: Grade
 	) {
-		itemView.bg.setOnClickListener {
+		itemView.binding.root.setOnClickListener {
 			onClickListener(grade)
 		}
 
-		itemView.textName.text = grade.courseName?.toString()
-		itemView.textValue.text = grade.valueSymbol
+		itemView.binding.gradeName.text = grade.courseName?.toString()
+		itemView.binding.gradeValue.text = grade.valueSymbol
 		if (grade.valueSymbol.isNullOrBlank()) {
-			itemView.textValue.isGone = true
+			itemView.binding.gradeValue.isGone = true
 		}
 	}
 
@@ -73,14 +79,9 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 		fun getSectionHeader() = term
 	}
 
-	class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val textName = itemView.find<AppCompatTextView>(R.id.termName)
-		val textAverage = itemView.find<AppCompatTextView>(R.id.termAverage)
-	}
+	class SectionViewHolder(val binding: ListItemGradeHeaderBinding) :
+		RecyclerView.ViewHolder(binding.root)
 
-	class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val bg = itemView.find<View>(R.id.bg)
-		val textName = itemView.find<AppCompatTextView>(R.id.gradeName)
-		val textValue = itemView.find<Chip>(R.id.gradeValue)
-	}
+	class ChildViewHolder(val binding: ListItemGradeChildBinding) :
+		RecyclerView.ViewHolder(binding.root)
 }

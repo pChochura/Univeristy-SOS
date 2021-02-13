@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttributes
 import com.pointlessapps.mobileusos.adapters.AdapterMeeting
+import com.pointlessapps.mobileusos.databinding.FragmentRoomBinding
 import com.pointlessapps.mobileusos.models.BuildingRoom
 import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
@@ -16,7 +17,6 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_room.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,15 +24,14 @@ import org.jetbrains.anko.doAsync
 import java.util.concurrent.CountDownLatch
 
 @Keep
-class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
+class FragmentRoom(private val id: String) :
+	FragmentCoreImpl<FragmentRoomBinding>(FragmentRoomBinding::class.java), FragmentPinnable {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 
-	override fun getLayoutId() = R.layout.fragment_room
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_room to fragment.getString(R.string.loading))
 		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getRoomById(id)
 			.onOnceCallback { (room) ->
@@ -52,18 +51,18 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 		prepareAttributesList()
 		prepareClickListeners()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		if (isPinned(javaClass.name, id)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		prepareData {
-			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
@@ -75,12 +74,12 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 				return@observe
 			}
 
-			root().roomName.text = room.number.toString()
+			binding().roomName.text = room.number.toString()
 
 			room.building?.name?.toString()?.also { buildingName ->
-				root().buttonBuilding.text = buildingName
+				binding().buttonBuilding.text = buildingName
 
-				root().buttonBuilding.setOnClickListener {
+				binding().buttonBuilding.setOnClickListener {
 					onChangeFragment?.invoke(
 						FragmentBuilding(
 							room.building?.id ?: return@setOnClickListener
@@ -90,9 +89,9 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 			}
 
 			room.building?.staticMapUrls?.values?.firstOrNull()?.also { map ->
-				root().containerBuildingLocation.isVisible = true
-				Picasso.get().load(map).into(root().buildingMap)
-				root().buildingMap.setOnClickListener {
+				binding().containerBuildingLocation.isVisible = true
+				Picasso.get().load(map).into(binding().buildingMap)
+				binding().buildingMap.setOnClickListener {
 					Utils.mapsIntent(
 						requireContext(),
 						room.building?.location?.lat,
@@ -102,7 +101,7 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 				}
 			}
 
-			(root().listAttributes.adapter as? AdapterAttributes)?.update(
+			(binding().listAttributes.adapter as? AdapterAttributes)?.update(
 				listOf(
 					BuildingRoom.Attribute(
 						"capacity",
@@ -115,7 +114,7 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 		}.onFinished { loaded.countDown() }
 
 		viewModelTimetable.getByRoomId(id).observe(this) { (list) ->
-			(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
+			(binding().listMeetings.adapter as? AdapterMeeting)?.update(list)
 		}.onFinished { loaded.countDown() }
 
 		doAsync {
@@ -125,8 +124,8 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, id))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -137,7 +136,7 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareAttributesList() {
-		root().listAttributes.apply {
+		binding().listAttributes.apply {
 			adapter = AdapterAttributes()
 			layoutManager =
 				UnscrollableLinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -145,10 +144,10 @@ class FragmentRoom(private val id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareMeetingsList() {
-		root().listMeetings.setAdapter(AdapterMeeting(true).apply {
+		binding().listMeetings.setAdapter(AdapterMeeting(true).apply {
 			onClickListener =
 				{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
 		})
-		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
+		binding().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 	}
 }

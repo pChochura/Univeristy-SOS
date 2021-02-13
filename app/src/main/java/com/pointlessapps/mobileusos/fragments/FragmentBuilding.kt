@@ -7,23 +7,23 @@ import androidx.lifecycle.ViewModelProvider
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterPhoneNumber
 import com.pointlessapps.mobileusos.adapters.AdapterRoom
+import com.pointlessapps.mobileusos.databinding.FragmentBuildingBinding
 import com.pointlessapps.mobileusos.models.Building
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_building.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Keep
-class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnable {
+class FragmentBuilding(private val id: String) :
+	FragmentCoreImpl<FragmentBuildingBinding>(FragmentBuildingBinding::class.java),
+	FragmentPinnable {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 
-	override fun getLayoutId() = R.layout.fragment_building
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_building to fragment.getString(R.string.loading))
 		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getBuildingById(id)
 			.onOnceCallback { (building) ->
@@ -43,18 +43,18 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 		prepareClickListeners()
 		refreshed()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		if (isPinned(javaClass.name, id)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		prepareData {
-			root().horizontalProgressBar.isRefreshing = false
-			root().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
 		}
 	}
 
@@ -66,16 +66,16 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 
 			prepareDataStatic(building)
 
-			(root().listRooms.adapter as? AdapterRoom)?.update(building.rooms ?: return@observe)
-			(root().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
+			(binding().listRooms.adapter as? AdapterRoom)?.update(building.rooms ?: return@observe)
+			(binding().listPhoneNumbers.adapter as? AdapterPhoneNumber)?.update(
 				building.allPhoneNumbers ?: return@observe
 			)
 		}.onFinished { callback?.invoke() }
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, id))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -86,12 +86,12 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	private fun prepareDataStatic(building: Building) {
-		root().buildingName.text = building.name?.toString()
-		root().campusName.text = building.campusName?.toString()
+		binding().buildingName.text = building.name?.toString()
+		binding().campusName.text = building.campusName?.toString()
 		building.staticMapUrls?.values?.firstOrNull()?.also { map ->
-			root().containerBuildingLocation.isVisible = true
-			Picasso.get().load(map).into(root().buildingMap)
-			root().buildingMap.setOnClickListener {
+			binding().containerBuildingLocation.isVisible = true
+			Picasso.get().load(map).into(binding().buildingMap)
+			binding().buildingMap.setOnClickListener {
 				Utils.mapsIntent(
 					requireContext(),
 					building.location?.lat,
@@ -103,7 +103,7 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	private fun preparePhonesList() {
-		root().listPhoneNumbers.apply {
+		binding().listPhoneNumbers.apply {
 			setAdapter(AdapterPhoneNumber().apply {
 				onClickListener = { Utils.phoneIntent(requireContext(), it.number) }
 			})
@@ -113,7 +113,7 @@ class FragmentBuilding(private val id: String) : FragmentBase(), FragmentPinnabl
 	}
 
 	private fun prepareRoomsList() {
-		root().listRooms.apply {
+		binding().listRooms.apply {
 			setAdapter(AdapterRoom().apply {
 				onClickListener = {
 					onChangeFragment?.invoke(FragmentRoom(it.id))

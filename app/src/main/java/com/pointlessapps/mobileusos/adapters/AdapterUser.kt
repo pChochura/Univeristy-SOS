@@ -1,41 +1,30 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
-import com.google.android.material.card.MaterialCardView
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemUserBinding
 import com.pointlessapps.mobileusos.models.User
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.find
 
-class AdapterUser : AdapterSimple<User>(mutableListOf()) {
+class AdapterUser :
+	AdapterCore<User, ListItemUserBinding>(mutableListOf(), ListItemUserBinding::class.java) {
 
 	init {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_user
 	override fun isCollapsible() = true
 
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-
+	override fun onCreate(binding: ListItemUserBinding) {
 		if (onClickListener == null) {
-			root.find<View>(R.id.bg).isClickable = false
-			root.find<MaterialCardView>(R.id.bg).setRippleColorResource(android.R.color.transparent)
+			binding.root.isClickable = false
+			binding.root.setRippleColorResource(android.R.color.transparent)
 		}
 	}
 
-	override fun onBind(root: View, position: Int) {
-		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener?.invoke(list[position])
-		}
-
-		root.find<AppCompatTextView>(R.id.userName).text = list[position].name()
+	override fun onBind(binding: ListItemUserBinding, position: Int) {
+		binding.userName.text = list[position].name()
 
 		list[position].photoUrls?.values?.firstOrNull()?.also {
-			Picasso.get().load(it).into(root.find<CircleImageView>(R.id.userProfileImg))
+			Picasso.get().load(it).into(binding.userProfileImg)
 		}
 	}
 

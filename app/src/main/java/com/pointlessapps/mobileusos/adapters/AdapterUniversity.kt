@@ -1,12 +1,12 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemUniversityBinding
 import com.pointlessapps.mobileusos.models.University
-import org.jetbrains.anko.find
 
-class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
+class AdapterUniversity : AdapterCore<University, ListItemUniversityBinding>(
+	mutableListOf(),
+	ListItemUniversityBinding::class.java
+) {
 
 	private val wholeList = mutableListOf(*list.toTypedArray())
 
@@ -14,15 +14,9 @@ class AdapterUniversity : AdapterSimple<University>(mutableListOf()) {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_university
-
-	override fun onBind(root: View, position: Int) {
-		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener?.invoke(list[position])
-		}
-
-		root.find<AppCompatTextView>(R.id.universityName).text = list[position].name
-		root.find<AppCompatTextView>(R.id.universityLocation).text = list[position].location
+	override fun onBind(binding: ListItemUniversityBinding, position: Int) {
+		binding.universityName.text = list[position].name
+		binding.universityLocation.text = list[position].location
 	}
 
 	override fun update(list: List<University>) {

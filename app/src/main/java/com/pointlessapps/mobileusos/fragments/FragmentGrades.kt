@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.app.Dialog
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -15,50 +14,47 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterGrade
+import com.pointlessapps.mobileusos.databinding.DialogShowGradeBinding
+import com.pointlessapps.mobileusos.databinding.FragmentGradesBinding
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.RoundedBarChartRenderer
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.dialog_show_grade.*
-import kotlinx.android.synthetic.main.fragment_grades.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentGrades : FragmentBase() {
+class FragmentGrades : FragmentCoreImpl<FragmentGradesBinding>(FragmentGradesBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
-
-	override fun getLayoutId() = R.layout.fragment_grades
 
 	override fun created() {
 		prepareGradesList()
 		prepareGrades()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		prepareGrades {
-			root().pullRefresh.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
 		}
 	}
 
 	private fun prepareGrades(callback: (() -> Unit)? = null) {
 		var finished1 = false
 		viewModelUser.getAllGroups().observe(this) { (groups) ->
-			val termIds = groups.map { group -> group.termId }
-
+			val termIds = groups.map { group -> group.termId }.distinct()
 			var finished2 = false
 			viewModelUser.getTermsByIds(termIds).observe(this) { (terms) ->
 				viewModelUser.getGradesByTermIds(termIds).observe(this) { (grades) ->
-					(root().listGrades.adapter as? AdapterGrade)
+					(binding().listGrades.adapter as? AdapterGrade)
 						?.notifyDataChanged(
 							terms.map {
 								AdapterGrade.SectionHeader(
 									it,
-									groups.distinctBy { group -> group.courseId }
+									groups.distinctBy { group -> group.courseId to group.termId }
 										.filter { group -> group.termId == it.id }.map { group ->
 											grades[it.id]?.get(group.courseId)?.also { grade ->
 												grade.courseName = group.courseName
@@ -73,13 +69,13 @@ class FragmentGrades : FragmentBase() {
 							}.sortedByDescending { it.getSectionHeader().orderKey }
 						)
 
-					root().listGrades.apply {
+					binding().listGrades.apply {
 						setEmptyText(getString(R.string.no_grades))
 						setLoaded(false)
 					}
 				}.onFinished {
 					if (finished1 && finished2) {
-						root().listGrades.setLoaded(true)
+						binding().listGrades.setLoaded(true)
 						callback?.invoke()
 					}
 				}
@@ -88,7 +84,7 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	private fun prepareGradesList() {
-		root().listGrades.setAdapter(AdapterGrade(requireContext()).apply {
+		binding().listGrades.setAdapter(AdapterGrade(requireContext()).apply {
 			onClickListener = { grade ->
 				showGradeDialog(this@FragmentGrades, grade, viewModelUser)
 			}
@@ -96,10 +92,14 @@ class FragmentGrades : FragmentBase() {
 	}
 
 	companion object {
-		fun showGradeDialog(fragment: FragmentBase, grade: Grade, viewModelUser: ViewModelUser) {
+		fun showGradeDialog(
+			fragment: FragmentCoreImpl<*>,
+			grade: Grade,
+			viewModelUser: ViewModelUser
+		) {
 			DialogUtil.create(
 				fragment.requireContext(),
-				R.layout.dialog_show_grade,
+				DialogShowGradeBinding::class.java,
 				{ dialog ->
 					prepareChart(fragment.requireContext(), dialog)
 
@@ -111,7 +111,9 @@ class FragmentGrades : FragmentBase() {
 							Locale.getDefault()
 						).format(it)
 					}
-					grade.modificationAuthor?.also { dialog.buttonGradeAuthor.text = it.name() }
+					grade.modificationAuthor?.also {
+						dialog.buttonGradeAuthor.text = it.name()
+					}
 
 					dialog.buttonGradeAuthor.setOnClickListener {
 						fragment.onChangeFragment?.invoke(
@@ -120,7 +122,7 @@ class FragmentGrades : FragmentBase() {
 							)
 						)
 
-						dialog.dismiss()
+						dismiss()
 					}
 
 					viewModelUser.getExamReportById(grade.examId ?: return@create)
@@ -134,6 +136,10 @@ class FragmentGrades : FragmentBase() {
 										distribution.percentage.toFloat()
 									)
 								} ?: listOf()
+
+							if (values.isEmpty()) {
+								return@observe
+							}
 
 							dialog.gradeChart.apply {
 								this.data = BarData(BarDataSet(values, "").apply {
@@ -177,7 +183,7 @@ class FragmentGrades : FragmentBase() {
 
 		fun prepareChart(
 			context: Context,
-			dialog: Dialog,
+			dialog: DialogShowGradeBinding,
 			numberFormat: String = "%.0f%%",
 			values: List<String> = listOf(
 				"2.0",

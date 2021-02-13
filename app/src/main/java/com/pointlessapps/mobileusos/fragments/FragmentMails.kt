@@ -3,14 +3,13 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEmail
+import com.pointlessapps.mobileusos.databinding.FragmentMailsBinding
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.fragment_mails.view.*
 
-class FragmentMails : FragmentBase() {
+class FragmentMails : FragmentCoreImpl<FragmentMailsBinding>(FragmentMailsBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 
-	override fun getLayoutId() = R.layout.fragment_mails
 	override fun getNavigationIcon() = R.drawable.ic_mail
 	override fun getNavigationName() = R.string.mail
 
@@ -20,22 +19,22 @@ class FragmentMails : FragmentBase() {
 
 		refreshed()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		viewModelUser.getAllEmails().observe(this) { (emails) ->
-			root().listEmails.setEmptyText(getString(R.string.no_emails))
-			root().listEmails.setLoaded(false)
-			(root().listEmails.adapter as? AdapterEmail)?.update(emails)
+			binding().listEmails.setEmptyText(getString(R.string.no_emails))
+			binding().listEmails.setLoaded(false)
+			(binding().listEmails.adapter as? AdapterEmail)?.update(emails)
 		}.onFinished {
-			root().listEmails.setLoaded(true)
-			root().pullRefresh.isRefreshing = false
+			binding().listEmails.setLoaded(true)
+			binding().pullRefresh.isRefreshing = false
 		}
 	}
 
 	private fun prepareEmailsList() {
-		root().listEmails.setAdapter(AdapterEmail().apply {
+		binding().listEmails.setAdapter(AdapterEmail().apply {
 			onClickListener = {
 				onChangeFragment?.invoke(FragmentMail(it))
 			}
@@ -43,7 +42,7 @@ class FragmentMails : FragmentBase() {
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonAdd.setOnClickListener {
+		binding().buttonAdd.setOnClickListener {
 			onChangeFragment?.invoke(FragmentComposeMail())
 		}
 	}

@@ -3,26 +3,25 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterCourse
+import com.pointlessapps.mobileusos.databinding.FragmentCoursesBinding
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.fragment_courses.view.*
 
-class FragmentCourses : FragmentBase() {
+class FragmentCourses :
+	FragmentCoreImpl<FragmentCoursesBinding>(FragmentCoursesBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
-
-	override fun getLayoutId() = R.layout.fragment_courses
 
 	override fun created() {
 		prepareCoursesList()
 		prepareCourses()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		prepareCourses {
-			root().pullRefresh.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
 		}
 	}
 
@@ -38,7 +37,7 @@ class FragmentCourses : FragmentBase() {
 							.mapValues { values -> values.value.sortedBy(Course::classTypeId) }
 					}
 
-				(root().listCourses.adapter as? AdapterCourse)?.notifyDataChanged(
+				(binding().listCourses.adapter as? AdapterCourse)?.notifyDataChanged(
 					terms.map { term ->
 						AdapterCourse.SectionHeader(
 							term,
@@ -48,13 +47,13 @@ class FragmentCourses : FragmentBase() {
 					}
 				)
 
-				root().listCourses.apply {
+				binding().listCourses.apply {
 					setEmptyText(getString(R.string.no_courses))
 					setLoaded(false)
 				}
 			}.onFinished {
 				if (finished) {
-					root().listCourses.setLoaded(true)
+					binding().listCourses.setLoaded(true)
 					callback?.invoke()
 				}
 			}
@@ -62,7 +61,7 @@ class FragmentCourses : FragmentBase() {
 	}
 
 	private fun prepareCoursesList() {
-		root().listCourses.setAdapter(AdapterCourse(requireContext()).apply {
+		binding().listCourses.setAdapter(AdapterCourse(requireContext()).apply {
 			onClickListener = {
 				onChangeFragment?.invoke(FragmentCourse(it))
 			}

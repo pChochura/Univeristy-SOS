@@ -1,43 +1,28 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.updateLayoutParams
-import com.google.android.material.chip.Chip
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemGradeSquareBinding
 import com.pointlessapps.mobileusos.models.Grade
 import com.pointlessapps.mobileusos.utils.dp
-import org.jetbrains.anko.find
 
-class AdapterRecentGrade : AdapterSimple<Grade>(mutableListOf()) {
-
-	private lateinit var textName: AppCompatTextView
-	private lateinit var textValue: Chip
-
+class AdapterRecentGrade : AdapterCore<Grade, ListItemGradeSquareBinding>(
+	mutableListOf(),
+	ListItemGradeSquareBinding::class.java
+) {
 	init {
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId(viewType: Int) = R.layout.list_item_grade_square
-
-	override fun onCreate(root: View) {
-		super.onCreate(root)
-		textName = root.find(R.id.gradeName)
-		textValue = root.find(R.id.gradeValue)
-	}
-
-	override fun onBind(root: View, position: Int) {
-		root.find<ViewGroup>(R.id.bg).updateLayoutParams<ViewGroup.MarginLayoutParams> {
+	override fun onBind(binding: ListItemGradeSquareBinding, position: Int) {
+		binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
 			marginEnd = if (position != itemCount - 1) 20.dp else 0
 		}
 
-		root.find<View>(R.id.bg).setOnClickListener {
-			onClickListener?.invoke(list[position])
-		}
-
-		textName.text =
-			list[position].courseName?.toString() ?: root.context.getString(R.string.loading)
-		textValue.text = list[position].valueSymbol
+		binding.gradeName.text =
+			list[position].courseName?.toString()
+				?: binding.root.context.getString(R.string.loading)
+		binding.gradeValue.text = list[position].valueSymbol
 	}
 }

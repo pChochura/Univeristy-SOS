@@ -14,11 +14,13 @@ import com.google.android.material.button.MaterialButton
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterMeeting
 import com.pointlessapps.mobileusos.adapters.AdapterUser
+import com.pointlessapps.mobileusos.databinding.FragmentCourseBinding
+import com.pointlessapps.mobileusos.databinding.TableItemCellBinding
+import com.pointlessapps.mobileusos.databinding.TableItemRowBinding
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.fragment_course.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,7 +30,8 @@ import java.util.*
 import java.util.concurrent.CountDownLatch
 
 @Keep
-class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
+class FragmentCourse(id: String) :
+	FragmentCoreImpl<FragmentCourseBinding>(FragmentCourseBinding::class.java), FragmentPinnable {
 
 	constructor(course: Course) : this("${course.courseUnitId}#${course.groupNumber}")
 
@@ -38,9 +41,7 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 
-	override fun getLayoutId() = R.layout.fragment_course
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_courses to fragment.getString(R.string.loading))
 		ViewModelProvider(fragment).get(ViewModelUser::class.java)
 			.getGroupByIdAndGroupNumber(courseUnitId, groupNumber)
@@ -63,28 +64,28 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 		refreshed()
 		prepareClickListeners()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		if (isPinned(javaClass.name, "${courseUnitId}#${groupNumber}")) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		prepareData {
-			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
 	private fun prepareClickListeners() {
-		setCollapsible(root().buttonDescription, root().courseDescription)
-		setCollapsible(root().buttonAssessmentCriteria, root().courseAssessmentCriteria)
-		setCollapsible(root().buttonLearningOutcomes, root().courseLearningOutcomes)
+		setCollapsible(binding().buttonDescription, binding().courseDescription)
+		setCollapsible(binding().buttonAssessmentCriteria, binding().courseAssessmentCriteria)
+		setCollapsible(binding().buttonLearningOutcomes, binding().courseLearningOutcomes)
 
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, "${courseUnitId}#${groupNumber}"))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -105,60 +106,50 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 						R.drawable.ic_arrow_up
 					}
 				)
-				TransitionManager.beginDelayedTransition(root(), AutoTransition())
+				TransitionManager.beginDelayedTransition(binding().root, AutoTransition())
 			}
 		}
 	}
 
 	private fun prepareCourseData(course: Course) {
-		root().courseName.text = course.courseName.toString()
-		root().courseInfo.text =
+		binding().courseName.text = course.courseName.toString()
+		binding().courseInfo.text =
 			getString(
 				R.string.course_info,
 				course.classType.toString().capitalize(Locale.getDefault()),
 				course.groupNumber
 			)
-		root().courseDescription.text =
+		binding().courseDescription.text =
 			course.courseDescription.toString().replace("&nbsp;", " ")
 
 		val layoutInflater = LayoutInflater.from(requireContext())
 		Jsoup.parse(course.courseAssessmentCriteria.toString()).also { html ->
-			root().courseAssessmentCriteria.removeAllViews()
+			binding().courseAssessmentCriteria.removeAllViews()
 			html.select("table").firstOrNull()?.also { table ->
 				table.select("tr").forEach {
-					val row =
-						layoutInflater.inflate(R.layout.table_item_row, null, false) as ViewGroup
+					val row = TableItemRowBinding.inflate(layoutInflater).root
 					it.select("td").map {
 						row.addView(
-							(layoutInflater.inflate(
-								R.layout.table_item_cell,
-								row,
-								false
-							) as AppCompatTextView).apply {
+							(TableItemCellBinding.inflate(layoutInflater, row, false).root).apply {
 								text = it.ownText().capitalize(Locale.getDefault())
 							})
 					}
-					root().courseAssessmentCriteria.addView(row)
+					binding().courseAssessmentCriteria.addView(row)
 				}
 			}
 		}
 		Jsoup.parse(course.courseLearningOutcomes.toString()).also { html ->
-			root().courseLearningOutcomes.removeAllViews()
+			binding().courseLearningOutcomes.removeAllViews()
 			html.select("table").firstOrNull()?.also { table ->
 				table.select("tr").forEach {
-					val row =
-						layoutInflater.inflate(R.layout.table_item_row, null, false) as ViewGroup
+					val row =TableItemRowBinding.inflate(layoutInflater).root
 					it.select("td").map {
 						row.addView(
-							(layoutInflater.inflate(
-								R.layout.table_item_cell,
-								row,
-								false
-							) as AppCompatTextView).apply {
+							(TableItemCellBinding.inflate(layoutInflater, row, false).root).apply {
 								text = it.ownText().capitalize(Locale.getDefault())
 							})
 					}
-					root().courseLearningOutcomes.addView(row)
+					binding().courseLearningOutcomes.addView(row)
 				}
 			}
 		}
@@ -169,7 +160,7 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 
 		viewModelTimetable.getBytUnitIdAndGroupNumber(courseUnitId, groupNumber)
 			.observe(this) { (list) ->
-				(root().listMeetings.adapter as? AdapterMeeting)?.update(list)
+				(binding().listMeetings.adapter as? AdapterMeeting)?.update(list)
 			}.onFinished { loaded.countDown() }
 
 		viewModelUser.getGroupByIdAndGroupNumber(courseUnitId, groupNumber)
@@ -181,16 +172,16 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 				course.lecturers?.map { it.id }?.also {
 					viewModelUser.getUsersByIds(it)
 						.observe(this) { (users) ->
-							(root().listInstructors.adapter as? AdapterUser)?.update(users)
-							root().listInstructors.setEmptyText(getString(R.string.no_instructors))
+							(binding().listInstructors.adapter as? AdapterUser)?.update(users)
+							binding().listInstructors.setEmptyText(getString(R.string.no_instructors))
 						}.onFinished { loaded.countDown() }
 				}
 
-				(root().listParticipants.adapter as? AdapterUser)?.update(
+				(binding().listParticipants.adapter as? AdapterUser)?.update(
 					course.participants ?: return@observe
 				)
 
-				root().courseParticipantsAmount.text =
+				binding().courseParticipantsAmount.text =
 					(course.participants?.count() ?: 0).toString()
 				prepareCourseData(course)
 			}.onFinished { loaded.countDown() }
@@ -204,7 +195,7 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareInstructorsList() {
-		root().listInstructors.setAdapter(AdapterUser().apply {
+		binding().listInstructors.setAdapter(AdapterUser().apply {
 			onClickListener = {
 				onChangeFragment?.invoke(FragmentUser(it.id))
 			}
@@ -212,14 +203,14 @@ class FragmentCourse(id: String) : FragmentBase(), FragmentPinnable {
 	}
 
 	private fun prepareMeetingsList() {
-		root().listMeetings.setAdapter(AdapterMeeting().apply {
+		binding().listMeetings.setAdapter(AdapterMeeting().apply {
 			onClickListener =
 				{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
 		})
-		root().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
+		binding().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 	}
 
 	private fun prepareParticipantsList() {
-		root().listParticipants.setAdapter(AdapterUser())
+		binding().listParticipants.setAdapter(AdapterUser())
 	}
 }

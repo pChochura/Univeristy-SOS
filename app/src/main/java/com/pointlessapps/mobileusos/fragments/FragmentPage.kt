@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEntry
+import com.pointlessapps.mobileusos.databinding.FragmentPageBinding
 import com.pointlessapps.mobileusos.models.Chapter
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.fromJson
-import kotlinx.android.synthetic.main.fragment_page.view.*
 
 @Keep
-class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable {
+class FragmentPage(private val json: String) :
+	FragmentCoreImpl<FragmentPageBinding>(FragmentPageBinding::class.java), FragmentPinnable {
 
 	constructor(page: Chapter.Page, nextPageName: String?) : this(Gson().toJson(page)) {
 		this.nextPageName = nextPageName
@@ -26,9 +27,7 @@ class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable 
 
 	var onNextPageClickListener: (() -> Unit)? = null
 
-	override fun getLayoutId() = R.layout.fragment_page
-
-	override fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) {
+	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_guide to page.title.toString())
 	}
 
@@ -36,19 +35,19 @@ class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable 
 		prepareEntriesList()
 
 		nextPageName?.also {
-			root().buttonNext.isVisible = true
-			root().nextPageName.text = it
+			binding().buttonNext.isVisible = true
+			binding().nextPageName.text = it
 		}
-		root().buttonNext.setOnClickListener { onNextPageClickListener?.invoke() }
+		binding().buttonNext.setOnClickListener { onNextPageClickListener?.invoke() }
 
-		root().pageName.text = page.title.toString()
+		binding().pageName.text = page.title.toString()
 
 		if (isPinned(javaClass.name, json)) {
-			root().buttonPin.setIconResource(R.drawable.ic_unpin)
+			binding().buttonPin.setIconResource(R.drawable.ic_unpin)
 		}
 
-		root().buttonPin.setOnClickListener {
-			root().buttonPin.setIconResource(
+		binding().buttonPin.setOnClickListener {
+			binding().buttonPin.setIconResource(
 				if (togglePin(javaClass.name, json))
 					R.drawable.ic_unpin
 				else R.drawable.ic_pin
@@ -59,7 +58,7 @@ class FragmentPage(private val json: String) : FragmentBase(), FragmentPinnable 
 	}
 
 	private fun prepareEntriesList() {
-		root().listEntries.apply {
+		binding().listEntries.apply {
 			adapter = AdapterEntry().apply {
 				update(page.entries ?: listOf())
 				onImageClickListener = {

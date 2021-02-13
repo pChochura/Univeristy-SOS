@@ -7,8 +7,9 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.installations.FirebaseInstallations
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ActivityMainBinding
 import com.pointlessapps.mobileusos.exceptions.ExceptionHttpUnsuccessful
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.*
@@ -21,11 +22,9 @@ import com.pointlessapps.mobileusos.services.ServiceUSOSArticle
 import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.contentView
 
 class ActivityMain : FragmentActivity() {
 
@@ -39,9 +38,11 @@ class ActivityMain : FragmentActivity() {
 		FirebaseApp.initializeApp(applicationContext)
 		Preferences.init(applicationContext)
 
-		setContentView(R.layout.activity_main)
-		bg.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
-		contentView?.rootView?.setBackgroundColor(themeColor(R.attr.colorBackground))
+		val binding = ActivityMainBinding.inflate(layoutInflater)
+		setContentView(binding.root)
+
+		binding.root.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
+		binding.root.setBackgroundColor(themeColor(R.attr.colorBackground))
 
 		fragmentManager = FragmentManager.of(
 			this,
@@ -55,7 +56,7 @@ class ActivityMain : FragmentActivity() {
 			selectAt(Preferences.get().getSystemDefaultTab())
 
 			intent.getStringExtra("destinationFragmentName")?.also {
-				(Class.forName(it)?.newInstance() as? FragmentBase)?.also(::changeFragment)
+				(Class.forName(it)?.newInstance() as? FragmentCoreImpl<*>)?.also(::changeFragment)
 			}
 		}
 
@@ -68,10 +69,9 @@ class ActivityMain : FragmentActivity() {
 				if (user != null) {
 					ensureNotificationsSubscription(user.id)
 
-					FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+					FirebaseInstallations.getInstance().getToken(false).addOnSuccessListener {
 						registerFCMToken(user.id, it.token)
 					}
-
 					return@onOnceCallback
 				}
 			}.onFinished {
@@ -109,11 +109,6 @@ class ActivityMain : FragmentActivity() {
 	override fun onConfigurationChanged(newConfig: Configuration) {
 		super.onConfigurationChanged(newConfig)
 		LocaleHelper.withLocale(this)
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		fragmentManager.currentFragment?.handleOnActivityResult(requestCode, resultCode, data)
 	}
 
 	override fun onBackPressed() {

@@ -17,12 +17,12 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterEvent
+import com.pointlessapps.mobileusos.databinding.FragmentCalendarBinding
 import com.pointlessapps.mobileusos.models.CalendarEvent
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
-import kotlinx.android.synthetic.main.fragment_calendar.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,7 +33,8 @@ import java.time.YearMonth
 import java.time.ZoneId
 import java.util.*
 
-class FragmentCalendar : FragmentBase() {
+class FragmentCalendar :
+	FragmentCoreImpl<FragmentCalendarBinding>(FragmentCalendarBinding::class.java) {
 
 	private val allEvents = mutableListOf<CalendarEvent>()
 	private val viewModelCommon by viewModels<ViewModelCommon>()
@@ -42,7 +43,6 @@ class FragmentCalendar : FragmentBase() {
 	private var startDate = MutableLiveData(Calendar.getInstance().time)
 	private lateinit var baseFacultyId: String
 
-	override fun getLayoutId() = R.layout.fragment_calendar
 	override fun getNavigationIcon() = R.drawable.ic_calendar
 	override fun getNavigationName() = R.string.calendar
 
@@ -58,21 +58,21 @@ class FragmentCalendar : FragmentBase() {
 							allEvents.find { it.id == event.id } == null
 						})
 						updateEventList()
-						root().calendar.notifyCalendarChanged()
+						binding().calendar.notifyCalendarChanged()
 
-						root().pullRefresh.isRefreshing = false
-						root().horizontalProgressBar.isRefreshing = true
+						binding().pullRefresh.isRefreshing = false
+						binding().horizontalProgressBar.isRefreshing = true
 					}.onFinished {
-						root().horizontalProgressBar.isRefreshing = false
+						binding().horizontalProgressBar.isRefreshing = false
 					}
 			}
 		}
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 		startDate.value = startDate.value
 	}
 
@@ -96,7 +96,7 @@ class FragmentCalendar : FragmentBase() {
 	}
 
 	private fun prepareEventsList() {
-		root().listEvents.apply {
+		binding().listEvents.apply {
 			adapter = AdapterEvent()
 			layoutManager =
 				UnscrollableLinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -104,7 +104,7 @@ class FragmentCalendar : FragmentBase() {
 	}
 
 	private fun prepareCalendar() {
-		root().calendar.dayBinder = object : DayBinder<DayViewContainer> {
+		binding().calendar.dayBinder = object : DayBinder<DayViewContainer> {
 			override fun create(view: View) = DayViewContainer(view)
 			override fun bind(container: DayViewContainer, day: CalendarDay) {
 				container.eventsContainer.apply {
@@ -138,7 +138,7 @@ class FragmentCalendar : FragmentBase() {
 						selectedDay = day.date
 						updateEventList()
 
-						root().calendar.notifyCalendarChanged()
+						binding().calendar.notifyCalendarChanged()
 					}
 				}
 
@@ -147,7 +147,7 @@ class FragmentCalendar : FragmentBase() {
 			}
 		}
 
-		root().calendar.monthScrollListener = { month ->
+		binding().calendar.monthScrollListener = { month ->
 			startDate.value = Calendar.getInstance().apply {
 				set(Calendar.YEAR, month.year)
 				set(Calendar.MONTH, month.month)
@@ -155,33 +155,34 @@ class FragmentCalendar : FragmentBase() {
 			}.time
 		}
 
-		root().calendar.monthHeaderBinder = object : MonthHeaderFooterBinder<HeaderViewContainer> {
-			override fun create(view: View) = HeaderViewContainer(view)
-			override fun bind(container: HeaderViewContainer, month: CalendarMonth) {
-				container.monthName.text =
-					requireContext().resources.getStringArray(R.array.month_names)[month.month - 1]
+		binding().calendar.monthHeaderBinder =
+			object : MonthHeaderFooterBinder<HeaderViewContainer> {
+				override fun create(view: View) = HeaderViewContainer(view)
+				override fun bind(container: HeaderViewContainer, month: CalendarMonth) {
+					container.monthName.text =
+						requireContext().resources.getStringArray(R.array.month_names)[month.month - 1]
 
-				container.buttonNext.setOnClickListener {
-					root().calendar.scrollToMonth(month.yearMonth.plusMonths(1))
-				}
+					container.buttonNext.setOnClickListener {
+						binding().calendar.scrollToMonth(month.yearMonth.plusMonths(1))
+					}
 
-				container.buttonPrevious.setOnClickListener {
-					root().calendar.scrollToMonth(month.yearMonth.minusMonths(1))
+					container.buttonPrevious.setOnClickListener {
+						binding().calendar.scrollToMonth(month.yearMonth.minusMonths(1))
+					}
 				}
 			}
-		}
 
 		val currentMonth = YearMonth.now()
 		val firstMonth = currentMonth.minusMonths(10)
 		val lastMonth = currentMonth.plusMonths(10)
-		root().calendar.setup(firstMonth, lastMonth, DayOfWeek.MONDAY)
-		root().calendar.scrollToMonth(YearMonth.now())
+		binding().calendar.setup(firstMonth, lastMonth, DayOfWeek.MONDAY)
+		binding().calendar.scrollToMonth(YearMonth.now())
 	}
 
 	private fun updateEventList() {
 		val events = getEventsFromDay(selectedDay)
-		(root().listEvents.adapter as? AdapterEvent)?.update(events)
-		root().labelEvents.isVisible = events.isNotEmpty()
+		(binding().listEvents.adapter as? AdapterEvent)?.update(events)
+		binding().labelEvents.isVisible = events.isNotEmpty()
 	}
 
 	private fun getEventsFromDay(day: LocalDate): List<CalendarEvent> {

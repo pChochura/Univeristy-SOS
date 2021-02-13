@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.exceptions.ExceptionFragmentContainerEmpty
-import com.pointlessapps.mobileusos.fragments.FragmentBase
-import com.pointlessapps.mobileusos.fragments.FragmentBaseInterface
+import com.pointlessapps.mobileusos.fragments.FragmentCore
+import com.pointlessapps.mobileusos.fragments.FragmentCoreImpl
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.contentView
@@ -18,23 +18,23 @@ import org.jetbrains.anko.contentView
 class FragmentManager private constructor(
 	private val activity: FragmentActivity,
 	private val fragmentManager: androidx.fragment.app.FragmentManager,
-	private val fragments: Array<out FragmentBaseInterface>
+	private val fragments: Array<out FragmentCore<*>>
 ) {
-	private val history = mutableListOf<FragmentBaseInterface>()
+	private val history = mutableListOf<FragmentCore<*>>()
 
 	private var startingPosition = -1
 
 	@IdRes
 	private var containerId: Int? = null
 	private var bottomNavigation: BottomNavigationView? = null
-	var currentFragment: FragmentBaseInterface? = null
+	var currentFragment: FragmentCore<*>? = null
 		private set
 
 	companion object {
 		fun of(
 			activity: FragmentActivity,
-			fragment: FragmentBaseInterface,
-			vararg fragments: FragmentBaseInterface
+			fragment: FragmentCore<*>,
+			vararg fragments: FragmentCore<*>
 		) =
 			FragmentManager(
 				activity,
@@ -71,7 +71,7 @@ class FragmentManager private constructor(
 			}
 	}
 
-	private fun prepareFragment(fragment: FragmentBaseInterface) {
+	private fun prepareFragment(fragment: FragmentCore<*>) {
 		fragment.onChangeFragment = { setFragment(it.apply { prepareFragment(this) }) }
 		fragment.onReplaceFragment = { setFragment(it.apply { prepareFragment(this) }, false) }
 		fragment.onForceRecreate = {
@@ -85,8 +85,8 @@ class FragmentManager private constructor(
 			activity.finish()
 		}
 		fragment.onForceRefreshAllFragments = {
-			(fragment as FragmentBase).forceRefresh()
-			history.forEach { (it as FragmentBase).forceRefresh() }
+			(fragment as FragmentCoreImpl<*>).forceRefresh()
+			history.forEach { (it as FragmentCoreImpl<*>).forceRefresh() }
 		}
 		fragment.onForceGoBack = { popHistory(true) }
 		fragment.bottomNavigationView = bottomNavigation
@@ -105,10 +105,10 @@ class FragmentManager private constructor(
 		startingPosition = if (startingPosition == -1) position else startingPosition
 	}
 
-	fun changeFragment(fragment: FragmentBaseInterface) =
+	fun changeFragment(fragment: FragmentCore<*>) =
 		setFragment(fragment.apply { prepareFragment(this) })
 
-	private fun setFragment(fragment: FragmentBaseInterface, addToHistory: Boolean = true) {
+	private fun setFragment(fragment: FragmentCore<*>, addToHistory: Boolean = true) {
 		if (containerId === null) {
 			throw ExceptionFragmentContainerEmpty("Fragment container cannot be null.")
 		}

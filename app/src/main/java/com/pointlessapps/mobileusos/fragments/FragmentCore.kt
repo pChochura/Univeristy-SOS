@@ -1,16 +1,12 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.content.Intent
-import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-interface FragmentBaseInterface {
-	@LayoutRes
-	fun getLayoutId(): Int
-
+interface FragmentCore<Binding : ViewBinding> {
 	@DrawableRes
 	fun getNavigationIcon(): Int = 0
 
@@ -20,15 +16,13 @@ interface FragmentBaseInterface {
 	fun created() = Unit
 	fun refreshed() = Unit
 
-	fun root(): ViewGroup? = null
-
-	fun handleOnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = Unit
+	fun binding(): Binding? = null
 
 	var forceRefresh: Boolean
 
 	var bottomNavigationView: BottomNavigationView?
-	var onChangeFragment: ((FragmentBaseInterface) -> Unit)?
-	var onReplaceFragment: ((FragmentBaseInterface) -> Unit)?
+	var onChangeFragment: ((FragmentCore<*>) -> Unit)?
+	var onReplaceFragment: ((FragmentCore<*>) -> Unit)?
 	var onForceRecreate: (() -> Unit)?
 	var onForceRefreshAllFragments: (() -> Unit)?
 	var onBackPressedListener: (() -> Boolean)?

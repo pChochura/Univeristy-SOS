@@ -2,31 +2,28 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.text.method.LinkMovementMethod
 import android.view.View
-import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.FragmentArticleBinding
 import com.pointlessapps.mobileusos.models.Article
 import com.pointlessapps.mobileusos.utils.Utils
-import kotlinx.android.synthetic.main.fragment_article.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentArticle(private val article: Article) : FragmentBase() {
-
-	override fun getLayoutId() = R.layout.fragment_article
+class FragmentArticle(private val article: Article) : FragmentCoreImpl<FragmentArticleBinding>(FragmentArticleBinding::class.java) {
 
 	override fun created() {
-		root().articleHeadline.text = Utils.parseHtml(article.headlineHtml.toString())
-		root().articleContent.text = Utils.parseHtml(article.contentHtml.toString())
-		root().articleAuthor.text = article.author
+		binding().articleHeadline.text = Utils.parseHtml(article.headlineHtml.toString())
+		binding().articleContent.text = Utils.parseHtml(article.contentHtml.toString())
+		binding().articleAuthor.text = article.author
 
 		article.publicationDate?.also {
-			root().articleDate.visibility = View.VISIBLE
-			root().articleDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
+			binding().articleDate.visibility = View.VISIBLE
+			binding().articleDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
 		}
 		article.category?.name?.toString()?.takeUnless { it.isEmpty() }?.also {
-			root().articleCategory.visibility = View.VISIBLE
-			root().articleCategory.text = it
+			binding().articleCategory.visibility = View.VISIBLE
+			binding().articleCategory.text = it
 		}
 
-		root().articleContent.movementMethod = LinkMovementMethod.getInstance()
+		binding().articleContent.movementMethod = LinkMovementMethod.getInstance()
 	}
 }

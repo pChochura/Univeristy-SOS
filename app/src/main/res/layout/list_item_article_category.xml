@@ -12,7 +12,7 @@
 	android:textColor="?white"
 	android:textSize="14sp"
 	app:checkedIconVisible="false"
-	app:chipBackgroundColor="@color/chip_select_colors"
+	app:chipBackgroundColor="@drawable/chip_select_colors"
 	app:chipMinTouchTargetSize="32dp"
 	app:rippleColor="?colorPrimary"
 	tools:text="Some text" />

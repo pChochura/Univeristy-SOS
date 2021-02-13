@@ -10,7 +10,7 @@ interface FragmentPinnable {
 	 * first - @DrawableRes of the icon
 	 * second - text string
 	 */
-	fun getShortcut(fragment: FragmentBase, callback: (Pair<Int, String>) -> Unit) = Unit
+	fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) = Unit
 
 	fun isPinned(className: String, data: String) = Preferences.get().run {
 		getProfileShortcuts().find {

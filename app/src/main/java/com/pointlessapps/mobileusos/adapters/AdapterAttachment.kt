@@ -1,14 +1,16 @@
 package com.pointlessapps.mobileusos.adapters
 
-import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.viewbinding.ViewBinding
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemEmailAttachmentBinding
+import com.pointlessapps.mobileusos.databinding.ListItemEmailItemAddBinding
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.toMB
 import org.jetbrains.anko.find
 
 class AdapterAttachment(private val canAddAttachment: Boolean = false) :
-	AdapterSimple<Email.Attachment>(mutableListOf()) {
+	AdapterCore<Email.Attachment, ViewBinding>(mutableListOf(), ViewBinding::class.java) {
 
 	var onAddClickListener: (() -> Unit)? = null
 
@@ -16,15 +18,15 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 		setHasStableIds(true)
 	}
 
-	override fun getLayoutId(viewType: Int) =
+	override fun getBindingClass(viewType: Int) =
 		if (viewType == +ViewType.SIMPLE) {
-			R.layout.list_item_email_attachment
+			ListItemEmailAttachmentBinding::class.java
 		} else {
-			R.layout.list_item_email_item_add
+			ListItemEmailItemAddBinding::class.java
 		}
 
-	override fun onBindViewHolder(holder: DataObjectHolder, position: Int) =
-		onBind(holder.root, position)
+	override fun onBindViewHolder(holder: ViewHolder<ViewBinding>, position: Int) =
+		onBind(holder.binding, position)
 
 	override fun getItemCount() = if (canAddAttachment) {
 		list.size + 1
@@ -39,8 +41,8 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 			+ViewType.SIMPLE
 		}
 
-	override fun onBind(root: View, position: Int) {
-		root.find<View>(R.id.bg).setOnClickListener {
+	override fun onBind(binding: ViewBinding, position: Int) {
+		binding.root.setOnClickListener {
 			if (getItemViewType(position) == +ViewType.ADD) {
 				onAddClickListener?.invoke()
 			} else {
@@ -48,9 +50,9 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 			}
 		}
 		if (position < list.size) {
-			root.find<AppCompatTextView>(R.id.attachmentName).text =
+			binding.root.find<AppCompatTextView>(R.id.attachmentName).text =
 				list[position].filename
-			root.find<AppCompatTextView>(R.id.attachmentSize).text =
+			binding.root.find<AppCompatTextView>(R.id.attachmentSize).text =
 				"%.2f MB".format(list[position].size?.toMB())
 		}
 	}

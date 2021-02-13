@@ -2,18 +2,16 @@ package com.pointlessapps.mobileusos.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.intrusoft.sectionedrecyclerview.Section
 import com.intrusoft.sectionedrecyclerview.SectionRecyclerViewAdapter
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.databinding.ListItemCourseChildBinding
+import com.pointlessapps.mobileusos.databinding.ListItemCourseClassTypeBinding
+import com.pointlessapps.mobileusos.databinding.ListItemCourseHeaderBinding
 import com.pointlessapps.mobileusos.models.Course
 import com.pointlessapps.mobileusos.models.Term
-import org.jetbrains.anko.find
 
 class AdapterCourse(private val context: Context, sections: List<SectionHeader> = listOf()) :
 	SectionRecyclerViewAdapter<AdapterCourse.SectionHeader, List<Course>, AdapterCourse.SectionViewHolder, AdapterCourse.ChildViewHolder>(
@@ -25,7 +23,11 @@ class AdapterCourse(private val context: Context, sections: List<SectionHeader> 
 
 	override fun onCreateSectionViewHolder(itemView: ViewGroup, viewType: Int) =
 		SectionViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_course_header, itemView, false)
+			ListItemCourseHeaderBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindSectionViewHolder(
@@ -33,13 +35,17 @@ class AdapterCourse(private val context: Context, sections: List<SectionHeader> 
 		sectionPosition: Int,
 		section: SectionHeader
 	) {
-		itemView.textName.text =
+		itemView.binding.termName.text =
 			(section.getSectionHeader().name ?: section.getSectionHeader().id).toString()
 	}
 
 	override fun onCreateChildViewHolder(itemView: ViewGroup, viewType: Int) =
 		ChildViewHolder(
-			LayoutInflater.from(context).inflate(R.layout.list_item_course_child, itemView, false)
+			ListItemCourseChildBinding.inflate(
+				LayoutInflater.from(context),
+				itemView,
+				false
+			)
 		)
 
 	override fun onBindChildViewHolder(
@@ -48,26 +54,25 @@ class AdapterCourse(private val context: Context, sections: List<SectionHeader> 
 		childPosition: Int,
 		courses: List<Course>
 	) {
-		itemView.textName.text = courses.firstOrNull()?.courseName.toString()
-		itemView.textGroup.text =
-			context.resources.getQuantityString(
-				R.plurals.groups,
-				courses.size,
-				courses.joinToString { it.groupNumber.toString() }
-			)
+		itemView.binding.courseName.text = courses.firstOrNull()?.courseName.toString()
+		itemView.binding.courseGroup.text = context.resources.getQuantityString(
+			R.plurals.groups,
+			courses.size,
+			courses.joinToString { it.groupNumber.toString() }
+		)
 		courses.distinctBy { it.groupNumber }.singleOrNull()?.also {
-			itemView.textGroup.text =
+			itemView.binding.courseGroup.text =
 				context.resources.getQuantityString(R.plurals.groups, 1, it.groupNumber.toString())
 		}
 
-		itemView.groupClassTypes.removeAllViews()
+		itemView.binding.courseClassTypes.removeAllViews()
 		courses.forEach { course ->
-			itemView.groupClassTypes.addView(
-				(LayoutInflater.from(context)
-					.inflate(
-						R.layout.list_item_course_class_type,
-						null
-					) as Chip).apply {
+			itemView.binding.courseClassTypes.addView(
+				ListItemCourseClassTypeBinding.inflate(
+					LayoutInflater.from(context),
+					null,
+					false
+				).root.apply {
 					setOnClickListener {
 						onClickListener(course)
 					}
@@ -85,13 +90,9 @@ class AdapterCourse(private val context: Context, sections: List<SectionHeader> 
 		fun getSectionHeader() = term
 	}
 
-	class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val textName = itemView.find<AppCompatTextView>(R.id.termName)
-	}
+	class SectionViewHolder(val binding: ListItemCourseHeaderBinding) :
+		RecyclerView.ViewHolder(binding.root)
 
-	class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val textName = itemView.find<AppCompatTextView>(R.id.courseName)
-		val textGroup = itemView.find<AppCompatTextView>(R.id.courseGroup)
-		val groupClassTypes = itemView.find<ChipGroup>(R.id.courseClassTypes)
-	}
+	class ChildViewHolder(val binding: ListItemCourseChildBinding) :
+		RecyclerView.ViewHolder(binding.root)
 }

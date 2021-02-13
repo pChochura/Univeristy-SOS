@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -19,6 +20,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
+import com.pointlessapps.mobileusos.databinding.DialogLoadingBinding
+import com.pointlessapps.mobileusos.databinding.DialogMemoBinding
+import com.pointlessapps.mobileusos.databinding.DialogShowEventBinding
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.models.AppDatabase
@@ -26,12 +30,6 @@ import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.models.Name
 import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.dialog_loading.*
-import kotlinx.android.synthetic.main.dialog_loading.buttonPrimary
-import kotlinx.android.synthetic.main.dialog_loading.buttonSecondary
-import kotlinx.android.synthetic.main.dialog_loading.messageMain
-import kotlinx.android.synthetic.main.dialog_memo.*
-import kotlinx.android.synthetic.main.dialog_show_event.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -107,6 +105,7 @@ object Utils {
 		context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber")))
 	}
 
+	@SuppressLint("QueryPermissionsNeeded")
 	fun mapsIntent(
 		context: Context,
 		lat: Float?,
@@ -122,6 +121,7 @@ object Utils {
 			}
 	}
 
+	@Suppress("DEPRECATION")
 	fun parseHtml(input: String): Spanned =
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			Html.fromHtml(input, Html.FROM_HTML_MODE_COMPACT)
@@ -129,6 +129,7 @@ object Utils {
 			Html.fromHtml(input)
 		}
 
+	@Suppress("DEPRECATION")
 	fun stripHtmlTags(html: String) =
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT).toString()
@@ -150,16 +151,16 @@ object Utils {
 		onDismissListener: (() -> Unit)? = null
 	) {
 		DialogUtil.create(
-			object : DialogUtil.StatefulDialog() {
+			object : DialogUtil.StatefulDialog<DialogLoadingBinding>() {
 				override fun toggle() {
-					dialog.progressBar.isVisible = true
-					dialog.messageMain.setText(R.string.loading)
-					dialog.messageSecondary.isGone = true
-					dialog.buttonPrimary.isGone = true
-					dialog.buttonSecondary.isGone = true
+					binding.progressBar.isVisible = true
+					binding.messageMain.setText(R.string.loading)
+					binding.messageSecondary.isGone = true
+					binding.buttonPrimary.isGone = true
+					binding.buttonSecondary.isGone = true
 				}
 			},
-			activity, R.layout.dialog_loading, { dialog ->
+			activity, DialogLoadingBinding::class.java, { dialog ->
 				dialog.messageMain.setText(R.string.there_been_a_problem)
 				dialog.messageSecondary.setText(description)
 				dialog.buttonPrimary.setText(R.string.logout)
@@ -168,7 +169,7 @@ object Utils {
 					doAsync {
 						Preferences.get().clear()
 						AppDatabase.init(activity).clearAllTables()
-						dialog.dismiss()
+						this@create.dialog.dismiss()
 						activity.apply {
 							startActivity(
 								Intent(
@@ -185,7 +186,7 @@ object Utils {
 				}
 
 				dialog.buttonSecondary.setOnClickListener {
-					dialog.dismiss()
+					this.dialog.dismiss()
 					onDismissListener?.invoke()
 				}
 			}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
@@ -196,13 +197,13 @@ object Utils {
 		context: Context,
 		event: CourseEvent?,
 		viewModelUser: ViewModelUser,
-		onChangeFragment: ((FragmentBaseInterface) -> Unit)?
+		onChangeFragment: ((FragmentCore<*>) -> Unit)?
 	) {
 		if (event == null) {
 			return
 		}
 
-		DialogUtil.create(context, R.layout.dialog_show_event, { dialog ->
+		DialogUtil.create(context, DialogShowEventBinding::class.java, { dialog ->
 			val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 			dialog.eventName.text = event.courseName.toString()
 			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
@@ -236,7 +237,7 @@ object Utils {
 			dialog.buttonGroup.setOnClickListener {
 				onChangeFragment?.invoke(FragmentCourse("${event.unitId}#${event.groupNumber}"))
 
-				dialog.dismiss()
+				dismiss()
 			}
 
 			dialog.buttonLecturer.setOnClickListener {
@@ -246,13 +247,13 @@ object Utils {
 					)
 				)
 
-				dialog.dismiss()
+				dismiss()
 			}
 
 			dialog.buttonRoom.setOnClickListener {
 				onChangeFragment?.invoke(FragmentRoom(event.roomId ?: return@setOnClickListener))
 
-				dialog.dismiss()
+				dismiss()
 			}
 
 			dialog.buttonBuilding.setOnClickListener {
@@ -262,27 +263,27 @@ object Utils {
 					)
 				)
 
-				dialog.dismiss()
+				dismiss()
 			}
 
 			dialog.buttonAddToCalendar.setOnClickListener { calendarIntent(context, event) }
 			dialog.buttonAddNote.setOnClickListener {
 				showEventMemoEdit(context, event)
-				dialog.dismiss()
+				dismiss()
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
 	}
 
 	private fun showEventMemoEdit(context: Context, event: CourseEvent) {
-		DialogUtil.create(context, R.layout.dialog_memo, { dialog ->
+		DialogUtil.create(context, DialogMemoBinding::class.java, { dialog ->
 			dialog.memoContent.setText(event.memo ?: "")
 
 			dialog.buttonPrimary.setOnClickListener {
 				event.memo = dialog.memoContent.text.toString()
 				RepositoryTimetable(context).insert(event)
-				dialog.dismiss()
+				dismiss()
 			}
-			dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+			dialog.buttonSecondary.setOnClickListener { dismiss() }
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 	}
 

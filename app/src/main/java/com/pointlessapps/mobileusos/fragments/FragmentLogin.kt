@@ -1,30 +1,28 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
+import com.pointlessapps.mobileusos.databinding.DialogPickUniversityBinding
+import com.pointlessapps.mobileusos.databinding.FragmentLoginBinding
 import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
-import com.pointlessapps.mobileusos.managers.SearchManager
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
-import kotlinx.android.synthetic.main.dialog_pick_university.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
 
-class FragmentLogin : FragmentBase() {
+class FragmentLogin : FragmentCoreImpl<FragmentLoginBinding>(FragmentLoginBinding::class.java) {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
-
-	override fun getLayoutId() = R.layout.fragment_login
 
 	override fun created() {
 		prepareClickListeners()
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonLogin.setOnClickListener {
-			DialogUtil.create(requireContext(), R.layout.dialog_pick_university, { dialog ->
+		binding().buttonLogin.setOnClickListener {
+			DialogUtil.create(requireContext(), DialogPickUniversityBinding::class.java, { dialog ->
 				dialog.listUniversities.apply {
 					setAdapter(AdapterUniversity().apply {
 						onClickListener = { university ->
@@ -38,12 +36,12 @@ class FragmentLogin : FragmentBase() {
 								}
 							}
 
-							dialog.dismiss()
+							dismiss()
 						}
 					})
 				}
 
-				viewModelCommon.getAllUniversities().observe(this) {
+				viewModelCommon.getAllUniversities().observe(this@FragmentLogin) {
 					(dialog.listUniversities.adapter as? AdapterUniversity)?.apply {
 						update(it.first)
 						showMatching(dialog.inputSearchUniversities.text.toString())
@@ -58,8 +56,10 @@ class FragmentLogin : FragmentBase() {
 					dialog.listUniversities.setLoaded(true)
 				}
 
-				SearchManager.of(dialog.inputSearchUniversities).setOnChangeTextListener {
-					(dialog.listUniversities.adapter as? AdapterUniversity)?.showMatching(it)
+				dialog.inputSearchUniversities.addTextChangedListener {
+					(dialog.listUniversities.adapter as? AdapterUniversity)?.showMatching(
+						it.toString()
+					)
 				}
 			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
 		}

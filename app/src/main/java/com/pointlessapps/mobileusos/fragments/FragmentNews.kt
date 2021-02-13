@@ -2,23 +2,22 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.view.LayoutInflater
 import androidx.fragment.app.viewModels
-import com.google.android.material.chip.Chip
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterNews
+import com.pointlessapps.mobileusos.databinding.FragmentNewsBinding
+import com.pointlessapps.mobileusos.databinding.ListItemArticleCategoryBinding
 import com.pointlessapps.mobileusos.models.Article
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
-import kotlinx.android.synthetic.main.fragment_news.view.*
 import org.jetbrains.anko.doAsync
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class FragmentNews : FragmentBase() {
+class FragmentNews : FragmentCoreImpl<FragmentNewsBinding>(FragmentNewsBinding::class.java) {
 
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 
 	private val selectedCategories = mutableListOf<Article.Category>()
 
-	override fun getLayoutId() = R.layout.fragment_news
 	override fun getNavigationIcon() = R.drawable.ic_news
 	override fun getNavigationName() = R.string.news
 
@@ -26,11 +25,11 @@ class FragmentNews : FragmentBase() {
 		prepareNewsList()
 		refreshed()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
-		root().horizontalProgressBar.isRefreshing = true
+		binding().horizontalProgressBar.isRefreshing = true
 
 		val lastWeekDate = Calendar.getInstance().apply {
 			add(Calendar.DAY_OF_MONTH, -7)
@@ -39,7 +38,7 @@ class FragmentNews : FragmentBase() {
 		val loaded = CountDownLatch(2)
 
 		viewModelCommon.getAllNews().observe(this) { (news) ->
-			(root().listNews.adapter as? AdapterNews)?.update(
+			(binding().listNews.adapter as? AdapterNews)?.update(
 				news.filter { article -> article.headlineHtml != null && article.contentHtml != null }
 					.groupBy { article ->
 						(article.publicationDate?.time ?: lastWeekDate) - lastWeekDate <= 0
@@ -52,20 +51,20 @@ class FragmentNews : FragmentBase() {
 					}
 			)
 
-			root().listNews.setEmptyText(getString(R.string.no_new_articles))
+			binding().listNews.setEmptyText(getString(R.string.no_new_articles))
 		}.onFinished { loaded.countDown() }
 
 		prepareCategoriesList { loaded.countDown() }
 
 		doAsync {
 			loaded.await()
-			root().pullRefresh.isRefreshing = false
-			root().horizontalProgressBar.isRefreshing = false
+			binding().pullRefresh.isRefreshing = false
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
 	private fun prepareNewsList() {
-		root().listNews.setAdapter(AdapterNews(requireContext()).apply {
+		binding().listNews.setAdapter(AdapterNews(requireContext()).apply {
 			onClickListener = {
 				onChangeFragment?.invoke(FragmentArticle(it))
 			}
@@ -74,26 +73,28 @@ class FragmentNews : FragmentBase() {
 
 	private fun prepareCategoriesList(callback: (() -> Unit)? = null) {
 		viewModelCommon.getAllNewsCategories().observe(this) { (list) ->
-			root().listCategories.removeAllViews()
-			list.sorted().forEach { category ->
-				root().listCategories.apply {
-					addView(
-						(LayoutInflater.from(requireContext())
-							.inflate(R.layout.list_item_article_category, null) as Chip).apply {
-							text = category.name?.toString()
+			binding().listCategories.removeAllViews()
+			LayoutInflater.from(requireContext()).let { inflater ->
+				list.sorted().forEach { category ->
+					binding().listCategories.apply {
+						addView(
+							ListItemArticleCategoryBinding.inflate(inflater, null, false)
+								.root.apply {
+									text = category.name?.toString()
+									setOnCheckedChangeListener { _, checked ->
+										if (checked) {
+											selectedCategories.add(category)
+										} else {
+											selectedCategories.remove(category)
+										}
 
-							setOnCheckedChangeListener { _, checked ->
-								if (checked) {
-									selectedCategories.add(category)
-								} else {
-									selectedCategories.remove(category)
+										(binding().listNews.adapter as? AdapterNews)?.filterCategories(
+											selectedCategories
+										)
+									}
 								}
-
-								(root().listNews.adapter as? AdapterNews)?.filterCategories(
-									selectedCategories
-								)
-							}
-						})
+						)
+					}
 				}
 			}
 

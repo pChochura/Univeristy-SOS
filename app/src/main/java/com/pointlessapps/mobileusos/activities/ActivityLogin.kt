@@ -5,7 +5,8 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
 import com.pointlessapps.mobileusos.R
-import com.pointlessapps.mobileusos.fragments.FragmentBase
+import com.pointlessapps.mobileusos.databinding.ActivityLoginBinding
+import com.pointlessapps.mobileusos.fragments.FragmentCoreImpl
 import com.pointlessapps.mobileusos.fragments.FragmentLogin
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
@@ -13,7 +14,7 @@ import com.pointlessapps.mobileusos.helpers.Preferences
 class ActivityLogin : FragmentActivity() {
 
 	private val loginFragment = FragmentLogin()
-	private var currentFragment: FragmentBase? = loginFragment
+	private var currentFragment: FragmentCoreImpl<*>? = loginFragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -28,7 +29,9 @@ class ActivityLogin : FragmentActivity() {
 		}
 
 		setTheme(R.style.AppTheme)
-		setContentView(R.layout.activity_login)
+
+		val binding = ActivityLoginBinding.inflate(layoutInflater)
+		setContentView(binding.root)
 
 		supportFragmentManager.beginTransaction().apply {
 			setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
@@ -62,9 +65,9 @@ class ActivityLogin : FragmentActivity() {
 			.replace(R.id.containerFragment, prepareFragment(loginFragment)).commit()
 	}
 
-	private fun prepareFragment(fragment: FragmentBase) = fragment.apply {
+	private fun prepareFragment(fragment: FragmentCoreImpl<*>) = fragment.apply {
 		onChangeFragment = { fragment ->
-			currentFragment = fragment as FragmentBase
+			currentFragment = fragment as FragmentCoreImpl
 			supportFragmentManager.beginTransaction()
 				.replace(R.id.containerFragment, fragment).commit()
 		}

@@ -3,30 +3,29 @@ package com.pointlessapps.mobileusos.fragments
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterSurvey
+import com.pointlessapps.mobileusos.databinding.FragmentSurveysBinding
 import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
-import kotlinx.android.synthetic.main.fragment_surveys.view.*
 
-class FragmentSurveys : FragmentBase() {
+class FragmentSurveys :
+	FragmentCoreImpl<FragmentSurveysBinding>(FragmentSurveysBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
-
-	override fun getLayoutId() = R.layout.fragment_surveys
 
 	override fun created() {
 		prepareSurveysList()
 
 		refreshed()
 
-		root().pullRefresh.setOnRefreshListener { refreshed() }
+		binding().pullRefresh.setOnRefreshListener { refreshed() }
 	}
 
 	override fun refreshed() {
 		viewModelUser.getSurveysToFill().observe(this) { (list) ->
-			root().listSurveys.setEmptyText(getString(R.string.no_surveys_to_fill))
-			root().listSurveys.setEmptyIcon(R.drawable.ic_no_surveys)
-			root().listSurveys.setLoaded(false)
-			(root().listSurveys.adapter as? AdapterSurvey)?.notifyDataChanged(
+			binding().listSurveys.setEmptyText(getString(R.string.no_surveys_to_fill))
+			binding().listSurveys.setEmptyIcon(R.drawable.ic_no_surveys)
+			binding().listSurveys.setLoaded(false)
+			(binding().listSurveys.adapter as? AdapterSurvey)?.notifyDataChanged(
 				list.groupBy(Survey::didIFillOut)
 					.toSortedMap { section1, section2 -> if (section1 == true) 1 else if (section2 == true) -1 else 0 }
 					.map {
@@ -39,13 +38,13 @@ class FragmentSurveys : FragmentBase() {
 					}
 			)
 		}.onFinished {
-			root().listSurveys.setLoaded(true)
-			root().pullRefresh.isRefreshing = false
+			binding().listSurveys.setLoaded(true)
+			binding().pullRefresh.isRefreshing = false
 		}
 	}
 
 	private fun prepareSurveysList() {
-		root().listSurveys.setAdapter(AdapterSurvey(requireContext()).apply {
+		binding().listSurveys.setAdapter(AdapterSurvey(requireContext()).apply {
 			onClickListener = {
 				onChangeFragment?.invoke(FragmentSurvey(it))
 			}

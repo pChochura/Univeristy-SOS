@@ -7,25 +7,21 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterQuestion
+import com.pointlessapps.mobileusos.databinding.DialogLoadingBinding
+import com.pointlessapps.mobileusos.databinding.DialogMessageBinding
+import com.pointlessapps.mobileusos.databinding.FragmentSurveyBinding
 import com.pointlessapps.mobileusos.models.Survey
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.UnscrollableLinearLayoutManager
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_loading.*
-import kotlinx.android.synthetic.main.dialog_message.buttonPrimary
-import kotlinx.android.synthetic.main.dialog_message.buttonSecondary
-import kotlinx.android.synthetic.main.dialog_message.messageMain
-import kotlinx.android.synthetic.main.dialog_message.messageSecondary
-import kotlinx.android.synthetic.main.fragment_survey.view.*
 
-class FragmentSurvey(private var survey: Survey) : FragmentBase() {
+class FragmentSurvey(private var survey: Survey) :
+	FragmentCoreImpl<FragmentSurveyBinding>(FragmentSurveyBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
 	private val answers = mutableMapOf<String, String>()
-
-	override fun getLayoutId() = R.layout.fragment_survey
 
 	override fun created() {
 		prepareData()
@@ -38,7 +34,7 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 			}
 
 			this.survey = survey
-			root().horizontalProgressBar.isRefreshing = true
+			binding().horizontalProgressBar.isRefreshing = true
 		}.onFinished {
 			if (it !== null) {
 				showErrorDialog()
@@ -47,37 +43,37 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 
 			prepareData()
 			prepareQuestions()
-			root().horizontalProgressBar.isRefreshing = false
-			root().sectionComment.isVisible = true
+			binding().horizontalProgressBar.isRefreshing = false
+			binding().sectionComment.isVisible = true
 		}
 	}
 
 	private fun prepareData() {
 		if (survey.surveyType == Survey.SurveyType.Course) {
-			root().surveyHeadline.isGone = true
-			root().sectionCourse.isGone = false
-			root().lecturerName.text = survey.lecturer?.name()
-			root().courseName.text = requireContext().getString(
+			binding().surveyHeadline.isGone = true
+			binding().sectionCourse.isGone = false
+			binding().lecturerName.text = survey.lecturer?.name()
+			binding().courseName.text = requireContext().getString(
 				R.string.course_info_general,
 				survey.group?.courseName,
 				survey.group?.classType
 			)
 			survey.lecturer?.photoUrls?.values?.firstOrNull()?.also {
-				Picasso.get().load(it).into(root().lecturerProfileImg)
+				Picasso.get().load(it).into(binding().lecturerProfileImg)
 			}
 		} else {
-			root().surveyHeadline.text = Utils.stripHtmlTags(survey.headlineHtml.toString())
-			root().sectionCourse.isGone = true
-			root().surveyHeadline.isGone = false
+			binding().surveyHeadline.text = Utils.stripHtmlTags(survey.headlineHtml.toString())
+			binding().sectionCourse.isGone = true
+			binding().surveyHeadline.isGone = false
 		}
 	}
 
 	private fun prepareQuestions() {
-		(root().listQuestions.adapter as? AdapterQuestion)?.update(survey.questions ?: return)
+		(binding().listQuestions.adapter as? AdapterQuestion)?.update(survey.questions ?: return)
 	}
 
 	private fun prepareQuestionsList() {
-		root().listQuestions.apply {
+		binding().listQuestions.apply {
 			adapter = AdapterQuestion().apply {
 				onCheckedListener = { questionId, answerId ->
 					answers[questionId] = answerId
@@ -89,19 +85,19 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 	}
 
 	private fun prepareClickListeners() {
-		root().buttonSend.setOnClickListener {
+		binding().buttonSend.setOnClickListener {
 			if (answers.keys.size < survey.numberOfAnswers) {
-				DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
+				DialogUtil.create(requireContext(), DialogMessageBinding::class.java, { dialog ->
 					dialog.messageMain.setText(R.string.complete_all_answers)
 					dialog.messageSecondary.setText(R.string.complete_all_answers_description)
 
 					dialog.buttonPrimary.setText(android.R.string.ok)
 					dialog.buttonPrimary.setOnClickListener {
-						dialog.dismiss()
+						dismiss()
 						sendSurvey()
 					}
 					dialog.buttonSecondary.setText(R.string.cancel)
-					dialog.buttonSecondary.setOnClickListener { dialog.dismiss() }
+					dialog.buttonSecondary.setOnClickListener { dismiss() }
 				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 			} else {
 				sendSurvey()
@@ -110,14 +106,14 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 	}
 
 	private fun sendSurvey() {
-		DialogUtil.create(object : DialogUtil.StatefulDialog() {
+		DialogUtil.create(object : DialogUtil.StatefulDialog<DialogLoadingBinding>() {
 			override fun toggle() {
-				dialog.progressBar.isVisible = false
-				dialog.messageSecondary.isGone = false
-				dialog.buttonPrimary.isGone = false
+				binding.progressBar.isVisible = false
+				binding.messageSecondary.isGone = false
+				binding.buttonPrimary.isGone = false
 			}
-		}, requireContext(), R.layout.dialog_loading, { dialog ->
-			dialog.setCancelable(false)
+		}, requireContext(), DialogLoadingBinding::class.java, { dialog ->
+			this.dialog.setCancelable(false)
 
 			dialog.messageMain.setText(R.string.saving_survey)
 			dialog.progressBar.isGone = false
@@ -126,13 +122,13 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 			dialog.messageSecondary.isGone = true
 
 			dialog.buttonPrimary.setOnClickListener {
-				dialog.dismiss()
+				this.dialog.dismiss()
 				onForceGoBack?.invoke()
 			}
 
 			viewModelUser.fillOutSurvey(
 				survey.id, answers,
-				root().inputComment.text?.toString()
+				binding().inputComment.text?.toString()
 			).onFinished {
 				toggle()
 				if (it !== null) {
@@ -147,18 +143,18 @@ class FragmentSurvey(private var survey: Survey) : FragmentBase() {
 	}
 
 	private fun showErrorDialog() {
-		DialogUtil.create(requireContext(), R.layout.dialog_message, { dialog ->
+		DialogUtil.create(requireContext(), DialogMessageBinding::class.java, { dialog ->
 			dialog.messageMain.setText(R.string.oops)
 			dialog.messageSecondary.setText(R.string.something_went_wrong)
 			dialog.buttonSecondary.isGone = true
 
 			dialog.buttonPrimary.setText(android.R.string.ok)
 			dialog.buttonPrimary.setOnClickListener {
-				dialog.dismiss()
+				dismiss()
 				onForceGoBack?.invoke()
 			}
-			dialog.setOnCancelListener {
-				dialog.dismiss()
+			setOnCancelListener {
+				dismiss()
 				onForceGoBack?.invoke()
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
