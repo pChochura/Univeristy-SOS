@@ -143,7 +143,12 @@ class FragmentSurvey(private var survey: Survey) :
 
 			viewModelUser.fillOutSurvey(
 				survey.id,
-				answers,
+				answers.mapValues {
+					mapOf(
+						"answers" to it.value["answers"],
+						"comment" to it.value.getOrDefault("comment", null)
+					)
+				},
 				binding().inputComment.text?.toString()
 			).onFinished {
 				toggle()
