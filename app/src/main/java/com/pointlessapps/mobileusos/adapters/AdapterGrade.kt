@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class AdapterGrade(private val context: Context, sections: List<SectionHeader> =
 			)
 		)
 
+	@SuppressLint("SetTextI18n")
 	override fun onBindSectionViewHolder(
 		itemView: SectionViewHolder,
 		sectionPosition: Int,

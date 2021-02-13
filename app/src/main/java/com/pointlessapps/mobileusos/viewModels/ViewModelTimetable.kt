@@ -62,7 +62,7 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 	fun getEventsByMonthYear(month: Int, year: Int) =
 		weekViewEvents[Utils.monthKey(month, year)]?.toList() ?: listOf()
 
-	fun getBytUnitIdAndGroupNumber(unitId: String, groupNumber: Int) =
+	fun getByUnitIdAndGroupNumber(unitId: String, groupNumber: Int) =
 		repositoryTimetable.getByUnitIdAndGroupNumber(unitId, groupNumber)
 
 	fun getByRoomId(roomId: String) = repositoryTimetable.getByRoomId(roomId)

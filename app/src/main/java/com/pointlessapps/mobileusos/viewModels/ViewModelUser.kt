@@ -46,7 +46,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
 
 	fun getSurveysById(id: String) = repositorySurvey.getById(id)
 
-	fun fillOutSurvey(id: String, answers: Map<String, String>, comment: String?) =
+	fun fillOutSurvey(id: String, answers: Map<String, Map<String, Any?>>, comment: String?) =
 		repositorySurvey.fillOutSurvey(
 			id,
 			answers,

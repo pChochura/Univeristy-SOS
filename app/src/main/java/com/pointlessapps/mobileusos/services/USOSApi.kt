@@ -39,6 +39,7 @@ open class USOSApi {
 		GsonBuilder()
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 			.setDateFormat("yyyy-MM-dd HH:mm:ss")
+			.serializeNulls()
 			.create()
 	}
 

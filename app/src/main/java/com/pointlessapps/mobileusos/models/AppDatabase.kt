@@ -29,7 +29,7 @@ import com.pointlessapps.mobileusos.utils.Utils
 		Chapter::class,
 		Test.Node::class,
 	],
-	version = 13
+	version = 14
 )
 @TypeConverters(
 	ConvertersCommon::class,

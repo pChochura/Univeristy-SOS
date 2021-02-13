@@ -43,6 +43,12 @@ data class Survey(
 	@ColumnInfo(name = "survey_type")
 	@SerializedName("survey_type")
 	var surveyType: String? = null,
+	@ColumnInfo(name = "has_final_comment")
+	@SerializedName("has_final_comment")
+	var hasFinalComment: Boolean = true,
+	@ColumnInfo(name = "faculty")
+	@SerializedName("faculty")
+	var faculty: User.Faculty? = null,
 	@PrimaryKey
 	@SerializedName("id")
 	var id: String = ""
@@ -59,13 +65,17 @@ data class Survey(
 		@SerializedName("possible_answers")
 		var possibleAnswers: List<Answer>?,
 		@SerializedName("display_text_html")
-		var displayTextHtml: Name,
+		var displayTextHtml: Name?,
 		@SerializedName("level")
 		var level: Int,
 		@SerializedName("number")
 		var number: String,
 		@SerializedName("id")
-		var id: String
+		var id: String,
+		@SerializedName("allow_comment")
+		var allowComment: Boolean,
+		@SerializedName("comment_length")
+		var commentLength: Int?
 	) {
 
 		@Keep

@@ -25,4 +25,7 @@ class ConvertersUser {
 	fun toUser(user: String?): User? {
 		return Gson().fromJson(user ?: return User())
 	}
+
+	@TypeConverter
+	fun toFaculty(faculty: String): User.Faculty = Gson().fromJson(faculty)
 }

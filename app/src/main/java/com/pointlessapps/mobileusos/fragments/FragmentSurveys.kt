@@ -33,7 +33,7 @@ class FragmentSurveys :
 							if (it.key == true) getString(R.string.filled_out) else getString(
 								R.string.to_fill_out
 							),
-							it.value
+							it.value.sortedBy(Survey::id)
 						)
 					}
 			)

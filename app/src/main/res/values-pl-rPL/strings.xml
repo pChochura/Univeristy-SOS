@@ -192,4 +192,7 @@
 	<string name="edit_the_note">Edytuj notatkę</string>
 	<string name="event_note">Notatka wydarzenia</string>
 	<string name="note_content">Zawartość notatki</string>
+	<string name="meeting">Spotkanie</string>
+	<string name="no_email_address">Brak adresu email</string>
+	<string name="no_name_survey">Brak nazwy ankiety</string>
 </resources>

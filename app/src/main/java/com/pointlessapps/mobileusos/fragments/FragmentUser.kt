@@ -113,7 +113,10 @@ class FragmentUser(private val id: String) :
 			)
 			binding().listPhoneNumbers.setEmptyText(getString(R.string.no_phone_numbers))
 
-			binding().userEmail.text = user.email
+			binding().userEmail.text = user.email ?: let {
+				binding().buttonEmail.isClickable = false
+				requireContext().getString(R.string.no_email_address)
+			}
 			binding().userOfficeHours.text = user.officeHours?.toString()
 			binding().userInterests.text = user.interests?.toString()
 			binding().userRoom.text = user.room?.number

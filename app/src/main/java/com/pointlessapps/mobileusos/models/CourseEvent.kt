@@ -55,7 +55,13 @@ data class CourseEvent(
 	var classtypeName: Name? = null,
 	@ColumnInfo(name = "lecturer_ids")
 	@SerializedName("lecturer_ids")
-	var lecturerIds: List<String>? = null
+	var lecturerIds: List<String>? = null,
+	@ColumnInfo(name = "related_user_ids")
+	@SerializedName("related_user_ids")
+	var relatedUserIds: List<String>? = null,
+	@ColumnInfo(name = "name")
+	@SerializedName("name")
+	var name: Name? = null
 ) : Comparable<CourseEvent> {
 
 	fun compositeId() =
@@ -63,6 +69,11 @@ data class CourseEvent(
 
 	private fun compositeName() =
 		"${courseName.toString()}${if (roomNumber.isNullOrBlank()) "" else " ($roomNumber)"} - ${classtypeName.toString()}"
+
+	fun name(withCourseName: Boolean = true) =
+		courseName?.takeIf { withCourseName }?.toString() ?:
+			classtypeName?.toString() ?:
+				name.toString()
 
 	fun toWeekViewEvent() = WeekView.WeekViewEvent(
 		compositeId(),
@@ -75,9 +86,8 @@ data class CourseEvent(
 		}).apply {
 		color = Utils.getColorByClassType(classtypeId ?: return@apply)
 		setHasOutline(
-			Preferences.get().getTimetableOutlineRemote() && buildingId?.toLowerCase(
-				Locale.getDefault()
-			) == "zdalny"
+			Preferences.get().getTimetableOutlineRemote() &&
+					buildingId?.toLowerCase(Locale.forLanguageTag("pl")) == "zdalny"
 		)
 	}
 

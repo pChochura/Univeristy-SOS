@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.fragments
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,6 @@ abstract class FragmentCoreImpl<Binding : ViewBinding>(private val bindingClass:
 		savedInstanceState: Bundle?
 	): View? {
 		if (binding == null || forceRefresh) {
-			Log.d("LOG!", "class: $bindingClass")
 			binding = bindingClass.getMethod(
 				"inflate",
 				LayoutInflater::class.java,

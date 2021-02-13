@@ -261,11 +261,11 @@ class ClientUSOSService private constructor() : USOSApi() {
 
 	fun surveysToFillRequest() = OAuthRequest(
 		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/surveys_to_fill")
+		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/surveys_to_fill2")
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles]|group[class_type_id|term_id|course_id|course_name|class_type]"
+				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles]|group[class_type_id|term_id|course_id|course_name|class_type]|faculty|headline_html"
 			)
 			.appendQueryParameter("include_filled_out", "true")
 			.build().toString()
@@ -273,24 +273,24 @@ class ClientUSOSService private constructor() : USOSApi() {
 
 	fun surveyRequest(surveyId: String) = OAuthRequest(
 		Verb.GET,
-		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/survey")
+		Uri.parse("${selectedUniversity?.serviceUrl}/surveys/survey2")
 			.buildUpon()
 			.appendQueryParameter(
 				"fields",
-				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles|photo_urls[200x200]]|group[class_type_id|term_id|course_id|course_name|class_type]|questions"
+				"id|survey_type|end_date|can_i_fill_out|did_i_fill_out|lecturer[id|first_name|last_name|titles|photo_urls[200x200]]|group[class_type_id|term_id|course_id|course_name|class_type]|questions|has_final_comment|faculty|headline_html"
 			)
 			.appendQueryParameter("survey_id", surveyId)
 			.build().toString()
 	)
 
-	fun fillOutSurveyRequest(surveyId: String, answers: Map<String, String>, comment: String?) =
+	fun fillOutSurveyRequest(surveyId: String, answers: Map<String, Map<String, Any?>>, comment: String?) =
 		OAuthRequest(
 			Verb.GET,
-			Uri.parse("${selectedUniversity?.serviceUrl}/surveys/fill_out")
+			Uri.parse("${selectedUniversity?.serviceUrl}/surveys/fill_out2")
 				.buildUpon()
 				.appendQueryParameter("survey_id", surveyId)
 				.appendQueryParameter("answers", gson.toJson(answers))
-				.appendQueryParameter("comment", comment ?: "")
+				.appendQueryParameter("comment", comment)
 				.build().toString()
 		)
 

@@ -21,7 +21,7 @@ class FragmentSurvey(private var survey: Survey) :
 	FragmentCoreImpl<FragmentSurveyBinding>(FragmentSurveyBinding::class.java) {
 
 	private val viewModelUser by viewModels<ViewModelUser>()
-	private val answers = mutableMapOf<String, String>()
+	private val answers = mutableMapOf<String, MutableMap<String, Any?>>()
 
 	override fun created() {
 		prepareData()
@@ -62,7 +62,13 @@ class FragmentSurvey(private var survey: Survey) :
 				Picasso.get().load(it).into(binding().lecturerProfileImg)
 			}
 		} else {
-			binding().surveyHeadline.text = Utils.stripHtmlTags(survey.headlineHtml.toString())
+			binding().surveyHeadline.text = Utils.stripHtmlTags(
+				survey.headlineHtml ?: requireContext().getString(
+					R.string.course_info_general,
+					survey.faculty?.name.toString(),
+					survey.id.substringAfter("|").substringBeforeLast("|")
+				)
+			)
 			binding().sectionCourse.isGone = true
 			binding().surveyHeadline.isGone = false
 		}
@@ -76,7 +82,16 @@ class FragmentSurvey(private var survey: Survey) :
 		binding().listQuestions.apply {
 			adapter = AdapterQuestion().apply {
 				onCheckedListener = { questionId, answerId ->
-					answers[questionId] = answerId
+					if (answers[questionId] == null) {
+						answers[questionId] = mutableMapOf()
+					}
+					answers[questionId]!!["answers"] = listOf(answerId)
+				}
+				onCommentChangedListener = { questionId, comment ->
+					if (answers[questionId] == null) {
+						answers[questionId] = mutableMapOf()
+					}
+					answers[questionId]!!["comment"] = comment
 				}
 			}
 			layoutManager =
@@ -127,7 +142,8 @@ class FragmentSurvey(private var survey: Survey) :
 			}
 
 			viewModelUser.fillOutSurvey(
-				survey.id, answers,
+				survey.id,
+				answers,
 				binding().inputComment.text?.toString()
 			).onFinished {
 				toggle()

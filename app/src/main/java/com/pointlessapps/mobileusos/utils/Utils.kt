@@ -63,7 +63,7 @@ object Utils {
 	fun calendarIntent(context: Context, event: CourseEvent) {
 		val insertCalendarIntent = Intent(Intent.ACTION_INSERT)
 			.setData(CalendarContract.Events.CONTENT_URI)
-			.putExtra(CalendarContract.Events.TITLE, event.courseName.toString())
+			.putExtra(CalendarContract.Events.TITLE, event.name())
 			.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false)
 			.putExtra(
 				CalendarContract.EXTRA_EVENT_BEGIN_TIME,
@@ -83,7 +83,7 @@ object Utils {
 			)
 			.putExtra(
 				CalendarContract.Events.CALENDAR_COLOR,
-				getColorByClassType(event.classtypeId ?: "")
+				getColorByClassType(event.classtypeId ?: context.getString(R.string.meeting))
 			)
 			.putExtra(
 				CalendarContract.Events.ACCESS_LEVEL,
@@ -205,10 +205,11 @@ object Utils {
 
 		DialogUtil.create(context, DialogShowEventBinding::class.java, { dialog ->
 			val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-			dialog.eventName.text = event.courseName.toString()
+			dialog.eventName.text = event.name()
 			dialog.eventStartTime.text = hourFormat.format(event.startTime.time)
 			dialog.eventEndTime.text = hourFormat.format(event.endTime?.time ?: return@create)
-			dialog.eventType.text = event.classtypeName.toString()
+			dialog.eventType.text =
+				event.classtypeName?.toString() ?: context.getString(R.string.meeting)
 			dialog.eventMemo.text = event.memo?.takeUnless(String::isNullOrEmpty)?.also {
 				dialog.eventMemo.isVisible = true
 				dialog.buttonAddNote.setText(R.string.edit_the_note)
@@ -226,13 +227,18 @@ object Utils {
 				dialog.buttonGroup.isVisible = true
 				dialog.buttonGroup.text = context.resources.getString(R.string.group_number, it)
 			}
-			viewModelUser.getUserById(event.lecturerIds?.firstOrNull() ?: return@create)
-				.onOnceCallback { (user) ->
-					GlobalScope.launch(Dispatchers.Main) {
-						user?.name()?.takeIf(String::isNotBlank)
-							?.also { dialog.buttonLecturer.text = it }
+			val userId = run {
+				event.lecturerIds?.firstOrNull() ?: event.relatedUserIds?.firstOrNull()
+			}
+			userId?.also { id ->
+				viewModelUser.getUserById(id)
+					.onOnceCallback { (user) ->
+						GlobalScope.launch(Dispatchers.Main) {
+							user?.name()?.takeIf(String::isNotBlank)
+								?.also { dialog.buttonLecturer.text = it }
+						}
 					}
-				}
+			}
 
 			dialog.buttonGroup.setOnClickListener {
 				onChangeFragment?.invoke(FragmentCourse("${event.unitId}#${event.groupNumber}"))
@@ -241,11 +247,7 @@ object Utils {
 			}
 
 			dialog.buttonLecturer.setOnClickListener {
-				onChangeFragment?.invoke(
-					FragmentUser(
-						event.lecturerIds?.firstOrNull() ?: return@setOnClickListener
-					)
-				)
+				onChangeFragment?.invoke(FragmentUser(userId ?: return@setOnClickListener))
 
 				dismiss()
 			}
@@ -258,9 +260,7 @@ object Utils {
 
 			dialog.buttonBuilding.setOnClickListener {
 				onChangeFragment?.invoke(
-					FragmentBuilding(
-						event.buildingId ?: return@setOnClickListener
-					)
+					FragmentBuilding(event.buildingId ?: return@setOnClickListener)
 				)
 
 				dismiss()
@@ -294,8 +294,6 @@ object Utils {
 		protected var instance: T? = null
 
 		fun init(arg: A? = null): T {
-			if (instance != null) return instance!!
-
 			return synchronized(this) {
 				if (instance != null) instance!!
 				else {

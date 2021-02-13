@@ -2,11 +2,10 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.Keep
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -113,12 +112,11 @@ class FragmentCourse(id: String) :
 
 	private fun prepareCourseData(course: Course) {
 		binding().courseName.text = course.courseName.toString()
-		binding().courseInfo.text =
-			getString(
-				R.string.course_info,
-				course.classType.toString().capitalize(Locale.getDefault()),
-				course.groupNumber
-			)
+		binding().courseInfo.text = getString(
+			R.string.course_info,
+			course.classType.toString().capitalize(Locale.getDefault()),
+			course.groupNumber
+		)
 		binding().courseDescription.text =
 			course.courseDescription.toString().replace("&nbsp;", " ")
 
@@ -142,7 +140,7 @@ class FragmentCourse(id: String) :
 			binding().courseLearningOutcomes.removeAllViews()
 			html.select("table").firstOrNull()?.also { table ->
 				table.select("tr").forEach {
-					val row =TableItemRowBinding.inflate(layoutInflater).root
+					val row = TableItemRowBinding.inflate(layoutInflater).root
 					it.select("td").map {
 						row.addView(
 							(TableItemCellBinding.inflate(layoutInflater, row, false).root).apply {
@@ -158,7 +156,7 @@ class FragmentCourse(id: String) :
 	private fun prepareData(callback: (() -> Unit)? = null) {
 		val loaded = CountDownLatch(3)
 
-		viewModelTimetable.getBytUnitIdAndGroupNumber(courseUnitId, groupNumber)
+		viewModelTimetable.getByUnitIdAndGroupNumber(courseUnitId, groupNumber)
 			.observe(this) { (list) ->
 				(binding().listMeetings.adapter as? AdapterMeeting)?.update(list)
 			}.onFinished { loaded.countDown() }

@@ -29,7 +29,7 @@ class ServiceUSOSSurvey private constructor() {
 			}
 		}
 
-	suspend fun fillOut(id: String, answers: Map<String, String>, comment: String?) =
+	suspend fun fillOut(id: String, answers: Map<String, Map<String, Any?>>, comment: String?) =
 		withContext(Dispatchers.IO) {
 			clientService.run {
 				execute(fillOutSurveyRequest(id, answers, comment))?.run {

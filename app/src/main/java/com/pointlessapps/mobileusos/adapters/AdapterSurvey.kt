@@ -3,7 +3,6 @@ package com.pointlessapps.mobileusos.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.intrusoft.sectionedrecyclerview.Section
@@ -72,10 +71,12 @@ class AdapterSurvey(private val context: Context, sections: List<SectionHeader> 
 				survey.group?.courseName?.toString(),
 				survey.group?.classType?.toString()
 			)
-			itemView.binding.surveyName.isGone = false
 		} else {
-			itemView.binding.surveyLecturer.text = Utils.stripHtmlTags(survey.name.toString())
-			itemView.binding.surveyName.isGone = true
+			itemView.binding.surveyLecturer.text = Utils.stripHtmlTags(
+				survey.name?.toString() ?: survey.faculty?.name?.toString()
+				?: context.getString(R.string.no_name_survey)
+			)
+			itemView.binding.surveyName.text = survey.id.substringAfter("|").substringBeforeLast("|")
 		}
 		itemView.binding.surveyDate.text = context.getString(R.string.date).format(survey.endDate)
 	}

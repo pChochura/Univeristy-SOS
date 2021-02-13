@@ -207,4 +207,7 @@
 	<string name="edit_the_note">Edit the note</string>
 	<string name="event_note">Event note</string>
 	<string name="note_content">Note content</string>
+	<string name="meeting">Meeting</string>
+	<string name="no_email_address">No email address</string>
+	<string name="no_name_survey">No name survey</string>
 </resources>

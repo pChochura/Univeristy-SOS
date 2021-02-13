@@ -60,7 +60,7 @@ class RepositorySurvey(context: Context) {
 		}
 	}
 
-	fun fillOutSurvey(id: String, answers: Map<String, String>, comment: String?) =
+	fun fillOutSurvey(id: String, answers: Map<String, Map<String, Any?>>, comment: String?) =
 		ObserverWrapper<Map<String, Any>?> {
 			postValue(SourceType.ONLINE) {
 				serviceSurvey.fillOut(id, answers, comment)

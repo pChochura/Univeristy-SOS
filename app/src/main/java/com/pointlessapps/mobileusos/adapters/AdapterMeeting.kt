@@ -21,12 +21,7 @@ class AdapterMeeting(private val showCourseName: Boolean = false) :
 	override fun isCollapsible() = true
 
 	override fun onBind(binding: ListItemMeetingBinding, position: Int) {
-		binding.meetingName.text =
-			if (showCourseName) {
-				list[position].courseName.toString()
-			} else {
-				list[position].classtypeName.toString()
-			}
+		binding.meetingName.text = list[position].name(showCourseName)
 		binding.meetingDate.text = dateFormat.format(list[position].startTime)
 		binding.meetingTime.text = binding.root.context.getString(
 			R.string.time_period,

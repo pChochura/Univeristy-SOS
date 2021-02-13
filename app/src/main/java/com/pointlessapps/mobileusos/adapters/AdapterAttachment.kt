@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.adapters
 
+import android.annotation.SuppressLint
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.viewbinding.ViewBinding
 import com.pointlessapps.mobileusos.R
@@ -41,6 +42,7 @@ class AdapterAttachment(private val canAddAttachment: Boolean = false) :
 			+ViewType.SIMPLE
 		}
 
+	@SuppressLint("SetTextI18n")
 	override fun onBind(binding: ViewBinding, position: Int) {
 		binding.root.setOnClickListener {
 			if (getItemViewType(position) == +ViewType.ADD) {

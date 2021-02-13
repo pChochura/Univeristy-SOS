@@ -106,6 +106,7 @@
 		android:textAlignment="viewStart"
 		android:textAllCaps="false"
 		android:textColor="?colorTextPrimary"
+		android:visibility="gone"
 		app:backgroundTint="?white"
 		app:icon="@drawable/ic_courses"
 		app:iconTint="?colorTextPrimary"

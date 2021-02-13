@@ -23,4 +23,23 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="5dp" />
 
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/inputComment"
+		style="@style/Widget.AppCompat.EditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:background="@drawable/background_rounded"
+		android:backgroundTint="?colorBackground"
+		android:fontFamily="@font/montserrat"
+		android:gravity="top"
+		android:hint="@string/some_comment"
+		android:minHeight="75dp"
+		android:padding="10dp"
+		android:textColor="?colorTextPrimary"
+		android:textColorHint="?colorTextSecondary"
+		android:textSize="14sp"
+		android:visibility="gone" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>
