@@ -197,7 +197,8 @@ object Utils {
 		context: Context,
 		event: CourseEvent?,
 		viewModelUser: ViewModelUser,
-		onChangeFragment: ((FragmentCore<*>) -> Unit)?
+		onChangeFragment: ((FragmentCore<*>) -> Unit)?,
+		onCommentChanged: ((String?) -> Unit)? = null
 	) {
 		if (event == null) {
 			return
@@ -268,20 +269,25 @@ object Utils {
 
 			dialog.buttonAddToCalendar.setOnClickListener { calendarIntent(context, event) }
 			dialog.buttonAddNote.setOnClickListener {
-				showEventMemoEdit(context, event)
+				showEventMemoEdit(context, event, onCommentChanged)
 				dismiss()
 			}
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
 	}
 
-	private fun showEventMemoEdit(context: Context, event: CourseEvent) {
+	private fun showEventMemoEdit(
+		context: Context,
+		event: CourseEvent,
+		onCommentChanged: ((String?) -> Unit)?
+	) {
 		DialogUtil.create(context, DialogMemoBinding::class.java, { dialog ->
 			dialog.memoContent.setText(event.memo ?: "")
 
 			dialog.buttonPrimary.setOnClickListener {
-				event.memo = dialog.memoContent.text.toString()
+				event.memo = dialog.memoContent.text?.toString()
 				RepositoryTimetable(context).insert(event)
 				dismiss()
+				onCommentChanged?.invoke(event.memo)
 			}
 			dialog.buttonSecondary.setOnClickListener { dismiss() }
 		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)

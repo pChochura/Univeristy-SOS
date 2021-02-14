@@ -32,6 +32,7 @@
 		android:backgroundTint="?colorBackground"
 		android:fontFamily="@font/montserrat"
 		android:hint="@string/note_content"
+		android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textAutoComplete"
 		android:paddingLeft="10dp"
 		android:paddingTop="10dp"
 		android:paddingRight="10dp"

@@ -74,6 +74,9 @@ class FragmentTimetable :
 			return
 		}
 
-		Utils.showCourseInfo(requireContext(), event, viewModelUser, onChangeFragment)
+		Utils.showCourseInfo(requireContext(), event, viewModelUser, onChangeFragment) {
+			weekViewEvent.comment = it
+			binding().weekView.refreshDataset()
+		}
 	}
 }

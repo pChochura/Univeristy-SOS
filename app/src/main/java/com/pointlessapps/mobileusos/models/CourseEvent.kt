@@ -83,7 +83,9 @@ data class CourseEvent(
 		},
 		Calendar.getInstance().apply {
 			time = endTime!!
-		}).apply {
+		},
+		memo
+	).apply {
 		color = Utils.getColorByClassType(classtypeId ?: return@apply)
 		setHasOutline(
 			Preferences.get().getTimetableOutlineRemote() &&

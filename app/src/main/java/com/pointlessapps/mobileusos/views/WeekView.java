@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -147,6 +148,8 @@ public class WeekView extends View {
 
 	private LinearGradient dayHeaderShadow;
 	private LinearGradient hourHeaderShadow;
+
+	private Drawable commentDrawable;
 
 	public WeekView(Context context, @Nullable AttributeSet attrs) {
 		this(context, attrs, 0, 0);
@@ -291,6 +294,10 @@ public class WeekView extends View {
 				Color.argb(0, 0, 0, 0),
 				Shader.TileMode.CLAMP
 		);
+
+		commentDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_note, null);
+		assert commentDrawable != null;
+		commentDrawable.setAlpha(150);
 
 		post(() -> {
 			computeMaxOffset();
@@ -785,6 +792,19 @@ public class WeekView extends View {
 					canvas.drawRoundRect(left, top, right, top + dp5 * 0.5f, eventCornerRadius, eventCornerRadius, eventPaint);
 				}
 
+				if (eventRect.event.comment != null && !eventRect.event.comment.isEmpty()) {
+					float maxWidth = Math.min(eventRect.rectF.width(), eventRect.rectF.height()) - 50;
+					float horizontalOffset = (eventRect.rectF.width() - maxWidth) * 0.5f;
+					float verticalOffset = (eventRect.rectF.height() - maxWidth) * 0.5f;
+					commentDrawable.setBounds(
+							(int) (left + horizontalOffset),
+							(int) (top + verticalOffset),
+							(int) (right - horizontalOffset),
+							(int) (bottom - verticalOffset)
+					);
+					commentDrawable.draw(canvas);
+				}
+
 				drawEventTitle(eventRect.event, eventRect.rectF, canvas, eventRect.rectF.top, eventRect.rectF.left);
 			}
 		}
@@ -1114,59 +1134,14 @@ public class WeekView extends View {
 		private String mName;
 		private int mColor;
 		private boolean hasOutline;
+		private String comment;
 
-		public WeekViewEvent() {
-		}
-
-		/**
-		 * Initializes the event for week view.
-		 *
-		 * @param id          The id of the event.
-		 * @param name        Name of the event.
-		 * @param startYear   Year when the event starts.
-		 * @param startMonth  Month when the event starts.
-		 * @param startDay    Day when the event starts.
-		 * @param startHour   Hour (in 24-hour format) when the event starts.
-		 * @param startMinute Minute when the event starts.
-		 * @param endYear     Year when the event ends.
-		 * @param endMonth    Month when the event ends.
-		 * @param endDay      Day when the event ends.
-		 * @param endHour     Hour (in 24-hour format) when the event ends.
-		 * @param endMinute   Minute when the event ends.
-		 */
-		public WeekViewEvent(long id, String name, int startYear, int startMonth, int startDay, int startHour, int startMinute, int endYear, int endMonth, int endDay, int endHour, int endMinute) {
-			this.mId = id;
-
-			this.mStartTime = Calendar.getInstance();
-			this.mStartTime.set(Calendar.YEAR, startYear);
-			this.mStartTime.set(Calendar.MONTH, startMonth - 1);
-			this.mStartTime.set(Calendar.DAY_OF_MONTH, startDay);
-			this.mStartTime.set(Calendar.HOUR_OF_DAY, startHour);
-			this.mStartTime.set(Calendar.MINUTE, startMinute);
-
-			this.mEndTime = Calendar.getInstance();
-			this.mEndTime.set(Calendar.YEAR, endYear);
-			this.mEndTime.set(Calendar.MONTH, endMonth - 1);
-			this.mEndTime.set(Calendar.DAY_OF_MONTH, endDay);
-			this.mEndTime.set(Calendar.HOUR_OF_DAY, endHour);
-			this.mEndTime.set(Calendar.MINUTE, endMinute);
-
-			this.mName = name;
-		}
-
-		/**
-		 * Initializes the event for week view.
-		 *
-		 * @param id        The id of the event.
-		 * @param name      Name of the event.
-		 * @param startTime The time when the event starts.
-		 * @param endTime   The time when the event ends.
-		 */
-		public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime) {
+		public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, String comment) {
 			this.mId = id;
 			this.mName = name;
 			this.mStartTime = startTime;
 			this.mEndTime = endTime;
+			this.comment = comment;
 		}
 
 		public Calendar getStartTime() {
@@ -1215,6 +1190,14 @@ public class WeekView extends View {
 
 		public void setId(long id) {
 			this.mId = id;
+		}
+
+		public String getComment() {
+			return comment;
+		}
+
+		public void setComment(String comment) {
+			this.comment = comment;
 		}
 
 		@Override
