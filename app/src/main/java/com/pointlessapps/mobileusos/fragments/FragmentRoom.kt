@@ -31,6 +31,8 @@ class FragmentRoom(private val id: String) :
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 	private val viewModelTimetable by viewModels<ViewModelTimetable>()
 
+	private var room: BuildingRoom? = null
+
 	override fun getShortcut(fragment: FragmentCoreImpl<*>, callback: (Pair<Int, String>) -> Unit) {
 		callback(R.drawable.ic_room to fragment.getString(R.string.loading))
 		ViewModelProvider(fragment).get(ViewModelCommon::class.java).getRoomById(id)
@@ -74,6 +76,7 @@ class FragmentRoom(private val id: String) :
 				return@observe
 			}
 
+			this.room = room
 			binding().roomName.text = room.number.toString()
 
 			room.building?.name?.toString()?.also { buildingName ->
@@ -145,8 +148,12 @@ class FragmentRoom(private val id: String) :
 
 	private fun prepareMeetingsList() {
 		binding().listMeetings.setAdapter(AdapterMeeting(true).apply {
-			onClickListener =
-				{ Utils.showCourseInfo(requireContext(), it, viewModelUser, onChangeFragment) }
+			onClickListener = {
+				Utils.showCourseInfo(requireContext(), it.apply {
+					roomNumber = room?.number
+					buildingName = room?.building?.name
+				}, viewModelUser, onChangeFragment)
+			}
 		})
 		binding().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 	}

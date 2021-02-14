@@ -35,6 +35,10 @@ open class USOSApi {
 		SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 	}
 
+	protected val datetimeFormat: DateFormat by lazy {
+		SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+	}
+
 	val gson: Gson by lazy {
 		GsonBuilder()
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

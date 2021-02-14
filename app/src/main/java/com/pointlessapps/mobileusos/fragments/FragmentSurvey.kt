@@ -44,7 +44,8 @@ class FragmentSurvey(private var survey: Survey) :
 			prepareData()
 			prepareQuestions()
 			binding().horizontalProgressBar.isRefreshing = false
-			binding().sectionComment.isVisible = true
+			binding().buttonSend.isVisible = true
+			binding().sectionComment.isVisible = survey.hasFinalComment
 		}
 	}
 
@@ -149,7 +150,7 @@ class FragmentSurvey(private var survey: Survey) :
 						"comment" to it.value.getOrDefault("comment", null)
 					)
 				},
-				binding().inputComment.text?.toString()
+				binding().inputComment.text?.takeIf { survey.hasFinalComment }?.toString()
 			).onFinished {
 				toggle()
 				if (it !== null) {

@@ -36,7 +36,7 @@ class RepositoryArticle(context: Context) {
 				*articleDao.getAllCategories().filterNot { category ->
 					category.name?.toString().isNullOrBlank()
 				}.toTypedArray(),
-				Article.Category("default", Name("Bez kategorii", "No category"))
+				Article.Category("default", Name("Brak kategorii", "No category"))
 			)
 		}
 		postValue(SourceType.ONLINE) { serviceArticle.getAllCategories() }
