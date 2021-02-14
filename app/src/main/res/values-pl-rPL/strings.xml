@@ -195,4 +195,6 @@
 	<string name="meeting">Spotkanie</string>
 	<string name="no_email_address">Brak adresu email</string>
 	<string name="no_name_survey">Brak nazwy ankiety</string>
+	<string name="add_missing_breaks">Dodaj brakujące przerwy</string>
+	<string name="add_missing_breaks_description">Jeżeli dane zajęcia nie mają zdefiniowanej przerwy, dodaj ją</string>
 </resources>

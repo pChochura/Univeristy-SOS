@@ -104,7 +104,15 @@ class FragmentSettings :
 			valueSwitch = { prefs.getTimetableOutlineRemote() }
 			onTapped {
 				prefs.putTimetableOutlineRemote(!prefs.getTimetableOutlineRemote())
-				onForceRefreshAllFragments?.invoke()
+				onForceRecreate?.invoke()
+			}
+		}
+
+		binding().itemAddMissingBreaks.apply {
+			valueSwitch = { prefs.getTimetableMissingBreaks() }
+			onTapped {
+				prefs.putTimetableMissingBreaks(!prefs.getTimetableMissingBreaks())
+				onForceRecreate?.invoke()
 			}
 		}
 

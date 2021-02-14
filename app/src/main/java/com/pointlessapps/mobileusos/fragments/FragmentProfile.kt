@@ -20,6 +20,7 @@ import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.doAsync
+import java.util.*
 import java.util.concurrent.Phaser
 import kotlin.reflect.full.primaryConstructor
 
@@ -118,7 +119,8 @@ class FragmentProfile :
 
 		loaded.register()
 		viewModelTimetable.getIncoming().observe(this) { (events) ->
-			(binding().listMeetings.adapter as? AdapterMeeting)?.update(events.filterNotNull())
+			val calendarTime = Calendar.getInstance().timeInMillis
+			(binding().listMeetings.adapter as? AdapterMeeting)?.update(events.filterNotNull().filter { it.startTime.time >= calendarTime })
 
 			binding().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))
 		}.onFinished { loaded.arriveAndDeregister() }

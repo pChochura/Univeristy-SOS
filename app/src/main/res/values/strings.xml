@@ -210,4 +210,6 @@
 	<string name="meeting">Meeting</string>
 	<string name="no_email_address">No email address</string>
 	<string name="no_name_survey">No name survey</string>
+	<string name="add_missing_breaks">Add missing classes breaks</string>
+	<string name="add_missing_breaks_description">If the class doesn\'t have defined break add one</string>
 </resources>

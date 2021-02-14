@@ -1,6 +1,8 @@
 package com.pointlessapps.mobileusos.repositories
 
 import android.content.Context
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getTimetableMissingBreaks
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.models.CourseEvent
 import com.pointlessapps.mobileusos.services.ServiceUSOSTimetable
@@ -48,12 +50,17 @@ class RepositoryTimetable(context: Context) {
 	}
 
 	private fun setBreaks(courses: List<CourseEvent>): List<CourseEvent> {
+		if (!Preferences.get().getTimetableMissingBreaks()) {
+			return courses
+		}
+
 		val breakLength = -15
+		val calendar = Calendar.getInstance()
 		return courses.sorted().also {
 			for (i in 0 until it.lastIndex) {
 				if (it[i].endTime!!.compareTo(it[i + 1].startTime) == 0) {
 					it.forEach { course ->
-						course.endTime!!.time = GregorianCalendar().apply {
+						course.endTime!!.time = calendar.apply {
 							time = course.endTime!!
 							add(Calendar.MINUTE, breakLength)
 						}.timeInMillis
