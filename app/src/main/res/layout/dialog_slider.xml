@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:cardBackgroundColor="?white"
+	app:cardCornerRadius="5dp"
+	app:cardElevation="0dp">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="20dp">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:gravity="center"
+			android:text="@string/select_visible_period"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="18sp"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<com.google.android.material.slider.Slider
+			android:id="@+id/slider"
+			style="@style/Widget.MaterialComponents.Slider"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:stepSize="1"
+			android:valueFrom="0"
+			android:valueTo="24"
+			app:labelBehavior="withinBounds"
+			app:layout_constraintTop_toBottomOf="@id/title"
+			app:thumbColor="@color/colorAccent"
+			app:thumbElevation="0dp"
+			app:thumbRadius="10dp"
+			app:tickColor="@android:color/transparent"
+			app:trackColorActive="@color/colorAccent"
+			app:trackColorInactive="?colorBackground"
+			app:trackHeight="6dp"
+			app:values="@array/initial_visible_period" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonPrimary"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="20dp"
+			android:fontFamily="@font/montserrat_bold"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@string/confirm"
+			android:textAllCaps="false"
+			android:textColor="@color/colorAccent"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/slider" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

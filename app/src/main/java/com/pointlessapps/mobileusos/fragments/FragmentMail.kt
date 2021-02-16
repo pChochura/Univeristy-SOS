@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterAttachment
@@ -128,6 +127,6 @@ class FragmentMail(private var email: Email) :
 			}
 			dialog.buttonSecondary.setText(R.string.cancel)
 			dialog.buttonSecondary.setOnClickListener { dismiss() }
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 }

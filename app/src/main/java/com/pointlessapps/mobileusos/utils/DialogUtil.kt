@@ -24,7 +24,7 @@ class DialogUtil<Binding : ViewBinding> private constructor(
 			context: Context,
 			bindingClass: Class<Binding>,
 			callback: Dialog.(Binding) -> Unit,
-			vararg windowSize: Int
+			vararg windowSize: Int = intArrayOf(UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 		) {
 			val dialog = DialogUtil(context, bindingClass, windowSize)
 			dialog.makeDialog { binding, dialogView ->
@@ -37,7 +37,7 @@ class DialogUtil<Binding : ViewBinding> private constructor(
 			context: Context,
 			bindingClass: Class<Binding>,
 			callback: StatefulDialog<Binding>.(Binding) -> Unit,
-			vararg windowSize: Int
+			vararg windowSize: Int = intArrayOf(UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
 		) {
 			val dialog = DialogUtil(context, bindingClass, windowSize)
 			dialog.makeDialog { binding, dialogView ->

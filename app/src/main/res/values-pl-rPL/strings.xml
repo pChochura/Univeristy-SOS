@@ -197,4 +197,24 @@
 	<string name="no_name_survey">Brak nazwy ankiety</string>
 	<string name="add_missing_breaks">Dodaj brakujące przerwy</string>
 	<string name="add_missing_breaks_description">Jeżeli dane zajęcia nie mają zdefiniowanej przerwy, dodaj ją</string>
+	<string name="widget_configuration">Konfiguracja widgetu</string>
+	<string name="number_of_visible_hours_before">Liczba widocznych godzin do teraz</string>
+	<string name="number_of_visible_hours_after">Liczba widocznych godzin od teraz</string>
+	<string name="number_of_visible_hours_before_description">Oznacza ile godzin będzie widocznych wstecz</string>
+	<string name="number_of_visible_hours_after_description">Oznacza ile godzin będzie widocznych do przodu</string>
+	<string name="widget_customization">Personalizacja widgetu</string>
+	<string name="number_of_visible_hours_before_title">Ile godzin wstecz do teraz powinno być widocznych?</string>
+	<string name="number_of_visible_hours_after_title">Ile godzin do przodu powinno być widocznych?</string>
+	<string name="future_background_color">Kolor tła dla przyszłości</string>
+	<string name="past_background_color">Kolor tła dla przeszłości</string>
+	<string name="weekends_background_color">Kolor tła dla weekendów</string>
+	<string name="now_line_color">Kolor linii wskazującej czas</string>
+	<string name="today_header_text_color">Kolor tekstu nagłówka wskazującego dzisiejszą datę</string>
+	<string name="header_text_color">Kolor tekstu nagłówka</string>
+	<string name="header_background_color">Kolor tła nagłówka</string>
+	<string name="divider_line_color">Kolor linii działowej</string>
+	<string name="transparency">Przezroczystość</string>
+	<string name="transparency_description">Oznacza jak bardzo przezroczysty ma być widget</string>
+	<string name="button_settings">Przycisk ustawień</string>
+	<string name="reset_widget_settings">Zresetuj ustawienia widgetu</string>
 </resources>

@@ -2,6 +2,7 @@ package com.pointlessapps.mobileusos.utils
 
 import android.content.res.Resources
 import android.util.Patterns
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.size
@@ -16,6 +17,9 @@ fun AppPreferences.putJson(key: String, obj: Any) = put(key, Gson().toJson(obj))
 
 val Int.dp: Int
 	get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.px: Int
+	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
 
 inline fun <reified T> AppPreferences.getJson(key: String, default: String = ""): T =
 	Gson().fromJson(getString(key, default), T::class.java)

@@ -51,7 +51,10 @@ public class WeekView extends View {
 
 	public static final int MIN_NUMBER_OF_VISIBLE_DAYS = 3;
 	public static final int MAX_NUMBER_OF_VISIBLE_DAYS = 7;
-
+	private final float startHourHeight = 200;
+	private final float startDayWidth = 200;
+	private final int scrollDuration = 300;
+	private final int snappingThreshold = 2;
 	private EmptyViewClickListener emptyViewClickListener;
 	private DateTimeInterpreter dateTimeInterpreter;
 	private MonthChangeListener monthChangeListener;
@@ -61,10 +64,8 @@ public class WeekView extends View {
 	private ScrollListener scrollListener;
 	private OverScroller scroller;
 	private Calendar today;
-
 	private Map<String, List<WeekViewEvent>> eventsByMonths;
 	private List<EventRect> eventRects;
-
 	private float offsetX;
 	private float offsetY;
 	private float maxOffsetY;
@@ -74,16 +75,10 @@ public class WeekView extends View {
 	private float scaleY = 1;
 	private int minHourToScroll = 8;
 	private int maxHourToScroll = 16;
-
-	private final float startHourHeight = 200;
-	private final float startDayWidth = 200;
 	private float hourHeight = startHourHeight;
 	private float dayWidth = startDayWidth;
 	private float goToTodayRadius = WeekViewUtil.dpToPx(getContext(), 24);
 	private float dp5 = WeekViewUtil.dpToPx(getContext(), 5);
-
-	private final int scrollDuration = 300;
-	private final int snappingThreshold = 2;
 	private boolean currentTimeLineShowed;
 	private RectF currentTimeLinePos;
 
@@ -151,16 +146,16 @@ public class WeekView extends View {
 
 	private Drawable commentDrawable;
 
-	public WeekView(Context context, @Nullable AttributeSet attrs) {
-		this(context, attrs, 0, 0);
+	public WeekView(Context context) {
+		this(context, null);
+	}
+
+	public WeekView(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
 	}
 
 	public WeekView(Context context, AttributeSet attrs, int defStyleAttr) {
-		this(context, attrs, defStyleAttr, 0);
-	}
-
-	public WeekView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
+		super(context, attrs, defStyleAttr);
 
 		init(context, attrs);
 	}
@@ -309,7 +304,41 @@ public class WeekView extends View {
 		});
 	}
 
+	private int getStartHour() {
+		if (startHour < 0) {
+			return today.get(Calendar.HOUR_OF_DAY) + startHour;
+		}
+
+		return startHour;
+	}
+
+	public void setStartHour(int startHour) {
+		this.startHour = startHour;
+		computeMaxOffset();
+		invalidate();
+	}
+
+	private int getEndHour() {
+		if (endHour < 0) {
+			return today.get(Calendar.HOUR_OF_DAY) - endHour;
+		}
+
+		return endHour;
+	}
+
+	public void setEndHour(int endHour) {
+		this.endHour = endHour;
+		computeMaxOffset();
+		invalidate();
+	}
+
 	private void computeMaxOffset() {
+		if (startHour < 0 || endHour < 0) {
+			// Here we have to calculate differences between current time and provided deltas
+			maxOffsetY = -(startHour + endHour) * hourHeight - (getMeasuredHeight() - headerHeight) + headerTextSize;
+
+			return;
+		}
 		maxOffsetY = (endHour - startHour) * hourHeight - (getMeasuredHeight() - headerHeight) + headerTextSize;
 	}
 
@@ -518,7 +547,7 @@ public class WeekView extends View {
 	}
 
 	public void scrollToHour(@IntRange(from = 0, to = 24) int hour) {
-		hour = Math.max(startHour, Math.min(endHour, hour)) - startHour; //Make sure the hour is correct
+		hour = Math.max(getStartHour(), Math.min(getEndHour(), hour)) - (getStartHour());
 
 		offsetY = Math.min(0, Math.max(-maxOffsetY, -(hour * hourHeight - (getMeasuredHeight() - headerHeight) / 2f + headerTextSize)));
 		invalidate();
@@ -562,14 +591,69 @@ public class WeekView extends View {
 
 	public void setVisibleDays(int defaultVisibleDays) {
 		numberOfVisibleDays = defaultVisibleDays;
+		computeNumberOfVisibleDays(numberOfVisibleDays);
+		invalidate();
 	}
 
-	public void setStartHour(int startHour) {
-		this.startHour = startHour;
+	public void setHourDelta(int deltaNegative, int deltaPositive) {
+		int hour = today.get(Calendar.HOUR_OF_DAY);
+		int negativeDiff = deltaNegative - Math.min(deltaNegative, hour);
+		int positiveDiff = deltaPositive - Math.min(deltaPositive, 24 - hour);
+		startHour = -Math.min(deltaNegative, hour) - Math.max(positiveDiff, 0);
+		endHour = -Math.min(deltaPositive, 24 - hour) - Math.max(negativeDiff, 0);
+		computeMaxOffset();
+		invalidate();
 	}
 
-	public void setEndHour(int endHour) {
-		this.endHour = endHour;
+	public void scaleToFit(float width, float height) {
+		dayWidth = (width - headerWidth) / numberOfVisibleDays;
+		hourHeight = (height - headerHeight) / (getEndHour() - getStartHour());
+		computeNumberOfVisibleDays(-1);
+		computeMaxOffset();
+
+		invalidate();
+	}
+
+	public void setToday(Calendar today) {
+		this.today = today;
+		updateFirstVisibleDay();
+		scrollToToday();
+	}
+
+	public void setFutureBackgroundColor(@ColorInt int color) {
+		this.futureBackgroundColor = color;
+	}
+
+	public void setPastBackgroundColor(@ColorInt int color) {
+		this.pastBackgroundColor = color;
+	}
+
+	public void setWeekendBackgroundColor(@ColorInt int color) {
+		this.weekendBackgroundColor = color;
+	}
+
+	public void setCurrentTimeLineColor(@ColorInt int color) {
+		this.currentTimeLineColor = color;
+		currentTimeLinePaint.setColor(currentTimeLineColor);
+	}
+
+	public void setTodayTextColor(@ColorInt int color) {
+		this.todayTextColor = color;
+	}
+
+	public void setHeaderTextColor(@ColorInt int color) {
+		this.headerTextColor = color;
+		headerTextPaint.setColor(headerTextColor);
+	}
+
+	public void setHeaderColor(@ColorInt int color) {
+		this.headerColor = color;
+		headerPaint.setColor(headerColor);
+	}
+
+	public void setDividerLineColor(@ColorInt int color) {
+		this.dividerLineColor = color;
+		dividerLinePaint.setColor(dividerLineColor);
 	}
 
 	public void setSnappingEnabled(boolean snappingEnabled) {
@@ -587,7 +671,7 @@ public class WeekView extends View {
 
 		int hourFromBeginning = (int) Math.floor((y - headerHeight - offsetY) / hourHeight);
 		int minute = (int) ((y - headerHeight - offsetY - hourFromBeginning * hourHeight) / hourHeight * 60);
-		int hour = hourFromBeginning + startHour;
+		int hour = hourFromBeginning + getStartHour();
 		selectedTime.set(Calendar.HOUR_OF_DAY, hour);
 		selectedTime.set(Calendar.MINUTE, minute);
 
@@ -628,7 +712,7 @@ public class WeekView extends View {
 
 				float fraction = WeekViewUtil.getFractionOfDay(today);
 				float maxHeight = hourHeight * 24;
-				float realY = fraction * maxHeight - startHour * hourHeight; //Compensate for selected smaller portion of a day to show
+				float realY = fraction * maxHeight - getStartHour() * hourHeight; //Compensate for selected smaller portion of a day to show
 				float y = realY + offsetY + headerHeight + headerPadding.top;
 
 				backgroundPaint.setColor(pastBackgroundColor);
@@ -654,7 +738,7 @@ public class WeekView extends View {
 	}
 
 	private void drawHorizontalLines(Canvas canvas) {
-		for (int i = startHour, index = 0; i < endHour; i++, index++) {
+		for (int i = getStartHour(), index = 0; i < getEndHour(); i++, index++) {
 
 //			Check if it's visible on the screen
 			float y = headerPadding.top + hourHeight * index + headerHeight + offsetY;
@@ -737,7 +821,7 @@ public class WeekView extends View {
 		canvas.clipRect(0, headerHeight, headerWidth, getBottom());
 
 //		Draw hours labels
-		for (int i = startHour, index = 0; i <= endHour; i++, index++) {
+		for (int i = getStartHour(), index = 0; i <= getEndHour(); i++, index++) {
 			if (dateTimeInterpreter == null) {
 				throw new RuntimeException("DateTimeInterpreter cannot be null!");
 			}
@@ -773,9 +857,9 @@ public class WeekView extends View {
 		for (EventRect eventRect : eventRects) {
 			if (WeekViewUtil.isSameDay(eventRect.event.getStartTime(), day)) {
 				float startFraction = WeekViewUtil.getFractionOfDay(eventRect.event.getStartTime());
-				float startRealY = startFraction * maxHeight - startHour * hourHeight; //Compensate for selected smaller portion of a day to show
+				float startRealY = startFraction * maxHeight - getStartHour() * hourHeight; //Compensate for selected smaller portion of a day to show
 				float endFraction = WeekViewUtil.getFractionOfDay(eventRect.event.getEndTime());
-				float endRealY = endFraction * maxHeight - startHour * hourHeight;
+				float endRealY = endFraction * maxHeight - getStartHour() * hourHeight;
 
 				float left = x + dayWidth * eventRect.left + overlappingEventsGap;
 				float top = startRealY + offsetY + headerHeight + headerPadding.top;
@@ -910,133 +994,29 @@ public class WeekView extends View {
 		return sD || gD;
 	}
 
-	private class WeekViewGestureDetector extends GestureDetector.SimpleOnGestureListener {
+	public interface DateTimeInterpreter {
+		String interpretDate(Calendar date);
 
-		@Override
-		public boolean onDown(MotionEvent e) {
-			scroller.forceFinished(true);
-			return true;
-		}
+		String interpretWeekday(Calendar date);
 
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			offsetX -= distanceX;
-			offsetY = Math.min(0, Math.max(-maxOffsetY, offsetY - distanceY));
-			invalidate();
-			return true;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			scroller.fling((int) offsetX, (int) offsetY, (int) velocityX, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, -(int) maxOffsetY, 0);
-			return true;
-		}
-
-		@Override
-		public boolean onSingleTapConfirmed(MotionEvent e) {
-			// If the tap was on go to today button scroll there
-			if (goToTodayVisible) {
-				if (!WeekViewUtil.isSameDay(firstVisibleDay, today)) {
-					float x = headerWidth + goToTodayRadius * 2f;
-					float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
-					float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
-					float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius;
-					float maxX = minX + goToTodayRadius * 2f;
-					float minY = y - goToTodayRadius;
-					float maxY = minY + goToTodayRadius * 2f;
-
-					if (e.getX() >= minX && e.getX() <= maxX && e.getY() >= minY && e.getY() <= maxY) {
-						scrollToToday();
-
-						return true;
-					}
-				}
-			}
-
-			// If the tap was on an event then trigger the callback.
-			if (eventRects != null && eventClickListener != null) {
-				List<EventRect> reversedEventRects = eventRects;
-				Collections.reverse(reversedEventRects);
-				for (EventRect event : reversedEventRects) {
-					if (event.rectF != null && event.rectF.contains(e.getX(), e.getY())) {
-						eventClickListener.onEventClick(event.event, event.rectF);
-						return true;
-					}
-				}
-			}
-
-			// If the tap was on in an empty space, then trigger the callback.
-			if (emptyViewClickListener != null && e.getX() > headerWidth && e.getY() > headerHeight) {
-				emptyViewClickListener.onEmptyViewClicked(getTimeFromPoint(e.getX(), e.getY()));
-			}
-
-			return true;
-		}
+		String interpretTime(int hour);
 	}
 
-	private class WeekViewScaleDetector implements ScaleGestureDetector.OnScaleGestureListener {
+	public interface ScrollListener {
+		void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, @Nullable Calendar oldFirstVisibleDay);
+	}
 
-		private float startPosX;
-		private float startPosY;
-		private float startScaleX;
-		private float startScaleY;
-		private float startOffsetX;
-		private float startOffsetY;
+	public interface EmptyViewClickListener {
+		void onEmptyViewClicked(Calendar time);
+	}
 
-		private final float oneWayScaleThresholdX = 100;
-		private final float oneWayScaleThresholdY = 200;
-		private final int SCALE_HORIZONTAL = 1;
-		private final int SCALE_VERTICAL = 1 << 1;
-		private final int SCALE_BOTH = 1 << 2;
-		private int scaleDirection;
+	public interface EventClickListener {
+		void onEventClick(WeekViewEvent event, RectF eventRect);
+	}
 
-		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
-			float sX = (scaleDirection & SCALE_VERTICAL) != SCALE_VERTICAL ? detector.getScaleFactor() : 1;
-			float sY = (scaleDirection & SCALE_HORIZONTAL) != SCALE_HORIZONTAL ? detector.getScaleFactor() : 1;
-			scaleX = Math.max(minScale, Math.min(maxScale, scaleX * sX));
-			scaleY = Math.max(minScale, Math.min(maxScale, scaleY * sY));
-
-			hourHeight = startHourHeight * scaleY;
-			dayWidth = startDayWidth * scaleX;
-
-			float diffX = (startPosX - startOffsetX) * (1 - scaleX / startScaleX);
-			float diffY = (startPosY - startOffsetY) * (1 - scaleY / startScaleY);
-
-			computeMaxOffset();
-			computeNumberOfVisibleDays(-1);
-
-			offsetX = startOffsetX + diffX;
-			offsetY = Math.min(0, Math.max(-maxOffsetY, startOffsetY + diffY));
-			invalidate();
-
-			return true;
-		}
-
-		@Override
-		public boolean onScaleBegin(ScaleGestureDetector detector) {
-			startPosX = detector.getFocusX();
-			startPosY = detector.getFocusY();
-			startScaleX = scaleX;
-			startScaleY = scaleY;
-			startOffsetX = offsetX;
-			startOffsetY = offsetY;
-
-			if (detector.getCurrentSpanX() < oneWayScaleThresholdX) {
-				scaleDirection = SCALE_VERTICAL;
-			} else if (detector.getCurrentSpanY() < oneWayScaleThresholdY) {
-				scaleDirection = SCALE_HORIZONTAL;
-			} else {
-				scaleDirection = SCALE_BOTH;
-			}
-
-			return true;
-		}
-
-		@Override
-		public void onScaleEnd(ScaleGestureDetector detector) {
-
-		}
+	public interface MonthChangeListener {
+		@NonNull
+		List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth);
 	}
 
 	public static class WeekViewUtil {
@@ -1100,31 +1080,6 @@ public class WeekView extends View {
 
 	public static class Padding {
 		public float bottom, top, left, right;
-	}
-
-	public interface DateTimeInterpreter {
-		String interpretDate(Calendar date);
-
-		String interpretWeekday(Calendar date);
-
-		String interpretTime(int hour);
-	}
-
-	public interface ScrollListener {
-		void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, @Nullable Calendar oldFirstVisibleDay);
-	}
-
-	public interface EmptyViewClickListener {
-		void onEmptyViewClicked(Calendar time);
-	}
-
-	public interface EventClickListener {
-		void onEventClick(WeekViewEvent event, RectF eventRect);
-	}
-
-	public interface MonthChangeListener {
-		@NonNull
-		List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth);
 	}
 
 	public static class WeekViewEvent {
@@ -1226,6 +1181,134 @@ public class WeekView extends View {
 			long start2 = event.getStartTime().getTimeInMillis();
 			long end2 = event.getEndTime().getTimeInMillis();
 			return !((start1 >= end2) || (end1 <= start2));
+		}
+	}
+
+	private class WeekViewGestureDetector extends GestureDetector.SimpleOnGestureListener {
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			scroller.forceFinished(true);
+			return true;
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			offsetX -= distanceX;
+			offsetY = Math.min(0, Math.max(-maxOffsetY, offsetY - distanceY));
+			invalidate();
+			return true;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			scroller.fling((int) offsetX, (int) offsetY, (int) velocityX, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, -(int) maxOffsetY, 0);
+			return true;
+		}
+
+		@Override
+		public boolean onSingleTapConfirmed(MotionEvent e) {
+			// If the tap was on go to today button scroll there
+			if (goToTodayVisible) {
+				if (!WeekViewUtil.isSameDay(firstVisibleDay, today)) {
+					float x = headerWidth + goToTodayRadius * 2f;
+					float y = getBottom() - WeekViewUtil.dpToPx(getContext(), 75) - goToTodayRadius;
+					float flipped = firstVisibleDay.getTimeInMillis() < today.getTimeInMillis() ? -1 : 1;
+					float minX = (flipped == -1 ? getRight() - goToTodayRadius * 2f : x) - goToTodayRadius;
+					float maxX = minX + goToTodayRadius * 2f;
+					float minY = y - goToTodayRadius;
+					float maxY = minY + goToTodayRadius * 2f;
+
+					if (e.getX() >= minX && e.getX() <= maxX && e.getY() >= minY && e.getY() <= maxY) {
+						scrollToToday();
+
+						return true;
+					}
+				}
+			}
+
+			// If the tap was on an event then trigger the callback.
+			if (eventRects != null && eventClickListener != null) {
+				List<EventRect> reversedEventRects = eventRects;
+				Collections.reverse(reversedEventRects);
+				for (EventRect event : reversedEventRects) {
+					if (event.rectF != null && event.rectF.contains(e.getX(), e.getY())) {
+						eventClickListener.onEventClick(event.event, event.rectF);
+						return true;
+					}
+				}
+			}
+
+			// If the tap was on in an empty space, then trigger the callback.
+			if (emptyViewClickListener != null && e.getX() > headerWidth && e.getY() > headerHeight) {
+				emptyViewClickListener.onEmptyViewClicked(getTimeFromPoint(e.getX(), e.getY()));
+			}
+
+			return true;
+		}
+	}
+
+	private class WeekViewScaleDetector implements ScaleGestureDetector.OnScaleGestureListener {
+
+		private final float oneWayScaleThresholdX = 100;
+		private final float oneWayScaleThresholdY = 200;
+		private final int SCALE_HORIZONTAL = 1;
+		private final int SCALE_VERTICAL = 1 << 1;
+		private final int SCALE_BOTH = 1 << 2;
+		private float startPosX;
+		private float startPosY;
+		private float startScaleX;
+		private float startScaleY;
+		private float startOffsetX;
+		private float startOffsetY;
+		private int scaleDirection;
+
+		@Override
+		public boolean onScale(ScaleGestureDetector detector) {
+			float sX = (scaleDirection & SCALE_VERTICAL) != SCALE_VERTICAL ? detector.getScaleFactor() : 1;
+			float sY = (scaleDirection & SCALE_HORIZONTAL) != SCALE_HORIZONTAL ? detector.getScaleFactor() : 1;
+			scaleX = Math.max(minScale, Math.min(maxScale, scaleX * sX));
+			scaleY = Math.max(minScale, Math.min(maxScale, scaleY * sY));
+
+			hourHeight = startHourHeight * scaleY;
+			dayWidth = startDayWidth * scaleX;
+
+			float diffX = (startPosX - startOffsetX) * (1 - scaleX / startScaleX);
+			float diffY = (startPosY - startOffsetY) * (1 - scaleY / startScaleY);
+
+			computeMaxOffset();
+			computeNumberOfVisibleDays(-1);
+
+			offsetX = startOffsetX + diffX;
+			offsetY = Math.min(0, Math.max(-maxOffsetY, startOffsetY + diffY));
+			invalidate();
+
+			return true;
+		}
+
+		@Override
+		public boolean onScaleBegin(ScaleGestureDetector detector) {
+			startPosX = detector.getFocusX();
+			startPosY = detector.getFocusY();
+			startScaleX = scaleX;
+			startScaleY = scaleY;
+			startOffsetX = offsetX;
+			startOffsetY = offsetY;
+
+			if (detector.getCurrentSpanX() < oneWayScaleThresholdX) {
+				scaleDirection = SCALE_VERTICAL;
+			} else if (detector.getCurrentSpanY() < oneWayScaleThresholdY) {
+				scaleDirection = SCALE_HORIZONTAL;
+			} else {
+				scaleDirection = SCALE_BOTH;
+			}
+
+			return true;
+		}
+
+		@Override
+		public void onScaleEnd(ScaleGestureDetector detector) {
+
 		}
 	}
 }

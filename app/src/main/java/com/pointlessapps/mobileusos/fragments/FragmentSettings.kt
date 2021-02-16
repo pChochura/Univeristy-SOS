@@ -1,7 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.content.Intent
-import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,7 +56,7 @@ class FragmentSettings :
 						item.refresh()
 						dismiss()
 					}
-				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+				})
 			}
 		}
 
@@ -91,7 +90,7 @@ class FragmentSettings :
 						layoutManager =
 							LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 					}
-				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+				})
 			}
 		}
 
@@ -200,7 +199,7 @@ class FragmentSettings :
 						layoutManager =
 							LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 					}
-				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+				})
 			}
 		}
 
@@ -260,7 +259,7 @@ class FragmentSettings :
 						}
 					}
 					dialog.buttonSecondary.setOnClickListener { this.dialog.dismiss() }
-				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
+				}
 			)
 		}
 	}

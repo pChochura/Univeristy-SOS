@@ -1,7 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
 import android.content.Context
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
@@ -175,9 +174,7 @@ class FragmentGrades : FragmentCoreImpl<FragmentGradesBinding>(FragmentGradesBin
 								invalidate()
 							}
 						}
-				},
-				DialogUtil.UNDEFINED_WINDOW_SIZE,
-				ConstraintLayout.LayoutParams.WRAP_CONTENT
+				}
 			)
 		}
 

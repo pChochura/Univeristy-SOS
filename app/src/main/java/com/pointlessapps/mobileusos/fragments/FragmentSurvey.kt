@@ -1,6 +1,5 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -114,7 +113,7 @@ class FragmentSurvey(private var survey: Survey) :
 					}
 					dialog.buttonSecondary.setText(R.string.cancel)
 					dialog.buttonSecondary.setOnClickListener { dismiss() }
-				}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+				})
 			} else {
 				sendSurvey()
 			}
@@ -161,7 +160,7 @@ class FragmentSurvey(private var survey: Survey) :
 					dialog.messageSecondary.setText(R.string.thank_you_fill_survey)
 				}
 			}
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 
 	private fun showErrorDialog() {
@@ -179,6 +178,6 @@ class FragmentSurvey(private var survey: Survey) :
 				dismiss()
 				onForceGoBack?.invoke()
 			}
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 }

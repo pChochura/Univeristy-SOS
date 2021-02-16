@@ -1,19 +1,22 @@
 package com.pointlessapps.mobileusos.helpers
 
 import android.content.Context
+import android.content.res.Configuration
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.pointlessapps.mobileusos.exceptions.ExceptionNotInitialized
 import com.pointlessapps.mobileusos.models.University
+import com.pointlessapps.mobileusos.models.WidgetConfiguration
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.getJson
 import com.pointlessapps.mobileusos.utils.putJson
 import net.grandcentrix.tray.AppPreferences
+import org.jetbrains.anko.configuration
 
 class Preferences private constructor(context: Context?) {
 
-	private val prefs = AppPreferences(context)
+	private val prefs = AppPreferencesWrapper(context)
 
-	fun get(): AppPreferences {
+	fun get(): AppPreferencesWrapper {
 		if (instance == null) {
 			throw ExceptionNotInitialized("You have to call init() first!")
 		}
@@ -48,7 +51,9 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_PROFILE_SHORTCUTS_CLASS = "profileShortcutsClass"
 		const val KEY_PROFILE_SHORTCUTS_DATA = "profileShortcutsData"
 
-		fun get(): AppPreferences {
+		const val KEY_WIDGET_CONFIGURATION = "widgetConfiguration"
+
+		fun get(): AppPreferencesWrapper {
 			if (instance == null) {
 				throw ExceptionNotInitialized("You have to call init() first!")
 			}
@@ -58,124 +63,141 @@ class Preferences private constructor(context: Context?) {
 	}
 }
 
-fun AppPreferences.getAccessToken() = getJson<OAuth1AccessToken?>(Preferences.KEY_ACCESS_TOKEN)
+class AppPreferencesWrapper(context: Context?) : AppPreferences(context) {
+	public override fun getContext(): Context = super.getContext()
+}
 
-fun AppPreferences.putAccessToken(accessToken: OAuth1AccessToken) =
+fun AppPreferencesWrapper.getAccessToken() =
+	getJson<OAuth1AccessToken?>(Preferences.KEY_ACCESS_TOKEN)
+
+fun AppPreferencesWrapper.putAccessToken(accessToken: OAuth1AccessToken) =
 	putJson(Preferences.KEY_ACCESS_TOKEN, accessToken)
 
 
-fun AppPreferences.getSelectedUniversity() =
+fun AppPreferencesWrapper.getSelectedUniversity() =
 	getJson<University>(Preferences.KEY_SELECTED_UNIVERSITY)
 
-fun AppPreferences.putSelectedUniversity(university: University) =
+fun AppPreferencesWrapper.putSelectedUniversity(university: University) =
 	putJson(Preferences.KEY_SELECTED_UNIVERSITY, university)
 
 
-fun AppPreferences.getTimetableStartHour() =
+fun AppPreferencesWrapper.getTimetableStartHour() =
 	getInt(Preferences.KEY_TIMETABLE_START_HOUR, 6)
 
-fun AppPreferences.putTimetableStartHour(value: Int) =
+fun AppPreferencesWrapper.putTimetableStartHour(value: Int) =
 	put(Preferences.KEY_TIMETABLE_START_HOUR, value)
 
 
-fun AppPreferences.getTimetableEndHour() =
+fun AppPreferencesWrapper.getTimetableEndHour() =
 	getInt(Preferences.KEY_TIMETABLE_END_HOUR, 20)
 
-fun AppPreferences.putTimetableEndHour(value: Int) =
+fun AppPreferencesWrapper.putTimetableEndHour(value: Int) =
 	put(Preferences.KEY_TIMETABLE_END_HOUR, value)
 
 
-fun AppPreferences.getTimetableVisibleDays() =
+fun AppPreferencesWrapper.getTimetableVisibleDays() =
 	getInt(Preferences.KEY_TIMETABLE_VISIBLE_DAYS, 5)
 
-fun AppPreferences.putTimetableVisibleDays(value: Int) =
+fun AppPreferencesWrapper.putTimetableVisibleDays(value: Int) =
 	put(Preferences.KEY_TIMETABLE_VISIBLE_DAYS, value)
 
 
-fun AppPreferences.getTimetableSnapToFullDay() =
+fun AppPreferencesWrapper.getTimetableSnapToFullDay() =
 	getBoolean(Preferences.KEY_TIMETABLE_SNAP_TO_FULL_DAY, true)
 
-fun AppPreferences.putTimetableSnapToFullDay(value: Boolean) =
+fun AppPreferencesWrapper.putTimetableSnapToFullDay(value: Boolean) =
 	put(Preferences.KEY_TIMETABLE_SNAP_TO_FULL_DAY, value)
 
 
-fun AppPreferences.getTimetableAddEvent() =
+fun AppPreferencesWrapper.getTimetableAddEvent() =
 	getBoolean(Preferences.KEY_TIMETABLE_ADD_EVENT, false)
 
-fun AppPreferences.putTimetableAddEvent(value: Boolean) =
+fun AppPreferencesWrapper.putTimetableAddEvent(value: Boolean) =
 	put(Preferences.KEY_TIMETABLE_ADD_EVENT, value)
 
-fun AppPreferences.getTimetableOutlineRemote() =
+
+fun AppPreferencesWrapper.getTimetableOutlineRemote() =
 	getBoolean(Preferences.KEY_TIMETABLE_OUTLINE_REMOTE, false)
 
-fun AppPreferences.putTimetableOutlineRemote(value: Boolean) =
+fun AppPreferencesWrapper.putTimetableOutlineRemote(value: Boolean) =
 	put(Preferences.KEY_TIMETABLE_OUTLINE_REMOTE, value)
 
-fun AppPreferences.getTimetableMissingBreaks() =
+
+fun AppPreferencesWrapper.getTimetableMissingBreaks() =
 	getBoolean(Preferences.KEY_TIMETABLE_MISSING_BREAKS, true)
 
-fun AppPreferences.putTimetableMissingBreaks(value: Boolean) =
+fun AppPreferencesWrapper.putTimetableMissingBreaks(value: Boolean) =
 	put(Preferences.KEY_TIMETABLE_MISSING_BREAKS, value)
 
 
-fun AppPreferences.getNotificationsEnabled() =
+fun AppPreferencesWrapper.getNotificationsEnabled() =
 	getBoolean(Preferences.KEY_NOTIFICATIONS_ENABLED, true)
 
-fun AppPreferences.putNotificationsEnabled(value: Boolean) =
+fun AppPreferencesWrapper.putNotificationsEnabled(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_ENABLED, value)
 
 
-fun AppPreferences.getNotificationsGrades() =
+fun AppPreferencesWrapper.getNotificationsGrades() =
 	getBoolean(Preferences.KEY_NOTIFICATIONS_GRADES, true)
 
-fun AppPreferences.putNotificationsGrades(value: Boolean) =
+fun AppPreferencesWrapper.putNotificationsGrades(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_GRADES, value)
 
 
-fun AppPreferences.getNotificationsNews() =
+fun AppPreferencesWrapper.getNotificationsNews() =
 	getBoolean(Preferences.KEY_NOTIFICATIONS_NEWS, true)
 
-fun AppPreferences.putNotificationsNews(value: Boolean) =
+fun AppPreferencesWrapper.putNotificationsNews(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_NEWS, value)
 
 
-fun AppPreferences.getNotificationsSurveys() =
+fun AppPreferencesWrapper.getNotificationsSurveys() =
 	getBoolean(Preferences.KEY_NOTIFICATIONS_SURVEYS, true)
 
-fun AppPreferences.putNotificationsSurveys(value: Boolean) =
+fun AppPreferencesWrapper.putNotificationsSurveys(value: Boolean) =
 	put(Preferences.KEY_NOTIFICATIONS_SURVEYS, value)
 
 
-fun AppPreferences.getSystemDarkMode() =
-	getBoolean(Preferences.KEY_SYSTEM_DARK_MODE, false)
+fun AppPreferencesWrapper.getSystemDarkMode() =
+	getBoolean(
+		Preferences.KEY_SYSTEM_DARK_MODE,
+		context.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+	)
 
-fun AppPreferences.putSystemDarkMode(value: Boolean) =
+fun AppPreferencesWrapper.putSystemDarkMode(value: Boolean) =
 	put(Preferences.KEY_SYSTEM_DARK_MODE, value)
 
 
-fun AppPreferences.getSystemDefaultTab() =
+fun AppPreferencesWrapper.getSystemDefaultTab() =
 	getInt(Preferences.KEY_SYSTEM_DEFAULT_TAB, 0)
 
-fun AppPreferences.putSystemDefaultTab(value: Int) =
+fun AppPreferencesWrapper.putSystemDefaultTab(value: Int) =
 	put(Preferences.KEY_SYSTEM_DEFAULT_TAB, value)
 
 
-fun AppPreferences.getSystemDefaultLanguage() =
+fun AppPreferencesWrapper.getSystemDefaultLanguage() =
 	getString(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, "PL")
 
-fun AppPreferences.putSystemDefaultLanguage(value: String) =
+fun AppPreferencesWrapper.putSystemDefaultLanguage(value: String) =
 	put(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, value)
 
 
-fun AppPreferences.getSendAnalytics() =
+fun AppPreferencesWrapper.getSendAnalytics() =
 	getBoolean(Preferences.KEY_SYSTEM_SEND_ANALYTICS, true)
 
-fun AppPreferences.putSendAnalytics(value: Boolean) =
+fun AppPreferencesWrapper.putSendAnalytics(value: Boolean) =
 	put(Preferences.KEY_SYSTEM_SEND_ANALYTICS, value)
 
 
-fun AppPreferences.getProfileShortcuts() =
+fun AppPreferencesWrapper.getProfileShortcuts() =
 	getJson<List<Map<String, String>>>(Preferences.KEY_PROFILE_SHORTCUTS, "[]")
 
-fun AppPreferences.putProfileShortcuts(shortcuts: List<Map<String, String>>) =
+fun AppPreferencesWrapper.putProfileShortcuts(shortcuts: List<Map<String, String>>) =
 	putJson(Preferences.KEY_PROFILE_SHORTCUTS, shortcuts)
+
+
+fun AppPreferencesWrapper.getWidgetConfiguration() =
+	getJson<WidgetConfiguration>(Preferences.KEY_WIDGET_CONFIGURATION, "{}")
+
+fun AppPreferencesWrapper.putWidgetConfiguration(widgetConfig: WidgetConfiguration) =
+	putJson(Preferences.KEY_WIDGET_CONFIGURATION, widgetConfig)

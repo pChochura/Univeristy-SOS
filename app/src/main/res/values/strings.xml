@@ -212,4 +212,25 @@
 	<string name="no_name_survey">No name survey</string>
 	<string name="add_missing_breaks">Add missing classes breaks</string>
 	<string name="add_missing_breaks_description">If the class doesn\'t have defined break add one</string>
+	<string name="widget" translatable="false">Widget</string>
+	<string name="widget_configuration">Widget configuration</string>
+	<string name="number_of_visible_hours_before">Number of visible hours before now</string>
+	<string name="number_of_visible_hours_after">Number of visible hours after now</string>
+	<string name="number_of_visible_hours_before_description">Indicates how many hours back will be visible</string>
+	<string name="number_of_visible_hours_after_description">Indicates how many hours ahead will be visible</string>
+	<string name="widget_customization">Widget customization</string>
+	<string name="number_of_visible_hours_before_title">How many hours before now should be visible?</string>
+	<string name="number_of_visible_hours_after_title">How many hours after now should be visible?</string>
+	<string name="future_background_color">Future background color</string>
+	<string name="past_background_color">Past background color</string>
+	<string name="weekends_background_color">Weekends background color</string>
+	<string name="now_line_color">Now line color</string>
+	<string name="today_header_text_color">Today header text color</string>
+	<string name="header_text_color">Header text color</string>
+	<string name="header_background_color">Header background color</string>
+	<string name="divider_line_color">Divider line color</string>
+	<string name="transparency">Transparency</string>
+	<string name="transparency_description">Indicates how transparent the widget will be</string>
+	<string name="button_settings">Button settings</string>
+	<string name="reset_widget_settings">Reset widget settings</string>
 </resources>

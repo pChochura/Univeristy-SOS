@@ -12,7 +12,6 @@ import android.os.Build
 import android.provider.CalendarContract
 import android.text.Html
 import android.text.Spanned
-import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
@@ -189,7 +188,7 @@ object Utils {
 					this.dialog.dismiss()
 					onDismissListener?.invoke()
 				}
-			}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT
+			}
 		)
 	}
 
@@ -290,7 +289,7 @@ object Utils {
 				onCommentChanged?.invoke(event.memo)
 			}
 			dialog.buttonSecondary.setOnClickListener { dismiss() }
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 
 	open class SingletonHolder<T : Any, in A>(creator: (A?) -> T) {

@@ -2,7 +2,6 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.view.ViewGroup
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -287,7 +286,7 @@ class FragmentTest(private val json: String) :
 				}
 				invalidate()
 			}
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 
 	private fun setCollapsible(button: MaterialButton, view: AppCompatTextView) {

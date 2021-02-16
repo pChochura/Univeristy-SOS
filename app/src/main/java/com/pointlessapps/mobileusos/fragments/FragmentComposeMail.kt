@@ -5,10 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
@@ -97,9 +94,7 @@ class FragmentComposeMail(
 						dismiss()
 						saveDraft()
 					}
-				},
-				DialogUtil.UNDEFINED_WINDOW_SIZE,
-				ViewGroup.LayoutParams.WRAP_CONTENT
+				}
 			)
 			true
 		}
@@ -216,9 +211,7 @@ class FragmentComposeMail(
 								update(attachments.apply { remove(attachment) })
 								dismiss()
 							}
-						},
-						DialogUtil.UNDEFINED_WINDOW_SIZE,
-						ViewGroup.LayoutParams.WRAP_CONTENT
+						}
 					)
 				}
 				onAddClickListener = {
@@ -347,7 +340,7 @@ class FragmentComposeMail(
 			dialog.messageSecondary.isGone = true
 
 			callback(dialog, this)
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 
 	private fun ensureEmailExists(callback: (String) -> Unit) {
@@ -424,6 +417,6 @@ class FragmentComposeMail(
 			dialog.buttonPrimary.setText(android.R.string.ok)
 			dialog.buttonPrimary.setOnClickListener { callback(this) }
 			setOnCancelListener { callback(this) }
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+		})
 	}
 }

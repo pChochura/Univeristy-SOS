@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+	android:minWidth="240dp"
+	android:minHeight="120dp"
+	android:updatePeriodMillis="1800000"
+	android:previewImage="@drawable/ic_widget_preview"
+	android:initialLayout="@layout/widget_timetable_full"
+	android:configure="com.pointlessapps.mobileusos.activities.ActivityWidgetSettings"
+	android:resizeMode="vertical|horizontal"
+	android:widgetCategory="home_screen">
+</appwidget-provider>

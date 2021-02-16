@@ -19,4 +19,33 @@
 		<item>@string/november</item>
 		<item>@string/december</item>
 	</string-array>
+
+	<integer-array name="colors">
+		<item>@color/colorBackground</item>
+		<item>@color/colorTextSecondary</item>
+		<item>@color/colorPrimary</item>
+		<item>@color/colorPrimaryDark</item>
+		<item>@color/headerTextColor</item>
+		<item>@color/colorAccentLight</item>
+		<item>@color/colorAccent</item>
+		<item>@color/colorAccentDark</item>
+		<item>@color/todayTextColor</item>
+		<item>@color/defaultEventColor</item>
+		<item>@color/color5</item>
+		<item>@color/color6</item>
+		<item>@color/color7</item>
+		<item>@color/color8</item>
+		<item>@color/color9</item>
+		<item>@color/color10</item>
+		<item>@color/color11</item>
+		<item>@color/color12</item>
+		<item>@color/color13</item>
+		<item>@color/color14</item>
+		<item>@color/color15</item>
+		<item>@color/color16</item>
+		<item>@color/color17</item>
+		<item>@color/color18</item>
+		<item>@color/color19</item>
+		<item>@color/color20</item>
+	</integer-array>
 </resources>
