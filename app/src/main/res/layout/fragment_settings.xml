@@ -180,7 +180,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/logout_description"
-					app:hasBubble="false"
+					app:hasValue="false"
 					app:hasSeparator="false"
 					app:title="@string/logout" />
 

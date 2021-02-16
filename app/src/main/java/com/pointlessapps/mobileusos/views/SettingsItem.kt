@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.databinding.SettingsItemBinding
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
+import com.pointlessapps.mobileusos.utils.px
 
 class SettingsItem(
 	context: Context,
@@ -32,6 +33,12 @@ class SettingsItem(
 			setAction()
 		}
 
+	var valueColor: (() -> Int) = { ContextCompat.getColor(context, R.color.colorAccent) }
+		set(value) {
+			field = value
+			setAction()
+		}
+
 	var valueSwitch: (() -> Boolean)? = null
 		set(value) {
 			field = value
@@ -42,15 +49,25 @@ class SettingsItem(
 		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.SettingsItem, 0, 0)
 		val title = a.getString(R.styleable.SettingsItem_title)
 		val description = a.getString(R.styleable.SettingsItem_description)
-		val hasBubble = a.getBoolean(R.styleable.SettingsItem_hasBubble, true)
+		val hasValue = a.getBoolean(R.styleable.SettingsItem_hasValue, true)
 		val hasSeparator = a.getBoolean(R.styleable.SettingsItem_hasSeparator, true)
+		val hasValueBorder = a.getBoolean(R.styleable.SettingsItem_hasValueBorder, false)
+		val valueColor = a.getColor(
+			R.styleable.SettingsItem_valueColor,
+			ContextCompat.getColor(context, R.color.colorAccent)
+		)
 		val isEnabled = a.getBoolean(R.styleable.SettingsItem_enabled, true)
 		a.recycle()
 
 		binding.itemTitle.text = title
 		binding.itemDescription.text = description
-		binding.itemAction.isVisible = hasBubble
+		binding.itemDescription.isVisible = description?.isNotBlank() == true
+		binding.itemAction.isVisible = hasValue
 		binding.itemSeparator.isVisible = hasSeparator
+
+		binding.itemAction.chipStrokeWidth = if (hasValueBorder) 1.px.toFloat() else 0f
+
+		this.valueColor = { valueColor }
 
 		setAction()
 		setSwitchAction()
@@ -75,6 +92,7 @@ class SettingsItem(
 
 	private fun setAction() {
 		binding.itemAction.text = value()
+		binding.itemAction.chipBackgroundColor = ColorStateList.valueOf(valueColor())
 	}
 
 	private fun setSwitchAction() {
