@@ -10,6 +10,7 @@ import com.pointlessapps.mobileusos.fragments.FragmentCoreImpl
 import com.pointlessapps.mobileusos.fragments.FragmentLogin
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getSystemDarkMode
 
 class ActivityLogin : FragmentActivity() {
 
@@ -28,7 +29,9 @@ class ActivityLogin : FragmentActivity() {
 			finish()
 		}
 
-		setTheme(R.style.AppTheme)
+		setTheme(
+			if (Preferences.get().getSystemDarkMode()) R.style.AppTheme_Dark else R.style.AppTheme
+		)
 
 		val binding = ActivityLoginBinding.inflate(layoutInflater)
 		setContentView(binding.root)
