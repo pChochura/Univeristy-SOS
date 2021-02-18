@@ -57,6 +57,7 @@
         <attr name="hasValue" format="boolean" />
         <attr name="isSwitch" format="boolean" />
         <attr name="enabled" format="boolean" />
+        <attr name="checked" format="boolean" />
         <attr name="hasSeparator" format="boolean" />
         <attr name="hasValueBorder" format="boolean" />
         <attr name="valueColor" format="color" />

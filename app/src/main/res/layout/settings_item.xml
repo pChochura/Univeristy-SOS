@@ -30,6 +30,8 @@
 				android:fontFamily="@font/montserrat"
 				android:textColor="?colorTextPrimary"
 				android:textSize="14sp"
+				app:layout_constraintHorizontal_bias="0"
+				app:layout_constraintRight_toLeftOf="@id/itemAction"
 				app:layout_constraintBottom_toTopOf="@id/itemDescription"
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintTop_toTopOf="parent"

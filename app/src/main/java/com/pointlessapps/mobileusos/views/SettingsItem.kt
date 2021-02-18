@@ -49,6 +49,7 @@ class SettingsItem(
 		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.SettingsItem, 0, 0)
 		val title = a.getString(R.styleable.SettingsItem_title)
 		val description = a.getString(R.styleable.SettingsItem_description)
+		val checked = a.getBoolean(R.styleable.SettingsItem_checked, true)
 		val hasValue = a.getBoolean(R.styleable.SettingsItem_hasValue, true)
 		val hasSeparator = a.getBoolean(R.styleable.SettingsItem_hasSeparator, true)
 		val hasValueBorder = a.getBoolean(R.styleable.SettingsItem_hasValueBorder, false)
@@ -57,6 +58,7 @@ class SettingsItem(
 			ContextCompat.getColor(context, R.color.colorAccent)
 		)
 		val isEnabled = a.getBoolean(R.styleable.SettingsItem_enabled, true)
+		val isSwitch = a.getBoolean(R.styleable.SettingsItem_isSwitch, false)
 		a.recycle()
 
 		binding.itemTitle.text = title
@@ -68,6 +70,9 @@ class SettingsItem(
 		binding.itemAction.chipStrokeWidth = if (hasValueBorder) 1.px.toFloat() else 0f
 
 		this.valueColor = { valueColor }
+		if (isSwitch) {
+			this.valueSwitch = { checked }
+		}
 
 		setAction()
 		setSwitchAction()
