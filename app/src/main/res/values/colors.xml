@@ -8,11 +8,9 @@
 	<color name="colorBackground">#EFEFEF</color>
 	<color name="colorTextPrimary">#515151</color>
 	<color name="colorTextSecondary">#ABABAB</color>
-	<color name="colorTextRed">#C80000</color>
-	<color name="colorSemiTransparentBlack">#66000000</color>
+	<color name="colorTextRed">#FF5252</color>
 	<color name="colorNavigationIconChecked">@color/colorAccent</color>
 	<color name="colorNavigationIconUnchecked">@color/colorTextPrimary</color>
-
 
 	<color name="headerColor">#ffffff</color>
 	<color name="headerTextColor">#000000</color>

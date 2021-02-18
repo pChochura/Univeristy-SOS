@@ -1,11 +1,11 @@
 package com.pointlessapps.mobileusos.fragments
 
-import android.content.Intent
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.ComponentActivity
 import androidx.core.view.isGone
-import com.pointlessapps.mobileusos.activities.ActivityMain
+import androidx.core.view.isVisible
 import com.pointlessapps.mobileusos.databinding.FragmentBrowserBinding
 import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 
@@ -27,18 +27,10 @@ class FragmentBrowser(private val url: String) :
 					binding().progressBar.isGone = false
 
 					if (request.url.scheme == HelperClientUSOS.CALLBACK_URL_HOST) {
-						binding().iconWelcome.isGone = false
+						binding().iconWelcome.isVisible = true
 						binding().progressBar.isGone = true
 						binding().containerNotification.isGone = true
-						HelperClientUSOS.handleLoginResult(requireActivity(), request.url) {
-							startActivity(
-								Intent(
-									requireContext(),
-									ActivityMain::class.java
-								).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-							)
-							requireActivity().finish()
-						}
+						HelperClientUSOS.handleLoginResult(requireActivity(), request.url)
 
 						return true
 					}
@@ -59,8 +51,10 @@ class FragmentBrowser(private val url: String) :
 	private fun prepareClickListeners() {
 		binding().buttonPrimary.setOnClickListener { binding().containerNotification.isGone = true }
 		binding().buttonSecondary.setOnClickListener {
+			binding().webView.stopLoading()
+			onForceGoBack?.invoke()
 			HelperClientUSOS.handleLogin(
-				requireActivity(),
+				requireActivity() as ComponentActivity,
 				HelperClientUSOS.university ?: return@setOnClickListener
 			)
 		}

@@ -2,7 +2,6 @@ package com.pointlessapps.mobileusos.activities
 
 import android.animation.LayoutTransition
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity

@@ -45,15 +45,8 @@ class ActivityLogin : FragmentActivity() {
 
 	override fun onNewIntent(intent: Intent?) {
 		super.onNewIntent(intent)
-		HelperClientUSOS.handleLoginResult(this, intent?.data) {
-			startActivity(
-				Intent(
-					this,
-					ActivityMain::class.java
-				).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-			)
-			finish()
-		}
+		(currentFragment as? FragmentLogin)?.showWelcomeScreen()
+		HelperClientUSOS.handleLoginResult(this, intent?.data)
 	}
 
 	override fun onBackPressed() {
@@ -70,6 +63,7 @@ class ActivityLogin : FragmentActivity() {
 
 	private fun prepareFragment(fragment: FragmentCoreImpl<*>) = fragment.apply {
 		onChangeFragment = { fragment ->
+			fragment.onForceGoBack = { onBackPressed() }
 			currentFragment = fragment as FragmentCoreImpl
 			supportFragmentManager.beginTransaction()
 				.replace(R.id.containerFragment, fragment).commit()

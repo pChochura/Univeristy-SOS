@@ -3,6 +3,9 @@ package com.pointlessapps.mobileusos.helpers
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -11,6 +14,7 @@ import com.github.scribejava.core.model.OAuth1AccessToken
 import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.oauth.OAuth10aService
 import com.pointlessapps.mobileusos.R
+import com.pointlessapps.mobileusos.activities.ActivityMain
 import com.pointlessapps.mobileusos.clients.ClientUSOS
 import com.pointlessapps.mobileusos.models.University
 import org.jetbrains.anko.doAsync
@@ -20,12 +24,19 @@ object HelperClientUSOS {
 	const val CALLBACK_URL_HOST = "usosauth"
 	var university: University? = null
 
-	private const val LOGIN_TABS_REQUEST_CODE = 123
 	private var requestToken: OAuth1RequestToken? = null
 	private var service: OAuth10aService? = null
+	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+	fun registerActivityResultListener(activity: ComponentActivity) {
+		resultLauncher =
+			activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+				handleLoginResult(activity, it.data?.data)
+			}
+	}
 
 	fun handleLogin(
-		activity: Activity,
+		activity: ComponentActivity,
 		university: University,
 		authUrlCallback: ((String) -> Unit)? = null
 	) {
@@ -42,7 +53,15 @@ object HelperClientUSOS {
 					return@apply
 				}
 
-				activity.startActivityForResult(CustomTabsIntent.Builder().apply {
+				launchUrl(activity, this)
+			}
+		}
+	}
+
+	private fun launchUrl(activity: Activity, service: OAuth10aService) {
+		val intent = when {
+			CustomTabsHelper.getPackageNameToUse(activity) != null -> CustomTabsIntent.Builder()
+				.apply {
 					setDefaultColorSchemeParams(
 						CustomTabColorSchemeParams.Builder()
 							.setToolbarColor(
@@ -53,17 +72,18 @@ object HelperClientUSOS {
 							)
 							.build()
 					)
-				}.build().intent.apply {
-					setPackage(CustomTabsHelper.getPackageNameToUse(activity))
-					data = Uri.parse(getAuthorizationUrl(this@HelperClientUSOS.requestToken))
-					addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-				}, LOGIN_TABS_REQUEST_CODE)
-			}
+				}.build().intent.setPackage(CustomTabsHelper.getPackageNameToUse(activity))
+			else -> Intent(Intent.ACTION_VIEW)
 		}
+
+		resultLauncher.launch(intent.apply {
+			data = Uri.parse(service.getAuthorizationUrl(this@HelperClientUSOS.requestToken))
+			addCategory(Intent.CATEGORY_BROWSABLE)
+			addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+		})
 	}
 
-	fun handleLoginResult(activity: Activity, data: Uri?, successCallback: () -> Unit) {
-		activity.finishActivity(LOGIN_TABS_REQUEST_CODE)
+	fun handleLoginResult(activity: Activity, data: Uri?) {
 		if (data?.scheme == CALLBACK_URL_HOST) {
 			doAsync {
 				val verifier = data.getQueryParameter("oauth_verifier")
@@ -72,7 +92,12 @@ object HelperClientUSOS {
 						?: throw NullPointerException("oauthService cannot be null.")
 				Preferences.get().putAccessToken(accessToken)
 				Preferences.get().putSelectedUniversity(this@HelperClientUSOS.university!!)
-				successCallback.invoke()
+				activity.startActivity(
+					Intent(
+						activity,
+						ActivityMain::class.java
+					).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+				)
 			}
 		}
 	}

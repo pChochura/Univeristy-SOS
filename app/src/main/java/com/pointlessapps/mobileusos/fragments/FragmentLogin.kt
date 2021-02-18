@@ -1,13 +1,16 @@
 package com.pointlessapps.mobileusos.fragments
 
+import androidx.activity.ComponentActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterUniversity
+import com.pointlessapps.mobileusos.databinding.DialogPickScopesBinding
 import com.pointlessapps.mobileusos.databinding.DialogPickUniversityBinding
 import com.pointlessapps.mobileusos.databinding.FragmentLoginBinding
 import com.pointlessapps.mobileusos.exceptions.ExceptionNullKeyOrSecret
-import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
+import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.dp
 import com.pointlessapps.mobileusos.viewModels.ViewModelCommon
@@ -17,7 +20,12 @@ class FragmentLogin : FragmentCoreImpl<FragmentLoginBinding>(FragmentLoginBindin
 	private val viewModelCommon by viewModels<ViewModelCommon>()
 
 	override fun created() {
+		HelperClientUSOS.registerActivityResultListener(requireActivity() as ComponentActivity)
 		prepareClickListeners()
+	}
+
+	fun showWelcomeScreen() {
+		binding().iconWelcome.isVisible = true
 	}
 
 	private fun prepareClickListeners() {
@@ -30,10 +38,11 @@ class FragmentLogin : FragmentCoreImpl<FragmentLoginBinding>(FragmentLoginBindin
 								throw ExceptionNullKeyOrSecret("Neither consumerKey nor consumerSecret can be null.")
 							}
 
-							activity?.apply {
-								HelperClientUSOS.handleLogin(this, university) {
-									onChangeFragment?.invoke(FragmentBrowser(it))
-								}
+							HelperClientUSOS.handleLogin(
+								requireActivity() as ComponentActivity,
+								university
+							) {
+								onChangeFragment?.invoke(FragmentBrowser(it))
 							}
 
 							dismiss()
