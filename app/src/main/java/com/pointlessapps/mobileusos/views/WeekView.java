@@ -18,6 +18,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Pair;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -69,7 +70,7 @@ public class WeekView extends View {
 	private float offsetX;
 	private float offsetY;
 	private float maxOffsetY;
-	private float minScale = 0.75f;
+	private Pair<Float, Float> minScale = Pair.create(1f, 0.75f);
 	private float maxScale = 2f;
 	private float scaleX = 1;
 	private float scaleY = 1;
@@ -295,9 +296,9 @@ public class WeekView extends View {
 		commentDrawable.setAlpha(150);
 
 		post(() -> {
+			computeScale();
 			computeMaxOffset();
 			computeNumberOfVisibleDays(numberOfVisibleDays);
-			computeScale();
 			updateFirstVisibleDay();
 			scrollToHour(Math.max(minHourToScroll, Math.min(maxHourToScroll, today.get(Calendar.HOUR_OF_DAY))));
 			scrollToToday();
@@ -355,14 +356,33 @@ public class WeekView extends View {
 
 	private void computeScale() {
 		maxScale = ((getMeasuredWidth() - headerWidth) / MIN_NUMBER_OF_VISIBLE_DAYS) / startDayWidth;
-		minScale = ((getMeasuredWidth() - headerWidth) / MAX_NUMBER_OF_VISIBLE_DAYS) / startDayWidth;
+		float minScaleX = ((getMeasuredWidth() - headerWidth) / MAX_NUMBER_OF_VISIBLE_DAYS) / startDayWidth;
+		float minScaleY = ((getMeasuredHeight() - headerHeight) / (Math.abs(endHour) - startHour)) / startHourHeight;
 
 		if (dateTimeInterpreter != null) {
 			float textLength = headerTextPaint.measureText(dateTimeInterpreter.interpretDate(today));
-			if (minScale * startDayWidth < textLength + headerPadding.left + headerPadding.right) {
-				minScale = (textLength + headerPadding.left + headerPadding.right) / startDayWidth;
+			if (minScaleX * startDayWidth < textLength + headerPadding.left + headerPadding.right) {
+				minScaleX = (textLength + headerPadding.left + headerPadding.right) / startDayWidth;
 			}
 		}
+		minScale = Pair.create(minScaleX, minScaleY);
+
+		if (scaleX < minScaleX) {
+			scaleX = minScaleX;
+		}
+		if (scaleX > maxScale) {
+			scaleX = maxScale;
+		}
+		if (scaleY < minScaleY) {
+			scaleY = minScaleY;
+		}
+		if (scaleY > maxScale) {
+			scaleY = maxScale;
+		}
+
+		hourHeight = startHourHeight * scaleY;
+		dayWidth = startDayWidth * scaleX;
+		invalidate();
 	}
 
 	private void computePositionOfEvents() {
@@ -554,8 +574,9 @@ public class WeekView extends View {
 	}
 
 	public void scrollToDate(@NotNull Calendar date) {
-		long dayDiff = Math.round((firstVisibleDay.getTimeInMillis() - date.getTimeInMillis()) / (float) TimeUnit.DAYS.toMillis(1));
-		scroller.startScroll((int) offsetX, (int) offsetY, (int) (dayDiff * dayWidth), 0, scrollDuration);
+		int dayOffset = Math.round(offsetX - ((int) offsetX / (int) dayWidth) * dayWidth);
+		long dayDiff = Math.round((firstVisibleDay.getTimeInMillis() - date.getTimeInMillis()) / (float) TimeUnit.DAYS.toMillis(1)) + (dayOffset <= 0 ? 0 : 1);
+		scroller.startScroll((int) offsetX, (int) offsetY, (int) (dayDiff * dayWidth) - dayOffset, 0, scrollDuration);
 		invalidate();
 	}
 
@@ -1250,8 +1271,6 @@ public class WeekView extends View {
 
 	private class WeekViewScaleDetector implements ScaleGestureDetector.OnScaleGestureListener {
 
-		private final float oneWayScaleThresholdX = 100;
-		private final float oneWayScaleThresholdY = 200;
 		private final int SCALE_HORIZONTAL = 1;
 		private final int SCALE_VERTICAL = 1 << 1;
 		private final int SCALE_BOTH = 1 << 2;
@@ -1267,8 +1286,8 @@ public class WeekView extends View {
 		public boolean onScale(ScaleGestureDetector detector) {
 			float sX = (scaleDirection & SCALE_VERTICAL) != SCALE_VERTICAL ? detector.getScaleFactor() : 1;
 			float sY = (scaleDirection & SCALE_HORIZONTAL) != SCALE_HORIZONTAL ? detector.getScaleFactor() : 1;
-			scaleX = Math.max(minScale, Math.min(maxScale, scaleX * sX));
-			scaleY = Math.max(minScale, Math.min(maxScale, scaleY * sY));
+			scaleX = Math.max(minScale.first, Math.min(maxScale, scaleX * sX));
+			scaleY = Math.max(minScale.second, Math.min(maxScale, scaleY * sY));
 
 			hourHeight = startHourHeight * scaleY;
 			dayWidth = startDayWidth * scaleX;
@@ -1295,9 +1314,9 @@ public class WeekView extends View {
 			startOffsetX = offsetX;
 			startOffsetY = offsetY;
 
-			if (detector.getCurrentSpanX() < oneWayScaleThresholdX) {
+			if (detector.getCurrentSpanX() < dayWidth) {
 				scaleDirection = SCALE_VERTICAL;
-			} else if (detector.getCurrentSpanY() < oneWayScaleThresholdY) {
+			} else if (detector.getCurrentSpanY() < hourHeight) {
 				scaleDirection = SCALE_HORIZONTAL;
 			} else {
 				scaleDirection = SCALE_BOTH;
@@ -1308,7 +1327,6 @@ public class WeekView extends View {
 
 		@Override
 		public void onScaleEnd(ScaleGestureDetector detector) {
-
 		}
 	}
 }
