@@ -6,7 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseApp
-import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.databinding.ActivityMainBinding
 import com.pointlessapps.mobileusos.exceptions.ExceptionHttpUnsuccessful
@@ -72,8 +72,8 @@ class ActivityMain : FragmentActivity() {
 				if (user != null) {
 					ensureNotificationsSubscription(user.id)
 
-					FirebaseInstallations.getInstance().getToken(false).addOnSuccessListener {
-						registerFCMToken(user.id, it.token)
+					FirebaseMessaging.getInstance().token.addOnSuccessListener {
+						registerFCMToken(user.id, it)
 					}
 					return@onOnceCallback
 				}

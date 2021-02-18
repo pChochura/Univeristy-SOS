@@ -1,5 +1,6 @@
 package com.pointlessapps.mobileusos.fragments
 
+import android.annotation.SuppressLint
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -17,6 +18,7 @@ class FragmentBrowser(private val url: String) :
 		prepareClickListeners()
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	private fun prepareWebView() {
 		binding().webView.also {
 			it.webViewClient = object : WebViewClient() {
@@ -44,6 +46,7 @@ class FragmentBrowser(private val url: String) :
 					super.onPageFinished(view, url)
 				}
 			}
+			it.settings.javaScriptEnabled = true
 			it.loadUrl(url)
 		}
 	}
