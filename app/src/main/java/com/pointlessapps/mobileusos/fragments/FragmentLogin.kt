@@ -72,5 +72,33 @@ class FragmentLogin : FragmentCoreImpl<FragmentLoginBinding>(FragmentLoginBindin
 				}
 			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
 		}
+
+		binding().buttonSelectScopes.setOnClickListener {
+			DialogUtil.create(requireContext(), DialogPickScopesBinding::class.java, { dialog ->
+				dialog.root.clipToOutline = true
+
+				val prefs = Preferences.get()
+				dialog.itemOtherEmails.apply {
+					valueSwitch = { prefs.getScopeOtherEmails() }
+					onTapped { prefs.putScopeOtherEmails(!prefs.getScopeOtherEmails()) }
+				}
+				dialog.itemCrsTests.apply {
+					valueSwitch = { prefs.getScopeCrsTests() }
+					onTapped { prefs.putScopeCrsTests(!prefs.getScopeCrsTests()) }
+				}
+				dialog.itemMailClient.apply {
+					valueSwitch = { prefs.getScopeMailClient() }
+					onTapped { prefs.putScopeMailClient(!prefs.getScopeMailClient()) }
+				}
+				dialog.itemSurveyFilling.apply {
+					valueSwitch = { prefs.getScopeSurveyFilling() }
+					onTapped { prefs.putScopeSurveyFilling(!prefs.getScopeSurveyFilling()) }
+				}
+				dialog.itemEvents.apply {
+					valueSwitch = { prefs.getScopeEvents() }
+					onTapped { prefs.putScopeEvents(!prefs.getScopeEvents()) }
+				}
+			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
+		}
 	}
 }

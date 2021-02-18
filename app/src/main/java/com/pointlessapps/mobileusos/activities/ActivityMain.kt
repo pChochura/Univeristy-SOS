@@ -63,6 +63,10 @@ class ActivityMain : FragmentActivity() {
 	}
 
 	private fun ensureNotificationSubscription() {
+		if (!Preferences.get().getScopeEvents()) {
+			return
+		}
+
 		RepositoryEvent().apply {
 			RepositoryUser(application).getById(null).onOnceCallback { (user) ->
 				if (user != null) {

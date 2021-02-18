@@ -53,6 +53,12 @@ class Preferences private constructor(context: Context?) {
 
 		const val KEY_WIDGET_CONFIGURATION = "widgetConfiguration"
 
+		const val KEY_SCOPE_OTHER_EMAILS = "scopeOtherEmails"
+		const val KEY_SCOPE_CRS_TESTS = "scopeCrsTests"
+		const val KEY_SCOPE_MAIL_CLIENT = "scopeMailClient"
+		const val KEY_SCOPE_SURVEY_FILLING = "scopeSurveyFilling"
+		const val KEY_SCOPE_EVENTS = "scopeEvents"
+
 		fun get(): AppPreferencesWrapper {
 			if (instance == null) {
 				throw ExceptionNotInitialized("You have to call init() first!")
@@ -201,3 +207,38 @@ fun AppPreferencesWrapper.getWidgetConfiguration() =
 
 fun AppPreferencesWrapper.putWidgetConfiguration(widgetConfig: WidgetConfiguration) =
 	putJson(Preferences.KEY_WIDGET_CONFIGURATION, widgetConfig)
+
+
+fun AppPreferencesWrapper.getScopeOtherEmails() =
+	getBoolean(Preferences.KEY_SCOPE_OTHER_EMAILS, true)
+
+fun AppPreferencesWrapper.putScopeOtherEmails(value: Boolean) =
+	put(Preferences.KEY_SCOPE_OTHER_EMAILS, value)
+
+
+fun AppPreferencesWrapper.getScopeCrsTests() =
+	getBoolean(Preferences.KEY_SCOPE_CRS_TESTS, true)
+
+fun AppPreferencesWrapper.putScopeCrsTests(value: Boolean) =
+	put(Preferences.KEY_SCOPE_CRS_TESTS, value)
+
+
+fun AppPreferencesWrapper.getScopeMailClient() =
+	getBoolean(Preferences.KEY_SCOPE_MAIL_CLIENT, true)
+
+fun AppPreferencesWrapper.putScopeMailClient(value: Boolean) =
+	put(Preferences.KEY_SCOPE_MAIL_CLIENT, value)
+
+
+fun AppPreferencesWrapper.getScopeSurveyFilling() =
+	getBoolean(Preferences.KEY_SCOPE_SURVEY_FILLING, true)
+
+fun AppPreferencesWrapper.putScopeSurveyFilling(value: Boolean) =
+	put(Preferences.KEY_SCOPE_SURVEY_FILLING, value)
+
+
+fun AppPreferencesWrapper.getScopeEvents() =
+	getBoolean(Preferences.KEY_SCOPE_EVENTS, true)
+
+fun AppPreferencesWrapper.putScopeEvents(value: Boolean) =
+	put(Preferences.KEY_SCOPE_EVENTS, value)

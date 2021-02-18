@@ -104,21 +104,19 @@ object HelperClientUSOS {
 
 	fun isLoggedIn() = Preferences.get().getAccessToken() != null
 
+	private fun prepareScopes() =
+		mutableListOf("studies", "email", "grades", "offline_access").apply {
+			val prefs = Preferences.get()
+			if (prefs.getScopeOtherEmails()) add("other_emails")
+			if (prefs.getScopeCrsTests()) add("crstests")
+			if (prefs.getScopeMailClient()) add("mailclient")
+			if (prefs.getScopeSurveyFilling()) add("surveys_filling")
+			if (prefs.getScopeEvents()) add("events")
+		}.toTypedArray()
+
 	fun getService(baseUrl: String, consumerKey: String, consumerSecret: String): OAuth10aService =
 		ServiceBuilder(consumerKey)
 			.apiSecret(consumerSecret)
 			.callback("$CALLBACK_URL_HOST:///")
-			.build(
-				ClientUSOS.withScopes(
-					baseUrl,
-					"studies",
-					"email",
-					"other_emails",
-					"grades",
-					"offline_access",
-					"mailclient",
-					"surveys_filling",
-					"crstests"
-				)
-			)
+			.build(ClientUSOS.withScopes(baseUrl, *prepareScopes()))
 }

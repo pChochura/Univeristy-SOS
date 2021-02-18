@@ -19,6 +19,8 @@ import com.pointlessapps.mobileusos.databinding.DialogAttachmentBinding
 import com.pointlessapps.mobileusos.databinding.DialogLoadingBinding
 import com.pointlessapps.mobileusos.databinding.DialogMessageBinding
 import com.pointlessapps.mobileusos.databinding.FragmentComposeMailBinding
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getScopeMailClient
 import com.pointlessapps.mobileusos.models.Email
 import com.pointlessapps.mobileusos.utils.*
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
@@ -43,6 +45,8 @@ class FragmentComposeMail(
 	private val attachments = mutableListOf<Email.Attachment>()
 
 	override fun created() {
+		checkScopes() ?: return
+
 		prepareClickListeners()
 		prepareRecipientsList()
 		prepareRecipientsEditorListener()
@@ -98,6 +102,22 @@ class FragmentComposeMail(
 			)
 			true
 		}
+	}
+
+	override fun refreshed() {
+		checkScopes() ?: return
+	}
+
+	private fun checkScopes(): Boolean? {
+		if (!Preferences.get().getScopeMailClient()) {
+			Utils.askForRelogin(requireActivity(), R.string.scopes_missing_description) {
+				onForceGoBack?.invoke()
+			}
+
+			return null
+		}
+
+		return true
 	}
 
 	private fun prepareRecipientsEditorListener() {

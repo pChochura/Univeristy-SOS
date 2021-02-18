@@ -160,8 +160,6 @@ object Utils {
 				}
 			},
 			activity, DialogLoadingBinding::class.java, { dialog ->
-				this.dialog.setCancelable(false)
-				this.dialog.setCanceledOnTouchOutside(false)
 				dialog.messageMain.setText(R.string.there_been_a_problem)
 				dialog.messageSecondary.setText(description)
 				dialog.buttonPrimary.setText(R.string.logout)
@@ -184,7 +182,12 @@ object Utils {
 				}
 				if (onDismissListener == null) {
 					dialog.buttonSecondary.isGone = true
+					this.dialog.setCancelable(false)
+					this.dialog.setCanceledOnTouchOutside(false)
 				}
+
+				this.dialog.setOnDismissListener { onDismissListener?.invoke()}
+				this.dialog.setOnCancelListener { onDismissListener?.invoke() }
 
 				dialog.buttonSecondary.setOnClickListener {
 					this.dialog.dismiss()

@@ -49,6 +49,7 @@
 
     <declare-styleable name="SettingsItemGroup">
         <attr name="header" format="string" />
+        <attr name="subHeader" format="string" />
     </declare-styleable>
 
     <declare-styleable name="SettingsItem">

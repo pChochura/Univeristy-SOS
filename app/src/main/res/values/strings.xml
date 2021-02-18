@@ -191,7 +191,7 @@
 		<item quantity="other">@string/groups_other</item>
 	</plurals>
 	<string name="there_been_a_problem">There\'s been a problem</string>
-	<string name="scopes_missing_description">In order to use this function you have to logout and login again. We will ask you for another permission.</string>
+	<string name="scopes_missing_description">In order to use this function you have to select an appropriate scope. Login again to access this feature.</string>
 	<string name="test">Test</string>
 	<string name="test_parts">Test parts</string>
 	<string name="ignore">Ignore</string>
@@ -233,4 +233,5 @@
 	<string name="transparency_description">Indicates how transparent the widget will be</string>
 	<string name="button_settings">Button settings</string>
 	<string name="reset_widget_settings">Reset widget settings</string>
+	<string name="select_scopes">Select scopes</string>
 </resources>

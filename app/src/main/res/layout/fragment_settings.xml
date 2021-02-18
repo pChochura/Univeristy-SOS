@@ -41,10 +41,10 @@
 			android:padding="20dp">
 
 			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:id="@+id/containerTimetable"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
-				android:id="@+id/containerTimetable"
 				app:header="@string/timetable">
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
@@ -100,9 +100,9 @@
 			</com.pointlessapps.mobileusos.views.SettingsItemGroup>
 
 			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:id="@+id/containerNotifications"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/containerNotifications"
 				app:header="@string/notifications">
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
@@ -141,9 +141,9 @@
 			</com.pointlessapps.mobileusos.views.SettingsItemGroup>
 
 			<com.pointlessapps.mobileusos.views.SettingsItemGroup
+				android:id="@+id/containerSystem"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/containerSystem"
 				app:header="@string/system">
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
@@ -173,6 +173,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/send_analytics_description"
+					app:isSwitch="true"
 					app:title="@string/send_analytics" />
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
@@ -180,8 +181,8 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/logout_description"
-					app:hasValue="false"
 					app:hasSeparator="false"
+					app:hasValue="false"
 					app:title="@string/logout" />
 
 			</com.pointlessapps.mobileusos.views.SettingsItemGroup>

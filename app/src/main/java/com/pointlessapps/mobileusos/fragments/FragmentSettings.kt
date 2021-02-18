@@ -122,7 +122,12 @@ class FragmentSettings :
 	}
 
 	private fun prepareNotificationsSettings() {
+		if (!prefs.getScopeEvents()) {
+			binding().containerNotifications.setSubHeader(getString(R.string.scopes_missing_description))
+		}
+
 		binding().itemEnableNotifications.apply {
+			enabled = { prefs.getScopeEvents() }
 			valueSwitch = { prefs.getNotificationsEnabled() }
 			onTapped {
 				prefs.putNotificationsEnabled(!prefs.getNotificationsEnabled())
@@ -133,19 +138,19 @@ class FragmentSettings :
 		}
 
 		binding().itemGradesNotifications.apply {
-			enabled = { prefs.getNotificationsEnabled() }
+			enabled = { prefs.getScopeEvents() && prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsGrades() }
 			onTapped { prefs.putNotificationsGrades(!prefs.getNotificationsGrades()) }
 		}
 
 		binding().itemNewsNotifications.apply {
-			enabled = { prefs.getNotificationsEnabled() }
+			enabled = { prefs.getScopeEvents() && prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsNews() }
 			onTapped { prefs.putNotificationsNews(!prefs.getNotificationsNews()) }
 		}
 
 		binding().itemSurveysNotifications.apply {
-			enabled = { prefs.getNotificationsEnabled() }
+			enabled = { prefs.getScopeEvents() && prefs.getNotificationsEnabled() }
 			valueSwitch = { prefs.getNotificationsSurveys() }
 			onTapped { prefs.putNotificationsSurveys(!prefs.getNotificationsSurveys()) }
 		}

@@ -176,7 +176,7 @@
 	<string name="groups_one">Grupa %s</string>
 	<string name="groups_other">Grupy: %s</string>
 	<string name="there_been_a_problem">Wystąpił problem</string>
-	<string name="scopes_missing_description">Żeby użyć tej funkcjonalności należy najpierw się wylogować i zalogować ponownie. Wymagane jest nowe pozwolenie.</string>
+	<string name="scopes_missing_description">Żeby użyć tej funkcjonalności należy najpierw zaznaczyć odpowiedni zakres. Zaloguj się ponownie, aby z niej skorzystać.</string>
 	<string name="test">Sprawdzian</string>
 	<string name="test_parts">Części sprawdzianu</string>
 	<string name="ignore">Ignoruj</string>

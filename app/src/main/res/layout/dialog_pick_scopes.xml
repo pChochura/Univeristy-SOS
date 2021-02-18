@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="?white"
+	android:clipChildren="false"
+	android:outlineProvider="background">
+
+	<androidx.core.widget.NestedScrollView
+		android:id="@+id/containerScopes"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@id/containerButtonOk"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<com.pointlessapps.mobileusos.views.SettingsItemGroup
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="Such as affiliation, being a student or an employee, etc"
+				app:enabled="false"
+				app:isSwitch="true"
+				app:title="Access basic information about you" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="Such as student number, general information about your programs, courses and class groups"
+				app:enabled="false"
+				app:isSwitch="true"
+				app:title="Access general information about your studies" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="In order to run more efficiently, the application may reach into your data in USOS even if you do not use it at the moment"
+				app:enabled="false"
+				app:isSwitch="true"
+				app:title="Access your data at any time" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="The application has access to your e-mail address and can send messages to this address"
+				app:enabled="false"
+				app:isSwitch="true"
+				app:title="Sending messages to your e-mail" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:id="@+id/itemOtherEmails"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="The application provides you with e-mail addresses of other users - the same ones that you have the right to view in USOSweb"
+				app:isSwitch="true"
+				app:title="Access other users' e-mail addresses" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:id="@+id/itemCrsTests"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="This application can access your course tests: tasks, pass rules, results"
+				app:isSwitch="true"
+				app:title="Access your course tests' results" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:id="@+id/itemMailClient"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="The application has the ability to send messages via the USOS Mail module. It can also read and manage messages that you sent earlier"
+				app:isSwitch="true"
+				app:title="Access your mail in USOS (USOS Mail module)" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:id="@+id/itemSurveyFilling"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="The application allows you to fill surveys dedicated to you"
+				app:isSwitch="true"
+				app:title="Filling out your surveys" />
+
+			<com.pointlessapps.mobileusos.views.SettingsItem
+				android:id="@+id/itemEvents"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:description="The application has access to protocols and grades to the extent corresponding to your access rights in USOSweb"
+				app:hasSeparator="false"
+				app:isSwitch="true"
+				app:title="Access notifications" />
+
+		</com.pointlessapps.mobileusos.views.SettingsItemGroup>
+
+	</androidx.core.widget.NestedScrollView>
+
+	<FrameLayout
+		android:id="@+id/containerButtonOk"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/background_fade"
+		android:backgroundTint="?white"
+		android:paddingLeft="20dp"
+		android:paddingTop="20dp"
+		android:paddingRight="20dp"
+		android:paddingBottom="10dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/containerScopes">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonOk"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end|center_vertical"
+			android:fontFamily="@font/montserrat_bold"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@android:string/ok"
+			android:textAllCaps="false"
+			android:textColor="@color/colorAccent" />
+
+	</FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

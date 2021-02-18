@@ -4,7 +4,11 @@ import androidx.fragment.app.viewModels
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.adapters.AdapterSurvey
 import com.pointlessapps.mobileusos.databinding.FragmentSurveysBinding
+import com.pointlessapps.mobileusos.helpers.Preferences
+import com.pointlessapps.mobileusos.helpers.getScopeMailClient
+import com.pointlessapps.mobileusos.helpers.getScopeSurveyFilling
 import com.pointlessapps.mobileusos.models.Survey
+import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 
 class FragmentSurveys :
@@ -13,6 +17,8 @@ class FragmentSurveys :
 	private val viewModelUser by viewModels<ViewModelUser>()
 
 	override fun created() {
+		checkScopes() ?: return
+
 		prepareSurveysList()
 
 		refreshed()
@@ -21,6 +27,8 @@ class FragmentSurveys :
 	}
 
 	override fun refreshed() {
+		checkScopes() ?: return
+
 		viewModelUser.getSurveysToFill().observe(this) { (list) ->
 			binding().listSurveys.setEmptyText(getString(R.string.no_surveys_to_fill))
 			binding().listSurveys.setEmptyIcon(R.drawable.ic_no_surveys)
@@ -41,6 +49,18 @@ class FragmentSurveys :
 			binding().listSurveys.setLoaded(true)
 			binding().pullRefresh.isRefreshing = false
 		}
+	}
+
+	private fun checkScopes(): Boolean? {
+		if (!Preferences.get().getScopeSurveyFilling()) {
+			Utils.askForRelogin(requireActivity(), R.string.scopes_missing_description) {
+				onForceGoBack?.invoke()
+			}
+
+			return null
+		}
+
+		return true
 	}
 
 	private fun prepareSurveysList() {
