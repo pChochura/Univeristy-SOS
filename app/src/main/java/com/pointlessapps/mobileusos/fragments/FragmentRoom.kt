@@ -149,10 +149,14 @@ class FragmentRoom(private val id: String) :
 	private fun prepareMeetingsList() {
 		binding().listMeetings.setAdapter(AdapterMeeting(true).apply {
 			onClickListener = {
-				Utils.showCourseInfo(requireContext(), it.apply {
-					roomNumber = room?.number
-					buildingName = room?.building?.name
-				}, viewModelUser, onChangeFragment)
+				Utils.showCourseInfo(
+					requireContext(),
+					it.apply {
+						roomNumber = room?.number
+						buildingName = room?.building?.name
+					},
+					viewModelUser, onChangeFragment
+				)
 			}
 		})
 		binding().listMeetings.setEmptyText(getString(R.string.no_incoming_meetings))

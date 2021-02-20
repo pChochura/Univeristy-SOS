@@ -106,12 +106,12 @@ class ActivityMain : FragmentActivity() {
 	}
 
 	override fun attachBaseContext(newBase: Context) {
-		super.attachBaseContext(LocaleHelper.withLocale(newBase))
+		super.attachBaseContext(LocaleHelper.withDefaultLocale(newBase))
 	}
 
 	override fun onConfigurationChanged(newConfig: Configuration) {
 		super.onConfigurationChanged(newConfig)
-		LocaleHelper.withLocale(this)
+		LocaleHelper.withDefaultLocale(this)
 	}
 
 	override fun onBackPressed() {

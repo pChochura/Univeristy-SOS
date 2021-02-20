@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
@@ -12,22 +13,23 @@ import android.os.Build
 import android.provider.CalendarContract
 import android.text.Html
 import android.text.Spanned
+import android.widget.AdapterView
 import androidx.annotation.AttrRes
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
-import com.pointlessapps.mobileusos.databinding.DialogLoadingBinding
-import com.pointlessapps.mobileusos.databinding.DialogMemoBinding
-import com.pointlessapps.mobileusos.databinding.DialogShowEventBinding
+import com.pointlessapps.mobileusos.activities.ActivityWidgetSettings
+import com.pointlessapps.mobileusos.adapters.AdapterAutocomplete
+import com.pointlessapps.mobileusos.databinding.*
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.Preferences
-import com.pointlessapps.mobileusos.models.AppDatabase
-import com.pointlessapps.mobileusos.models.CourseEvent
-import com.pointlessapps.mobileusos.models.Name
+import com.pointlessapps.mobileusos.models.*
 import com.pointlessapps.mobileusos.repositories.RepositoryTimetable
+import com.pointlessapps.mobileusos.repositories.RepositoryUser
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 object Utils {
@@ -51,15 +54,16 @@ object Utils {
 			Resources.getSystem().displayMetrics.heightPixels
 		)
 
-	fun getColorByClassType(classType: String) = when (classType.toLowerCase(Locale.getDefault())) {
-		"wyk" -> Color.parseColor("#FF80CBC4")
-		"ćw" -> Color.parseColor("#FFF06292")
-		"lab" -> Color.parseColor("#FFFF9E80")
-		"wf" -> Color.parseColor("#FF81C784")
-		else -> Color.parseColor("#FFAED581")
-	}
+	fun getColorByClassType(classType: String?) =
+		when (classType?.toLowerCase(Locale.getDefault())) {
+			"wyk" -> Color.parseColor("#FF80CBC4")
+			"ćw" -> Color.parseColor("#FFF06292")
+			"lab" -> Color.parseColor("#FFFF9E80")
+			"wf" -> Color.parseColor("#FF81C784")
+			else -> Color.parseColor("#FFAED581")
+		}
 
-	fun calendarIntent(context: Context, event: CourseEvent) {
+	private fun calendarIntent(context: Context, event: CourseEvent) {
 		val insertCalendarIntent = Intent(Intent.ACTION_INSERT)
 			.setData(CalendarContract.Events.CONTENT_URI)
 			.putExtra(CalendarContract.Events.TITLE, event.name())
@@ -74,15 +78,16 @@ object Utils {
 			)
 			.putExtra(
 				CalendarContract.Events.EVENT_LOCATION,
-				"${event.buildingName.toString()}, ${event.roomNumber}"
+				if (event.buildingName != null) "${event.buildingName.toString()}, ${event.roomNumber}"
+				else event.roomNumber
 			)
 			.putExtra(
 				CalendarContract.Events.DESCRIPTION,
-				context.getString(R.string.calendar_event_description)
+				event.memo ?: context.getString(R.string.calendar_event_description)
 			)
 			.putExtra(
 				CalendarContract.Events.CALENDAR_COLOR,
-				getColorByClassType(event.classtypeId ?: context.getString(R.string.meeting))
+				getColorByClassType(event.classtypeId)
 			)
 			.putExtra(
 				CalendarContract.Events.ACCESS_LEVEL,
@@ -186,7 +191,7 @@ object Utils {
 					this.dialog.setCanceledOnTouchOutside(false)
 				}
 
-				this.dialog.setOnDismissListener { onDismissListener?.invoke()}
+				this.dialog.setOnDismissListener { onDismissListener?.invoke() }
 				this.dialog.setOnCancelListener { onDismissListener?.invoke() }
 
 				dialog.buttonSecondary.setOnClickListener {
@@ -202,7 +207,8 @@ object Utils {
 		event: CourseEvent?,
 		viewModelUser: ViewModelUser,
 		onChangeFragment: ((FragmentCore<*>) -> Unit)?,
-		onCommentChanged: ((String?) -> Unit)? = null
+		onCommentChanged: ((String?) -> Unit)? = null,
+		onRemoved: (() -> Unit)? = null
 	) {
 		if (event == null) {
 			return
@@ -235,14 +241,17 @@ object Utils {
 			val userId = run {
 				event.lecturerIds?.firstOrNull() ?: event.relatedUserIds?.firstOrNull()
 			}
-			userId?.also { id ->
-				viewModelUser.getUserById(id)
+
+			when {
+				userId != null -> viewModelUser.getUserById(userId)
 					.onOnceCallback { (user) ->
 						GlobalScope.launch(Dispatchers.Main) {
 							user?.name()?.takeIf(String::isNotBlank)
 								?.also { dialog.buttonLecturer.text = it }
 						}
 					}
+				event.lecturerName != null -> dialog.buttonLecturer.text = event.lecturerName
+				else -> dialog.buttonLecturer.isGone = true
 			}
 
 			dialog.buttonGroup.setOnClickListener {
@@ -265,7 +274,9 @@ object Utils {
 
 			dialog.buttonBuilding.setOnClickListener {
 				onChangeFragment?.invoke(
-					FragmentBuilding(event.buildingId ?: return@setOnClickListener)
+					FragmentBuilding(
+						event.buildingId ?: return@setOnClickListener
+					)
 				)
 
 				dismiss()
@@ -273,10 +284,334 @@ object Utils {
 
 			dialog.buttonAddToCalendar.setOnClickListener { calendarIntent(context, event) }
 			dialog.buttonAddNote.setOnClickListener {
-				showEventMemoEdit(context, event, onCommentChanged)
+				showEventMemoEdit(context, event) {
+					dialog.eventMemo.isGone = it.isNullOrBlank()
+					dialog.eventMemo.text = it?.takeUnless(String::isNullOrEmpty)?.also {
+						dialog.buttonAddNote.setText(R.string.edit_the_note)
+						dialog.buttonAddNote.setIconResource(R.drawable.ic_edit)
+					}.toString()
+					onCommentChanged?.invoke(it)
+				}
+			}
+
+			if (onRemoved == null || (try {
+					UUID.fromString(event.unitId)
+				} catch (e: Exception) {
+					null
+				}) == null
+			) {
+				dialog.buttonRemove.isGone = true
+			}
+			dialog.buttonRemove.setOnClickListener {
+				showMessage(
+					R.string.are_you_sure,
+					R.string.delete_event_description,
+					R.string.remove,
+					context = context
+				) {
+					RepositoryTimetable(context).deleteByCompositeId(
+						event.courseId,
+						event.unitId,
+						event.startTime.time
+					)
+					dismiss()
+					onRemoved?.invoke()
+				}
+			}
+		})
+	}
+
+	fun showEventAdd(
+		context: Context,
+		startDate: Calendar,
+		onSaved: (CourseEvent) -> Unit
+	) {
+		DialogUtil.create(context, DialogAddEventBinding::class.java, { dialog ->
+			val startTime = startDate.clone() as Calendar
+			val endTime = (startDate.clone() as Calendar).apply { add(Calendar.MINUTE, 45) }
+			var color = ContextCompat.getColor(context, R.color.defaultEventColor)
+			var endTimeRepeating: Calendar? = null
+			var frequency = 0
+			var lecturer: User? = null
+
+			dialog.buttonEventColor.iconTint = ColorStateList.valueOf(color)
+			dialog.buttonEventColor.setOnClickListener {
+				ActivityWidgetSettings.showDialogColorPicker(context, R.string.event_color) {
+					color = it
+					dialog.buttonEventColor.iconTint = ColorStateList.valueOf(color)
+				}
+			}
+
+			dialog.buttonEventDate.text =
+				SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startTime.time)
+			dialog.buttonEventStartTime.text =
+				SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime.time)
+			dialog.buttonEventEndTime.text =
+				SimpleDateFormat("HH:mm", Locale.getDefault()).format(endTime.time)
+
+			dialog.buttonEventDate.setOnClickListener {
+				showDatePicker(context, startTime) {
+					startTime.timeInMillis = it.timeInMillis
+					dialog.buttonEventDate.text =
+						SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startTime.time)
+				}
+			}
+			dialog.buttonEventStartTime.setOnClickListener {
+				showTimePicker(context, startTime) {
+					startTime.timeInMillis = it.timeInMillis
+					dialog.buttonEventStartTime.text =
+						SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime.time)
+				}
+			}
+			dialog.buttonEventEndTime.setOnClickListener {
+				showTimePicker(context, endTime) {
+					endTime.timeInMillis = it.timeInMillis
+					dialog.buttonEventEndTime.text =
+						SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime.time)
+				}
+			}
+
+			dialog.buttonEnableRepeating.setOnClickListener {
+				showRepeating(context, frequency, endTimeRepeating, startTime) { f, eTR ->
+					frequency = f
+					endTimeRepeating = eTR
+					if (frequency > 0 && endTimeRepeating != null) {
+						dialog.buttonEnableRepeating.text = context.resources.getQuantityString(
+							R.plurals.repeat_every_until,
+							frequency,
+							frequency,
+							endTimeRepeating!!.time
+						)
+					} else {
+						dialog.buttonEnableRepeating.setText(R.string.enable_repeating)
+					}
+				}
+			}
+
+			dialog.inputEventLecturer.apply {
+				setAdapter(AdapterAutocomplete(context).apply {
+					onItemClickListener =
+						AdapterView.OnItemClickListener { _, _, position, _ ->
+							list[position].also {
+								lecturer = it.user
+								dialog.inputEventLecturer.setText(it.name())
+							}
+						}
+
+					isLongClickable = false
+				})
+
+				val repositoryUser = RepositoryUser(context)
+				addTextChangedListener {
+					if (isPerformingCompletion) {
+						return@addTextChangedListener
+					}
+
+					(adapter as? AdapterAutocomplete)?.update(
+						listOf(
+							Email.Recipient(
+								it.toString(),
+								null
+							)
+						)
+					)
+					repositoryUser.getByQuery(it.toString()).onOnceCallback { (list) ->
+						GlobalScope.launch(Dispatchers.Main) {
+							(adapter as? AdapterAutocomplete)?.update(
+								listOf(
+									Email.Recipient(it.toString(), null),
+									*list.map { user -> Email.Recipient(null, user) }.toTypedArray()
+								)
+							)
+						}
+					}
+				}
+			}
+
+			setCanceledOnTouchOutside(false)
+			setCancelable(false)
+
+			dialog.buttonCancel.setOnClickListener {
+				showMessage(
+					R.string.discard_title,
+					R.string.discard_message,
+					R.string.discard,
+					context = context
+				) { dismiss() }
+			}
+
+			dialog.buttonSave.setOnClickListener {
+				if (dialog.inputEventName.text.isNullOrBlank() ||
+					dialog.inputEventLecturer.text.isNullOrBlank() ||
+					dialog.inputEventLocation.text.isNullOrBlank()
+				) {
+					showMessage(
+						R.string.there_been_a_problem,
+						R.string.you_cannot_leave_empty_fields,
+						android.R.string.ok,
+						null,
+						context
+					)
+
+					return@setOnClickListener
+				}
+
+				val event = CourseEvent(
+					unitId = UUID.randomUUID().toString(),
+					startTime = startTime.time,
+					endTime = endTime.time,
+					color = color,
+					name = Name(pl = dialog.inputEventName.text.toString()),
+					lecturerName = dialog.inputEventLecturer.text.toString(),
+					lecturerIds = lecturer?.let { listOf(it.id) },
+					roomNumber = dialog.inputEventLocation.text.toString(),
+					endTimeRepeating = endTimeRepeating?.time,
+					frequency = TimeUnit.DAYS.toMillis(frequency.toLong())
+				)
+				RepositoryTimetable(context).insert(event)
+				dismiss()
+				onSaved(event)
+			}
+		})
+	}
+
+	private fun showRepeating(
+		context: Context,
+		startFrequency: Int,
+		startEndTimeRepeating: Calendar?,
+		minTime: Calendar,
+		onSaved: (Int, Calendar?) -> Unit
+	) {
+		var frequency = startFrequency.coerceAtLeast(1)
+		val endTimeRepeating = startEndTimeRepeating?.clone() as? Calendar ?: minTime
+		DialogUtil.create(context, DialogRepeatingBinding::class.java, { dialog ->
+			dialog.buttonFrequency.text = frequency.toString()
+			dialog.textDays.text =
+				context.resources.getQuantityString(R.plurals.day, frequency)
+
+			dialog.buttonEndTimeRepeating.text =
+				SimpleDateFormat(
+					"dd.MM.yyyy",
+					Locale.getDefault()
+				).format(endTimeRepeating.time)
+
+			dialog.buttonFrequency.setOnClickListener {
+				ActivityWidgetSettings.showDialogSlider(
+					context,
+					R.string.repeat_every,
+					1,
+					14,
+					frequency.coerceAtLeast(1)
+				) {
+					frequency = it.toInt()
+					dialog.buttonFrequency.text = it
+					dialog.textDays.text =
+						context.resources.getQuantityString(R.plurals.day, frequency)
+				}
+			}
+			dialog.buttonEndTimeRepeating.setOnClickListener {
+				showDatePicker(context, endTimeRepeating) {
+					endTimeRepeating.timeInMillis = it.timeInMillis
+					dialog.buttonEndTimeRepeating.text =
+						SimpleDateFormat(
+							"dd.MM.yyyy",
+							Locale.getDefault()
+						).format(endTimeRepeating.time)
+				}
+			}
+			dialog.buttonDisable.setOnClickListener {
+				dismiss()
+				onSaved(0, null)
+			}
+			dialog.buttonSave.setOnClickListener {
+				dismiss()
+				onSaved(frequency, endTimeRepeating)
+			}
+		})
+	}
+
+	private fun showDatePicker(
+		context: Context,
+		startDate: Calendar,
+		onPicked: (Calendar) -> Unit
+	) {
+		DialogUtil.create(context, DialogDatePickerBinding::class.java, { dialog ->
+			val date = startDate.clone() as Calendar
+			dialog.datePicker.minDate = startDate.timeInMillis
+			dialog.datePicker.init(
+				startDate.get(Calendar.YEAR),
+				startDate.get(Calendar.MONTH),
+				startDate.get(Calendar.DAY_OF_MONTH)
+			) { _, year, month, day ->
+				date.set(Calendar.YEAR, year)
+				date.set(Calendar.MONTH, month)
+				date.set(Calendar.DAY_OF_MONTH, day)
+			}
+
+			dialog.buttonPrimary.setOnClickListener {
+				onPicked(date)
 				dismiss()
 			}
-		}, DialogUtil.UNDEFINED_WINDOW_SIZE, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+			dialog.buttonSecondary.setOnClickListener { dismiss() }
+		})
+	}
+
+	@Suppress("DEPRECATION")
+	private fun showTimePicker(
+		context: Context,
+		startTime: Calendar,
+		onPicked: (Calendar) -> Unit
+	) {
+		DialogUtil.create(context, DialogTimePickerBinding::class.java, { dialog ->
+			val date = startTime.clone() as Calendar
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				dialog.timePicker.hour = startTime.get(Calendar.HOUR_OF_DAY)
+				dialog.timePicker.minute = startTime.get(Calendar.MINUTE)
+			} else {
+				dialog.timePicker.currentHour = startTime.get(Calendar.HOUR_OF_DAY)
+				dialog.timePicker.currentMinute = startTime.get(Calendar.MINUTE)
+			}
+			dialog.timePicker.setIs24HourView(true)
+			dialog.timePicker.setOnTimeChangedListener { _, hour, minute ->
+				date.set(Calendar.HOUR_OF_DAY, hour)
+				date.set(Calendar.MINUTE, minute)
+			}
+
+			dialog.buttonPrimary.setOnClickListener {
+				onPicked(date)
+				dismiss()
+			}
+			dialog.buttonSecondary.setOnClickListener { dismiss() }
+		})
+	}
+
+	private fun showMessage(
+		title: Int,
+		description: Int,
+		buttonPrimary: Int,
+		buttonSecondary: Int? = R.string.cancel,
+		context: Context,
+		onPrimaryClicked: (() -> Unit)? = null
+	) {
+		DialogUtil.create(
+			context,
+			DialogMessageBinding::class.java,
+			{ dialog ->
+				dialog.messageMain.text = context.getString(title)
+				dialog.messageSecondary.text = context.getString(description)
+				dialog.buttonPrimary.text = context.getString(buttonPrimary)
+				if (buttonSecondary != null) {
+					dialog.buttonSecondary.text = context.getString(buttonSecondary)
+				} else {
+					dialog.buttonSecondary.isGone = true
+				}
+
+				dialog.buttonPrimary.setOnClickListener {
+					dismiss()
+					onPrimaryClicked?.invoke()
+				}
+				dialog.buttonSecondary.setOnClickListener { dismiss() }
+			})
 	}
 
 	private fun showEventMemoEdit(

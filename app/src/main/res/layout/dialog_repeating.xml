@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="?white"
+	android:orientation="vertical"
+	android:padding="15dp">
+
+	<androidx.appcompat.widget.AppCompatTextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/montserrat"
+		android:gravity="center"
+		android:text="@string/enable_repeating"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="18sp" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:layout_margin="15dp"
+		android:background="?colorTextSecondary" />
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="10dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/repeat_every"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="14sp" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonFrequency"
+			style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:clickable="true"
+			android:focusable="true"
+			android:fontFamily="@font/montserrat_bold"
+			android:gravity="center"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="0dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="0dp"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="24sp"
+			app:backgroundTint="?colorBackground"
+			tools:text="5" />
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:id="@+id/textDays"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/days_other"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="18sp" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="10dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal">
+
+		<androidx.appcompat.widget.AppCompatTextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:text="@string/until"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="14sp" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonEndTimeRepeating"
+			style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:clickable="true"
+			android:focusable="true"
+			android:fontFamily="@font/montserrat"
+			android:gravity="center"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="0dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="0dp"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="14sp"
+			app:backgroundTint="?colorBackground"
+			tools:text="26.03.2021" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="end"
+		android:orientation="horizontal">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonDisable"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@string/disable"
+			android:textAllCaps="false"
+			android:textColor="?colorTextPrimary" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonSave"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@string/save"
+			android:textAllCaps="false"
+			android:textColor="@color/colorAccent" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,7 +2,6 @@ package com.pointlessapps.mobileusos.fragments
 
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.Keep

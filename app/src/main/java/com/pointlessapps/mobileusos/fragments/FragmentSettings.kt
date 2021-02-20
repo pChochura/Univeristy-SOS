@@ -35,7 +35,7 @@ class FragmentSettings :
 				)
 			}
 			onTapped { item ->
-				DialogUtil.create(requireContext(), DialogTimePickerBinding::class.java, { dialog ->
+				DialogUtil.create(requireContext(), DialogPeriodPickerBinding::class.java, { dialog ->
 					var currentMin = prefs.getTimetableStartHour().toFloat()
 					var currentMax = prefs.getTimetableEndHour().toFloat()
 					dialog.periodPicker.apply {
@@ -117,7 +117,10 @@ class FragmentSettings :
 
 		binding().itemAddEvent.apply {
 			valueSwitch = { prefs.getTimetableAddEvent() }
-			onTapped { prefs.putTimetableAddEvent(!prefs.getTimetableAddEvent()) }
+			onTapped {
+				prefs.putTimetableAddEvent(!prefs.getTimetableAddEvent())
+				onForceRefreshAllFragments?.invoke()
+			}
 		}
 	}
 
@@ -216,7 +219,7 @@ class FragmentSettings :
 					else -> getString(R.string.pl)
 				}.also {
 					prefs.putSystemDefaultLanguage(it)
-					LocaleHelper.withLocale(context)
+					LocaleHelper.withDefaultLocale(context)
 					onForceRecreate?.invoke()
 				}
 			}

@@ -22,6 +22,12 @@ class ViewModelTimetable(application: Application) : AndroidViewModel(applicatio
 
 	fun clearCache() = cache.clear()
 
+	fun clearAll() {
+		clearCache()
+		weekViewEvents.clear()
+		courseEvents.clear()
+	}
+
 	fun prepareForDate(date: Calendar, callback: (() -> Unit)? = null) {
 		val days = 7 // Always download for the next 7 days
 		var downloading = false

@@ -30,5 +30,7 @@ class AdapterMeeting(private val showCourseName: Boolean = false) :
 		)
 	}
 
-	override fun update(list: List<CourseEvent>) = super.update(list.sorted())
+	override fun update(list: List<CourseEvent>) = super.update(this.list.toMutableSet().apply {
+		addAll(list)
+	}.toList().sorted())
 }

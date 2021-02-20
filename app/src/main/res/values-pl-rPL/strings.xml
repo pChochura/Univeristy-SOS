@@ -84,8 +84,8 @@
 	<string name="no_instructors">Nie ma żadnych prowadzących</string>
 	<string name="discard">Odrzuć</string>
 	<string name="save_draft">Zapisz wersję roboczą</string>
-	<string name="discard_email_message">Cała wpisana zawartość zostanie utracona i nie będzie możlwiości jej odzyskania.</string>
-	<string name="discard_email_title">Czy chcesz odrzucić wszystkie zmiany?</string>
+	<string name="discard_message">Cała wpisana zawartość zostanie utracona i nie będzie możlwiości jej odzyskania.</string>
+	<string name="discard_title">Czy chcesz odrzucić wszystkie zmiany?</string>
 	<string name="academic_calendar">Kalendarz akademicki</string>
 	<string name="events">Wydarzenia</string>
 	<string name="day_off">Wolne</string>
@@ -217,4 +217,23 @@
 	<string name="transparency_description">Oznacza jak bardzo przezroczysty ma być widget</string>
 	<string name="button_settings">Przycisk ustawień</string>
 	<string name="reset_widget_settings">Zresetuj ustawienia widgetu</string>
+	<string name="select_scopes">Wybierz zakresy</string>
+	<string name="name_of_the_event">Nazwa wydarzenia</string>
+	<string name="enable_repeating">Włącz powtarzanie</string>
+	<string name="location">Miejsce</string>
+	<string name="lecturer">Prowadzący</string>
+	<string name="you_cannot_leave_empty_fields">Nie możesz zostawić pustych pól</string>
+	<string name="event_text_color">Kolor tekstu wydarzenia</string>
+	<string name="event_text_size">Rozmiar tekstu wydarzenia</string>
+	<string name="event_color">Kolor wydarzenia</string>
+	<string name="repeat_every">Powtarzaj co</string>
+	<string name="days_one">dzień</string>
+	<string name="days_other">dni</string>
+	<string name="until">Aż do</string>
+	<string name="disable">Wyłącz</string>
+	<string name="repeat_every_until_one">Powtarzaj co %d dzień aż do %2$td.%2$tm.%2$tY</string>
+	<string name="repeat_every_until_other">Powtarzaj co %d dni aż do %2$td.%2$tm.%2$tY</string>
+	<string name="select_time">Zaznacz czas</string>
+	<string name="select_date">Zaznacz datę</string>
+	<string name="delete_event_description">Czy na pewno chcesz usunąć to wydarzenie? Nie będzie możliwości odzyskania go później</string>
 </resources>

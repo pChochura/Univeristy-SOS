@@ -85,8 +85,8 @@ class FragmentComposeMail(
 				requireContext(),
 				DialogMessageBinding::class.java,
 				{ dialog ->
-					dialog.messageMain.text = getString(R.string.discard_email_title)
-					dialog.messageSecondary.text = getString(R.string.discard_email_message)
+					dialog.messageMain.text = getString(R.string.discard_title)
+					dialog.messageSecondary.text = getString(R.string.discard_message)
 					dialog.buttonPrimary.text = getString(R.string.discard)
 					dialog.buttonSecondary.text = getString(R.string.save_draft)
 

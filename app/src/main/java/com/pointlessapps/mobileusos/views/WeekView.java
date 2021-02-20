@@ -424,6 +424,25 @@ public class WeekView extends View {
 		List<WeekViewEvent> allEvents = new ArrayList<>();
 		for (List<WeekViewEvent> events : eventsByMonths.values()) {
 			allEvents.addAll(events);
+
+			for (WeekViewEvent event : events) {
+				if (event.frequency != 0 && event.repeatingEndDate != null) {
+					Calendar date = (Calendar) event.startTime.clone();
+					date.add(Calendar.MILLISECOND, (int) event.frequency);
+					while (date.compareTo(event.repeatingEndDate) < 0) {
+						WeekViewEvent repeatingEvent = new WeekViewEvent(event);
+						repeatingEvent.endTime.setTimeInMillis(
+								date.getTimeInMillis() +
+										repeatingEvent.endTime.getTimeInMillis() - repeatingEvent.startTime.getTimeInMillis()
+						);
+						repeatingEvent.startTime.setTimeInMillis(date.getTimeInMillis());
+						repeatingEvent.isChild = true;
+						allEvents.add(repeatingEvent);
+
+						date.add(Calendar.MILLISECOND, (int) event.frequency);
+					}
+				}
+			}
 		}
 
 		Collections.sort(allEvents, (event1, event2) -> {
@@ -610,6 +629,12 @@ public class WeekView extends View {
 		invalidate();
 	}
 
+	public void setEventTextColor(@ColorInt int eventTextColor) {
+		this.eventTextColor = eventTextColor;
+		eventTextPaint.setColor(eventTextColor);
+		invalidate();
+	}
+
 	public void setVisibleDays(int defaultVisibleDays) {
 		numberOfVisibleDays = defaultVisibleDays;
 		computeNumberOfVisibleDays(numberOfVisibleDays);
@@ -692,9 +717,11 @@ public class WeekView extends View {
 
 		int hourFromBeginning = (int) Math.floor((y - headerHeight - offsetY) / hourHeight);
 		int minute = (int) ((y - headerHeight - offsetY - hourFromBeginning * hourHeight) / hourHeight * 60);
+		int minuteQuarterDiff = minute % 15;
 		int hour = hourFromBeginning + getStartHour();
 		selectedTime.set(Calendar.HOUR_OF_DAY, hour);
-		selectedTime.set(Calendar.MINUTE, minute);
+		selectedTime.set(Calendar.MINUTE, minute / 15 * 15 + (minuteQuarterDiff > 7 ? 15 : 0));
+
 
 		return selectedTime;
 	}
@@ -784,9 +811,6 @@ public class WeekView extends View {
 		}
 	}
 
-	/**
-	 * Draws horizontal header with dates of column's corresponding days
-	 */
 	private void drawDayHeader(Canvas canvas) {
 		shadowPaint.setShader(dayHeaderShadow);
 		canvas.drawRect(headerWidth, headerHeight - 5f, getRight(), headerHeight + 10f, shadowPaint);
@@ -829,9 +853,6 @@ public class WeekView extends View {
 		canvas.restore();
 	}
 
-	/**
-	 * Draws vertical header with hours
-	 */
 	private void drawHourHeader(Canvas canvas) {
 		shadowPaint.setShader(hourHeaderShadow);
 		canvas.drawRect(headerWidth - 5f, 0, headerWidth + 10f, getBottom(), shadowPaint);
@@ -1084,7 +1105,6 @@ public class WeekView extends View {
 	}
 
 	public static class EventRect {
-
 		public final WeekViewEvent event;
 		public RectF rectF;
 
@@ -1104,52 +1124,68 @@ public class WeekView extends View {
 	}
 
 	public static class WeekViewEvent {
-		private long mId;
-		private Calendar mStartTime;
-		private Calendar mEndTime;
-		private String mName;
-		private int mColor;
+		private long id;
+		private Calendar startTime;
+		private Calendar endTime;
+		private String name;
+		private int color;
 		private boolean hasOutline;
 		private String comment;
+		private long frequency;
+		private Calendar repeatingEndDate;
+		private boolean isChild;
 
 		public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, String comment) {
-			this.mId = id;
-			this.mName = name;
-			this.mStartTime = startTime;
-			this.mEndTime = endTime;
+			this.id = id;
+			this.name = name;
+			this.startTime = startTime;
+			this.endTime = endTime;
 			this.comment = comment;
 		}
 
+		public WeekViewEvent(WeekViewEvent event) {
+			this.id = event.id;
+			this.startTime = event.startTime != null ? (Calendar) event.startTime.clone() : null;
+			this.endTime = event.startTime != null ? (Calendar) event.endTime.clone() : null;
+			this.name = event.name;
+			this.color = event.color;
+			this.hasOutline = event.hasOutline;
+			this.comment = event.comment;
+			this.frequency = event.frequency;
+			this.repeatingEndDate = event.startTime != null ? (Calendar) event.repeatingEndDate.clone() : null;
+			this.isChild = event.isChild;
+		}
+
 		public Calendar getStartTime() {
-			return mStartTime;
+			return startTime;
 		}
 
 		public void setStartTime(Calendar startTime) {
-			this.mStartTime = startTime;
+			this.startTime = startTime;
 		}
 
 		public Calendar getEndTime() {
-			return mEndTime;
+			return endTime;
 		}
 
 		public void setEndTime(Calendar endTime) {
-			this.mEndTime = endTime;
+			this.endTime = endTime;
 		}
 
 		public String getName() {
-			return mName;
+			return name;
 		}
 
 		public void setName(String name) {
-			this.mName = name;
+			this.name = name;
 		}
 
 		public int getColor() {
-			return mColor;
+			return color;
 		}
 
 		public void setColor(int color) {
-			this.mColor = color;
+			this.color = color;
 		}
 
 		public boolean hasOutline() {
@@ -1161,11 +1197,11 @@ public class WeekView extends View {
 		}
 
 		public long getId() {
-			return mId;
+			return id;
 		}
 
 		public void setId(long id) {
-			this.mId = id;
+			this.id = id;
 		}
 
 		public String getComment() {
@@ -1174,6 +1210,30 @@ public class WeekView extends View {
 
 		public void setComment(String comment) {
 			this.comment = comment;
+		}
+
+		public long getFrequency() {
+			return frequency;
+		}
+
+		public void setFrequency(long frequency) {
+			this.frequency = frequency;
+		}
+
+		public Calendar getRepeatingEndDate() {
+			return repeatingEndDate;
+		}
+
+		public void setRepeatingEndDate(Calendar repeatingEndDate) {
+			this.repeatingEndDate = repeatingEndDate;
+		}
+
+		public boolean isChild() {
+			return isChild;
+		}
+
+		public void setChild(boolean child) {
+			isChild = child;
 		}
 
 		@Override
@@ -1187,13 +1247,13 @@ public class WeekView extends View {
 
 			WeekViewEvent that = (WeekViewEvent) o;
 
-			return mId == that.mId;
+			return id == that.id;
 
 		}
 
 		@Override
 		public int hashCode() {
-			return (int) (mId ^ (mId >>> 32));
+			return (int) (id ^ (id >>> 32));
 		}
 
 		public boolean isCollidingWith(WeekViewEvent event) {
@@ -1201,7 +1261,7 @@ public class WeekView extends View {
 			long end1 = getEndTime().getTimeInMillis();
 			long start2 = event.getStartTime().getTimeInMillis();
 			long end2 = event.getEndTime().getTimeInMillis();
-			return !((start1 >= end2) || (end1 <= start2));
+			return !(start1 >= end2 || end1 <= start2);
 		}
 	}
 

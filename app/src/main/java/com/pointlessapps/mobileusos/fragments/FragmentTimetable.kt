@@ -23,6 +23,7 @@ class FragmentTimetable :
 	override fun created() {
 		prepareClickListeners()
 		refreshed()
+		refreshDataset(true)
 	}
 
 	override fun refreshed() {
@@ -31,18 +32,25 @@ class FragmentTimetable :
 	}
 
 	private fun prepareClickListeners() {
-		binding().buttonRefresh.setOnClickListener {
-			binding().horizontalProgressBar.isRefreshing = true
+		binding().buttonRefresh.setOnClickListener { refreshDataset() }
+	}
+
+	private fun refreshDataset(clearAll: Boolean = false) {
+		binding().horizontalProgressBar.isRefreshing = true
+		if (clearAll) {
+			viewModelTimetable.clearAll()
+		} else {
 			viewModelTimetable.clearCache()
-			viewModelTimetable.prepareForDate(binding().weekView.firstVisibleDay) {
-				binding().weekView.refreshDataset()
-				binding().horizontalProgressBar.isRefreshing = false
-			}
+		}
+		viewModelTimetable.prepareForDate(binding().weekView.firstVisibleDay) {
+			binding().weekView.refreshDataset()
+			binding().horizontalProgressBar.isRefreshing = false
 		}
 	}
 
 	private fun prepareWeekView() {
-		Preferences.get().apply {
+		val prefs = Preferences.get()
+		prefs.apply {
 			binding().weekView.setStartHour(getTimetableStartHour())
 			binding().weekView.setEndHour(getTimetableEndHour())
 			binding().weekView.setVisibleDays(getTimetableVisibleDays())
@@ -56,9 +64,16 @@ class FragmentTimetable :
 			}
 		}
 		binding().weekView.setMonthChangeListener { newYear, newMonth ->
-			return@setMonthChangeListener viewModelTimetable.getEventsByMonthYear(newMonth, newYear)
+			viewModelTimetable.getEventsByMonthYear(newMonth, newYear)
 		}
 		binding().weekView.setEventClickListener { event, _ -> showEventInfo(event) }
+		if (prefs.getTimetableAddEvent()) {
+			binding().weekView.setEmptyViewClickListener {
+				Utils.showEventAdd(requireContext(), it) {
+					refreshDataset()
+				}
+			}
+		}
 	}
 
 	private fun showEventInfo(weekViewEvent: WeekView.WeekViewEvent) {
@@ -74,9 +89,12 @@ class FragmentTimetable :
 			return
 		}
 
-		Utils.showCourseInfo(requireContext(), event, viewModelUser, onChangeFragment) {
-			weekViewEvent.comment = it
-			binding().weekView.refreshDataset()
-		}
+		Utils.showCourseInfo(
+			requireContext(), event, viewModelUser, onChangeFragment,
+			{
+				weekViewEvent.comment = it
+				binding().weekView.refreshDataset()
+			}, { refreshDataset(true) }
+		)
 	}
 }

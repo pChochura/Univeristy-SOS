@@ -3,6 +3,7 @@ package com.pointlessapps.mobileusos.activities
 import android.app.Dialog
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -96,6 +97,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			value = { widgetConfiguration.visibleDays.toString() }
 			onTapped { item ->
 				showDialogList(
+					this@ActivityWidgetSettings,
 					R.string.number_of_visible_days_title,
 					(3..7).map(Int::toString).toList()
 				) {
@@ -110,6 +112,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			value = { widgetConfiguration.visibleHoursBefore.toString() }
 			onTapped { item ->
 				showDialogList(
+					this@ActivityWidgetSettings,
 					R.string.number_of_visible_hours_before_title,
 					(1..6).map(Int::toString)
 				) {
@@ -124,6 +127,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			value = { widgetConfiguration.visibleHoursAfter.toString() }
 			onTapped { item ->
 				showDialogList(
+					this@ActivityWidgetSettings,
 					R.string.number_of_visible_hours_after_title,
 					(1..6).map(Int::toString)
 				) {
@@ -138,6 +142,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			value = { widgetConfiguration.transparency.toString() }
 			onTapped { item ->
 				showDialogSlider(
+					this@ActivityWidgetSettings,
 					R.string.transparency,
 					0, 100, widgetConfiguration.transparency
 				) {
@@ -152,7 +157,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemFutureBackgroundColor.apply {
 			valueColor = { widgetConfiguration.futureBackgroundColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.future_background_color) {
+				showDialogColorPicker(
+					this@ActivityWidgetSettings,
+					R.string.future_background_color
+				) {
 					widgetConfiguration.futureBackgroundColor = it
 
 					drawWidget()
@@ -163,7 +171,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemPastBackgroundColor.apply {
 			valueColor = { widgetConfiguration.pastBackgroundColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.past_background_color) {
+				showDialogColorPicker(this@ActivityWidgetSettings, R.string.past_background_color) {
 					widgetConfiguration.pastBackgroundColor = it
 
 					drawWidget()
@@ -174,7 +182,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemWeekendBackgroundColor.apply {
 			valueColor = { widgetConfiguration.weekendsBackgroundColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.weekends_background_color) {
+				showDialogColorPicker(
+					this@ActivityWidgetSettings,
+					R.string.weekends_background_color
+				) {
 					widgetConfiguration.weekendsBackgroundColor = it
 
 					drawWidget()
@@ -185,7 +196,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemNowLineColor.apply {
 			valueColor = { widgetConfiguration.nowLineColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.now_line_color) {
+				showDialogColorPicker(this@ActivityWidgetSettings, R.string.now_line_color) {
 					widgetConfiguration.nowLineColor = it
 
 					drawWidget()
@@ -196,7 +207,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemTodayHeaderTextColor.apply {
 			valueColor = { widgetConfiguration.todayHeaderTextColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.today_header_text_color) {
+				showDialogColorPicker(
+					this@ActivityWidgetSettings,
+					R.string.today_header_text_color
+				) {
 					widgetConfiguration.todayHeaderTextColor = it
 
 					drawWidget()
@@ -207,7 +221,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemHeaderTextColor.apply {
 			valueColor = { widgetConfiguration.headerTextColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.header_text_color) {
+				showDialogColorPicker(this@ActivityWidgetSettings, R.string.header_text_color) {
 					widgetConfiguration.headerTextColor = it
 
 					drawWidget()
@@ -218,7 +232,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemHeaderBackgroundColor.apply {
 			valueColor = { widgetConfiguration.headerBackgroundColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.header_background_color) {
+				showDialogColorPicker(
+					this@ActivityWidgetSettings,
+					R.string.header_background_color
+				) {
 					widgetConfiguration.headerBackgroundColor = it
 
 					drawWidget()
@@ -229,7 +246,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemDividerLineColor.apply {
 			valueColor = { widgetConfiguration.dividerLineColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.divider_line_color) {
+				showDialogColorPicker(this@ActivityWidgetSettings, R.string.divider_line_color) {
 					widgetConfiguration.dividerLineColor = it
 
 					drawWidget()
@@ -240,7 +257,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.itemEventTextColor.apply {
 			valueColor = { widgetConfiguration.eventTextColor }
 			onTapped { item ->
-				showDialogColorPicker(R.string.event_text_color) {
+				showDialogColorPicker(this@ActivityWidgetSettings, R.string.event_text_color) {
 					widgetConfiguration.eventTextColor = it
 
 					drawWidget()
@@ -252,6 +269,7 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			value = { widgetConfiguration.eventTextSize.toString() }
 			onTapped { item ->
 				showDialogSlider(
+					this@ActivityWidgetSettings,
 					R.string.event_text_size,
 					12,
 					20,
@@ -358,86 +376,94 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			)))
 	}
 
-	private fun showDialogSlider(
-		@StringRes title: Int,
-		minValue: Int,
-		maxValue: Int,
-		value: Int,
-		onSelectedListener: (String) -> Unit
-	) {
-		DialogUtil.create(
-			this@ActivityWidgetSettings,
-			DialogSliderBinding::class.java,
-			{ dialog ->
-				dialog.title.setText(title)
-				dialog.slider.valueFrom = minValue.toFloat()
-				dialog.slider.valueTo = maxValue.toFloat()
-				dialog.slider.value = value.toFloat()
-				dialog.buttonPrimary.setOnClickListener {
-					onSelectedListener(dialog.slider.value.toInt().toString())
-					dismiss()
-				}
-			})
-	}
-
-	private fun showDialogList(
-		@StringRes title: Int,
-		values: List<String>,
-		onSelectedListener: (String) -> Unit
-	) {
-		showDialog(
-			ListItemSimpleBinding::class.java,
-			title,
-			values,
-			LinearLayoutManager(applicationContext),
-			{ binding, value -> binding.root.text = value }
+	companion object {
+		fun showDialogSlider(
+			context: Context,
+			@StringRes title: Int,
+			minValue: Int,
+			maxValue: Int,
+			value: Int,
+			onSelectedListener: (String) -> Unit
 		) {
-			onSelectedListener(it)
-			dismiss()
+			DialogUtil.create(
+				context,
+				DialogSliderBinding::class.java,
+				{ dialog ->
+					dialog.title.setText(title)
+					dialog.slider.valueFrom = minValue.toFloat()
+					dialog.slider.valueTo = maxValue.toFloat()
+					dialog.slider.value = value.toFloat()
+					dialog.buttonPrimary.setOnClickListener {
+						onSelectedListener(dialog.slider.value.toInt().toString())
+						dismiss()
+					}
+				})
 		}
-	}
 
-	private fun showDialogColorPicker(
-		@StringRes title: Int,
-		onSelectedListener: (Int) -> Unit
-	) {
-		showDialog(
-			ListItemColorBinding::class.java,
-			title,
-			resources.getIntArray(R.array.colors).map(Int::toString).toList(),
-			GridLayoutManager(applicationContext, 5),
-			{ binding, value -> binding.root.setColorFilter(value.toInt()) }
+		fun showDialogList(
+			context: Context,
+			@StringRes title: Int,
+			values: List<String>,
+			onSelectedListener: (String) -> Unit
 		) {
-			onSelectedListener(it.toInt())
-			dismiss()
+			showDialog(
+				context,
+				ListItemSimpleBinding::class.java,
+				title,
+				values,
+				LinearLayoutManager(context),
+				{ binding, value -> binding.root.text = value }
+			) {
+				onSelectedListener(it)
+				dismiss()
+			}
 		}
-	}
 
-	private fun <T : ViewBinding> showDialog(
-		bindingClass: Class<T>,
-		@StringRes title: Int,
-		values: List<String>,
-		layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(applicationContext),
-		onBindListener: (T, String) -> Unit,
-		onSelectedListener: Dialog.(String) -> Unit
-	) {
-		DialogUtil.create(
-			this@ActivityWidgetSettings,
-			DialogListPickerBinding::class.java,
-			{ dialog ->
-				dialog.title.setText(title)
-				dialog.listItems.apply {
-					adapter = object :
-						AdapterCore<String, T>(values.toMutableList(), bindingClass) {
-						override fun onBind(binding: T, position: Int) {
-							binding.root.apply {
-								onBindListener(binding, list[position])
-								setOnClickListener { onSelectedListener(list[position]) }
+		fun showDialogColorPicker(
+			context: Context,
+			@StringRes title: Int,
+			onSelectedListener: (Int) -> Unit
+		) {
+			showDialog(
+				context,
+				ListItemColorBinding::class.java,
+				title,
+				context.resources.getIntArray(R.array.colors).map(Int::toString).toList(),
+				GridLayoutManager(context, 5),
+				{ binding, value -> binding.root.setColorFilter(value.toInt()) }
+			) {
+				onSelectedListener(it.toInt())
+				dismiss()
+			}
+		}
+
+		private fun <T : ViewBinding> showDialog(
+			context: Context,
+			bindingClass: Class<T>,
+			@StringRes title: Int,
+			values: List<String>,
+			layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context),
+			onBindListener: (T, String) -> Unit,
+			onSelectedListener: Dialog.(String) -> Unit
+		) {
+			DialogUtil.create(
+				context,
+				DialogListPickerBinding::class.java,
+				{ dialog ->
+					dialog.title.setText(title)
+					dialog.listItems.apply {
+						adapter = object :
+							AdapterCore<String, T>(values.toMutableList(), bindingClass) {
+							override fun onBind(binding: T, position: Int) {
+								binding.root.apply {
+									onBindListener(binding, list[position])
+									setOnClickListener { onSelectedListener(list[position]) }
+								}
 							}
 						}
+						this.layoutManager = layoutManager
 					}
-					this.layoutManager = layoutManager
-				}
-			})
+				})
+		}
 	}
 }

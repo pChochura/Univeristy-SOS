@@ -209,4 +209,23 @@
 		app:iconTint="?colorTextPrimary"
 		app:rippleColor="?colorTextSecondary" />
 
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonRemove"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/remove"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
+		app:icon="@drawable/ic_delete"
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+	android:layout_height="wrap_content"
 	app:cardBackgroundColor="?white"
 	app:cardCornerRadius="5dp"
 	app:cardElevation="0dp">
@@ -19,7 +19,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/montserrat_bold"
 			android:gravity="center"
-			android:text="@string/select_visible_period"
+			android:text="@string/select_time"
 			android:textAlignment="center"
 			android:textColor="?colorTextPrimary"
 			android:textSize="18sp"
@@ -27,25 +27,17 @@
 			app:layout_constraintRight_toRightOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<com.google.android.material.slider.RangeSlider
-			android:id="@+id/periodPicker"
-			style="@style/Widget.MaterialComponents.Slider"
-			android:layout_width="match_parent"
+		<TimePicker
+			android:id="@+id/timePicker"
+			android:theme="@style/TimePicker"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
-			android:stepSize="1"
-			android:valueFrom="0"
-			android:valueTo="24"
-			app:labelBehavior="withinBounds"
-			app:layout_constraintTop_toBottomOf="@id/title"
-			app:thumbColor="@color/colorAccent"
-			app:thumbElevation="0dp"
-			app:thumbRadius="10dp"
-			app:tickColor="@android:color/transparent"
-			app:trackColorActive="@color/colorAccent"
-			app:trackColorInactive="?colorBackground"
-			app:trackHeight="6dp"
-			app:values="@array/initial_visible_period" />
+			android:headerBackground="?white"
+			android:numbersBackgroundColor="?colorBackground"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title" />
 
 		<com.google.android.material.button.MaterialButton
 			android:id="@+id/buttonPrimary"
@@ -68,7 +60,7 @@
 			android:textColor="@color/colorAccent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/periodPicker" />
+			app:layout_constraintTop_toBottomOf="@id/timePicker" />
 
 		<com.google.android.material.button.MaterialButton
 			android:id="@+id/buttonSecondary"
@@ -94,7 +86,7 @@
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintRight_toLeftOf="@id/buttonPrimary"
 			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/periodPicker" />
+			app:layout_constraintTop_toBottomOf="@id/timePicker" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

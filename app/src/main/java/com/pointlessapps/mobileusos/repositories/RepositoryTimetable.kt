@@ -24,6 +24,12 @@ class RepositoryTimetable(context: Context) {
 		}
 	}
 
+	fun deleteByCompositeId(courseId: String, unitId: String, startTime: Long) {
+		GlobalScope.launch {
+			timetableDao.deleteByCompositeId(courseId, unitId, startTime)
+		}
+	}
+
 	fun getForDays(startTime: Calendar, numberOfDays: Int) = ObserverWrapper<List<CourseEvent?>> {
 		postValue {
 			timetableDao.getForDays(

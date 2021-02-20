@@ -92,7 +92,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					app:description="@string/add_an_event_description"
-					app:enabled="false"
 					app:hasSeparator="false"
 					app:isSwitch="true"
 					app:title="@string/add_an_event" />

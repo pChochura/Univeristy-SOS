@@ -73,8 +73,8 @@
 	<string name="no_instructors">There are no instructors</string>
 	<string name="discard">Discard</string>
 	<string name="save_draft">Save draft</string>
-	<string name="discard_email_message">All your content will be erased and you won\'t be able to come back to it.</string>
-	<string name="discard_email_title">Do you want to discard all changes?</string>
+	<string name="discard_message">All your content will be erased and you won\'t be able to come back to it.</string>
+	<string name="discard_title">Do you want to discard all changes?</string>
 	<string name="academic_calendar">Academic calendar</string>
 	<string name="events">Events</string>
 	<string name="date_period" translatable="false">%1$td.%1$tm.%1$tY - %2$td.%2$tm.%2$tY</string>
@@ -234,4 +234,30 @@
 	<string name="button_settings">Button settings</string>
 	<string name="reset_widget_settings">Reset widget settings</string>
 	<string name="select_scopes">Select scopes</string>
+	<string name="name_of_the_event">Name of the event</string>
+	<string name="enable_repeating">Enable repeating</string>
+	<string name="location">Location</string>
+	<string name="lecturer">Lecturer</string>
+	<string name="you_cannot_leave_empty_fields">You cannot leave empty fields</string>
+	<string name="event_text_color">Event text color</string>
+	<string name="event_text_size">Event text size</string>
+	<string name="event_color">Event color</string>
+	<string name="repeat_every">Repeat every</string>
+	<string name="days_one">day</string>
+	<string name="days_other">days</string>
+	<plurals name="day">
+		<item quantity="one">@string/days_one</item>
+		<item quantity="other">@string/days_other</item>
+	</plurals>
+	<string name="until">Until</string>
+	<string name="disable">Disable</string>
+	<string name="repeat_every_until_one">Repeat every %d day until %2$td.%2$tm.%2$tY</string>
+	<string name="repeat_every_until_other">Repeat every %d days until %2$td.%2$tm.%2$tY</string>
+	<string name="select_time">Select time</string>
+	<string name="select_date">Select date</string>
+	<string name="delete_event_description">Do you want to remove this event? You won\'t be able to recover it</string>
+	<plurals name="repeat_every_until">
+		<item quantity="one">@string/repeat_every_until_one</item>
+		<item quantity="other">@string/repeat_every_until_other</item>
+	</plurals>
 </resources>

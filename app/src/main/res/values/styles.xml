@@ -45,6 +45,29 @@
 		<item name="android:windowTranslucentNavigation">false</item>
 	</style>
 
+	<style name="TimePicker" parent="@style/Widget.MaterialComponents.TimePicker.Clock">
+		<item name="android:background">?white</item>
+		<item name="android:headerBackground">?white</item>
+		<item name="android:fontFamily">@font/montserrat</item>
+		<item name="android:textColorPrimary">?colorTextPrimary</item>
+		<item name="android:textColorPrimaryInverse">?colorTextPrimary</item>
+		<item name="android:textColorSecondary">?colorTextSecondary</item>
+		<item name="android:textColorSecondaryInverse">?colorTextSecondary</item>
+		<item name="android:numbersBackgroundColor">?colorTextSecondary</item>
+		<item name="colorAccent">?colorTextSecondary</item>
+	</style>
+
+	<style name="DatePicker" parent="@style/Widget.MaterialComponents.TimePicker.Clock">
+		<item name="android:background">?white</item>
+		<item name="android:headerBackground">?white</item>
+		<item name="android:fontFamily">@font/montserrat</item>
+		<item name="android:textColorPrimary">?colorTextPrimary</item>
+		<item name="android:textColorPrimaryInverse">?colorTextPrimary</item>
+		<item name="android:textColorSecondary">?colorTextSecondary</item>
+		<item name="android:textColorSecondaryInverse">?colorTextSecondary</item>
+		<item name="colorAccent">?colorTextSecondary</item>
+	</style>
+
 	<style name="BottomNavigationTextActive" parent="Widget.MaterialComponents.BottomNavigationView">
 		<item name="android:fontFamily">@font/montserrat_bold</item>
 		<item name="android:textSize">10sp</item>

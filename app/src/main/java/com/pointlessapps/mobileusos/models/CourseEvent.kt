@@ -34,6 +34,9 @@ data class CourseEvent(
 	@ColumnInfo(name = "end_time")
 	@SerializedName("end_time")
 	var endTime: Date? = null,
+	@ColumnInfo(name = "end_time_repeating")
+	@SerializedName("end_time_repeating")
+	var endTimeRepeating: Date? = null,
 	@ColumnInfo(name = "building_name")
 	@SerializedName("building_name")
 	var buildingName: Name? = null,
@@ -46,7 +49,9 @@ data class CourseEvent(
 	@ColumnInfo(name = "group_number")
 	@SerializedName("group_number")
 	var groupNumber: String? = null,
-	var frequency: String? = null,
+	@ColumnInfo(name = "frequency")
+	@SerializedName("frequency")
+	var frequency: Long? = null,
 	@ColumnInfo(name = "classtype_id")
 	@SerializedName("classtype_id")
 	var classtypeId: String? = null,
@@ -56,9 +61,15 @@ data class CourseEvent(
 	@ColumnInfo(name = "lecturer_ids")
 	@SerializedName("lecturer_ids")
 	var lecturerIds: List<String>? = null,
+	@ColumnInfo(name = "lecturer_name")
+	@SerializedName("lecturer_name")
+	var lecturerName: String? = null,
 	@ColumnInfo(name = "related_user_ids")
 	@SerializedName("related_user_ids")
 	var relatedUserIds: List<String>? = null,
+	@ColumnInfo(name = "color")
+	@SerializedName("color")
+	var color: Int? = null,
 	@ColumnInfo(name = "name")
 	@SerializedName("name")
 	var name: Name? = null
@@ -67,13 +78,15 @@ data class CourseEvent(
 	fun compositeId() =
 		(courseId.hashCode() * 31 + unitId.hashCode()) * 31 + startTime.hashCode().toLong()
 
-	private fun compositeName() =
-		"${courseName.toString()}${if (roomNumber.isNullOrBlank()) "" else " ($roomNumber)"} - ${classtypeName.toString()}"
+	private fun compositeName() = buildString {
+		append(name())
+		if (roomNumber?.isNotBlank() == true) append(" (${roomNumber.toString()})")
+		if (classtypeName?.isNotEmpty() == true) append(" - ${classtypeName.toString()}")
+	}
 
 	fun name(withCourseName: Boolean = true) =
-		courseName?.takeIf { withCourseName }?.toString() ?:
-			classtypeName?.toString() ?:
-				name.toString()
+		courseName?.takeIf { withCourseName }?.toString() ?: classtypeName?.toString()
+		?: name.toString()
 
 	fun toWeekViewEvent() = WeekView.WeekViewEvent(
 		compositeId(),
@@ -86,7 +99,10 @@ data class CourseEvent(
 		},
 		memo
 	).apply {
-		color = Utils.getColorByClassType(classtypeId ?: return@apply)
+		color = this@CourseEvent.color ?: Utils.getColorByClassType(classtypeId)
+		frequency = this@CourseEvent.frequency ?: 0
+		repeatingEndDate =
+			endTimeRepeating?.let { Calendar.getInstance().apply { timeInMillis = it.time } }
 		setHasOutline(
 			Preferences.get().getTimetableOutlineRemote() &&
 					buildingId?.toLowerCase(Locale.forLanguageTag("pl")) == "zdalny"
@@ -94,4 +110,23 @@ data class CourseEvent(
 	}
 
 	override fun compareTo(other: CourseEvent) = startTime.compareTo(other.startTime)
+
+	override fun equals(other: Any?): Boolean {
+		if (other == null || other !is CourseEvent) {
+			return false
+		}
+
+		if (courseId == other.courseId && unitId == other.unitId && startTime.time == other.startTime.time) {
+			return true
+		}
+
+		return hashCode() == other.hashCode()
+	}
+
+	override fun hashCode(): Int {
+		var result = courseId.hashCode()
+		result = 31 * result + unitId.hashCode()
+		result = 31 * result + startTime.time.hashCode()
+		return result
+	}
 }

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/background_rounded"
+	android:backgroundTint="?white"
+	android:orientation="vertical"
+	android:padding="15dp">
+
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/inputEventName"
+		style="@style/Widget.AppCompat.EditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/background_rounded"
+		android:backgroundTint="?colorBackground"
+		android:fontFamily="@font/montserrat"
+		android:hint="@string/name_of_the_event"
+		android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textAutoComplete"
+		android:padding="10dp"
+		android:textColor="?colorTextPrimary"
+		android:textColorHint="?colorTextSecondary"
+		android:textSize="18sp"
+		app:drawableTint="?colorTextSecondary" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:layout_margin="15dp"
+		android:background="?colorTextSecondary" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonEventDate"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:fontFamily="@font/montserrat"
+		android:gravity="center"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:minWidth="0dp"
+		android:minHeight="0dp"
+		android:paddingLeft="10dp"
+		android:paddingTop="5dp"
+		android:paddingRight="10dp"
+		android:paddingBottom="5dp"
+		android:textAlignment="center"
+		android:textColor="?colorTextPrimary"
+		android:textSize="14sp"
+		app:backgroundTint="?colorBackground"
+		tools:text="12.02.2020" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="15dp">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonEventStartTime"
+			style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="15dp"
+			android:layout_marginRight="15dp"
+			android:clickable="true"
+			android:focusable="true"
+			android:fontFamily="@font/montserrat_bold"
+			android:gravity="center"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="0dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="0dp"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="24sp"
+			app:backgroundTint="?colorBackground"
+			app:layout_constraintRight_toLeftOf="@id/divider"
+			tools:text="11:00" />
+
+		<View
+			android:id="@+id/divider"
+			android:layout_width="15dp"
+			android:layout_height="1px"
+			android:background="?colorTextPrimary"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonEventEndTime"
+			style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="15dp"
+			android:layout_marginRight="15dp"
+			android:clickable="true"
+			android:focusable="true"
+			android:fontFamily="@font/montserrat_bold"
+			android:gravity="center"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="0dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="0dp"
+			android:textAlignment="center"
+			android:textColor="?colorTextPrimary"
+			android:textSize="24sp"
+			app:backgroundTint="?colorBackground"
+			app:layout_constraintLeft_toRightOf="@id/divider"
+			tools:text="13:15" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<androidx.appcompat.widget.AppCompatAutoCompleteTextView
+		android:id="@+id/inputEventLecturer"
+		style="@style/Widget.AppCompat.EditText"
+		android:popupBackground="?colorBackground"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:background="@drawable/background_rounded"
+		android:backgroundTint="?colorBackground"
+		android:drawableStart="@drawable/ic_profile"
+		android:drawablePadding="10dp"
+		android:fontFamily="@font/montserrat"
+		android:hint="@string/lecturer"
+		android:inputType="textAutoCorrect|textPersonName|textAutoComplete|textCapWords"
+		android:padding="10dp"
+		android:textColor="?colorTextPrimary"
+		android:textColorHint="?colorTextSecondary"
+		android:textSize="14sp"
+		app:drawableTint="?colorTextPrimary" />
+
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/inputEventLocation"
+		style="@style/Widget.AppCompat.EditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:background="@drawable/background_rounded"
+		android:backgroundTint="?colorBackground"
+		android:drawableStart="@drawable/ic_map"
+		android:drawablePadding="10dp"
+		android:fontFamily="@font/montserrat"
+		android:hint="@string/location"
+		android:inputType="textAutoCorrect|textAutoComplete|textPostalAddress|textCapWords"
+		android:padding="10dp"
+		android:textColor="?colorTextPrimary"
+		android:textColorHint="?colorTextSecondary"
+		android:textSize="14sp"
+		app:drawableTint="?colorTextPrimary" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonEventColor"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/event_color"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
+		app:icon="@drawable/ic_circle"
+		app:iconTint="@color/defaultEventColor"
+		app:rippleColor="?colorTextSecondary" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonEnableRepeating"
+		style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minHeight="0dp"
+		android:padding="10dp"
+		android:text="@string/enable_repeating"
+		android:textAlignment="viewStart"
+		android:textAllCaps="false"
+		android:textColor="?colorTextPrimary"
+		app:backgroundTint="?white"
+		app:icon="@drawable/ic_calendar_add"
+		app:iconTint="?colorTextPrimary"
+		app:rippleColor="?colorTextSecondary" />
+
+	<androidx.appcompat.widget.LinearLayoutCompat
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="end"
+		android:orientation="horizontal">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonCancel"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@string/cancel"
+			android:textAllCaps="false"
+			android:textColor="?colorTextPrimary" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/buttonSave"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/montserrat_bold"
+			android:insetTop="0dp"
+			android:insetBottom="0dp"
+			android:letterSpacing="0"
+			android:minWidth="0dp"
+			android:minHeight="0dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+			android:paddingRight="10dp"
+			android:paddingBottom="5dp"
+			android:text="@string/save"
+			android:textAllCaps="false"
+			android:textColor="@color/colorAccent" />
+
+	</androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

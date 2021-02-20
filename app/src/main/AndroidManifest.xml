@@ -19,6 +19,7 @@
 			android:name=".activities.ActivityLogin"
 			android:configChanges="uiMode"
 			android:launchMode="singleTop"
+			android:resizeableActivity="false"
 			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme"
 			android:windowSoftInputMode="adjustPan">
@@ -39,11 +40,13 @@
 		<activity
 			android:name=".activities.ActivityMain"
 			android:configChanges="uiMode"
+			android:resizeableActivity="false"
 			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme" />
 
 		<activity
 			android:name=".activities.ActivityWidgetSettings"
+			android:resizeableActivity="false"
 			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme">
 			<intent-filter>

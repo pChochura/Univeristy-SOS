@@ -18,4 +18,6 @@ class Name(
 	override fun compareTo(other: Name) = compareValuesBy(this, other, { it.toString() })
 
 	fun isEmpty() = pl.isNullOrBlank() && en.isNullOrBlank()
+
+	fun isNotEmpty() = pl?.isNotBlank() == true && en?.isNotBlank() == true
 }
