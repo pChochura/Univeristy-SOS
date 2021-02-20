@@ -98,6 +98,7 @@ class FragmentLogin : FragmentCoreImpl<FragmentLoginBinding>(FragmentLoginBindin
 					valueSwitch = { prefs.getScopeEvents() }
 					onTapped { prefs.putScopeEvents(!prefs.getScopeEvents()) }
 				}
+				dialog.buttonOk.setOnClickListener { dismiss() }
 			}, DialogUtil.UNDEFINED_WINDOW_SIZE, 500.dp)
 		}
 	}

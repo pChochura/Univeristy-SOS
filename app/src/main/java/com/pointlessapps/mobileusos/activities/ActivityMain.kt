@@ -68,7 +68,8 @@ class ActivityMain : FragmentActivity() {
 	}
 
 	private fun checkRating() {
-		if (Preferences.get().getSystemLaunchCount() % 10 == 0 &&
+		if (Preferences.get().getSystemLaunchCount() > 0 &&
+			Preferences.get().getSystemLaunchCount() % 10 == 0 &&
 			!Preferences.get().getSystemReviewDiscarded()
 		) {
 			val reviewManager = ReviewManagerFactory.create(applicationContext)
