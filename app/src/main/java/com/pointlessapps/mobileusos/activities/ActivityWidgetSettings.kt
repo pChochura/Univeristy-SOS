@@ -327,7 +327,6 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		if (ColorUtils.setAlphaComponent(widgetConfiguration.eventTextColor, 0) == 0) {
 			widgetConfiguration.eventTextColor = themeColor(R.attr.weekViewEventTextColor)
 		}
-		widgetConfiguration.eventTextSize = 14
 	}
 
 	private fun drawWidget() {

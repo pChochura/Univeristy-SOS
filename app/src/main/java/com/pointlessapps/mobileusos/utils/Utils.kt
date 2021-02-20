@@ -483,7 +483,7 @@ object Utils {
 		onSaved: (Int, Calendar?) -> Unit
 	) {
 		var frequency = startFrequency.coerceAtLeast(1)
-		val endTimeRepeating = startEndTimeRepeating?.clone() as? Calendar ?: minTime
+		val endTimeRepeating = (startEndTimeRepeating ?: minTime).clone() as Calendar
 		DialogUtil.create(context, DialogRepeatingBinding::class.java, { dialog ->
 			dialog.buttonFrequency.text = frequency.toString()
 			dialog.textDays.text =
