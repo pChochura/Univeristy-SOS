@@ -39,10 +39,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Preferences.init(applicationContext)
 		setTheme(
 			if (Preferences.get().getSystemDarkMode()) R.style.AppTheme_Dark else R.style.AppTheme
 		)
-		Preferences.init(applicationContext)
 
 		binding = ActivityWidgetSettingsBinding.inflate(layoutInflater)
 		setContentView(binding.root)
@@ -237,6 +237,33 @@ class ActivityWidgetSettings : AppCompatActivity() {
 				}
 			}
 		}
+		binding.itemEventTextColor.apply {
+			valueColor = { widgetConfiguration.eventTextColor }
+			onTapped { item ->
+				showDialogColorPicker(R.string.event_text_color) {
+					widgetConfiguration.eventTextColor = it
+
+					drawWidget()
+					item.refresh()
+				}
+			}
+		}
+		binding.itemEventTextSize.apply {
+			value = { widgetConfiguration.eventTextSize.toString() }
+			onTapped { item ->
+				showDialogSlider(
+					R.string.event_text_size,
+					12,
+					20,
+					widgetConfiguration.eventTextSize
+				) {
+					widgetConfiguration.eventTextSize = it.toInt()
+
+					drawWidget()
+					item.refresh()
+				}
+			}
+		}
 		binding.itemResetSettings.onTapped {
 			widgetConfiguration = WidgetConfiguration()
 			prepareSettings()
@@ -279,6 +306,10 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		if (ColorUtils.setAlphaComponent(widgetConfiguration.dividerLineColor, 0) == 0) {
 			widgetConfiguration.dividerLineColor = themeColor(R.attr.weekViewDividerLineColor)
 		}
+		if (ColorUtils.setAlphaComponent(widgetConfiguration.eventTextColor, 0) == 0) {
+			widgetConfiguration.eventTextColor = themeColor(R.attr.weekViewEventTextColor)
+		}
+		widgetConfiguration.eventTextSize = 14
 	}
 
 	private fun drawWidget() {

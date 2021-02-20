@@ -139,8 +139,25 @@
 					app:valueColor="?weekViewDividerLineColor" />
 
 				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemEventTextColor"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:hasValueBorder="true"
+					app:title="@string/event_text_color"
+					app:valueColor="?weekViewEventTextColor" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
+					android:id="@+id/itemEventTextSize"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:title="@string/event_text_size"
+					app:hasValue="true" />
+
+				<com.pointlessapps.mobileusos.views.SettingsItem
 					android:id="@+id/itemResetSettings"
 					android:layout_width="match_parent"
+					android:paddingTop="5dp"
+					android:paddingBottom="5dp"
 					android:layout_height="wrap_content"
 					app:hasSeparator="false"
 					app:hasValue="false"

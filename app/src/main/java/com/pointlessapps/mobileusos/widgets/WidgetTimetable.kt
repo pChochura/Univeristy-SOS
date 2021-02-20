@@ -35,15 +35,21 @@ class WidgetTimetable : AppWidgetProvider() {
 			context,
 			appWidgetManager.getAppWidgetOptions(appWidgetId)
 		)
-		val calendar = Calendar.getInstance()
+		val calendar = Calendar.getInstance().apply {
+			set(Calendar.SECOND, 0)
+			set(Calendar.MINUTE, 0)
+			set(Calendar.HOUR_OF_DAY, 1)
+		}
 		val widgetConfiguration = Preferences.init(context).get().getWidgetConfiguration()
 		RepositoryTimetable(context).getForDays(calendar, widgetConfiguration.visibleDays)
 			.onOnceCallback {
+				val set = timetableEvents.toMutableSet()
+				set.addAll(it.first.filterNotNull().map(CourseEvent::toWeekViewEvent))
 				timetableEvents.clear()
-				timetableEvents.addAll(it.first.filterNotNull().map(CourseEvent::toWeekViewEvent))
+				timetableEvents.addAll(set)
 			}
 			.onFinished {
-				val views = RemoteViews(context.packageName, R.layout.widget_timetable_full)
+				val views = RemoteViews(context.packageName, R.layout.widget_timetable)
 				views.setImageViewBitmap(
 					R.id.imageWidget,
 					getWidgetBitmap(
@@ -51,7 +57,7 @@ class WidgetTimetable : AppWidgetProvider() {
 						width,
 						height,
 						widgetConfiguration,
-						calendar,
+						Calendar.getInstance(),
 						timetableEvents
 					)
 				)
@@ -127,6 +133,8 @@ class WidgetTimetable : AppWidgetProvider() {
 			view.setVisibleDays(configuration.visibleDays)
 			view.setFutureBackgroundColor(configuration.futureBackgroundColor)
 			view.setPastBackgroundColor(configuration.pastBackgroundColor)
+			view.setEventTextSize(configuration.eventTextSize)
+			view.setEventTextColor(configuration.eventTextColor)
 			view.setWeekendBackgroundColor(configuration.weekendsBackgroundColor)
 			view.setCurrentTimeLineColor(configuration.nowLineColor)
 			view.setTodayTextColor(configuration.todayHeaderTextColor)

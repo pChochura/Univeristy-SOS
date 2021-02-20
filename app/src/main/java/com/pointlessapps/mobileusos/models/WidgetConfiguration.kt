@@ -7,7 +7,8 @@ data class WidgetConfiguration(
 	var visibleDays: Int = 3,
 	var visibleHoursBefore: Int = 1,
 	var visibleHoursAfter: Int = 4,
-	var transparency: Int = 100
+	var transparency: Int = 100,
+	var eventTextSize: Int = 14
 ) {
 	@ColorInt
 	var futureBackgroundColor: Int = 0
@@ -27,6 +28,10 @@ data class WidgetConfiguration(
 
 	@ColorInt
 	var todayHeaderTextColor: Int = 0
+		get() = ColorUtils.setAlphaComponent(field, (transparency * 2.55f).toInt())
+
+	@ColorInt
+	var eventTextColor: Int = 0
 		get() = ColorUtils.setAlphaComponent(field, (transparency * 2.55f).toInt())
 
 	@ColorInt

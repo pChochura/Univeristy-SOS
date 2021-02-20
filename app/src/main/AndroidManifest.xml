@@ -65,7 +65,7 @@
 			</intent-filter>
 			<meta-data
 				android:name="android.appwidget.provider"
-				android:resource="@xml/widget_timetable_full_info" />
+				android:resource="@xml/widget_timetable_info" />
 		</receiver>
 
 		<meta-data
