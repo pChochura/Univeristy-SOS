@@ -35,28 +35,31 @@ class FragmentSettings :
 				)
 			}
 			onTapped { item ->
-				DialogUtil.create(requireContext(), DialogPeriodPickerBinding::class.java, { dialog ->
-					var currentMin = prefs.getTimetableStartHour().toFloat()
-					var currentMax = prefs.getTimetableEndHour().toFloat()
-					dialog.periodPicker.apply {
-						setLabelFormatter { "%02.0f:00".format(it) }
-						setValues(currentMin, currentMax)
-						addOnChangeListener { slider, _, _ ->
-							slider.values.minOrNull()?.also { currentMin = it }
-							slider.values.maxOrNull()?.also { currentMax = it }
+				DialogUtil.create(
+					requireContext(),
+					DialogPeriodPickerBinding::class.java,
+					{ dialog ->
+						var currentMin = prefs.getTimetableStartHour().toFloat()
+						var currentMax = prefs.getTimetableEndHour().toFloat()
+						dialog.periodPicker.apply {
+							setLabelFormatter { "%02.0f:00".format(it) }
+							setValues(currentMin, currentMax)
+							addOnChangeListener { slider, _, _ ->
+								slider.values.minOrNull()?.also { currentMin = it }
+								slider.values.maxOrNull()?.also { currentMax = it }
+							}
 						}
-					}
-					dialog.buttonSecondary.setOnClickListener { dismiss() }
-					dialog.buttonPrimary.setOnClickListener {
-						prefs.putTimetableStartHour(currentMin.toInt())
-						prefs.putTimetableEndHour(currentMax.toInt())
+						dialog.buttonSecondary.setOnClickListener { dismiss() }
+						dialog.buttonPrimary.setOnClickListener {
+							prefs.putTimetableStartHour(currentMin.toInt())
+							prefs.putTimetableEndHour(currentMax.toInt())
 
-						onForceRefreshAllFragments?.invoke()
+							onForceRefreshAllFragments?.invoke()
 
-						item.refresh()
-						dismiss()
-					}
-				})
+							item.refresh()
+							dismiss()
+						}
+					})
 			}
 		}
 
@@ -226,11 +229,11 @@ class FragmentSettings :
 		}
 
 		binding().itemSendAnalytics.apply {
-			valueSwitch = { prefs.getSendAnalytics() }
+			valueSwitch = { prefs.getSystemSendAnalytics() }
 			onTapped {
-				prefs.putSendAnalytics(!prefs.getSendAnalytics())
+				prefs.putSystemSendAnalytics(!prefs.getSystemSendAnalytics())
 				FirebaseCrashlytics.getInstance()
-					.setCrashlyticsCollectionEnabled(prefs.getSendAnalytics())
+					.setCrashlyticsCollectionEnabled(prefs.getSystemSendAnalytics())
 			}
 		}
 
@@ -252,7 +255,13 @@ class FragmentSettings :
 					dialog.buttonPrimary.setOnClickListener {
 						toggle()
 						doAsync {
-							Preferences.get().clear()
+							Preferences.get().apply {
+								val launchCount = prefs.getSystemLaunchCount()
+								val reviewDiscarded = getSystemReviewDiscarded()
+								clear()
+								put(Preferences.KEY_SYSTEM_LAUNCH_COUNT, launchCount)
+								putSystemReviewDiscarded(reviewDiscarded)
+							}
 							AppDatabase.init(requireContext()).clearAllTables()
 							this@create.dialog.dismiss()
 							requireActivity().apply {

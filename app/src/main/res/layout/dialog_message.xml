@@ -86,4 +86,31 @@
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/messageSecondary" />
 
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/buttonTertiary"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginTop="20dp"
+		android:layout_marginRight="10dp"
+		android:fontFamily="@font/montserrat"
+		android:insetTop="0dp"
+		android:insetBottom="0dp"
+		android:letterSpacing="0"
+		android:minWidth="0dp"
+		android:minHeight="0dp"
+		android:paddingLeft="10dp"
+		android:paddingTop="5dp"
+		android:paddingRight="10dp"
+		android:paddingBottom="5dp"
+		android:text="@string/no"
+		android:textAllCaps="false"
+		android:textColor="?colorTextSecondary"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintRight_toLeftOf="@id/buttonSecondary"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/messageSecondary" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

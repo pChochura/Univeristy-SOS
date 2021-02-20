@@ -23,7 +23,7 @@ class FragmentTimetable :
 	override fun created() {
 		prepareClickListeners()
 		refreshed()
-		refreshDataset(true)
+		binding().weekView.post { refreshDataset(true) }
 	}
 
 	override fun refreshed() {

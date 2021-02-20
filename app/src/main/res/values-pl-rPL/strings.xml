@@ -236,4 +236,8 @@
 	<string name="select_time">Zaznacz czas</string>
 	<string name="select_date">Zaznacz datę</string>
 	<string name="delete_event_description">Czy na pewno chcesz usunąć to wydarzenie? Nie będzie możliwości odzyskania go później</string>
+	<string name="review_this_app">Lubisz tę aplikację?</string>
+	<string name="review_this_app_description">Czy chciałbyś napisać co myślisz na temat tej aplikacji i zostawić ocenę w Sklepie Play?</string>
+	<string name="later">Później</string>
+	<string name="no">Nie</string>
 </resources>

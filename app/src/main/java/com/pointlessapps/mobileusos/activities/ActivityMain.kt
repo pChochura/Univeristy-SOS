@@ -4,11 +4,14 @@ import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.databinding.ActivityMainBinding
+import com.pointlessapps.mobileusos.databinding.DialogMessageBinding
 import com.pointlessapps.mobileusos.exceptions.ExceptionHttpUnsuccessful
 import com.pointlessapps.mobileusos.fragments.*
 import com.pointlessapps.mobileusos.helpers.*
@@ -19,6 +22,7 @@ import com.pointlessapps.mobileusos.repositories.RepositoryEvent
 import com.pointlessapps.mobileusos.repositories.RepositoryUser
 import com.pointlessapps.mobileusos.services.ServiceUSOSArticle
 import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
+import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +64,39 @@ class ActivityMain : FragmentActivity() {
 		}
 
 		ensureNotificationSubscription()
+		checkRating()
+	}
+
+	private fun checkRating() {
+		if (Preferences.get().getSystemLaunchCount() % 10 == 0 &&
+			!Preferences.get().getSystemReviewDiscarded()
+		) {
+			val reviewManager = ReviewManagerFactory.create(applicationContext)
+			reviewManager.requestReviewFlow().addOnCompleteListener { reviewInfo ->
+				if (!reviewInfo.isSuccessful) {
+					return@addOnCompleteListener
+				}
+
+				DialogUtil.create(this, DialogMessageBinding::class.java, { dialog ->
+					dialog.messageMain.setText(R.string.review_this_app)
+					dialog.messageSecondary.setText(R.string.review_this_app_description)
+					dialog.buttonPrimary.setText(android.R.string.ok)
+					dialog.buttonSecondary.setText(R.string.later)
+					dialog.buttonTertiary.setText(R.string.no)
+					dialog.buttonTertiary.isVisible = true
+
+					dialog.buttonPrimary.setOnClickListener {
+						dismiss()
+						reviewManager.launchReviewFlow(this@ActivityMain, reviewInfo.result)
+					}
+					dialog.buttonSecondary.setOnClickListener { dismiss() }
+					dialog.buttonTertiary.setOnClickListener {
+						Preferences.get().putSystemReviewDiscarded(true)
+						dismiss()
+					}
+				})
+			}
+		}
 	}
 
 	private fun ensureNotificationSubscription() {

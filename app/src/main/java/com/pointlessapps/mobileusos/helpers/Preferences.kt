@@ -47,6 +47,9 @@ class Preferences private constructor(context: Context?) {
 		const val KEY_SYSTEM_DEFAULT_LANGUAGE = "systemDefaultLanguage"
 		const val KEY_SYSTEM_SEND_ANALYTICS = "systemSendAnalytics"
 
+		const val KEY_SYSTEM_LAUNCH_COUNT = "systemLaunchCount"
+		const val KEY_SYSTEM_REVIEW_DISCARDED = "systemReviewDiscarded"
+
 		const val KEY_PROFILE_SHORTCUTS = "profileShortcuts"
 		const val KEY_PROFILE_SHORTCUTS_CLASS = "profileShortcutsClass"
 		const val KEY_PROFILE_SHORTCUTS_DATA = "profileShortcutsData"
@@ -188,11 +191,24 @@ fun AppPreferencesWrapper.putSystemDefaultLanguage(value: String) =
 	put(Preferences.KEY_SYSTEM_DEFAULT_LANGUAGE, value)
 
 
-fun AppPreferencesWrapper.getSendAnalytics() =
+fun AppPreferencesWrapper.getSystemSendAnalytics() =
 	getBoolean(Preferences.KEY_SYSTEM_SEND_ANALYTICS, true)
 
-fun AppPreferencesWrapper.putSendAnalytics(value: Boolean) =
+fun AppPreferencesWrapper.putSystemSendAnalytics(value: Boolean) =
 	put(Preferences.KEY_SYSTEM_SEND_ANALYTICS, value)
+
+
+fun AppPreferencesWrapper.getSystemLaunchCount() =
+	getInt(Preferences.KEY_SYSTEM_LAUNCH_COUNT, 0).also {
+		put(Preferences.KEY_SYSTEM_LAUNCH_COUNT, it + 1)
+	}
+
+
+fun AppPreferencesWrapper.getSystemReviewDiscarded() =
+	getBoolean(Preferences.KEY_SYSTEM_REVIEW_DISCARDED, false)
+
+fun AppPreferencesWrapper.putSystemReviewDiscarded(value: Boolean) =
+	put(Preferences.KEY_SYSTEM_REVIEW_DISCARDED, value)
 
 
 fun AppPreferencesWrapper.getProfileShortcuts() =
