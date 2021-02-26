@@ -240,4 +240,6 @@
 	<string name="review_this_app_description">Czy chciałbyś napisać co myślisz na temat tej aplikacji i zostawić ocenę w Sklepie Play?</string>
 	<string name="later">Później</string>
 	<string name="no">Nie</string>
+	<string name="you_have_to_be_logged_in">Musisz być zalogowany</string>
+	<string name="tap_to_login">Wciśnij, aby się zalogować</string>
 </resources>

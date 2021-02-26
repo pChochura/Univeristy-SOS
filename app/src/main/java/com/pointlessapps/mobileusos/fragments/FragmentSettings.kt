@@ -13,6 +13,7 @@ import com.pointlessapps.mobileusos.databinding.*
 import com.pointlessapps.mobileusos.helpers.*
 import com.pointlessapps.mobileusos.models.AppDatabase
 import com.pointlessapps.mobileusos.utils.DialogUtil
+import com.pointlessapps.mobileusos.widgets.WidgetTimetable
 import org.jetbrains.anko.doAsync
 
 class FragmentSettings :
@@ -255,15 +256,16 @@ class FragmentSettings :
 					dialog.buttonPrimary.setOnClickListener {
 						toggle()
 						doAsync {
-							Preferences.get().apply {
-								val launchCount = prefs.getSystemLaunchCount()
-								val reviewDiscarded = getSystemReviewDiscarded()
-								clear()
-								put(Preferences.KEY_SYSTEM_LAUNCH_COUNT, launchCount)
-								putSystemReviewDiscarded(reviewDiscarded)
-							}
+							val launchCount = prefs.getSystemLaunchCount()
+							val reviewDiscarded = prefs.getSystemReviewDiscarded()
+							val widgetConfiguration = prefs.getWidgetConfiguration()
+							prefs.clear()
+							prefs.put(Preferences.KEY_SYSTEM_LAUNCH_COUNT, launchCount)
+							prefs.putSystemReviewDiscarded(reviewDiscarded)
+							prefs.putWidgetConfiguration(widgetConfiguration)
 							AppDatabase.init(requireContext()).clearAllTables()
 							this@create.dialog.dismiss()
+							WidgetTimetable.requestRefresh(requireActivity())
 							requireActivity().apply {
 								startActivity(
 									Intent(

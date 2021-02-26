@@ -9,6 +9,7 @@ import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.viewModels.ViewModelTimetable
 import com.pointlessapps.mobileusos.viewModels.ViewModelUser
 import com.pointlessapps.mobileusos.views.WeekView
+import com.pointlessapps.mobileusos.widgets.WidgetTimetable
 import java.util.*
 
 class FragmentTimetable :
@@ -71,6 +72,7 @@ class FragmentTimetable :
 			binding().weekView.setEmptyViewClickListener {
 				Utils.showEventAdd(requireContext(), it) {
 					refreshDataset()
+					WidgetTimetable.requestRefresh(requireActivity())
 				}
 			}
 		}
@@ -94,7 +96,10 @@ class FragmentTimetable :
 			{
 				weekViewEvent.comment = it
 				binding().weekView.refreshDataset()
-			}, { refreshDataset(true) }
+			}, {
+				refreshDataset(true)
+				WidgetTimetable.requestRefresh(requireActivity())
+			}
 		)
 	}
 }

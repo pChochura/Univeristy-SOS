@@ -219,7 +219,7 @@ fun AppPreferencesWrapper.putProfileShortcuts(shortcuts: List<Map<String, String
 
 
 fun AppPreferencesWrapper.getWidgetConfiguration() =
-	getJson<WidgetConfiguration>(Preferences.KEY_WIDGET_CONFIGURATION, "{}")
+	getJson(Preferences.KEY_WIDGET_CONFIGURATION, WidgetConfiguration())
 
 fun AppPreferencesWrapper.putWidgetConfiguration(widgetConfig: WidgetConfiguration) =
 	putJson(Preferences.KEY_WIDGET_CONFIGURATION, widgetConfig)

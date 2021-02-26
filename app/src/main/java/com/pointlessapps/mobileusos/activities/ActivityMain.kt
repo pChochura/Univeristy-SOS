@@ -2,11 +2,12 @@ package com.pointlessapps.mobileusos.activities
 
 import android.animation.LayoutTransition
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pointlessapps.mobileusos.R
@@ -25,6 +26,7 @@ import com.pointlessapps.mobileusos.services.ServiceUSOSSurvey
 import com.pointlessapps.mobileusos.utils.DialogUtil
 import com.pointlessapps.mobileusos.utils.Utils
 import com.pointlessapps.mobileusos.utils.Utils.themeColor
+import com.pointlessapps.mobileusos.widgets.WidgetTimetable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -63,6 +65,7 @@ class ActivityMain : FragmentActivity() {
 			}
 		}
 
+		WidgetTimetable.requestRefresh(this)
 		ensureNotificationSubscription()
 		checkRating()
 	}
@@ -72,31 +75,30 @@ class ActivityMain : FragmentActivity() {
 			Preferences.get().getSystemLaunchCount() % 10 == 0 &&
 			!Preferences.get().getSystemReviewDiscarded()
 		) {
-			val reviewManager = ReviewManagerFactory.create(applicationContext)
-			reviewManager.requestReviewFlow().addOnCompleteListener { reviewInfo ->
-				if (!reviewInfo.isSuccessful) {
-					return@addOnCompleteListener
+			DialogUtil.create(this, DialogMessageBinding::class.java, { dialog ->
+				dialog.messageMain.setText(R.string.review_this_app)
+				dialog.messageSecondary.setText(R.string.review_this_app_description)
+				dialog.buttonPrimary.setText(android.R.string.ok)
+				dialog.buttonSecondary.setText(R.string.later)
+				dialog.buttonTertiary.setText(R.string.no)
+				dialog.buttonTertiary.isVisible = true
+
+				dialog.buttonPrimary.setOnClickListener {
+					dismiss()
+					startActivity(
+						Intent(
+							Intent.ACTION_VIEW,
+							Uri.parse("https://play.google.com/store/apps/details?id=${packageName}")
+						).setPackage("com.android.vending")
+					)
+					Preferences.get().putSystemReviewDiscarded(true)
 				}
-
-				DialogUtil.create(this, DialogMessageBinding::class.java, { dialog ->
-					dialog.messageMain.setText(R.string.review_this_app)
-					dialog.messageSecondary.setText(R.string.review_this_app_description)
-					dialog.buttonPrimary.setText(android.R.string.ok)
-					dialog.buttonSecondary.setText(R.string.later)
-					dialog.buttonTertiary.setText(R.string.no)
-					dialog.buttonTertiary.isVisible = true
-
-					dialog.buttonPrimary.setOnClickListener {
-						dismiss()
-						reviewManager.launchReviewFlow(this@ActivityMain, reviewInfo.result)
-					}
-					dialog.buttonSecondary.setOnClickListener { dismiss() }
-					dialog.buttonTertiary.setOnClickListener {
-						Preferences.get().putSystemReviewDiscarded(true)
-						dismiss()
-					}
-				})
-			}
+				dialog.buttonSecondary.setOnClickListener { dismiss() }
+				dialog.buttonTertiary.setOnClickListener {
+					Preferences.get().putSystemReviewDiscarded(true)
+					dismiss()
+				}
+			})
 		}
 	}
 

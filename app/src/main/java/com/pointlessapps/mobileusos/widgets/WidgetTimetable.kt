@@ -1,8 +1,10 @@
 package com.pointlessapps.mobileusos.widgets
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -13,6 +15,7 @@ import android.widget.RemoteViews
 import com.pointlessapps.mobileusos.R
 import com.pointlessapps.mobileusos.activities.ActivityLogin
 import com.pointlessapps.mobileusos.activities.ActivityWidgetSettings
+import com.pointlessapps.mobileusos.helpers.HelperClientUSOS
 import com.pointlessapps.mobileusos.helpers.Preferences
 import com.pointlessapps.mobileusos.helpers.getWidgetConfiguration
 import com.pointlessapps.mobileusos.models.CourseEvent
@@ -31,6 +34,23 @@ class WidgetTimetable : AppWidgetProvider() {
 		appWidgetManager: AppWidgetManager,
 		appWidgetId: Int
 	) {
+		Preferences.init(context)
+		if (!HelperClientUSOS.isLoggedIn()) {
+			val views = RemoteViews(context.packageName, R.layout.widget_timetable_require_login)
+			views.setOnClickPendingIntent(
+				R.id.container,
+				PendingIntent.getActivity(
+					context,
+					0,
+					Intent(context, ActivityLogin::class.java),
+					PendingIntent.FLAG_UPDATE_CURRENT
+				)
+			)
+			appWidgetManager.updateAppWidget(appWidgetId, views)
+
+			return
+		}
+
 		val (width, height) = getSizeConsideringOrientation(
 			context,
 			appWidgetManager.getAppWidgetOptions(appWidgetId)
@@ -40,7 +60,7 @@ class WidgetTimetable : AppWidgetProvider() {
 			set(Calendar.MINUTE, 0)
 			set(Calendar.HOUR_OF_DAY, 1)
 		}
-		val widgetConfiguration = Preferences.init(context).get().getWidgetConfiguration()
+		val widgetConfiguration = Preferences.get().getWidgetConfiguration()
 		RepositoryTimetable(context).getForDays(calendar, widgetConfiguration.visibleDays)
 			.onOnceCallback {
 				val set = timetableEvents.toMutableSet()
@@ -115,6 +135,22 @@ class WidgetTimetable : AppWidgetProvider() {
 		}
 
 	companion object {
+		fun getWidgetId(context: Context): IntArray =
+			AppWidgetManager.getInstance(context).getAppWidgetIds(
+				ComponentName(context, WidgetTimetable::class.java)
+			)
+
+		fun requestRefresh(activity: Activity, ids: IntArray = getWidgetId(activity)) {
+			activity.sendBroadcast(
+				Intent(
+					AppWidgetManager.ACTION_APPWIDGET_UPDATE,
+					null,
+					activity,
+					WidgetTimetable::class.java
+				).putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+			)
+		}
+
 		fun getWidgetBitmap(
 			context: Context,
 			width: Int,

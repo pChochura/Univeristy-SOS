@@ -24,7 +24,10 @@ class DialogUtil<Binding : ViewBinding> private constructor(
 			context: Context,
 			bindingClass: Class<Binding>,
 			callback: Dialog.(Binding) -> Unit,
-			vararg windowSize: Int = intArrayOf(UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+			vararg windowSize: Int = intArrayOf(
+				UNDEFINED_WINDOW_SIZE,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+			)
 		) {
 			val dialog = DialogUtil(context, bindingClass, windowSize)
 			dialog.makeDialog { binding, dialogView ->
@@ -37,7 +40,10 @@ class DialogUtil<Binding : ViewBinding> private constructor(
 			context: Context,
 			bindingClass: Class<Binding>,
 			callback: StatefulDialog<Binding>.(Binding) -> Unit,
-			vararg windowSize: Int = intArrayOf(UNDEFINED_WINDOW_SIZE, ViewGroup.LayoutParams.WRAP_CONTENT)
+			vararg windowSize: Int = intArrayOf(
+				UNDEFINED_WINDOW_SIZE,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+			)
 		) {
 			val dialog = DialogUtil(context, bindingClass, windowSize)
 			dialog.makeDialog { binding, dialogView ->
@@ -62,12 +68,14 @@ class DialogUtil<Binding : ViewBinding> private constructor(
 			it.attributes?.dimAmount = 0.5f
 		}
 		val size = Utils.getScreenSize()
-		val width =
-			if (windowSize.isNotEmpty() && windowSize.first() != UNDEFINED_WINDOW_SIZE) windowSize[0]
-			else min(350.dp, size.x - 150)
-		val height =
-			if (windowSize.size > 1 && windowSize[1] != UNDEFINED_WINDOW_SIZE) windowSize[1]
-			else min(500.dp, size.y - 150)
+		val width = min(
+			if (windowSize.isNotEmpty() && windowSize.first() != UNDEFINED_WINDOW_SIZE) windowSize[0] else 350.dp,
+			size.x - 150
+		)
+		val height = min(
+			if (windowSize.size > 1 && windowSize[1] != UNDEFINED_WINDOW_SIZE) windowSize[1] else 500.dp,
+			size.y - 150
+		)
 
 		val binding = bindingClass.getMethod(
 			"inflate",

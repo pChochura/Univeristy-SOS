@@ -24,6 +24,10 @@ val Int.px: Int
 inline fun <reified T> AppPreferences.getJson(key: String, default: String = ""): T =
 	Gson().fromJson(getString(key, default), T::class.java)
 
+inline fun <reified T> AppPreferences.getJson(key: String, default: T): T {
+	return Gson().fromJson(getString(key, null) ?: return default, T::class.java)
+}
+
 inline fun <reified T> Gson.fromJson(json: String): T =
 	this.fromJson(json, object : TypeToken<T>() {}.type)
 

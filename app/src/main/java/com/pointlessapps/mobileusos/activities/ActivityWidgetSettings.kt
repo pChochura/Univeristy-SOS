@@ -67,23 +67,11 @@ class ActivityWidgetSettings : AppCompatActivity() {
 		binding.buttonSave.setOnClickListener {
 			Preferences.get().putWidgetConfiguration(widgetConfiguration)
 			val ids = if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-				AppWidgetManager.getInstance(applicationContext).getAppWidgetIds(
-					ComponentName(
-						applicationContext,
-						WidgetTimetable::class.java
-					)
-				)
+				WidgetTimetable.getWidgetId(applicationContext)
 			} else {
 				intArrayOf(widgetId)
 			}
-			sendBroadcast(
-				Intent(
-					AppWidgetManager.ACTION_APPWIDGET_UPDATE,
-					null,
-					this,
-					WidgetTimetable::class.java
-				).putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-			)
+			WidgetTimetable.requestRefresh(this, ids)
 			setResult(
 				RESULT_OK,
 				Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -139,12 +127,12 @@ class ActivityWidgetSettings : AppCompatActivity() {
 			}
 		}
 		binding.itemTransparency.apply {
-			value = { widgetConfiguration.transparency.toString() }
+			value = { widgetConfiguration.transparency.coerceIn(0, 50).toString() }
 			onTapped { item ->
 				showDialogSlider(
 					this@ActivityWidgetSettings,
 					R.string.transparency,
-					0, 100, widgetConfiguration.transparency
+					0, 50, widgetConfiguration.transparency.coerceIn(0, 50)
 				) {
 					widgetConfiguration.transparency = it.toInt()
 
